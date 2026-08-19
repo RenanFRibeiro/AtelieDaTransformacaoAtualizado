@@ -146,7 +146,7 @@ partial class ProductsUserControl
         _categoryComboBox.Location = new Point(587, 26);
         _categoryComboBox.Name = "_categoryComboBox";
         _categoryComboBox.ShadowDecoration.CustomizableEdges = customizableEdges10;
-        _categoryComboBox.Size = new Size(150, 36);
+        _categoryComboBox.Size = new Size(157, 36);
         _categoryComboBox.TabIndex = 4;
         // 
         // _searchTextBox

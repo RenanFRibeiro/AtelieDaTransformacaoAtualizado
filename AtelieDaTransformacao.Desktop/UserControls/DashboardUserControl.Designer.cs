@@ -70,6 +70,7 @@ partial class DashboardUserControl
         // 
         // _headerPanel
         // 
+        _headerPanel.BackColor = Color.Transparent;
         _headerPanel.Controls.Add(_statusLabel);
         _headerPanel.Controls.Add(_refreshButton);
         _headerPanel.Controls.Add(_descriptionLabel);
@@ -134,6 +135,7 @@ partial class DashboardUserControl
         // 
         // _cardsPanel
         // 
+        _cardsPanel.BackColor = Color.Transparent;
         _cardsPanel.CustomizableEdges = customizableEdges5;
         _cardsPanel.Dock = DockStyle.Top;
         _cardsPanel.FillColor = Color.Transparent;
@@ -267,6 +269,7 @@ partial class DashboardUserControl
         // 
         // _tableTitle
         // 
+        _tableTitle.BackColor = Color.Transparent;
         _tableTitle.Dock = DockStyle.Top;
         _tableTitle.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
         _tableTitle.ForeColor = Color.FromArgb(30, 34, 43);

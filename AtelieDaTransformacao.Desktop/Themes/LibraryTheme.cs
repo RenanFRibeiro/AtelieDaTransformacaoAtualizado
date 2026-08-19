@@ -4,7 +4,7 @@ public static class LibraryTheme
 {
     public static readonly Color Sidebar = Color.FromArgb(24, 27, 34);
     public static readonly Color SidebarHover = Color.FromArgb(42, 47, 58);
-    public static readonly Color Accent = Color.FromArgb(74, 108, 247);
+    public static readonly Color Accent = Color.FromArgb(88, 52, 27);
     public static readonly Color AccentDark = Color.FromArgb(52, 82, 204);
     public static readonly Color Background = Color.FromArgb(245, 247, 251);
     public static readonly Color Surface = Color.White;

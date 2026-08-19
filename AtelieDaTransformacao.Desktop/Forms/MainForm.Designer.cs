@@ -299,7 +299,7 @@ partial class MainForm
         // 
         // _brandPanel
         // 
-        _brandPanel.BackColor = Color.FromArgb(94, 60, 32);
+        _brandPanel.BackColor = Color.FromArgb(88, 52, 27);
         _brandPanel.BorderRadius = 7;
         _brandPanel.Controls.Add(_brandSubtitle);
         _brandPanel.Controls.Add(_brandLabel);
@@ -336,6 +336,7 @@ partial class MainForm
         // 
         // _contentPanel
         // 
+        _contentPanel.BackColor = Color.Transparent;
         _contentPanel.CustomizableEdges = customizableEdges1;
         _contentPanel.Dock = DockStyle.Fill;
         _contentPanel.Location = new Point(255, 92);

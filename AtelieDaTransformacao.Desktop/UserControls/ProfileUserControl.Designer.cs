@@ -6,9 +6,11 @@ partial class ProfileUserControl
     private System.ComponentModel.IContainer? components=null;private Guna.UI2.WinForms.Guna2Panel _card=null!;private Label _titleLabel=null!;private Label _emailCaptionLabel=null!;private Label _emailValueLabel=null!;private Label _roleCaptionLabel=null!;private Label _roleValueLabel=null!;private Label _sessionCaptionLabel=null!;private Label _sessionValueLabel=null!;private Label _permissionsCaptionLabel=null!;private Label _permissionsValueLabel=null!;    protected override void Dispose(bool disposing){if(disposing)components?.Dispose();base.Dispose(disposing);}
     private void InitializeComponent()
     {
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         _card = new Guna.UI2.WinForms.Guna2Panel();
+        lblAvatar = new Guna.UI2.WinForms.Guna2CircleButton();
         _permissionsValueLabel = new Label();
         _permissionsCaptionLabel = new Label();
         _sessionValueLabel = new Label();
@@ -26,6 +28,7 @@ partial class ProfileUserControl
         _card.BorderColor = Color.FromArgb(226, 229, 236);
         _card.BorderRadius = 12;
         _card.BorderThickness = 1;
+        _card.Controls.Add(lblAvatar);
         _card.Controls.Add(_permissionsValueLabel);
         _card.Controls.Add(_permissionsCaptionLabel);
         _card.Controls.Add(_sessionValueLabel);
@@ -34,22 +37,41 @@ partial class ProfileUserControl
         _card.Controls.Add(_roleCaptionLabel);
         _card.Controls.Add(_emailValueLabel);
         _card.Controls.Add(_emailCaptionLabel);
-        _card.CustomizableEdges = customizableEdges1;
+        _card.CustomizableEdges = customizableEdges2;
         _card.FillColor = Color.White;
         _card.Location = new Point(38, 52);
         _card.Name = "_card";
         _card.Padding = new Padding(24);
-        _card.ShadowDecoration.CustomizableEdges = customizableEdges2;
+        _card.ShadowDecoration.CustomizableEdges = customizableEdges3;
         _card.Size = new Size(516, 382);
         _card.TabIndex = 1;
+        // 
+        // lblAvatar
+        // 
+        lblAvatar.BackColor = Color.Transparent;
+        lblAvatar.DisabledState.BorderColor = Color.DarkGray;
+        lblAvatar.DisabledState.CustomBorderColor = Color.DarkGray;
+        lblAvatar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+        lblAvatar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+        lblAvatar.FillColor = Color.FromArgb(88, 52, 27);
+        lblAvatar.Font = new Font("Yu Gothic", 26.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+        lblAvatar.ForeColor = Color.White;
+        lblAvatar.Location = new Point(222, 33);
+        lblAvatar.Name = "lblAvatar";
+        lblAvatar.ShadowDecoration.CustomizableEdges = customizableEdges1;
+        lblAvatar.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
+        lblAvatar.Size = new Size(88, 88);
+        lblAvatar.TabIndex = 8;
+        lblAvatar.Text = "U";
+        lblAvatar.Click += lblAvatar_Click;
         // 
         // _permissionsValueLabel
         // 
         _permissionsValueLabel.BackColor = Color.Transparent;
         _permissionsValueLabel.Font = new Font("Yu Gothic", 9F);
-        _permissionsValueLabel.Location = new Point(22, 348);
+        _permissionsValueLabel.Location = new Point(22, 339);
         _permissionsValueLabel.Name = "_permissionsValueLabel";
-        _permissionsValueLabel.Size = new Size(100, 23);
+        _permissionsValueLabel.Size = new Size(100, 19);
         _permissionsValueLabel.TabIndex = 0;
         _permissionsValueLabel.Text = "...";
         // 
@@ -67,7 +89,7 @@ partial class ProfileUserControl
         // 
         _sessionValueLabel.BackColor = Color.Transparent;
         _sessionValueLabel.Font = new Font("Yu Gothic", 9F);
-        _sessionValueLabel.Location = new Point(22, 291);
+        _sessionValueLabel.Location = new Point(22, 290);
         _sessionValueLabel.Name = "_sessionValueLabel";
         _sessionValueLabel.Size = new Size(100, 23);
         _sessionValueLabel.TabIndex = 2;
@@ -85,7 +107,7 @@ partial class ProfileUserControl
         // 
         // _roleValueLabel
         // 
-        _roleValueLabel.BackColor = Color.FromArgb(141, 103, 56);
+        _roleValueLabel.BackColor = Color.FromArgb(88, 52, 27);
         _roleValueLabel.ForeColor = Color.White;
         _roleValueLabel.Location = new Point(172, 152);
         _roleValueLabel.Name = "_roleValueLabel";
@@ -108,7 +130,7 @@ partial class ProfileUserControl
         _emailValueLabel.BackColor = Color.Transparent;
         _emailValueLabel.Font = new Font("Yu Gothic", 9F);
         _emailValueLabel.ForeColor = Color.Black;
-        _emailValueLabel.Location = new Point(22, 240);
+        _emailValueLabel.Location = new Point(22, 234);
         _emailValueLabel.Name = "_emailValueLabel";
         _emailValueLabel.Size = new Size(100, 23);
         _emailValueLabel.TabIndex = 6;
@@ -129,7 +151,7 @@ partial class ProfileUserControl
         _titleLabel.BackColor = Color.Transparent;
         _titleLabel.Font = new Font("Segoe UI", 17F, FontStyle.Bold);
         _titleLabel.ForeColor = Color.FromArgb(30, 34, 43);
-        _titleLabel.Location = new Point(38, 24);
+        _titleLabel.Location = new Point(38, 18);
         _titleLabel.Name = "_titleLabel";
         _titleLabel.Size = new Size(137, 31);
         _titleLabel.TabIndex = 8;
@@ -146,5 +168,7 @@ partial class ProfileUserControl
         ResumeLayout(false);
         PerformLayout();
     }
-    private static void AddPair(Label caption,Label value,string title,int y){caption.AutoSize=true;caption.Text=title;caption.Font=new Font("Segoe UI",8.5F);caption.ForeColor=LibraryTheme.Muted;caption.Location=new Point(24,y);value.AutoSize=true;value.Font=new Font("Segoe UI",10F,FontStyle.Bold);value.ForeColor=LibraryTheme.Text;value.Location=new Point(150,y-2);}
+    private static void AddPair(Label caption,Label value,string title,int y){caption.AutoSize=true;caption.Text=title;caption.Font=new Font("Segoe UI",8.5F);caption.ForeColor=LibraryTheme.Muted;caption.Location=new Point(24,y);value.AutoSize=true;value.Font=new Font("Segoe UI",10F,FontStyle.Bold);value.ForeColor=LibraryTheme.Text;value.Location=new Point(150,y-2); }
+
+    private Guna.UI2.WinForms.Guna2CircleButton lblAvatar;
 }

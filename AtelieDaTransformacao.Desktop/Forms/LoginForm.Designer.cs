@@ -115,7 +115,7 @@ partial class LoginForm
         _featureLabel.BackColor = Color.Transparent;
         _featureLabel.Font = new Font("Segoe UI Semibold", 8F);
         _featureLabel.ForeColor = Color.White;
-        _featureLabel.Location = new Point(12, 330);
+        _featureLabel.Location = new Point(12, 375);
         _featureLabel.Name = "_featureLabel";
         _featureLabel.Size = new Size(124, 65);
         _featureLabel.TabIndex = 0;
