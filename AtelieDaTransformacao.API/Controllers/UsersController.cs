@@ -1,0 +1,26 @@
+using AtelieDaTransformacao.Application.DTOs;
+using AtelieDaTransformacao.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+
+namespace AtelieDaTransformacao.API.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+[Authorize(Roles = "Admin")]
+public sealed class UsersController : ControllerBase
+{
+    private readonly IUserManagementService _service;
+    public UsersController(IUserManagementService service) => _service = service;
+
+    [HttpGet]
+    public async Task<ActionResult<IReadOnlyList<UserSummaryDto>>> GetAll() => Ok(await _service.GetAllAsync());
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        var currentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        return await _service.DeleteAsync(id, currentId) ? NoContent() : BadRequest(new { message = "Usuário não encontrado ou operação não permitida." });
+    }
+}
