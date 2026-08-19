@@ -71,11 +71,11 @@ partial class MainForm
         _productsButton = new Guna.UI2.WinForms.Guna2Button();
         _dashboardButton = new Guna.UI2.WinForms.Guna2Button();
         _logoutButton = new Guna.UI2.WinForms.Guna2Button();
-        _roleLabel = new Label();
-        _userEmailLabel = new Label();
         _brandPanel = new Guna.UI2.WinForms.Guna2Panel();
         _brandSubtitle = new Label();
         _brandLabel = new Label();
+        _roleLabel = new Label();
+        _userEmailLabel = new Label();
         _contentPanel = new Guna.UI2.WinForms.Guna2Panel();
         _topBar.SuspendLayout();
         _sidebar.SuspendLayout();
@@ -154,8 +154,6 @@ partial class MainForm
         _sidebar.BackColor = Color.FromArgb(107, 69, 37);
         _sidebar.Controls.Add(_navPanel);
         _sidebar.Controls.Add(_logoutButton);
-        _sidebar.Controls.Add(_roleLabel);
-        _sidebar.Controls.Add(_userEmailLabel);
         _sidebar.Controls.Add(_brandPanel);
         _sidebar.CustomizableEdges = customizableEdges21;
         _sidebar.Dock = DockStyle.Left;
@@ -258,12 +256,11 @@ partial class MainForm
         // 
         _logoutButton.BorderRadius = 9;
         _logoutButton.CustomizableEdges = customizableEdges17;
-        _logoutButton.Dock = DockStyle.Bottom;
         _logoutButton.FillColor = Color.FromArgb(192, 0, 0);
         _logoutButton.Font = new Font("Segoe UI", 9F);
         _logoutButton.ForeColor = Color.White;
         _logoutButton.HoverState.FillColor = Color.FromArgb(55, 60, 72);
-        _logoutButton.Location = new Point(14, 568);
+        _logoutButton.Location = new Point(14, 544);
         _logoutButton.Margin = new Padding(5, 10, 5, 8);
         _logoutButton.Name = "_logoutButton";
         _logoutButton.ShadowDecoration.CustomizableEdges = customizableEdges18;
@@ -272,37 +269,14 @@ partial class MainForm
         _logoutButton.Text = "↪ Sair da conta";
         _logoutButton.Click += _logoutButton_Click;
         // 
-        // _roleLabel
-        // 
-        _roleLabel.BackColor = Color.Transparent;
-        _roleLabel.Dock = DockStyle.Bottom;
-        _roleLabel.Font = new Font("Segoe UI", 8.5F);
-        _roleLabel.ForeColor = Color.Transparent;
-        _roleLabel.Location = new Point(14, 610);
-        _roleLabel.Name = "_roleLabel";
-        _roleLabel.Padding = new Padding(8, 0, 8, 0);
-        _roleLabel.Size = new Size(227, 16);
-        _roleLabel.TabIndex = 2;
-        // 
-        // _userEmailLabel
-        // 
-        _userEmailLabel.AutoEllipsis = true;
-        _userEmailLabel.BackColor = Color.Transparent;
-        _userEmailLabel.Dock = DockStyle.Bottom;
-        _userEmailLabel.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-        _userEmailLabel.ForeColor = Color.Transparent;
-        _userEmailLabel.Location = new Point(14, 626);
-        _userEmailLabel.Name = "_userEmailLabel";
-        _userEmailLabel.Padding = new Padding(8, 0, 8, 0);
-        _userEmailLabel.Size = new Size(227, 10);
-        _userEmailLabel.TabIndex = 3;
-        // 
         // _brandPanel
         // 
         _brandPanel.BackColor = Color.FromArgb(88, 52, 27);
         _brandPanel.BorderRadius = 7;
         _brandPanel.Controls.Add(_brandSubtitle);
         _brandPanel.Controls.Add(_brandLabel);
+        _brandPanel.Controls.Add(_roleLabel);
+        _brandPanel.Controls.Add(_userEmailLabel);
         _brandPanel.CustomizableEdges = customizableEdges19;
         _brandPanel.Dock = DockStyle.Top;
         _brandPanel.FillColor = Color.Transparent;
@@ -333,6 +307,30 @@ partial class MainForm
         _brandLabel.Size = new Size(170, 40);
         _brandLabel.TabIndex = 1;
         _brandLabel.Text = "ATELIÊ\nDA TRANSFORMAÇÃO";
+        // 
+        // _roleLabel
+        // 
+        _roleLabel.BackColor = Color.Transparent;
+        _roleLabel.ForeColor = Color.White;
+        _roleLabel.Location = new Point(3, 62);
+        _roleLabel.Name = "_roleLabel";
+        _roleLabel.Padding = new Padding(8, 0, 8, 0);
+        _roleLabel.Size = new Size(227, 16);
+        _roleLabel.TabIndex = 2;
+        // 
+        // _userEmailLabel
+        // 
+        _userEmailLabel.AutoEllipsis = true;
+        _userEmailLabel.BackColor = Color.Transparent;
+        _userEmailLabel.Dock = DockStyle.Bottom;
+        _userEmailLabel.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+        _userEmailLabel.ForeColor = Color.FromArgb(235, 239, 255); // visível
+        _userEmailLabel.Location = new Point(14, 618);
+        _userEmailLabel.Name = "_userEmailLabel";
+        _userEmailLabel.Padding = new Padding(8, 0, 8, 0);
+        _userEmailLabel.Size = new Size(227, 20); // altura aumentada
+        _userEmailLabel.TabIndex = 3;
+        _userEmailLabel.TextAlign = ContentAlignment.MiddleLeft;
         // 
         // _contentPanel
         // 
