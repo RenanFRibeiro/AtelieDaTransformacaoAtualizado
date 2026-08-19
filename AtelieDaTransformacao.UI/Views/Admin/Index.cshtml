@@ -1,0 +1,113 @@
+﻿@model IEnumerable<AtelieDaTransformacao.Application.DTOs.ProductDto>
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Painel de Controle";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-5">
+    <div>
+        <h2 class="fw-bold text-dark m-0">Painel de Gestão</h2>
+        <p class="text-muted small m-0">Controle o inventário de peças e destaques da vitrina.</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a href="@Url.Action("Categories", "Admin")" class="btn btn-outline-dark rounded-pill px-4 py-2 fw-medium shadow-sm">
+            <i class="bi bi-tags me-2"></i>Categorias
+        </a>
+        <a href="@Url.Action("CreateProduct", "Admin")" class="btn btn-dark rounded-pill px-4 py-2 fw-medium shadow-sm">
+            <i class="bi bi-plus-lg me-2"></i>Nova Peça
+        </a>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <div class="col-12 col-sm-6 col-xl-4">
+        <div class="card border-0 shadow-sm p-4 rounded-4 bg-white border-start border-4 border-dark">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="text-muted text-uppercase fw-bold small tracking-wider">Total de Peças</span>
+                    <h3 class="fw-bold text-dark m-0 mt-1">@Model.Count()</h3>
+                </div>
+                <div class="bg-light p-3 rounded-circle text-dark"><i class="bi bi-box-seam fs-4"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-4">
+        <div class="card border-0 shadow-sm p-4 rounded-4 bg-white border-start border-4 border-success">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="text-muted text-uppercase fw-bold small tracking-wider">Disponíveis</span>
+                    <h3 class="fw-bold text-success m-0 mt-1">@Model.Count(p => p.IsAvailable)</h3>
+                </div>
+                <div class="bg-success bg-opacity-10 p-3 rounded-circle text-success"><i class="bi bi-check-circle fs-4"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-4">
+        <div class="card border-0 shadow-sm p-4 rounded-4 bg-white border-start border-4 border-warning">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <span class="text-muted text-uppercase fw-bold small tracking-wider">Em Destaque</span>
+                    <h3 class="fw-bold text-warning m-0 mt-1">@Model.Count(p => p.IsFeatured)</h3>
+                </div>
+                <div class="bg-warning bg-opacity-10 p-3 rounded-circle text-warning"><i class="bi bi-star fs-4"></i></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
+    <div class="card-header bg-white border-0 py-3 px-4">
+        <h5 class="fw-bold m-0 text-dark">Inventário do Ateliê</h5>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light border-bottom border-light">
+                <tr class="small text-muted text-uppercase tracking-wider">
+                    <th class="ps-4">Item</th>
+                    <th>Título</th>
+                    <th>Categoria</th>
+                    <th>Preço</th>
+                    <th>Status</th>
+                    <th class="text-end pe-4">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var prod in Model)
+                {
+                    <tr>
+                        <td class="ps-4">
+                            <img src="@(string.IsNullOrEmpty(prod.Image) ? "/images/placeholder.jpg" : prod.Image)"
+                                 class="rounded-3 border object-fit-cover" style="width: 50px; height: 50px;" alt="" />
+                        </td>
+                        <td>
+                            <span class="fw-bold text-dark d-block">@prod.Title</span>
+                            @if (prod.IsFeatured)
+                            {
+                                <span class="badge bg-warning text-dark rounded-pill" style="font-size: 0.65rem;">Destaque</span>
+                            }
+                        </td>
+                        <td>
+                            <span class="text-secondary small">
+                                @(string.IsNullOrEmpty(prod.CategoryName) ? "Mobiliário" : prod.CategoryName)
+                            </span>
+                        </td>
+                        <td class="fw-semibold text-dark">@prod.Price.ToString("C")</td>
+                        <td>
+                            <span class="badge rounded-pill px-3 py-1 @(prod.IsAvailable ? "bg-success bg-opacity-10 text-success" : "bg-secondary bg-opacity-10 text-secondary")">
+                                @(prod.IsAvailable ? "Disponível" : "Esgotado")
+                            </span>
+                        </td>
+                        <td class="text-end pe-4">
+                            <div class="d-inline-flex gap-2">
+                                <a href="@Url.Action("EditProduct", "Admin", new { id = prod.Id })" class="btn btn-sm btn-outline-dark rounded-pill px-3">Editar</a>
+                                <form asp-action="DeleteProduct" asp-route-id="@prod.Id" method="post" onsubmit="return confirm('Excluir permanentemente esta peça?');">
+                                    <button type="submit" class="btn btn-sm btn-link text-danger text-decoration-none small">Remover</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

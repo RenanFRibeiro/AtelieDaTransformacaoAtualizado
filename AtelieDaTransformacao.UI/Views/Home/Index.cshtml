@@ -1,0 +1,71 @@
+﻿@model AtelieDaTransformacao.Application.ViewModels.HomeViewModel
+
+@{
+    ViewData["Title"] = "Peças Exclusivas";
+}
+
+<div class="container mb-5">
+    <div class="d-flex justify-content-center flex-wrap gap-2 mb-5">
+        <a href="@Url.Action("Index", "Home")"
+               class="px-4 py-2 text-decoration-none rounded-pill fw-semibold small filter-pill @(Model.SelectedCategoryId == null ? "active" : "")">
+            Ver Toda a Coleção
+        </a>
+        @foreach (var cat in Model.Categories)
+        {
+            <a href="@Url.Action("Index", "Home", new { categoryId = cat.Id })"
+                   class="px-4 py-2 text-decoration-none rounded-pill fw-semibold small filter-pill @(Model.SelectedCategoryId == cat.Id ? "active" : "")">
+                @cat.Name
+            </a>
+        }
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @foreach (var prod in Model.Products)
+        {
+            <div class="col">
+                <div class="card h-100 card-wood position-relative overflow-hidden">
+                    @if (prod.IsFeatured)
+                    {
+                        <span class="position-absolute top-0 start-0 m-3 badge px-3 py-2 rounded-pill fw-bold shadow-sm" style="z-index: 2; background-color: var(--artisan-gold); color: var(--artisan-wood);">
+                            <i class="bi bi-stars me-1"></i> Destaque
+                        </span>
+                    }
+                    
+                    <div class="image-container" style="height: 280px;">
+                        <img src="@(string.IsNullOrEmpty(prod.Image) ? "/images/placeholder.jpg" : prod.Image)"
+                             class="w-100 h-100 object-fit-cover transition-transform" alt="@prod.Title" />
+                    </div>
+                    
+                    <div class="card-body p-4 d-flex flex-column">
+                        <span class="text-uppercase text-gold fw-bold tracking-wider mb-2" style="font-size: 0.75rem;">@prod.CategoryName</span>
+                        <h4 class="card-title fw-bold text-dark mb-2 serif-title">@prod.Title</h4>
+                        <p class="text-muted small mb-4 flex-grow-1">@prod.Description</p>
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-auto pt-3 border-top border-light">
+                            <div>
+                                <span class="text-muted d-block small" style="font-size: 0.7rem;">Valor Unitário</span>
+                                <span class="fs-4 fw-bold text-dark">@prod.Price.ToString("C")</span>
+                            </div>
+                            
+                            <div class="d-flex gap-2">
+                                <a href="@Url.Action("ProductDetails", "Home", new { id = prod.Id })" class="btn btn-light rounded-circle px-3 py-2 border" title="Ver Detalhes">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                @if (prod.IsAvailable)
+                                {
+                                    <a href="@prod.WhatsAppLink" target="_blank" class="btn btn-success rounded-pill px-4 fw-medium d-inline-flex align-items-center gap-2 small shadow-sm" style="background-color: #25d366; border: none;">
+                                        <i class="bi bi-whatsapp"></i> Comprar
+                                    </a>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-outline-secondary rounded-pill px-3 small border-0" disabled>Reservado</button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
