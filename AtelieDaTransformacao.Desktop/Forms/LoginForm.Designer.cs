@@ -50,6 +50,7 @@ partial class LoginForm
         _borderlessForm = new Guna.UI2.WinForms.Guna2BorderlessForm(components);
         _dragControl = new Guna.UI2.WinForms.Guna2DragControl(components);
         _brandPanel = new Guna.UI2.WinForms.Guna2Panel();
+        pnSeparador2 = new Panel();
         _featureLabel = new Label();
         _brandDescription = new Label();
         _brandLabel = new Label();
@@ -85,27 +86,38 @@ partial class LoginForm
         // 
         // _brandPanel
         // 
+        _brandPanel.Controls.Add(pnSeparador2);
         _brandPanel.Controls.Add(_featureLabel);
         _brandPanel.Controls.Add(_brandDescription);
         _brandPanel.Controls.Add(_brandLabel);
         _brandPanel.CustomizableEdges = customizableEdges13;
         _brandPanel.Dock = DockStyle.Left;
-        _brandPanel.FillColor = Color.FromArgb(135, 98, 35);
+        _brandPanel.FillColor = Color.FromArgb(107, 69, 37);
         _brandPanel.Location = new Point(0, 0);
         _brandPanel.Name = "_brandPanel";
         _brandPanel.ShadowDecoration.CustomizableEdges = customizableEdges14;
         _brandPanel.Size = new Size(320, 450);
         _brandPanel.TabIndex = 1;
         // 
+        // pnSeparador2
+        // 
+        pnSeparador2.BackColor = Color.FromArgb(217, 168, 91);
+        pnSeparador2.BorderStyle = BorderStyle.FixedSingle;
+        pnSeparador2.ForeColor = SystemColors.MenuHighlight;
+        pnSeparador2.Location = new Point(20, 147);
+        pnSeparador2.Name = "pnSeparador2";
+        pnSeparador2.Size = new Size(180, 5);
+        pnSeparador2.TabIndex = 9;
+        // 
         // _featureLabel
         // 
         _featureLabel.AutoSize = true;
         _featureLabel.BackColor = Color.Transparent;
-        _featureLabel.Font = new Font("Segoe UI Semibold", 10F);
-        _featureLabel.ForeColor = Color.FromArgb(165, 190, 255);
-        _featureLabel.Location = new Point(20, 265);
+        _featureLabel.Font = new Font("Segoe UI Semibold", 8F);
+        _featureLabel.ForeColor = Color.White;
+        _featureLabel.Location = new Point(12, 330);
         _featureLabel.Name = "_featureLabel";
-        _featureLabel.Size = new Size(152, 95);
+        _featureLabel.Size = new Size(124, 65);
         _featureLabel.TabIndex = 0;
         _featureLabel.Text = "●  API conectada\n\n●  Autenticação segura\n\n●  Controle de estoque";
         // 
@@ -113,11 +125,11 @@ partial class LoginForm
         // 
         _brandDescription.AutoSize = true;
         _brandDescription.BackColor = Color.Transparent;
-        _brandDescription.Font = new Font("Segoe UI", 11F);
-        _brandDescription.ForeColor = Color.FromArgb(190, 196, 208);
-        _brandDescription.Location = new Point(20, 200);
+        _brandDescription.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+        _brandDescription.ForeColor = SystemColors.ControlDark;
+        _brandDescription.Location = new Point(20, 195);
         _brandDescription.Name = "_brandDescription";
-        _brandDescription.Size = new Size(275, 60);
+        _brandDescription.Size = new Size(246, 51);
         _brandDescription.TabIndex = 1;
         _brandDescription.Text = "Gestão simples, bonita e centralizada.\nControle produtos, categorias e estoque\nem um só lugar.";
         // 
@@ -125,16 +137,17 @@ partial class LoginForm
         // 
         _brandLabel.AutoSize = true;
         _brandLabel.BackColor = Color.Transparent;
-        _brandLabel.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+        _brandLabel.Font = new Font("Yu Gothic", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
         _brandLabel.ForeColor = Color.White;
-        _brandLabel.Location = new Point(36, 58);
+        _brandLabel.Location = new Point(12, 67);
         _brandLabel.Name = "_brandLabel";
-        _brandLabel.Size = new Size(239, 60);
+        _brandLabel.Size = new Size(280, 62);
         _brandLabel.TabIndex = 2;
         _brandLabel.Text = "ATELIÊ\nDA TRANSFORMAÇÃO";
         // 
         // _loginCard
         // 
+        _loginCard.BorderRadius = 10;
         _loginCard.Controls.Add(btnMinimize);
         _loginCard.Controls.Add(btnClose);
         _loginCard.Controls.Add(_versionLabel);
@@ -189,7 +202,7 @@ partial class LoginForm
         _versionLabel.AutoSize = true;
         _versionLabel.Font = new Font("Segoe UI", 8F);
         _versionLabel.ForeColor = Color.FromArgb(160, 165, 175);
-        _versionLabel.Location = new Point(40, 365);
+        _versionLabel.Location = new Point(46, 362);
         _versionLabel.Name = "_versionLabel";
         _versionLabel.Size = new Size(182, 13);
         _versionLabel.TabIndex = 0;
@@ -199,7 +212,7 @@ partial class LoginForm
         // 
         _apiStatusLabel.AutoSize = true;
         _apiStatusLabel.Font = new Font("Segoe UI", 8.5F);
-        _apiStatusLabel.Location = new Point(40, 345);
+        _apiStatusLabel.Location = new Point(46, 342);
         _apiStatusLabel.Name = "_apiStatusLabel";
         _apiStatusLabel.Size = new Size(99, 15);
         _apiStatusLabel.TabIndex = 1;
@@ -208,7 +221,7 @@ partial class LoginForm
         // _statusLabel
         // 
         _statusLabel.Font = new Font("Segoe UI", 9F);
-        _statusLabel.Location = new Point(70, 378);
+        _statusLabel.Location = new Point(43, 375);
         _statusLabel.Name = "_statusLabel";
         _statusLabel.Size = new Size(390, 46);
         _statusLabel.TabIndex = 2;
@@ -217,9 +230,10 @@ partial class LoginForm
         // 
         _loginButton.BorderRadius = 9;
         _loginButton.CustomizableEdges = customizableEdges5;
+        _loginButton.FillColor = Color.FromArgb(107, 69, 37);
         _loginButton.Font = new Font("Segoe UI Semibold", 10F);
         _loginButton.ForeColor = Color.White;
-        _loginButton.Location = new Point(40, 260);
+        _loginButton.Location = new Point(46, 267);
         _loginButton.Name = "_loginButton";
         _loginButton.ShadowDecoration.CustomizableEdges = customizableEdges6;
         _loginButton.Size = new Size(390, 46);
@@ -232,10 +246,10 @@ partial class LoginForm
         _passwordTextBox.CustomizableEdges = customizableEdges7;
         _passwordTextBox.DefaultText = "";
         _passwordTextBox.Font = new Font("Segoe UI", 10F);
-        _passwordTextBox.Location = new Point(40, 160);
+        _passwordTextBox.Location = new Point(49, 186);
         _passwordTextBox.Name = "_passwordTextBox";
         _passwordTextBox.PasswordChar = '●';
-        _passwordTextBox.PlaceholderText = "Digite sua senha";
+        _passwordTextBox.PlaceholderText = "🔒 Digite sua senha";
         _passwordTextBox.SelectedText = "";
         _passwordTextBox.ShadowDecoration.CustomizableEdges = customizableEdges8;
         _passwordTextBox.Size = new Size(390, 42);
@@ -254,9 +268,9 @@ partial class LoginForm
         _emailTextBox.CustomizableEdges = customizableEdges9;
         _emailTextBox.DefaultText = "";
         _emailTextBox.Font = new Font("Segoe UI", 10F);
-        _emailTextBox.Location = new Point(40, 112);
+        _emailTextBox.Location = new Point(49, 138);
         _emailTextBox.Name = "_emailTextBox";
-        _emailTextBox.PlaceholderText = "seu@email.com";
+        _emailTextBox.PlaceholderText = "✉️ seu@email.com";
         _emailTextBox.SelectedText = "";
         _emailTextBox.ShadowDecoration.CustomizableEdges = customizableEdges10;
         _emailTextBox.Size = new Size(390, 42);
@@ -273,7 +287,8 @@ partial class LoginForm
         // 
         _subtitleLabel.AutoSize = true;
         _subtitleLabel.Font = new Font("Segoe UI", 10F);
-        _subtitleLabel.Location = new Point(40, 90);
+        _subtitleLabel.ForeColor = SystemColors.ControlDark;
+        _subtitleLabel.Location = new Point(52, 103);
         _subtitleLabel.Name = "_subtitleLabel";
         _subtitleLabel.Size = new Size(230, 19);
         _subtitleLabel.TabIndex = 8;
@@ -282,12 +297,12 @@ partial class LoginForm
         // _welcomeLabel
         // 
         _welcomeLabel.AutoSize = true;
-        _welcomeLabel.Font = new Font("Segoe UI Semibold", 24.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-        _welcomeLabel.Location = new Point(40, 50);
+        _welcomeLabel.Font = new Font("Yu Gothic", 24.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+        _welcomeLabel.Location = new Point(46, 58);
         _welcomeLabel.Name = "_welcomeLabel";
-        _welcomeLabel.Size = new Size(185, 45);
+        _welcomeLabel.Size = new Size(207, 43);
         _welcomeLabel.TabIndex = 9;
-        _welcomeLabel.Text = "Bem-vindo";
+        _welcomeLabel.Text = "Bem-Vindo!";
         // 
         // LoginForm
         // 
@@ -323,4 +338,5 @@ partial class LoginForm
 
     private Guna.UI2.WinForms.Guna2ControlBox btnMinimize;
     private Guna.UI2.WinForms.Guna2ControlBox btnClose;
+    private Panel pnSeparador2;
 }

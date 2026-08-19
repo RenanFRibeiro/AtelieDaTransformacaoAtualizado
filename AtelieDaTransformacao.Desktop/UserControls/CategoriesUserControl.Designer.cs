@@ -56,9 +56,10 @@ partial class CategoriesUserControl
         // 
         // _refreshButton
         // 
+        _refreshButton.BackColor = Color.White;
         _refreshButton.BorderRadius = 10;
         _refreshButton.CustomizableEdges = customizableEdges1;
-        _refreshButton.FillColor = Color.FromArgb(192, 192, 0);
+        _refreshButton.FillColor = Color.Gray;
         _refreshButton.Font = new Font("Segoe UI", 9F);
         _refreshButton.ForeColor = Color.FromArgb(224, 224, 224);
         _refreshButton.Location = new Point(349, 25);
@@ -66,7 +67,7 @@ partial class CategoriesUserControl
         _refreshButton.ShadowDecoration.CustomizableEdges = customizableEdges2;
         _refreshButton.Size = new Size(108, 45);
         _refreshButton.TabIndex = 0;
-        _refreshButton.Text = "Atualizar";
+        _refreshButton.Text = "🔄️ Atualizar";
         // 
         // _deleteButton
         // 
@@ -80,13 +81,13 @@ partial class CategoriesUserControl
         _deleteButton.ShadowDecoration.CustomizableEdges = customizableEdges4;
         _deleteButton.Size = new Size(108, 45);
         _deleteButton.TabIndex = 1;
-        _deleteButton.Text = "Excluir";
+        _deleteButton.Text = "🗑️ Excluir";
         // 
         // _editButton
         // 
         _editButton.BorderRadius = 10;
         _editButton.CustomizableEdges = customizableEdges5;
-        _editButton.FillColor = Color.FromArgb(0, 0, 192);
+        _editButton.FillColor = Color.MidnightBlue;
         _editButton.Font = new Font("Segoe UI", 9F);
         _editButton.ForeColor = Color.FromArgb(224, 224, 224);
         _editButton.Location = new Point(121, 25);
@@ -94,13 +95,13 @@ partial class CategoriesUserControl
         _editButton.ShadowDecoration.CustomizableEdges = customizableEdges6;
         _editButton.Size = new Size(108, 45);
         _editButton.TabIndex = 2;
-        _editButton.Text = "Editar";
+        _editButton.Text = "✏️ Editar";
         // 
         // _newButton
         // 
         _newButton.BorderRadius = 10;
         _newButton.CustomizableEdges = customizableEdges7;
-        _newButton.FillColor = Color.FromArgb(0, 192, 0);
+        _newButton.FillColor = Color.Green;
         _newButton.Font = new Font("Segoe UI", 9F);
         _newButton.ForeColor = Color.FromArgb(224, 224, 224);
         _newButton.Location = new Point(7, 25);

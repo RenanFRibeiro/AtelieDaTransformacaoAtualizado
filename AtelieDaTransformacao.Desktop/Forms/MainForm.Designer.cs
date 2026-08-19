@@ -98,7 +98,7 @@ partial class MainForm
         // 
         // _topBar
         // 
-        _topBar.BackColor = Color.Transparent;
+        _topBar.BackColor = Color.FromArgb(107, 69, 37);
         _topBar.Controls.Add(_roleBadge);
         _topBar.Controls.Add(_pageSubtitle);
         _topBar.Controls.Add(_pageTitle);
@@ -130,6 +130,7 @@ partial class MainForm
         _pageSubtitle.AutoSize = true;
         _pageSubtitle.BackColor = Color.Transparent;
         _pageSubtitle.Font = new Font("Segoe UI", 9.5F);
+        _pageSubtitle.ForeColor = Color.Transparent;
         _pageSubtitle.Location = new Point(30, 53);
         _pageSubtitle.Name = "_pageSubtitle";
         _pageSubtitle.Size = new Size(243, 17);
@@ -141,6 +142,7 @@ partial class MainForm
         _pageTitle.AutoSize = true;
         _pageTitle.BackColor = Color.Transparent;
         _pageTitle.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
+        _pageTitle.ForeColor = Color.Transparent;
         _pageTitle.Location = new Point(28, 14);
         _pageTitle.Name = "_pageTitle";
         _pageTitle.Size = new Size(157, 37);
@@ -149,6 +151,7 @@ partial class MainForm
         // 
         // _sidebar
         // 
+        _sidebar.BackColor = Color.FromArgb(107, 69, 37);
         _sidebar.Controls.Add(_navPanel);
         _sidebar.Controls.Add(_logoutButton);
         _sidebar.Controls.Add(_roleLabel);
@@ -165,7 +168,7 @@ partial class MainForm
         // 
         // _navPanel
         // 
-        _navPanel.BackColor = Color.Transparent;
+        _navPanel.BackColor = Color.FromArgb(107, 69, 37);
         _navPanel.Controls.Add(_profileButton);
         _navPanel.Controls.Add(_usersButton);
         _navPanel.Controls.Add(_categoriesButton);
@@ -188,10 +191,10 @@ partial class MainForm
         _profileButton.FillColor = Color.FromArgb(164, 104, 45);
         _profileButton.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
         _profileButton.ForeColor = Color.DimGray;
-        _profileButton.Location = new Point(0, 186);
+        _profileButton.Location = new Point(0, 292);
         _profileButton.Name = "_profileButton";
         _profileButton.ShadowDecoration.CustomizableEdges = customizableEdges6;
-        _profileButton.Size = new Size(227, 45);
+        _profileButton.Size = new Size(227, 56);
         _profileButton.TabIndex = 0;
         _profileButton.Text = "Perfil";
         // 
@@ -202,10 +205,10 @@ partial class MainForm
         _usersButton.FillColor = Color.FromArgb(164, 104, 45);
         _usersButton.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
         _usersButton.ForeColor = Color.DimGray;
-        _usersButton.Location = new Point(0, 141);
+        _usersButton.Location = new Point(0, 230);
         _usersButton.Name = "_usersButton";
         _usersButton.ShadowDecoration.CustomizableEdges = customizableEdges8;
-        _usersButton.Size = new Size(227, 45);
+        _usersButton.Size = new Size(227, 56);
         _usersButton.TabIndex = 1;
         _usersButton.Text = "Usuários";
         // 
@@ -216,10 +219,10 @@ partial class MainForm
         _categoriesButton.FillColor = Color.FromArgb(164, 104, 45);
         _categoriesButton.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
         _categoriesButton.ForeColor = Color.DimGray;
-        _categoriesButton.Location = new Point(0, 96);
+        _categoriesButton.Location = new Point(0, 168);
         _categoriesButton.Name = "_categoriesButton";
         _categoriesButton.ShadowDecoration.CustomizableEdges = customizableEdges10;
-        _categoriesButton.Size = new Size(227, 45);
+        _categoriesButton.Size = new Size(227, 56);
         _categoriesButton.TabIndex = 2;
         _categoriesButton.Text = "Categorias";
         // 
@@ -230,10 +233,10 @@ partial class MainForm
         _productsButton.FillColor = Color.FromArgb(164, 104, 45);
         _productsButton.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
         _productsButton.ForeColor = Color.DimGray;
-        _productsButton.Location = new Point(0, 51);
+        _productsButton.Location = new Point(0, 106);
         _productsButton.Name = "_productsButton";
         _productsButton.ShadowDecoration.CustomizableEdges = customizableEdges12;
-        _productsButton.Size = new Size(227, 45);
+        _productsButton.Size = new Size(227, 56);
         _productsButton.TabIndex = 3;
         _productsButton.Text = "Produtos";
         // 
@@ -244,10 +247,10 @@ partial class MainForm
         _dashboardButton.FillColor = Color.FromArgb(164, 104, 45);
         _dashboardButton.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
         _dashboardButton.ForeColor = Color.DimGray;
-        _dashboardButton.Location = new Point(0, 6);
+        _dashboardButton.Location = new Point(0, 44);
         _dashboardButton.Name = "_dashboardButton";
         _dashboardButton.ShadowDecoration.CustomizableEdges = customizableEdges14;
-        _dashboardButton.Size = new Size(227, 45);
+        _dashboardButton.Size = new Size(227, 56);
         _dashboardButton.TabIndex = 4;
         _dashboardButton.Text = "Dashboard";
         // 
@@ -256,45 +259,47 @@ partial class MainForm
         _logoutButton.BorderRadius = 9;
         _logoutButton.CustomizableEdges = customizableEdges17;
         _logoutButton.Dock = DockStyle.Bottom;
-        _logoutButton.FillColor = Color.FromArgb(39, 44, 54);
+        _logoutButton.FillColor = Color.FromArgb(192, 0, 0);
         _logoutButton.Font = new Font("Segoe UI", 9F);
         _logoutButton.ForeColor = Color.White;
         _logoutButton.HoverState.FillColor = Color.FromArgb(55, 60, 72);
-        _logoutButton.Location = new Point(14, 544);
+        _logoutButton.Location = new Point(14, 568);
         _logoutButton.Margin = new Padding(5, 10, 5, 8);
         _logoutButton.Name = "_logoutButton";
         _logoutButton.ShadowDecoration.CustomizableEdges = customizableEdges18;
         _logoutButton.Size = new Size(227, 42);
         _logoutButton.TabIndex = 1;
-        _logoutButton.Text = "Sair da conta";
+        _logoutButton.Text = "↪ Sair da conta";
         _logoutButton.Click += _logoutButton_Click;
         // 
         // _roleLabel
         // 
+        _roleLabel.BackColor = Color.Transparent;
         _roleLabel.Dock = DockStyle.Bottom;
         _roleLabel.Font = new Font("Segoe UI", 8.5F);
-        _roleLabel.ForeColor = Color.FromArgb(143, 151, 166);
-        _roleLabel.Location = new Point(14, 586);
+        _roleLabel.ForeColor = Color.Transparent;
+        _roleLabel.Location = new Point(14, 610);
         _roleLabel.Name = "_roleLabel";
         _roleLabel.Padding = new Padding(8, 0, 8, 0);
-        _roleLabel.Size = new Size(227, 24);
+        _roleLabel.Size = new Size(227, 16);
         _roleLabel.TabIndex = 2;
         // 
         // _userEmailLabel
         // 
         _userEmailLabel.AutoEllipsis = true;
+        _userEmailLabel.BackColor = Color.Transparent;
         _userEmailLabel.Dock = DockStyle.Bottom;
         _userEmailLabel.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-        _userEmailLabel.ForeColor = Color.White;
-        _userEmailLabel.Location = new Point(14, 610);
+        _userEmailLabel.ForeColor = Color.Transparent;
+        _userEmailLabel.Location = new Point(14, 626);
         _userEmailLabel.Name = "_userEmailLabel";
         _userEmailLabel.Padding = new Padding(8, 0, 8, 0);
-        _userEmailLabel.Size = new Size(227, 26);
+        _userEmailLabel.Size = new Size(227, 10);
         _userEmailLabel.TabIndex = 3;
         // 
         // _brandPanel
         // 
-        _brandPanel.BackColor = Color.FromArgb(164, 104, 45);
+        _brandPanel.BackColor = Color.FromArgb(94, 60, 32);
         _brandPanel.BorderRadius = 7;
         _brandPanel.Controls.Add(_brandSubtitle);
         _brandPanel.Controls.Add(_brandLabel);
@@ -322,7 +327,7 @@ partial class MainForm
         // 
         _brandLabel.AutoSize = true;
         _brandLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-        _brandLabel.ForeColor = Color.White;
+        _brandLabel.ForeColor = Color.Transparent;
         _brandLabel.Location = new Point(15, 14);
         _brandLabel.Name = "_brandLabel";
         _brandLabel.Size = new Size(170, 40);

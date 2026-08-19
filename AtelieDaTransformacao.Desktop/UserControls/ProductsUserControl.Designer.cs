@@ -87,13 +87,13 @@ partial class ProductsUserControl
         _deleteButton.ShadowDecoration.CustomizableEdges = customizableEdges2;
         _deleteButton.Size = new Size(80, 33);
         _deleteButton.TabIndex = 0;
-        _deleteButton.Text = "Excluir";
+        _deleteButton.Text = "🗑️ Excluir";
         // 
         // _editButton
         // 
         _editButton.BorderRadius = 10;
         _editButton.CustomizableEdges = customizableEdges3;
-        _editButton.FillColor = Color.FromArgb(128, 128, 255);
+        _editButton.FillColor = Color.MidnightBlue;
         _editButton.Font = new Font("Segoe UI", 9F);
         _editButton.ForeColor = Color.White;
         _editButton.Location = new Point(322, 28);
@@ -101,13 +101,13 @@ partial class ProductsUserControl
         _editButton.ShadowDecoration.CustomizableEdges = customizableEdges4;
         _editButton.Size = new Size(79, 33);
         _editButton.TabIndex = 1;
-        _editButton.Text = "Editar";
+        _editButton.Text = "✏️ Editar";
         // 
         // _newButton
         // 
         _newButton.BorderRadius = 10;
         _newButton.CustomizableEdges = customizableEdges5;
-        _newButton.FillColor = Color.FromArgb(0, 192, 0);
+        _newButton.FillColor = Color.Green;
         _newButton.Font = new Font("Segoe UI", 9F);
         _newButton.ForeColor = Color.White;
         _newButton.Location = new Point(220, 28);
@@ -121,7 +121,7 @@ partial class ProductsUserControl
         // 
         _refreshButton.BorderRadius = 10;
         _refreshButton.CustomizableEdges = customizableEdges7;
-        _refreshButton.FillColor = Color.FromArgb(192, 192, 0);
+        _refreshButton.FillColor = Color.Gray;
         _refreshButton.Font = new Font("Segoe UI", 9F);
         _refreshButton.ForeColor = Color.White;
         _refreshButton.Location = new Point(493, 29);
@@ -129,7 +129,7 @@ partial class ProductsUserControl
         _refreshButton.ShadowDecoration.CustomizableEdges = customizableEdges8;
         _refreshButton.Size = new Size(88, 33);
         _refreshButton.TabIndex = 3;
-        _refreshButton.Text = "Atualizar";
+        _refreshButton.Text = "🔄️ Atualizar";
         // 
         // _categoryComboBox
         // 
@@ -159,7 +159,7 @@ partial class ProductsUserControl
         _searchTextBox.Font = new Font("Segoe UI", 9.5F);
         _searchTextBox.Location = new Point(11, 26);
         _searchTextBox.Name = "_searchTextBox";
-        _searchTextBox.PlaceholderText = "Pesquisar produto...";
+        _searchTextBox.PlaceholderText = "🔎 Pesquisar produto...";
         _searchTextBox.SelectedText = "";
         _searchTextBox.ShadowDecoration.CustomizableEdges = customizableEdges12;
         _searchTextBox.Size = new Size(203, 36);
