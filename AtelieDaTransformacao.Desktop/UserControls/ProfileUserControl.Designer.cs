@@ -53,7 +53,7 @@ partial class ProfileUserControl
         lblAvatar.DisabledState.CustomBorderColor = Color.DarkGray;
         lblAvatar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
         lblAvatar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-        lblAvatar.FillColor = Color.FromArgb(88, 52, 27);
+        lblAvatar.FillColor = Color.FromArgb(145, 98, 57);
         lblAvatar.Font = new Font("Yu Gothic", 26.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
         lblAvatar.ForeColor = Color.White;
         lblAvatar.Location = new Point(222, 33);
@@ -89,9 +89,9 @@ partial class ProfileUserControl
         // 
         _sessionValueLabel.BackColor = Color.Transparent;
         _sessionValueLabel.Font = new Font("Yu Gothic", 9F);
-        _sessionValueLabel.Location = new Point(22, 290);
+        _sessionValueLabel.Location = new Point(23, 284);
         _sessionValueLabel.Name = "_sessionValueLabel";
-        _sessionValueLabel.Size = new Size(100, 23);
+        _sessionValueLabel.Size = new Size(100, 18);
         _sessionValueLabel.TabIndex = 2;
         _sessionValueLabel.Text = "JWT autenticado";
         // 
@@ -107,7 +107,7 @@ partial class ProfileUserControl
         // 
         // _roleValueLabel
         // 
-        _roleValueLabel.BackColor = Color.FromArgb(88, 52, 27);
+        _roleValueLabel.BackColor = Color.FromArgb(145, 98, 57);
         _roleValueLabel.ForeColor = Color.White;
         _roleValueLabel.Location = new Point(172, 152);
         _roleValueLabel.Name = "_roleValueLabel";
@@ -132,7 +132,7 @@ partial class ProfileUserControl
         _emailValueLabel.ForeColor = Color.Black;
         _emailValueLabel.Location = new Point(22, 234);
         _emailValueLabel.Name = "_emailValueLabel";
-        _emailValueLabel.Size = new Size(100, 23);
+        _emailValueLabel.Size = new Size(256, 23);
         _emailValueLabel.TabIndex = 6;
         // 
         // _emailCaptionLabel
@@ -159,7 +159,7 @@ partial class ProfileUserControl
         // 
         // ProfileUserControl
         // 
-        BackColor = Color.FromArgb(245, 247, 251);
+        BackColor = Color.Transparent;
         Controls.Add(_card);
         Controls.Add(_titleLabel);
         Name = "ProfileUserControl";

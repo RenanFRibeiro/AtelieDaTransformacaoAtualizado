@@ -55,6 +55,7 @@ partial class ProductsUserControl
         // 
         // _toolbarCard
         // 
+        _toolbarCard.BackColor = Color.Transparent;
         _toolbarCard.BorderColor = Color.FromArgb(226, 229, 236);
         _toolbarCard.BorderRadius = 12;
         _toolbarCard.BorderThickness = 1;
@@ -76,6 +77,7 @@ partial class ProductsUserControl
         // 
         // _deleteButton
         // 
+        _deleteButton.BackColor = Color.Transparent;
         _deleteButton.BorderRadius = 10;
         _deleteButton.CustomizableEdges = customizableEdges1;
         _deleteButton.FillColor = Color.FromArgb(192, 0, 0);
@@ -91,6 +93,7 @@ partial class ProductsUserControl
         // 
         // _editButton
         // 
+        _editButton.BackColor = Color.Transparent;
         _editButton.BorderRadius = 10;
         _editButton.CustomizableEdges = customizableEdges3;
         _editButton.FillColor = Color.MidnightBlue;
@@ -105,6 +108,7 @@ partial class ProductsUserControl
         // 
         // _newButton
         // 
+        _newButton.BackColor = Color.Transparent;
         _newButton.BorderRadius = 10;
         _newButton.CustomizableEdges = customizableEdges5;
         _newButton.FillColor = Color.Green;
@@ -119,6 +123,7 @@ partial class ProductsUserControl
         // 
         // _refreshButton
         // 
+        _refreshButton.BackColor = Color.Transparent;
         _refreshButton.BorderRadius = 10;
         _refreshButton.CustomizableEdges = customizableEdges7;
         _refreshButton.FillColor = Color.Gray;
@@ -146,11 +151,12 @@ partial class ProductsUserControl
         _categoryComboBox.Location = new Point(587, 26);
         _categoryComboBox.Name = "_categoryComboBox";
         _categoryComboBox.ShadowDecoration.CustomizableEdges = customizableEdges10;
-        _categoryComboBox.Size = new Size(157, 36);
+        _categoryComboBox.Size = new Size(142, 36);
         _categoryComboBox.TabIndex = 4;
         // 
         // _searchTextBox
         // 
+        _searchTextBox.BackColor = Color.Transparent;
         _searchTextBox.BorderColor = Color.FromArgb(226, 229, 236);
         _searchTextBox.BorderRadius = 10;
         _searchTextBox.CustomizableEdges = customizableEdges11;

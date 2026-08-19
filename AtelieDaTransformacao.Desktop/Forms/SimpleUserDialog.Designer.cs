@@ -4,6 +4,170 @@ namespace AtelieDaTransformacao.Desktop.Forms;
 partial class SimpleUserDialog
 {
     private System.ComponentModel.IContainer? components=null;private Guna.UI2.WinForms.Guna2BorderlessForm _borderlessForm=null!;private Guna.UI2.WinForms.Guna2DragControl _dragControl=null!;private Guna.UI2.WinForms.Guna2Panel _headerPanel=null!;private Guna.UI2.WinForms.Guna2Panel _bodyPanel=null!;private Label _titleLabel=null!;private Label _emailCaption=null!;private Label _passwordCaption=null!;private Guna.UI2.WinForms.Guna2TextBox _emailTextBox=null!;private Guna.UI2.WinForms.Guna2TextBox _passwordTextBox=null!;private Guna.UI2.WinForms.Guna2Button _cancelButton=null!;private Guna.UI2.WinForms.Guna2Button _createButton=null!;
-    protected override void Dispose(bool disposing){if(disposing)components?.Dispose();base.Dispose(disposing);}private void InitializeComponent(){components=new System.ComponentModel.Container();_borderlessForm=new Guna.UI2.WinForms.Guna2BorderlessForm(components);_dragControl=new Guna.UI2.WinForms.Guna2DragControl(components);_headerPanel=new Guna.UI2.WinForms.Guna2Panel();_bodyPanel=new Guna.UI2.WinForms.Guna2Panel();_titleLabel=new Label();_emailCaption=new Label();_passwordCaption=new Label();_emailTextBox=new Guna.UI2.WinForms.Guna2TextBox();_passwordTextBox=new Guna.UI2.WinForms.Guna2TextBox();_cancelButton=new Guna.UI2.WinForms.Guna2Button();_createButton=new Guna.UI2.WinForms.Guna2Button();SuspendLayout();_borderlessForm.ContainerControl=this;_borderlessForm.BorderRadius=14;_borderlessForm.ShadowColor=Color.Black;_dragControl.TargetControl=_headerPanel;FormBorderStyle=FormBorderStyle.None;StartPosition=FormStartPosition.CenterParent;ClientSize=new Size(520,360);BackColor=Color.White;Text="Novo usuário";_headerPanel.Dock=DockStyle.Top;_headerPanel.Height=76;_headerPanel.FillColor=Color.White;_headerPanel.Controls.Add(_titleLabel);_titleLabel.AutoSize=true;_titleLabel.Text="Novo usuário";_titleLabel.Font=new Font("Segoe UI",17F,FontStyle.Bold);_titleLabel.ForeColor=LibraryTheme.Text;_titleLabel.Location=new Point(24,20);_bodyPanel.Dock=DockStyle.Fill;_bodyPanel.FillColor=Color.White;_bodyPanel.Controls.Add(_createButton);_bodyPanel.Controls.Add(_cancelButton);_bodyPanel.Controls.Add(_passwordTextBox);_bodyPanel.Controls.Add(_emailTextBox);_bodyPanel.Controls.Add(_passwordCaption);_bodyPanel.Controls.Add(_emailCaption);ConfigureCaption(_emailCaption,"E-mail",24,18);ConfigureText(_emailTextBox,24,40,"seu@email.com",false);ConfigureCaption(_passwordCaption,"Senha",24,92);ConfigureText(_passwordTextBox,24,114,"Mínimo de 6 caracteres",true);ConfigureButton(_cancelButton,"Cancelar",272,110,false);ConfigureButton(_createButton,"Criar",396,110,true);_cancelButton.DialogResult=DialogResult.Cancel;AcceptButton=_createButton;CancelButton=_cancelButton;Controls.Add(_bodyPanel);Controls.Add(_headerPanel);ResumeLayout(false);}
+    protected override void Dispose(bool disposing){if(disposing)components?.Dispose();base.Dispose(disposing);}
+    private void InitializeComponent()
+    {
+        components = new System.ComponentModel.Container();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges11 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        _borderlessForm = new Guna.UI2.WinForms.Guna2BorderlessForm(components);
+        _dragControl = new Guna.UI2.WinForms.Guna2DragControl(components);
+        _headerPanel = new Guna.UI2.WinForms.Guna2Panel();
+        _titleLabel = new Label();
+        _bodyPanel = new Guna.UI2.WinForms.Guna2Panel();
+        _createButton = new Guna.UI2.WinForms.Guna2Button();
+        _cancelButton = new Guna.UI2.WinForms.Guna2Button();
+        _passwordTextBox = new Guna.UI2.WinForms.Guna2TextBox();
+        _emailTextBox = new Guna.UI2.WinForms.Guna2TextBox();
+        _passwordCaption = new Label();
+        _emailCaption = new Label();
+        _headerPanel.SuspendLayout();
+        _bodyPanel.SuspendLayout();
+        SuspendLayout();
+        // 
+        // _borderlessForm
+        // 
+        _borderlessForm.BorderRadius = 14;
+        _borderlessForm.ContainerControl = this;
+        _borderlessForm.DockIndicatorTransparencyValue = 0.6D;
+        _borderlessForm.TransparentWhileDrag = true;
+        // 
+        // _dragControl
+        // 
+        _dragControl.DockIndicatorTransparencyValue = 0.6D;
+        _dragControl.TargetControl = _headerPanel;
+        _dragControl.UseTransparentDrag = true;
+        // 
+        // _headerPanel
+        // 
+        _headerPanel.Controls.Add(_titleLabel);
+        _headerPanel.CustomizableEdges = customizableEdges11;
+        _headerPanel.Dock = DockStyle.Top;
+        _headerPanel.FillColor = Color.White;
+        _headerPanel.Location = new Point(0, 0);
+        _headerPanel.Name = "_headerPanel";
+        _headerPanel.ShadowDecoration.CustomizableEdges = customizableEdges12;
+        _headerPanel.Size = new Size(520, 76);
+        _headerPanel.TabIndex = 1;
+        // 
+        // _titleLabel
+        // 
+        _titleLabel.AutoSize = true;
+        _titleLabel.Font = new Font("Segoe UI", 17F, FontStyle.Bold);
+        _titleLabel.ForeColor = Color.FromArgb(30, 34, 43);
+        _titleLabel.Location = new Point(24, 20);
+        _titleLabel.Name = "_titleLabel";
+        _titleLabel.Size = new Size(158, 31);
+        _titleLabel.TabIndex = 0;
+        _titleLabel.Text = "Novo usuário";
+        // 
+        // _bodyPanel
+        // 
+        _bodyPanel.Controls.Add(_createButton);
+        _bodyPanel.Controls.Add(_cancelButton);
+        _bodyPanel.Controls.Add(_passwordTextBox);
+        _bodyPanel.Controls.Add(_emailTextBox);
+        _bodyPanel.Controls.Add(_passwordCaption);
+        _bodyPanel.Controls.Add(_emailCaption);
+        _bodyPanel.CustomizableEdges = customizableEdges9;
+        _bodyPanel.Dock = DockStyle.Fill;
+        _bodyPanel.FillColor = Color.White;
+        _bodyPanel.Location = new Point(0, 76);
+        _bodyPanel.Name = "_bodyPanel";
+        _bodyPanel.ShadowDecoration.CustomizableEdges = customizableEdges10;
+        _bodyPanel.Size = new Size(520, 284);
+        _bodyPanel.TabIndex = 0;
+        // 
+        // _createButton
+        // 
+        _createButton.CustomizableEdges = customizableEdges1;
+        _createButton.FillColor = Color.FromArgb(145, 98, 57);
+        _createButton.Font = new Font("Segoe UI", 9F);
+        _createButton.ForeColor = Color.White;
+        _createButton.Location = new Point(0, 0);
+        _createButton.Name = "_createButton";
+        _createButton.ShadowDecoration.CustomizableEdges = customizableEdges2;
+        _createButton.Size = new Size(180, 45);
+        _createButton.TabIndex = 0;
+        // 
+        // _cancelButton
+        // 
+        _cancelButton.CustomizableEdges = customizableEdges3;
+        _cancelButton.DialogResult = DialogResult.Cancel;
+        _cancelButton.Font = new Font("Segoe UI", 9F);
+        _cancelButton.ForeColor = Color.White;
+        _cancelButton.Location = new Point(0, 0);
+        _cancelButton.Name = "_cancelButton";
+        _cancelButton.ShadowDecoration.CustomizableEdges = customizableEdges4;
+        _cancelButton.Size = new Size(180, 45);
+        _cancelButton.TabIndex = 1;
+        // 
+        // _passwordTextBox
+        // 
+        _passwordTextBox.CustomizableEdges = customizableEdges5;
+        _passwordTextBox.DefaultText = "";
+        _passwordTextBox.Font = new Font("Segoe UI", 9F);
+        _passwordTextBox.Location = new Point(0, 0);
+        _passwordTextBox.Name = "_passwordTextBox";
+        _passwordTextBox.PlaceholderText = "";
+        _passwordTextBox.SelectedText = "";
+        _passwordTextBox.ShadowDecoration.CustomizableEdges = customizableEdges6;
+        _passwordTextBox.Size = new Size(200, 36);
+        _passwordTextBox.TabIndex = 2;
+        // 
+        // _emailTextBox
+        // 
+        _emailTextBox.CustomizableEdges = customizableEdges7;
+        _emailTextBox.DefaultText = "";
+        _emailTextBox.Font = new Font("Segoe UI", 9F);
+        _emailTextBox.Location = new Point(0, 0);
+        _emailTextBox.Name = "_emailTextBox";
+        _emailTextBox.PlaceholderText = "";
+        _emailTextBox.SelectedText = "";
+        _emailTextBox.ShadowDecoration.CustomizableEdges = customizableEdges8;
+        _emailTextBox.Size = new Size(200, 36);
+        _emailTextBox.TabIndex = 3;
+        // 
+        // _passwordCaption
+        // 
+        _passwordCaption.Location = new Point(0, 0);
+        _passwordCaption.Name = "_passwordCaption";
+        _passwordCaption.Size = new Size(100, 23);
+        _passwordCaption.TabIndex = 4;
+        // 
+        // _emailCaption
+        // 
+        _emailCaption.Location = new Point(0, 0);
+        _emailCaption.Name = "_emailCaption";
+        _emailCaption.Size = new Size(100, 23);
+        _emailCaption.TabIndex = 5;
+        // 
+        // SimpleUserDialog
+        // 
+        AcceptButton = _createButton;
+        BackColor = Color.White;
+        CancelButton = _cancelButton;
+        ClientSize = new Size(520, 360);
+        Controls.Add(_bodyPanel);
+        Controls.Add(_headerPanel);
+        FormBorderStyle = FormBorderStyle.None;
+        Name = "SimpleUserDialog";
+        StartPosition = FormStartPosition.CenterParent;
+        Text = "Novo usuário";
+        _headerPanel.ResumeLayout(false);
+        _headerPanel.PerformLayout();
+        _bodyPanel.ResumeLayout(false);
+        ResumeLayout(false);
+    }
     private static void ConfigureCaption(Label l,string t,int x,int y){l.AutoSize=true;l.Text=t;l.Font=new Font("Segoe UI Semibold",8.5F);l.ForeColor=LibraryTheme.Text;l.Location=new Point(x,y);}private static void ConfigureText(Guna.UI2.WinForms.Guna2TextBox t,int x,int y,string ph,bool password){t.Location=new Point(x,y);t.Size=new Size(472,42);t.BorderRadius=9;t.BorderColor=LibraryTheme.Border;t.FocusedState.BorderColor=LibraryTheme.Accent;t.PlaceholderText=ph;t.Font=new Font("Segoe UI",9.5F);if(password)t.PasswordChar='●';}private static void ConfigureButton(Guna.UI2.WinForms.Guna2Button b,string text,int x,int y,bool primary){b.Location=new Point(x,180);b.Size=new Size(y,42);b.Text=text;b.BorderRadius=9;b.FillColor=primary?LibraryTheme.Accent:Color.FromArgb(241,243,248);b.ForeColor=primary?Color.White:LibraryTheme.Text;b.Font=new Font("Segoe UI Semibold",9F);b.HoverState.FillColor=primary?LibraryTheme.AccentDark:Color.FromArgb(225,229,238);}
 }

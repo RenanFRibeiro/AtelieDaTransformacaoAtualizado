@@ -56,13 +56,13 @@ partial class CategoriesUserControl
         // 
         // _refreshButton
         // 
-        _refreshButton.BackColor = Color.White;
+        _refreshButton.BackColor = Color.Transparent;
         _refreshButton.BorderRadius = 10;
         _refreshButton.CustomizableEdges = customizableEdges1;
         _refreshButton.FillColor = Color.Gray;
         _refreshButton.Font = new Font("Segoe UI", 9F);
         _refreshButton.ForeColor = Color.FromArgb(224, 224, 224);
-        _refreshButton.Location = new Point(349, 25);
+        _refreshButton.Location = new Point(500, 17);
         _refreshButton.Name = "_refreshButton";
         _refreshButton.ShadowDecoration.CustomizableEdges = customizableEdges2;
         _refreshButton.Size = new Size(108, 45);
@@ -71,12 +71,13 @@ partial class CategoriesUserControl
         // 
         // _deleteButton
         // 
+        _deleteButton.BackColor = Color.Transparent;
         _deleteButton.BorderRadius = 10;
         _deleteButton.CustomizableEdges = customizableEdges3;
         _deleteButton.FillColor = Color.FromArgb(192, 0, 0);
         _deleteButton.Font = new Font("Segoe UI", 9F);
         _deleteButton.ForeColor = Color.FromArgb(224, 224, 224);
-        _deleteButton.Location = new Point(235, 25);
+        _deleteButton.Location = new Point(386, 17);
         _deleteButton.Name = "_deleteButton";
         _deleteButton.ShadowDecoration.CustomizableEdges = customizableEdges4;
         _deleteButton.Size = new Size(108, 45);
@@ -85,12 +86,13 @@ partial class CategoriesUserControl
         // 
         // _editButton
         // 
+        _editButton.BackColor = Color.Transparent;
         _editButton.BorderRadius = 10;
         _editButton.CustomizableEdges = customizableEdges5;
         _editButton.FillColor = Color.MidnightBlue;
         _editButton.Font = new Font("Segoe UI", 9F);
         _editButton.ForeColor = Color.FromArgb(224, 224, 224);
-        _editButton.Location = new Point(121, 25);
+        _editButton.Location = new Point(272, 17);
         _editButton.Name = "_editButton";
         _editButton.ShadowDecoration.CustomizableEdges = customizableEdges6;
         _editButton.Size = new Size(108, 45);
@@ -99,12 +101,13 @@ partial class CategoriesUserControl
         // 
         // _newButton
         // 
+        _newButton.BackColor = Color.Transparent;
         _newButton.BorderRadius = 10;
         _newButton.CustomizableEdges = customizableEdges7;
         _newButton.FillColor = Color.Green;
         _newButton.Font = new Font("Segoe UI", 9F);
         _newButton.ForeColor = Color.FromArgb(224, 224, 224);
-        _newButton.Location = new Point(7, 25);
+        _newButton.Location = new Point(158, 17);
         _newButton.Name = "_newButton";
         _newButton.ShadowDecoration.CustomizableEdges = customizableEdges8;
         _newButton.Size = new Size(108, 45);

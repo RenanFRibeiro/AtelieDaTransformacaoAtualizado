@@ -317,7 +317,7 @@ partial class MainForm
         _brandSubtitle.AutoSize = true;
         _brandSubtitle.Font = new Font("Segoe UI", 7.5F, FontStyle.Bold);
         _brandSubtitle.ForeColor = Color.FromArgb(137, 145, 160);
-        _brandSubtitle.Location = new Point(15, 66);
+        _brandSubtitle.Location = new Point(3, 44);
         _brandSubtitle.Name = "_brandSubtitle";
         _brandSubtitle.Size = new Size(128, 12);
         _brandSubtitle.TabIndex = 0;
@@ -328,7 +328,7 @@ partial class MainForm
         _brandLabel.AutoSize = true;
         _brandLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
         _brandLabel.ForeColor = Color.Transparent;
-        _brandLabel.Location = new Point(15, 14);
+        _brandLabel.Location = new Point(0, 0);
         _brandLabel.Name = "_brandLabel";
         _brandLabel.Size = new Size(170, 40);
         _brandLabel.TabIndex = 1;

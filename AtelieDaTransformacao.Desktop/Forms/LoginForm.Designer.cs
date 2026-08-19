@@ -92,7 +92,7 @@ partial class LoginForm
         _brandPanel.Controls.Add(_brandLabel);
         _brandPanel.CustomizableEdges = customizableEdges13;
         _brandPanel.Dock = DockStyle.Left;
-        _brandPanel.FillColor = Color.FromArgb(107, 69, 37);
+        _brandPanel.FillColor = Color.FromArgb(72, 43, 24);
         _brandPanel.Location = new Point(0, 0);
         _brandPanel.Name = "_brandPanel";
         _brandPanel.ShadowDecoration.CustomizableEdges = customizableEdges14;
@@ -230,7 +230,7 @@ partial class LoginForm
         // 
         _loginButton.BorderRadius = 9;
         _loginButton.CustomizableEdges = customizableEdges5;
-        _loginButton.FillColor = Color.FromArgb(107, 69, 37);
+        _loginButton.FillColor = Color.FromArgb(145, 98, 57);
         _loginButton.Font = new Font("Segoe UI Semibold", 10F);
         _loginButton.ForeColor = Color.White;
         _loginButton.Location = new Point(46, 267);
