@@ -1,3 +1,5 @@
+using System.Drawing;
+using System.Windows.Forms;
 using AtelieDaTransformacao.Desktop.DTOs;
 using AtelieDaTransformacao.Desktop.Forms;
 using AtelieDaTransformacao.Desktop.Services;
@@ -14,6 +16,12 @@ public partial class CategoriesUserControl : UserControl
     public CategoriesUserControl()
     {
         InitializeComponent();
+
+        // configuração de cor de seleção do DataGridView
+        _grid.EnableHeadersVisualStyles = false;
+        _grid.DefaultCellStyle.SelectionBackColor = Color.FromArgb(225, 225, 225); // ajuste a cor aqui
+        _grid.DefaultCellStyle.SelectionForeColor = Color.Black;
+
         _newButton.Visible = SessionManager.IsAdmin;
         _editButton.Visible = SessionManager.IsAdmin;
         _deleteButton.Visible = SessionManager.IsAdmin;
