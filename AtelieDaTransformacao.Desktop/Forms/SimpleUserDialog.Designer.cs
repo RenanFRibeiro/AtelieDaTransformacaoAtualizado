@@ -178,7 +178,7 @@ partial class SimpleUserDialog
         _emailCaption.Name = "_emailCaption";
         _emailCaption.Size = new Size(100, 23);
         _emailCaption.TabIndex = 5;
-        _emailCaption.Text = "Digite seu Email";
+        _emailCaption.Text = "Digite seu email";
         // 
         // SimpleUserDialog
         // 
