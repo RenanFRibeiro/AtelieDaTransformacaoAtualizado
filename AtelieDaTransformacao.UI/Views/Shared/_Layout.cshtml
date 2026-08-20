@@ -78,57 +78,7 @@
 
     @if (ViewContext.RouteData.Values["controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["action"]?.ToString() == "Index")
     {
-        <div id="artisanHeroCarousel" class="carousel slide carousel-fade shadow-sm mb-5" data-bs-ride="carousel">
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#artisanHeroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#artisanHeroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#artisanHeroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-            </div>
-            <div class="carousel-inner" style="max-height: 550px; background-color: var(--artisan-wood);">
-                
-                <div class="carousel-item active" data-bs-interval="6000">
-                    <div class="position-relative w-100" style="height: 550px; background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.75)), url('https://images.unsplash.com/photo-1610701596007-11502861afab?q=80&w=1600') center/cover no-repeat;">
-                        <div class="carousel-caption h-100 d-flex flex-column justify-content-center align-items-start text-start px-md-5" style="max-width: 750px; bottom: 0;">
-                            <span class="badge text-dark text-uppercase mb-3 px-3 py-2 rounded-pill fw-bold" style="background-color: var(--artisan-gold, #dfb76c) !important;">Design Exclusivo</span>
-                            <h1 class="display-4 fw-bold text-white mb-3">Mobiliário Orgânico & Resina Fluida</h1>
-                            <p class="lead text-white-50 mb-4">Peças únicas esculpidas a partir de troncos de descarte e resina de alta resistência. Arte viva para transformar o seu espaço com requinte.</p>
-                            <a href="#galeria-ancora" class="btn btn-outline-light border-2 px-4 py-2 rounded-pill fw-semibold">Explorar Coleção</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="carousel-item" data-bs-interval="6000">
-                    <div class="position-relative w-100" style="height: 550px; background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.75)), url('https://images.unsplash.com/photo-1455792244726-6d13a5a5130f?q=80&w=1600') center/cover no-repeat;">
-                        <div class="carousel-caption h-100 d-flex flex-column justify-content-center align-items-start text-start px-md-5" style="max-width: 750px; bottom: 0;">
-                            <span class="badge text-white text-uppercase mb-3 px-3 py-2 rounded-pill fw-bold" style="background-color: var(--artisan-clay, #b85a3a) !important;">Sustentabilidade</span>
-                            <h1 class="display-4 fw-bold text-white mb-3">Autenticidade Esculpida à Mão</h1>
-                            <p class="lead text-white-50 mb-4">Respeitamos a história e a curvatura original da madeira rústica, garantindo que cada peça gourmet, mesa ou bancada traga uma identidade irreplicável.</p>
-                            <a href="#galeria-ancora" class="btn btn-outline-light border-2 px-4 py-2 rounded-pill fw-semibold">Ver Peças Prontas</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="carousel-item" data-bs-interval="6000">
-                    <div class="position-relative w-100" style="height: 550px; background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.75)), url('https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=80&w=1600') center/cover no-repeat;">
-                        <div class="carousel-caption h-100 d-flex flex-column justify-content-center align-items-start text-start px-md-5" style="max-width: 750px; bottom: 0;">
-                            <span class="badge text-uppercase mb-3 px-3 py-2 rounded-pill fw-bold" style="background-color: var(--artisan-gold, #dfb76c) !important; color: var(--artisan-wood, #1a1512)">Projetos sob Medida</span>
-                            <h1 class="display-4 fw-bold text-white mb-3">Direto para o seu WhatsApp</h1>
-                            <p class="lead text-white-50 mb-4">Escolha o modelo ideal em nossa vitrine digital e entre em contato direto com o mestre artesão para alinhar dimensões e detalhes de entrega.</p>
-                            <a href="https://wa.me/seu_numero" target="_blank" class="btn btn-success px-4 py-2 rounded-pill fw-semibold border-0 shadow" style="background-color: #25d366;"><i class="bi bi-whatsapp me-2"></i>Encomendar Agora</a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#artisanHeroCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Anterior</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#artisanHeroCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Seguinte</span>
-            </button>
-        </div>
+        @await Component.InvokeAsync("Carousel")
         <div id="galeria-ancora"></div>
     }
 
@@ -185,8 +135,87 @@
         <i class="bi bi-whatsapp"></i>
     </a>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bundle.min.js"></script>
+    <!-- usar bundle local para evitar bloqueios de CDN/CORB em dev -->
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        // Inicializa o carousel explicitamente e garante que os botões prev/next funcionem
+        document.addEventListener('DOMContentLoaded', function () {
+            try {
+                var el = document.getElementById('artisanHeroCarousel');
+                if (el && window.bootstrap && typeof window.bootstrap.Carousel === 'function') {
+                    // cria/obtém a instância do carousel com opções
+                    var carousel = bootstrap.Carousel.getOrCreateInstance(el, { interval: 5000, ride: 'carousel', pause: 'hover', keyboard: true, wrap: true });
+                    // log para depuração: quantos slides e quais URLs estão definidos (background-image)
+                    try {
+                        var items = el.querySelectorAll('.carousel-item');
+                        console.log('Carousel items count:', items.length);
+                        items.forEach(function(it, idx) {
+                            var bg = window.getComputedStyle(it.querySelector('.position-relative') || it).backgroundImage || '';
+                            console.log(' slide', idx, bg ? bg : '(no background-image)');
+                        });
+                    } catch (e) { console.warn('Não foi possível listar slides:', e); }
+
+                    // garante que o carousel esteja em ciclo (autoplay)
+                    try { carousel.cycle(); } catch (e) { /* ignore */ }
+
+                    // se por algum motivo o carousel não fizer wrap corretamente, forçamos retorno ao primeiro slide após o último
+                    try {
+                        // quando chegamos ao último slide, espera 5s antes de voltar ao início
+                        el.addEventListener('slid.bs.carousel', function (ev) {
+                            try {
+                                var items = el.querySelectorAll('.carousel-item');
+                                var lastIndex = items.length - 1;
+                                if (typeof ev.to !== 'undefined' && ev.to === lastIndex) {
+                                    // limpa qualquer timeout anterior
+                                    if (el.dataset.startTo0Timeout) { clearTimeout(parseInt(el.dataset.startTo0Timeout)); delete el.dataset.startTo0Timeout; }
+                                    // pausa o carousel e aguarda 5000ms antes de ir ao primeiro slide
+                                    try { carousel.pause(); } catch (e) { }
+                                    var t = setTimeout(function () {
+                                        try { carousel.to(0); } catch (e) { }
+                                        try { carousel.cycle(); } catch (e) { }
+                                        // limpa fallback interval se existir
+                                        if (el.dataset.fallbackId) { clearInterval(parseInt(el.dataset.fallbackId)); delete el.dataset.fallbackId; }
+                                    }, 5000);
+                                    el.dataset.startTo0Timeout = t;
+                                }
+                            } catch (e) { /* ignore */ }
+                        });
+                    } catch (e) { /* ignore */ }
+                    // garante que os botões prev/next chamem os métodos da instância
+                    var prev = el.querySelector('[data-bs-slide="prev"]');
+                    var next = el.querySelector('[data-bs-slide="next"]');
+                    if (prev) prev.addEventListener('click', function (e) { e.preventDefault(); carousel.prev(); });
+                    if (next) next.addEventListener('click', function (e) { e.preventDefault(); carousel.next(); });
+
+                    // fallback: se o bootstrap não criar um intervalo interno, usamos setInterval para avançar
+                    try {
+                        if (!carousel._interval) {
+                            var fallbackId = setInterval(function () { try { carousel.next(); } catch (e) { /* ignore */ } }, 5000);
+                            el.dataset.fallbackId = fallbackId;
+                        }
+
+                        // pause/resume no hover para o fallback
+                        el.addEventListener('mouseenter', function () {
+                            try { carousel.pause(); } catch (e) { }
+                            if (el.dataset.fallbackId) { clearInterval(parseInt(el.dataset.fallbackId)); delete el.dataset.fallbackId; }
+                        });
+                        el.addEventListener('mouseleave', function () {
+                            try { carousel.cycle(); } catch (e) { }
+                            if (!el.dataset.fallbackId && (!carousel._interval)) {
+                                var id = setInterval(function () { try { carousel.next(); } catch (e) { } }, 5000);
+                                el.dataset.fallbackId = id;
+                            }
+                        });
+                    } catch (e) { /* ignore fallback errors */ }
+                }
+            } catch (ex) {
+                console && console.error && console.error('Erro ao inicializar carousel:', ex);
+            }
+        });
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
