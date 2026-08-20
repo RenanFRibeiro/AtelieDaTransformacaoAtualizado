@@ -63,6 +63,35 @@ public class HomeController : Controller
     }
 
     [HttpGet]
+    public async Task<IActionResult> ContactSeller(int id)
+    {
+        var product = await _productService.GetByIdAsync(id);
+
+        if (product == null)
+            return NotFound();
+
+        if (User.Identity?.IsAuthenticated != true)
+        {
+            TempData["RegistrationReason"] =
+                "Para entrar em contato com o vendedor e iniciar a compra desta peça, você precisa criar uma conta. Assim, seu atendimento fica vinculado ao seu perfil.";
+
+            var returnUrl = Url.Action(nameof(ContactSeller), "Home", new { id });
+
+            return RedirectToAction("Register", "Account", new { returnUrl });
+        }
+
+        if (string.IsNullOrWhiteSpace(product.WhatsAppLink))
+        {
+            TempData["ErrorMessage"] =
+                "O contato do vendedor não está disponível no momento.";
+
+            return RedirectToAction(nameof(ProductDetails), new { id });
+        }
+
+        return Redirect(product.WhatsAppLink);
+    }
+
+    [HttpGet]
     public IActionResult About() => View();
 
     [HttpGet]

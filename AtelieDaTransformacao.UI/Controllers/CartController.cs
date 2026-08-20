@@ -1,10 +1,12 @@
 using System.Text.Json;
 using AtelieDaTransformacao.Application.Interfaces;
 using AtelieDaTransformacao.Application.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AtelieDaTransformacao.UI.Controllers;
 
+[Authorize]
 public sealed class CartController : Controller
 {
     private const string CartSessionKey = "AtelieDaTransformacao.Cart";

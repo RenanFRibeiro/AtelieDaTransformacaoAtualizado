@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using AtelieDaTransformacao.Application.DTOs;
@@ -60,9 +60,11 @@ public class AccountController : Controller
     /// Exibe a página de registo de novos perfis.
     /// </summary>
     [HttpGet]
-    public IActionResult Register()
+    public IActionResult Register(string returnUrl = null)
     {
-        // CORREÇÃO: Passa um modelo vazio para evitar o erro de NullReferenceException na View
+        ViewBag.RegistrationReason = TempData.Peek("RegistrationReason") as string;
+        ViewBag.ReturnUrl = returnUrl;
+
         return View(new RegisterDto());
     }
 
@@ -71,8 +73,11 @@ public class AccountController : Controller
     /// </summary>
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Register(RegisterDto model)
+    public async Task<IActionResult> Register(RegisterDto model, string returnUrl = null)
     {
+        ViewBag.RegistrationReason = TempData.Peek("RegistrationReason") as string;
+        ViewBag.ReturnUrl = returnUrl;
+
         if (!ModelState.IsValid) return View(model);
 
         var user = new IdentityUser { UserName = model.Email, Email = model.Email };
@@ -83,7 +88,14 @@ public class AccountController : Controller
             // Efetua o login automático logo após a criação da conta
             await _signInManager.SignInAsync(user, isPersistent: false);
 
-            // CORREÇÃO CRUCIAL: Redireciona para a vitrina pública ("Home"), impedindo o erro de Access Denied
+            // Se o cadastro foi iniciado ao tentar entrar em contato com o vendedor,
+            // volta para a ação original. Como o usuário já está autenticado,
+            // ContactSeller liberará o redirecionamento para o WhatsApp.
+            if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+
             return RedirectToAction("Index", "Home");
         }
 

@@ -60,12 +60,12 @@
                             </a>
                         }
 
-                        <a class="btn btn-outline-artisan btn-sm px-3 py-2 rounded-pill d-flex align-items-center" asp-controller="Cart" asp-action="Index" title="Ver carrinho">
-                            <i class="bi bi-cart3 me-2"></i> Carrinho
-                            @* Se desejar mostrar a contagem de itens, envie um ViewBag/Model (ex.: ViewBag.CartCount) e use a badge abaixo:
-                               <span class="badge bg-danger ms-2">@(ViewBag.CartCount ?? 0)</span>
-                            *@
-                        </a>
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <a class="btn btn-outline-artisan btn-sm px-3 py-2 rounded-pill d-flex align-items-center" asp-controller="Cart" asp-action="Index" title="Ver carrinho">
+                                <i class="bi bi-cart3 me-2"></i> Carrinho
+                            </a>
+                        }
                     </div>
                 </div>
             </div>
