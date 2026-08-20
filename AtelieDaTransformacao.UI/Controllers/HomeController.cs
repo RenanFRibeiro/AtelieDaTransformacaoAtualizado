@@ -30,7 +30,7 @@ public class HomeController : Controller
     /// permitindo filtrar os produtos por categoria.
     /// </summary>
     [HttpGet]
-    public async Task<IActionResult> Index(int? categoryId)
+    public async Task<IActionResult> Index(int? categoryId, string? search)
     {
         var viewModel = new HomeViewModel
         {
@@ -49,8 +49,24 @@ public class HomeController : Controller
                 await _productService.GetAllAsync();
         }
 
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var term = search.Trim();
+            viewModel.Products = viewModel.Products.Where(p =>
+                p.Title.Contains(term, StringComparison.OrdinalIgnoreCase) ||
+                p.Description.Contains(term, StringComparison.OrdinalIgnoreCase) ||
+                p.CategoryName.Contains(term, StringComparison.OrdinalIgnoreCase));
+            ViewBag.Search = term;
+        }
+
         return View(viewModel);
     }
+
+    [HttpGet]
+    public IActionResult About() => View();
+
+    [HttpGet]
+    public IActionResult Gallery() => View();
 
     /// <summary>
     /// Exibe os detalhes de um produto específico.

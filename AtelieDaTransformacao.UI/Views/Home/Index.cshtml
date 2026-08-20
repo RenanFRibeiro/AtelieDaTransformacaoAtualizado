@@ -4,7 +4,27 @@
     ViewData["Title"] = "Peças Exclusivas";
 }
 
+<section class="business-intro text-center py-5 mb-4">
+    <div class="container">
+        <span class="eyebrow">COLEÇÃO ARTESANAL</span>
+        <h1 class="display-5 serif-title fw-bold mt-2">Peças que transformam ambientes.</h1>
+        <p class="text-muted lead mx-auto" style="max-width: 720px;">Descubra criações exclusivas ou conte sua ideia para desenvolvermos um projeto personalizado.</p>
+        <div class="d-flex justify-content-center gap-2 flex-wrap mt-3">
+            <a asp-controller="Quote" asp-action="Index" class="btn btn-artisan rounded-pill px-4 py-2"><i class="bi bi-rulers me-2"></i>Solicitar orçamento</a>
+            <a asp-action="Gallery" class="btn btn-outline-dark rounded-pill px-4 py-2">Ver projetos</a>
+        </div>
+    </div>
+</section>
+
 <div class="container mb-5">
+    <form method="get" class="product-search mb-4 mx-auto" style="max-width: 720px;">
+        @if (Model.SelectedCategoryId.HasValue) { <input type="hidden" name="categoryId" value="@Model.SelectedCategoryId" /> }
+        <div class="input-group input-group-lg shadow-sm">
+            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+            <input name="search" value="@ViewBag.Search" class="form-control border-start-0" placeholder="Busque por mesas, resina, madeira..." />
+            <button class="btn btn-artisan px-4" type="submit">Buscar</button>
+        </div>
+    </form>
     <div class="d-flex justify-content-center flex-wrap gap-2 mb-5">
         <a href="@Url.Action("Index", "Home")"
                class="px-4 py-2 text-decoration-none rounded-pill fw-semibold small filter-pill @(Model.SelectedCategoryId == null ? "active" : "")">
@@ -57,7 +77,7 @@
                                         @Html.AntiForgeryToken()
                                         <input type="hidden" name="id" value="@prod.Id" />
                                         <input type="hidden" name="quantity" value="1" />
-                                        <button type="submit" class="btn btn-primary rounded-pill px-3 fw-medium d-inline-flex align-items-center gap-2 small shadow-sm">
+                                        <button type="submit" class="btn btn-artisan rounded-pill px-3 fw-medium d-inline-flex align-items-center gap-2 small shadow-sm">
                                             <i class="bi bi-cart-plus"></i> Carrinho
                                         </button>
                                     </form>
@@ -73,4 +93,12 @@
             </div>
         }
     </div>
+    @if (!Model.Products.Any())
+    {
+        <div class="text-center py-5"><i class="bi bi-search fs-1 text-gold"></i><h3 class="serif-title mt-3">Nenhuma peça encontrada.</h3><p class="text-muted">Tente outro termo ou veja toda a coleção.</p><a asp-action="Index" class="btn btn-outline-dark rounded-pill">Limpar busca</a></div>
+    }
 </div>
+
+<section class="business-steps py-5 mt-5 rounded-4">
+    <div class="row align-items-center g-4"><div class="col-lg-4"><span class="eyebrow">COMO FUNCIONA</span><h2 class="serif-title fw-bold">Sua ideia pode virar uma peça única.</h2></div><div class="col-md-4 col-lg"><div class="step-item"><span>01</span><h5>Conte sua ideia</h5><p>Fale sobre o ambiente e o que você imagina.</p></div></div><div class="col-md-4 col-lg"><div class="step-item"><span>02</span><h5>Definimos o projeto</h5><p>Alinhamos medidas, materiais e acabamento.</p></div></div><div class="col-md-4 col-lg"><div class="step-item"><span>03</span><h5>Criamos</h5><p>Acompanhamento próximo até a transformação.</p></div></div></div>
+</section>

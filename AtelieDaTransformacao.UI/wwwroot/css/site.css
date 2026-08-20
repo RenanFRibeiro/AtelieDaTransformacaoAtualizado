@@ -279,3 +279,25 @@ div.position-fixed.bottom-0 button {
         z-index: 1050 !important;
     }
 }
+/* === EXPERIÊNCIA COMERCIAL === */
+.eyebrow { color: var(--artisan-clay); font-size: .78rem; font-weight: 800; letter-spacing: .16em; }
+.business-intro, .page-hero { background: linear-gradient(180deg, #fff 0%, var(--artisan-sand) 100%); border-radius: 0 0 2rem 2rem; }
+.product-search .form-control, .product-search .input-group-text { border-color: rgba(61,43,31,.12); }
+.product-search .form-control:focus { box-shadow: none !important; }
+.business-steps { background: var(--artisan-linen); padding-left: 2rem; padding-right: 2rem; }
+.step-item span { color: var(--artisan-gold); font-weight: 800; font-size: .85rem; letter-spacing: .1em; }
+.step-item h5 { margin-top: .7rem; font-weight: 800; }
+.step-item p { color: #6c635e; font-size: .9rem; margin: 0; }
+.value-card, .quote-card { background: #fff; border: 1px solid rgba(61,43,31,.08); border-radius: 1.25rem; padding: 2rem; height: 100%; box-shadow: 0 10px 30px rgba(61,43,31,.05); }
+.value-card i { font-size: 2rem; color: var(--artisan-gold); display: block; margin-bottom: 1rem; }
+.value-card h4 { font-family: 'Playfair Display', serif; font-weight: 700; }
+.about-art-placeholder { min-height: 380px; border-radius: 1.5rem; display:flex; align-items:center; justify-content:center; background: linear-gradient(135deg, var(--artisan-wood), var(--artisan-clay)); color: var(--artisan-gold); }
+.about-art-placeholder i { font-size: 8rem; opacity: .8; }
+.gallery-grid { display:grid; grid-template-columns:repeat(4,1fr); grid-auto-rows:220px; gap:1rem; }
+.gallery-card { position:relative; border-radius:1.25rem; overflow:hidden; min-height:220px; background: linear-gradient(145deg, var(--artisan-wood), #80614c); display:flex; align-items:end; padding:1.5rem; color:white; }
+.gallery-card:nth-child(2n) { background:linear-gradient(145deg, var(--artisan-clay), #d59a68); }
+.gallery-card:nth-child(3n) { background:linear-gradient(145deg, #7a614f, var(--artisan-gold)); }
+.gallery-card:before { content:''; position:absolute; inset:0; background:linear-gradient(transparent, rgba(0,0,0,.55)); }
+.gallery-card > div { position:relative; z-index:1; }.gallery-card span { font-size:.75rem; text-transform:uppercase; letter-spacing:.1em; opacity:.8; }.gallery-card h3 { margin:.3rem 0 0; font-family:'Playfair Display',serif; }
+.gallery-large { grid-column:span 2; grid-row:span 2; }
+@media(max-width:767px){ .gallery-grid { grid-template-columns:1fr 1fr; }.gallery-large { grid-column:span 2; }.business-steps{padding:2rem 1.25rem;} }
