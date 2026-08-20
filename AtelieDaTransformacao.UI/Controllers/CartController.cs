@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Linq;
 using AtelieDaTransformacao.Application.Interfaces;
 using AtelieDaTransformacao.Application.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -151,6 +152,50 @@ public sealed class CartController : Controller
         SaveCart(new List<CartItemViewModel>());
         TempData["SuccessMessage"] = "Carrinho esvaziado.";
         return RedirectToAction(nameof(Index));
+    }
+
+    // Retorna a quantidade atual do carrinho (pode ser chamado anonimamente para mostrar o badge)
+    [HttpGet]
+    [AllowAnonymous]
+    public IActionResult Count()
+    {
+        var total = GetCart().Sum(x => x.Quantity);
+        return Json(total);
+    }
+
+    // Importa/mescla o carrinho enviado pelo client (localStorage) para a sessão do servidor.
+    // Usamos AllowAnonymous porque pode ser chamado logo após o login/registro quando o usuário ainda estava anônimo.
+    [HttpPost]
+    [AllowAnonymous]
+    [IgnoreAntiforgeryToken]
+    public IActionResult Import([FromBody] List<CartItemViewModel>? items)
+    {
+        if (items == null || items.Count == 0) return Ok();
+
+        var cart = GetCart();
+
+        foreach (var incoming in items)
+        {
+            var existing = cart.FirstOrDefault(x => x.ProductId == incoming.ProductId);
+            if (existing is null)
+            {
+                cart.Add(new CartItemViewModel
+                {
+                    ProductId = incoming.ProductId,
+                    Quantity = incoming.Quantity,
+                    Title = incoming.Title,
+                    Image = incoming.Image,
+                    Price = incoming.Price
+                });
+            }
+            else
+            {
+                existing.Quantity += incoming.Quantity;
+            }
+        }
+
+        SaveCart(cart);
+        return Ok();
     }
 
     private List<CartItemViewModel> GetCart()
