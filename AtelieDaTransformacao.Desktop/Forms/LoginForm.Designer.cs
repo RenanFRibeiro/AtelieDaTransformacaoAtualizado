@@ -36,17 +36,16 @@ partial class LoginForm
         components = new System.ComponentModel.Container();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges13 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges14 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginForm));
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges11 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         _borderlessForm = new Guna.UI2.WinForms.Guna2BorderlessForm(components);
@@ -90,6 +89,7 @@ partial class LoginForm
         // _brandPanel
         // 
         _brandPanel.Controls.Add(pnSeparador2);
+        _brandPanel.Controls.Add(_featureLabel);
         _brandPanel.Controls.Add(_brandDescription);
         _brandPanel.Controls.Add(_brandLabel);
         _brandPanel.CustomizableEdges = customizableEdges13;
@@ -119,19 +119,19 @@ partial class LoginForm
         _brandDescription.ForeColor = SystemColors.ControlDark;
         _brandDescription.Location = new Point(20, 196);
         _brandDescription.Name = "_brandDescription";
-        _brandDescription.Size = new Size(275, 102);
+        _brandDescription.Size = new Size(273, 51);
         _brandDescription.TabIndex = 1;
-        _brandDescription.Text = resources.GetString("_brandDescription.Text");
+        _brandDescription.Text = "Gestão simples, bonita e centralizada. \r\nControle produtos, categorias e estoque \r\nem um só lugar, com praticidade e eficiência.";
         // 
         // _brandLabel
         // 
         _brandLabel.AutoSize = true;
         _brandLabel.BackColor = Color.Transparent;
-        _brandLabel.Font = new Font("Yu Gothic", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+        _brandLabel.Font = new Font("Yu Gothic UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
         _brandLabel.ForeColor = Color.White;
         _brandLabel.Location = new Point(12, 67);
         _brandLabel.Name = "_brandLabel";
-        _brandLabel.Size = new Size(280, 62);
+        _brandLabel.Size = new Size(261, 64);
         _brandLabel.TabIndex = 2;
         _brandLabel.Text = "ATELIÊ\nDA TRANSFORMAÇÃO";
         // 
@@ -139,26 +139,25 @@ partial class LoginForm
         // 
         _featureLabel.AutoSize = true;
         _featureLabel.BackColor = Color.Transparent;
-        _featureLabel.Font = new Font("Segoe UI Semibold", 8F);
-        _featureLabel.ForeColor = Color.Black;
-        _featureLabel.Location = new Point(46, 428);
+        _featureLabel.Font = new Font("Segoe UI Semibold", 7F);
+        _featureLabel.ForeColor = Color.DarkGray;
+        _featureLabel.Location = new Point(3, 429);
         _featureLabel.Name = "_featureLabel";
-        _featureLabel.Size = new Size(359, 13);
+        _featureLabel.Size = new Size(315, 12);
         _featureLabel.TabIndex = 0;
-        _featureLabel.Text = "●  API conectada     ●  Autenticação segura      ●  Controle de estoque ";
+        _featureLabel.Text = "●  API conectada   ●  Autenticação segura   ●  Controle de estoque ";
         // 
         // _loginCard
         // 
         _loginCard.BorderRadius = 10;
+        _loginCard.Controls.Add(_passwordToggleButton);
         _loginCard.Controls.Add(btnMinimize);
-        _loginCard.Controls.Add(_featureLabel);
         _loginCard.Controls.Add(btnClose);
         _loginCard.Controls.Add(_versionLabel);
         _loginCard.Controls.Add(_apiStatusLabel);
         _loginCard.Controls.Add(_statusLabel);
         _loginCard.Controls.Add(_loginButton);
         _loginCard.Controls.Add(_passwordTextBox);
-        _loginCard.Controls.Add(_passwordToggleButton);
         _loginCard.Controls.Add(_passwordLabel);
         _loginCard.Controls.Add(_emailTextBox);
         _loginCard.Controls.Add(_emailLabel);
@@ -261,16 +260,17 @@ partial class LoginForm
         // 
         // _passwordToggleButton
         // 
+        _passwordToggleButton.BackColor = Color.Transparent;
         _passwordToggleButton.BorderRadius = 7;
         _passwordToggleButton.Cursor = Cursors.Hand;
         _passwordToggleButton.CustomizableEdges = customizableEdges1;
-        _passwordToggleButton.FillColor = Color.FromArgb(241, 243, 248);
-        _passwordToggleButton.Font = new Font("Segoe UI", 9F);
+        _passwordToggleButton.FillColor = Color.Transparent;
+        _passwordToggleButton.Font = new Font("Segoe UI", 9.5F);
         _passwordToggleButton.ForeColor = Color.FromArgb(30, 34, 43);
-        _passwordToggleButton.Location = new Point(413, 186);
+        _passwordToggleButton.Location = new Point(358, 191);
         _passwordToggleButton.Name = "_passwordToggleButton";
         _passwordToggleButton.ShadowDecoration.CustomizableEdges = customizableEdges2;
-        _passwordToggleButton.Size = new Size(46, 42);
+        _passwordToggleButton.Size = new Size(46, 32);
         _passwordToggleButton.TabIndex = 11;
         _passwordToggleButton.Text = "👁";
         // 
@@ -316,10 +316,10 @@ partial class LoginForm
         // _welcomeLabel
         // 
         _welcomeLabel.AutoSize = true;
-        _welcomeLabel.Font = new Font("Yu Gothic", 24.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+        _welcomeLabel.Font = new Font("Yu Gothic UI", 24.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
         _welcomeLabel.Location = new Point(46, 58);
         _welcomeLabel.Name = "_welcomeLabel";
-        _welcomeLabel.Size = new Size(207, 43);
+        _welcomeLabel.Size = new Size(197, 45);
         _welcomeLabel.TabIndex = 9;
         _welcomeLabel.Text = "Bem-Vindo!";
         // 

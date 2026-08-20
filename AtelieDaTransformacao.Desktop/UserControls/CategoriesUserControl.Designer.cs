@@ -65,7 +65,7 @@ partial class CategoriesUserControl
         _refreshButton.FillColor = Color.Gray;
         _refreshButton.Font = new Font("Segoe UI", 9F);
         _refreshButton.ForeColor = Color.FromArgb(224, 224, 224);
-        _refreshButton.Location = new Point(154, 17);
+        _refreshButton.Location = new Point(314, 24);
         _refreshButton.Name = "_refreshButton";
         _refreshButton.ShadowDecoration.CustomizableEdges = customizableEdges2;
         _refreshButton.Size = new Size(90, 42);
@@ -80,10 +80,10 @@ partial class CategoriesUserControl
         _deleteButton.FillColor = Color.FromArgb(192, 0, 0);
         _deleteButton.Font = new Font("Segoe UI", 9F);
         _deleteButton.ForeColor = Color.FromArgb(224, 224, 224);
-        _deleteButton.Location = new Point(340, 17);
+        _deleteButton.Location = new Point(514, 24);
         _deleteButton.Name = "_deleteButton";
         _deleteButton.ShadowDecoration.CustomizableEdges = customizableEdges4;
-        _deleteButton.Size = new Size(77, 42);
+        _deleteButton.Size = new Size(90, 42);
         _deleteButton.TabIndex = 1;
         _deleteButton.Text = "🗑️ Excluir";
         // 
@@ -95,10 +95,10 @@ partial class CategoriesUserControl
         _editButton.FillColor = Color.MidnightBlue;
         _editButton.Font = new Font("Segoe UI", 9F);
         _editButton.ForeColor = Color.FromArgb(224, 224, 224);
-        _editButton.Location = new Point(250, 17);
+        _editButton.Location = new Point(414, 24);
         _editButton.Name = "_editButton";
         _editButton.ShadowDecoration.CustomizableEdges = customizableEdges6;
-        _editButton.Size = new Size(84, 42);
+        _editButton.Size = new Size(90, 42);
         _editButton.TabIndex = 2;
         _editButton.Text = "✏️ Editar";
         // 
@@ -110,10 +110,10 @@ partial class CategoriesUserControl
         _newButton.FillColor = Color.Green;
         _newButton.Font = new Font("Segoe UI", 9F);
         _newButton.ForeColor = Color.FromArgb(224, 224, 224);
-        _newButton.Location = new Point(37, 17);
+        _newButton.Location = new Point(177, 24);
         _newButton.Name = "_newButton";
         _newButton.ShadowDecoration.CustomizableEdges = customizableEdges8;
-        _newButton.Size = new Size(111, 42);
+        _newButton.Size = new Size(127, 42);
         _newButton.TabIndex = 3;
         _newButton.Text = "+ Nova Categoria";
         // 
@@ -141,6 +141,7 @@ partial class CategoriesUserControl
         // _grid
         // 
         _grid.AllowUserToAddRows = false;
+        _grid.BorderStyle = BorderStyle.FixedSingle;
         _grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
         _grid.ColumnHeadersHeight = 42;
         _grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
@@ -154,7 +155,6 @@ partial class CategoriesUserControl
         _grid.DefaultCellStyle = dataGridViewCellStyle2;
         _grid.Dock = DockStyle.Fill;
         _grid.GridColor = Color.Black;
-        _grid.BorderStyle = BorderStyle.FixedSingle;
         _grid.Location = new Point(14, 14);
         _grid.MultiSelect = false;
         _grid.Name = "_grid";

@@ -86,10 +86,10 @@ partial class ProductsUserControl
         _deleteButton.Font = new Font("Segoe UI", 9F);
         _deleteButton.ForeColor = Color.White;
         _deleteButton.HoverState.FillColor = Color.FromArgb(248, 220, 220);
-        _deleteButton.Location = new Point(407, 29);
+        _deleteButton.Location = new Point(370, 30);
         _deleteButton.Name = "_deleteButton";
         _deleteButton.ShadowDecoration.CustomizableEdges = customizableEdges2;
-        _deleteButton.Size = new Size(80, 33);
+        _deleteButton.Size = new Size(80, 36);
         _deleteButton.TabIndex = 0;
         _deleteButton.Text = "🗑️ Excluir";
         // 
@@ -101,10 +101,10 @@ partial class ProductsUserControl
         _editButton.FillColor = Color.MidnightBlue;
         _editButton.Font = new Font("Segoe UI", 9F);
         _editButton.ForeColor = Color.White;
-        _editButton.Location = new Point(322, 28);
+        _editButton.Location = new Point(285, 30);
         _editButton.Name = "_editButton";
         _editButton.ShadowDecoration.CustomizableEdges = customizableEdges4;
-        _editButton.Size = new Size(79, 33);
+        _editButton.Size = new Size(79, 36);
         _editButton.TabIndex = 1;
         _editButton.Text = "✏️ Editar";
         // 
@@ -116,10 +116,10 @@ partial class ProductsUserControl
         _newButton.FillColor = Color.Green;
         _newButton.Font = new Font("Segoe UI", 9F);
         _newButton.ForeColor = Color.White;
-        _newButton.Location = new Point(220, 28);
+        _newButton.Location = new Point(183, 30);
         _newButton.Name = "_newButton";
         _newButton.ShadowDecoration.CustomizableEdges = customizableEdges6;
-        _newButton.Size = new Size(96, 34);
+        _newButton.Size = new Size(96, 36);
         _newButton.TabIndex = 2;
         _newButton.Text = "+ Novo Produto";
         // 
@@ -131,10 +131,10 @@ partial class ProductsUserControl
         _refreshButton.FillColor = Color.Gray;
         _refreshButton.Font = new Font("Segoe UI", 9F);
         _refreshButton.ForeColor = Color.White;
-        _refreshButton.Location = new Point(493, 29);
+        _refreshButton.Location = new Point(456, 30);
         _refreshButton.Name = "_refreshButton";
         _refreshButton.ShadowDecoration.CustomizableEdges = customizableEdges8;
-        _refreshButton.Size = new Size(88, 33);
+        _refreshButton.Size = new Size(88, 36);
         _refreshButton.TabIndex = 3;
         _refreshButton.Text = "🔄️ Atualizar";
         // 
@@ -150,10 +150,10 @@ partial class ProductsUserControl
         _categoryComboBox.Font = new Font("Segoe UI", 9.5F);
         _categoryComboBox.ForeColor = Color.FromArgb(68, 88, 112);
         _categoryComboBox.ItemHeight = 30;
-        _categoryComboBox.Location = new Point(587, 26);
+        _categoryComboBox.Location = new Point(550, 30);
         _categoryComboBox.Name = "_categoryComboBox";
         _categoryComboBox.ShadowDecoration.CustomizableEdges = customizableEdges10;
-        _categoryComboBox.Size = new Size(142, 36);
+        _categoryComboBox.Size = new Size(177, 36);
         _categoryComboBox.TabIndex = 4;
         // 
         // _searchTextBox
@@ -165,12 +165,12 @@ partial class ProductsUserControl
         _searchTextBox.DefaultText = "";
         _searchTextBox.FocusedState.BorderColor = Color.FromArgb(74, 108, 247);
         _searchTextBox.Font = new Font("Segoe UI", 9.5F);
-        _searchTextBox.Location = new Point(11, 26);
+        _searchTextBox.Location = new Point(11, 30);
         _searchTextBox.Name = "_searchTextBox";
         _searchTextBox.PlaceholderText = "🔎 Pesquisar produto...";
         _searchTextBox.SelectedText = "";
         _searchTextBox.ShadowDecoration.CustomizableEdges = customizableEdges12;
-        _searchTextBox.Size = new Size(203, 36);
+        _searchTextBox.Size = new Size(166, 36);
         _searchTextBox.TabIndex = 5;
         // 
         // _tableCard
@@ -197,6 +197,7 @@ partial class ProductsUserControl
         // 
         _grid.AllowUserToAddRows = false;
         _grid.AllowUserToDeleteRows = false;
+        _grid.BorderStyle = BorderStyle.FixedSingle;
         _grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
         _grid.ColumnHeadersHeight = 42;
         _grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
@@ -210,7 +211,6 @@ partial class ProductsUserControl
         _grid.DefaultCellStyle = dataGridViewCellStyle2;
         _grid.Dock = DockStyle.Fill;
         _grid.GridColor = Color.Black;
-        _grid.BorderStyle = BorderStyle.FixedSingle;
         _grid.Location = new Point(14, 14);
         _grid.MultiSelect = false;
         _grid.Name = "_grid";

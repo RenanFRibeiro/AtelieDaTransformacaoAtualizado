@@ -67,7 +67,7 @@ partial class UsersUserControl
         _activationButton.FillColor = Color.MidnightBlue;
         _activationButton.Font = new Font("Segoe UI", 9F);
         _activationButton.ForeColor = Color.White;
-        _activationButton.Location = new Point(250, 17);
+        _activationButton.Location = new Point(354, 22);
         _activationButton.Name = "_activationButton";
         _activationButton.ShadowDecoration.CustomizableEdges = customizableEdges2;
         _activationButton.Size = new Size(117, 42);
@@ -82,7 +82,7 @@ partial class UsersUserControl
         _deleteButton.FillColor = Color.FromArgb(192, 0, 0);
         _deleteButton.Font = new Font("Segoe UI", 9F);
         _deleteButton.ForeColor = Color.White;
-        _deleteButton.Location = new Point(373, 17);
+        _deleteButton.Location = new Point(481, 22);
         _deleteButton.Name = "_deleteButton";
         _deleteButton.ShadowDecoration.CustomizableEdges = customizableEdges4;
         _deleteButton.Size = new Size(135, 42);
@@ -97,7 +97,7 @@ partial class UsersUserControl
         _refreshButton.FillColor = Color.Gray;
         _refreshButton.Font = new Font("Segoe UI", 9F);
         _refreshButton.ForeColor = Color.White;
-        _refreshButton.Location = new Point(154, 17);
+        _refreshButton.Location = new Point(255, 22);
         _refreshButton.Name = "_refreshButton";
         _refreshButton.ShadowDecoration.CustomizableEdges = customizableEdges6;
         _refreshButton.Size = new Size(90, 42);
@@ -112,7 +112,7 @@ partial class UsersUserControl
         _newButton.FillColor = Color.Green;
         _newButton.Font = new Font("Segoe UI", 9F);
         _newButton.ForeColor = Color.White;
-        _newButton.Location = new Point(37, 17);
+        _newButton.Location = new Point(134, 22);
         _newButton.Name = "_newButton";
         _newButton.ShadowDecoration.CustomizableEdges = customizableEdges8;
         _newButton.Size = new Size(111, 42);
@@ -142,6 +142,7 @@ partial class UsersUserControl
         // _grid
         // 
         _grid.AllowUserToAddRows = false;
+        _grid.BorderStyle = BorderStyle.FixedSingle;
         _grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
         _grid.ColumnHeadersHeight = 42;
         _grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
@@ -155,7 +156,6 @@ partial class UsersUserControl
         _grid.DefaultCellStyle = dataGridViewCellStyle2;
         _grid.Dock = DockStyle.Fill;
         _grid.GridColor = Color.Black;
-        _grid.BorderStyle = BorderStyle.FixedSingle;
         _grid.Location = new Point(14, 14);
         _grid.MultiSelect = false;
         _grid.Name = "_grid";
