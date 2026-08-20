@@ -1,31 +1,50 @@
-﻿using System.Web;
+using System.Text;
 using AtelieDaTransformacao.Application.Interfaces;
+using AtelieDaTransformacao.Application.ViewModels;
 
 namespace AtelieDaTransformacao.Application.Services;
 
-/// <summary>
-/// Service responsible for formatting the message with product data and generating the direct link to the seller's WhatsApp.
-/// </summary>
-public class WhatsAppService : IWhatsAppService
+public sealed class WhatsAppService : IWhatsAppService
 {
-    // Número de telefone do Ateliê (com o código do país 55 e o DDD)
-    private readonly string _merchantPhoneNumber = "5511999999999";
+    // Substitua pelo número real do vendedor: 55 + DDD + número, somente dígitos.
+    private const string MerchantPhoneNumber = "5511999999999";
 
-    /// <summary>
-    /// Cria uma URL dinâmica estruturada para iniciar uma conversa no WhatsApp já preenchida com o nome e valor do produto.
-    /// </summary>
-    /// <param name="productName">Nome do produto de interesse do cliente.</param>
-    /// <param name="price">Preço atual do produto.</param>
-    /// <returns>Uma string contendo a URL completa de redirecionamento (Ex: https://wa.me/...)</returns>
     public string GenerateProductInquiryLink(string productName, decimal price)
     {
-        // Monta a mensagem que o cliente enviará ao clicar (usando asteriscos para negrito no WhatsApp)
-        string message = $"Olá! Fiquei muito interessado no produto *{productName}* no valor de {price:C}. Gostaria de combinar o pagamento e a entrega!";
+        var message = $"Olá! Fiquei interessado no produto *{productName}* no valor de R$ {price:N2}. Gostaria de combinar o pagamento e a entrega!";
+        return BuildLink(message);
+    }
 
-        // Codifica a mensagem para que espaços e caracteres especiais funcionem perfeitamente dentro de uma URL HTTP
-        string encodedMessage = HttpUtility.UrlEncode(message);
+    public string GenerateCartLink(CartViewModel cart)
+    {
+        if (cart is null || cart.Items.Count == 0)
+            return string.Empty;
 
-        // Retorna o link final estruturado na API oficial do WhatsApp
-        return $"https://wa.me/{_merchantPhoneNumber}?text={encodedMessage}";
+        var message = new StringBuilder();
+        message.AppendLine("Olá! Gostaria de realizar uma compra pelo Ateliê da Transformação.");
+        message.AppendLine();
+        message.AppendLine("*Produtos selecionados:*");
+        message.AppendLine();
+
+        foreach (var item in cart.Items)
+        {
+            message.AppendLine($"• {item.Title}");
+            message.AppendLine($"  Quantidade: {item.Quantity}");
+            message.AppendLine($"  Valor unitário: R$ {item.Price:N2}");
+            message.AppendLine($"  Subtotal: R$ {item.Subtotal:N2}");
+            message.AppendLine();
+        }
+
+        message.AppendLine($"*Total estimado: R$ {cart.Total:N2}*");
+        message.AppendLine();
+        message.AppendLine("Gostaria de continuar a compra e combinar pagamento e entrega.");
+
+        return BuildLink(message.ToString());
+    }
+
+    private static string BuildLink(string message)
+    {
+        var encoded = Uri.EscapeDataString(message);
+        return $"https://wa.me/{MerchantPhoneNumber}?text={encoded}";
     }
 }

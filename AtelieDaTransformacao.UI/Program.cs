@@ -47,6 +47,14 @@ public static class Program
         builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
         builder.Services.AddScoped<IWhatsAppService, WhatsAppService>();
 
+        builder.Services.AddDistributedMemoryCache();
+        builder.Services.AddSession(options =>
+        {
+            options.IdleTimeout = TimeSpan.FromHours(2);
+            options.Cookie.HttpOnly = true;
+            options.Cookie.IsEssential = true;
+        });
+
         builder.Services.AddControllersWithViews();
 
         var app = builder.Build();
@@ -71,6 +79,7 @@ public static class Program
         app.UseStaticFiles();
 
         app.UseRouting();
+        app.UseSession();
 
         app.UseAuthentication();
         app.UseAuthorization();

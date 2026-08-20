@@ -1,4 +1,4 @@
-﻿@model AtelieDaTransformacao.Application.ViewModels.HomeViewModel
+@model AtelieDaTransformacao.Application.ViewModels.HomeViewModel
 
 @{
     ViewData["Title"] = "Peças Exclusivas";
@@ -53,13 +53,18 @@
                                 </a>
                                 @if (prod.IsAvailable)
                                 {
-                                    <a href="@prod.WhatsAppLink" target="_blank" class="btn btn-success rounded-pill px-4 fw-medium d-inline-flex align-items-center gap-2 small shadow-sm" style="background-color: #25d366; border: none;">
-                                        <i class="bi bi-whatsapp"></i> Comprar
-                                    </a>
+                                    <form asp-controller="Cart" asp-action="Add" method="post" class="m-0">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@prod.Id" />
+                                        <input type="hidden" name="quantity" value="1" />
+                                        <button type="submit" class="btn btn-primary rounded-pill px-3 fw-medium d-inline-flex align-items-center gap-2 small shadow-sm">
+                                            <i class="bi bi-cart-plus"></i> Carrinho
+                                        </button>
+                                    </form>
                                 }
                                 else
                                 {
-                                    <button class="btn btn-outline-secondary rounded-pill px-3 small border-0" disabled>Reservado</button>
+                                    <button class="btn btn-outline-secondary rounded-pill px-3 small border-0" disabled>Indisponível</button>
                                 }
                             </div>
                         </div>
