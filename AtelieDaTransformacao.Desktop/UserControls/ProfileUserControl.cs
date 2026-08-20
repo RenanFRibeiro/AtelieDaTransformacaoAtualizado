@@ -52,7 +52,7 @@ public partial class ProfileUserControl : UserControl
 
         // Campos do perfil existentes no designer
         _emailValueLabel.Text = email;
-        _roleValueLabel.Text = SessionManager.IsAdmin ? "Administrador" : "Usuário";
+        _roleValueLabel.Text = SessionManager.IsAdmin ? "Administrador 🔧" : "Usuário 🤵🏿";
         _sessionValueLabel.Text = !string.IsNullOrWhiteSpace(SessionManager.Token) ? "JWT autenticado" : "Sem sessão";
 
         // Permissões + roles

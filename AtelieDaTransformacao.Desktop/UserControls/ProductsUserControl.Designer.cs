@@ -55,9 +55,9 @@ partial class ProductsUserControl
         // 
         // _toolbarCard
         // 
-        _toolbarCard.BackColor = Color.Transparent;
-        _toolbarCard.BorderColor = Color.FromArgb(226, 229, 236);
-        _toolbarCard.BorderRadius = 12;
+        _toolbarCard.BackColor = Color.White;
+        _toolbarCard.BorderColor = Color.White;
+        _toolbarCard.BorderRadius = 15;
         _toolbarCard.BorderThickness = 1;
         _toolbarCard.Controls.Add(_deleteButton);
         _toolbarCard.Controls.Add(_editButton);
@@ -65,9 +65,11 @@ partial class ProductsUserControl
         _toolbarCard.Controls.Add(_refreshButton);
         _toolbarCard.Controls.Add(_categoryComboBox);
         _toolbarCard.Controls.Add(_searchTextBox);
+        customizableEdges13.TopLeft = false;
+        customizableEdges13.TopRight = false;
         _toolbarCard.CustomizableEdges = customizableEdges13;
         _toolbarCard.Dock = DockStyle.Top;
-        _toolbarCard.FillColor = Color.White;
+        _toolbarCard.FillColor = Color.LightGray;
         _toolbarCard.Location = new Point(0, 0);
         _toolbarCard.Name = "_toolbarCard";
         _toolbarCard.Padding = new Padding(14);
@@ -173,11 +175,14 @@ partial class ProductsUserControl
         // 
         // _tableCard
         // 
-        _tableCard.BorderColor = Color.FromArgb(226, 229, 236);
-        _tableCard.BorderRadius = 12;
+        _tableCard.BackColor = Color.Transparent;
+        _tableCard.BorderColor = Color.White;
+        _tableCard.BorderRadius = 15;
         _tableCard.BorderThickness = 1;
         _tableCard.Controls.Add(_grid);
         _tableCard.Controls.Add(_countLabel);
+        customizableEdges15.TopLeft = false;
+        customizableEdges15.TopRight = false;
         _tableCard.CustomizableEdges = customizableEdges15;
         _tableCard.Dock = DockStyle.Fill;
         _tableCard.FillColor = Color.White;
@@ -199,12 +204,13 @@ partial class ProductsUserControl
         dataGridViewCellStyle2.BackColor = SystemColors.Window;
         dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
         dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-        dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-        dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+        dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(225, 225, 225);
+        dataGridViewCellStyle2.SelectionForeColor = Color.Black;
         dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
         _grid.DefaultCellStyle = dataGridViewCellStyle2;
         _grid.Dock = DockStyle.Fill;
-        _grid.GridColor = Color.FromArgb(226, 229, 236);
+        _grid.GridColor = Color.Black;
+        _grid.BorderStyle = BorderStyle.FixedSingle;
         _grid.Location = new Point(14, 14);
         _grid.MultiSelect = false;
         _grid.Name = "_grid";
@@ -212,7 +218,7 @@ partial class ProductsUserControl
         _grid.RowTemplate.Height = 42;
         _grid.Size = new Size(767, 384);
         _grid.TabIndex = 0;
-        _grid.ThemeStyle.GridColor = Color.FromArgb(226, 229, 236);
+        _grid.ThemeStyle.GridColor = Color.Black;
         _grid.ThemeStyle.HeaderStyle.BackColor = Color.Empty;
         _grid.ThemeStyle.HeaderStyle.Font = null;
         _grid.ThemeStyle.HeaderStyle.ForeColor = Color.Empty;
@@ -221,11 +227,12 @@ partial class ProductsUserControl
         _grid.ThemeStyle.RowsStyle.Font = new Font("Segoe UI", 9F);
         _grid.ThemeStyle.RowsStyle.ForeColor = SystemColors.ControlText;
         _grid.ThemeStyle.RowsStyle.Height = 42;
-        _grid.ThemeStyle.RowsStyle.SelectionBackColor = SystemColors.Highlight;
-        _grid.ThemeStyle.RowsStyle.SelectionForeColor = SystemColors.HighlightText;
+        _grid.ThemeStyle.RowsStyle.SelectionBackColor = Color.FromArgb(225, 225, 225);
+        _grid.ThemeStyle.RowsStyle.SelectionForeColor = Color.Black;
         // 
         // _countLabel
         // 
+        _countLabel.BackColor = Color.WhiteSmoke;
         _countLabel.Dock = DockStyle.Bottom;
         _countLabel.Font = new Font("Segoe UI", 8.5F);
         _countLabel.ForeColor = Color.FromArgb(113, 120, 135);
@@ -238,7 +245,7 @@ partial class ProductsUserControl
         // 
         // ProductsUserControl
         // 
-        BackColor = Color.FromArgb(245, 247, 251);
+        BackColor = Color.Transparent;
         Controls.Add(_tableCard);
         Controls.Add(_toolbarCard);
         Name = "ProductsUserControl";

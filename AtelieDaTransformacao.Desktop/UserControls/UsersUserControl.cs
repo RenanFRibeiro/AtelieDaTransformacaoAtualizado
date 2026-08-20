@@ -18,6 +18,7 @@ public partial class UsersUserControl : UserControl
         _newButton.Click += async (_, _) => await CreateAsync();
         _refreshButton.Click += async (_, _) => await LoadAsync();
         _deleteButton.Click += async (_, _) => await DeleteSelectedAsync();
+        _activationButton.Click += async (_, _) => await ActivateSelectedAsync();
         Load += async (_, _) => await LoadAsync();
     }
 
@@ -26,7 +27,7 @@ public partial class UsersUserControl : UserControl
         try
         {
             _items = await _service.GetAllAsync() ?? new();
-            _grid.DataSource = _items.Select(x => new { x.Id, Usuário = x.Email, Perfil = x.Roles.Count == 0 ? "Usuário" : string.Join(", ", x.Roles) }).ToList();
+            _grid.DataSource = _items.Select(x => new { x.Id, Usuário = x.Email, Perfil = x.Roles.Count == 0 ? "Usuário" : string.Join(", ", x.Roles), Ativo = x.IsActive ? "Sim" : "Não" }).ToList();
             if (_grid.Columns["Id"] is not null) _grid.Columns["Id"].Visible = false;
             _countLabel.Text = $"{_items.Count} usuário(s)";
         }
@@ -47,7 +48,16 @@ public partial class UsersUserControl : UserControl
         var id = _grid.CurrentRow.Cells["Id"].Value?.ToString(); var email = _grid.CurrentRow.Cells["Usuário"].Value?.ToString();
         if (string.IsNullOrWhiteSpace(id) || string.IsNullOrWhiteSpace(email)) return;
         if (string.Equals(email, SessionManager.Email, StringComparison.OrdinalIgnoreCase)) { MessageBox.Show(this, "Você não pode excluir o próprio usuário."); return; }
-        if (MessageBox.Show(this, $"Excluir {email}?", "Confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes) return;
-        try { await _service.DeleteAsync(id); await LoadAsync(); } catch (Exception ex) { MessageBox.Show(this, ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+        if (MessageBox.Show(this, $"Desativar {email}?", "Confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) != DialogResult.Yes) return;
+        try { await _service.DeactivateAsync(id); await LoadAsync(); } catch (Exception ex) { MessageBox.Show(this, ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error); }
+    }
+
+    private async Task ActivateSelectedAsync()
+    {
+        if (_grid.CurrentRow is null) return;
+        var id = _grid.CurrentRow.Cells["Id"].Value?.ToString(); var email = _grid.CurrentRow.Cells["Usuário"].Value?.ToString();
+        if (string.IsNullOrWhiteSpace(id) || string.IsNullOrWhiteSpace(email)) return;
+        if (MessageBox.Show(this, $"Ativar {email}?", "Confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes) return;
+        try { await _service.ActivateAsync(id); await LoadAsync(); } catch (Exception ex) { MessageBox.Show(this, ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error); }
     }
 }

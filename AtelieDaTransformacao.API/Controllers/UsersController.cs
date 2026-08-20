@@ -23,4 +23,18 @@ public sealed class UsersController : ControllerBase
         var currentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         return await _service.DeleteAsync(id, currentId) ? NoContent() : BadRequest(new { message = "Usuário não encontrado ou operação não permitida." });
     }
+
+    [HttpPost("deactivate/{id}")]
+    public async Task<IActionResult> Deactivate(string id)
+    {
+        var currentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        return await _service.DeactivateAsync(id, currentId) ? NoContent() : BadRequest(new { message = "Não foi possível desativar o usuário." });
+    }
+
+    [HttpPost("activate/{id}")]
+    public async Task<IActionResult> Activate(string id)
+    {
+        var currentId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        return await _service.ActivateAsync(id, currentId) ? NoContent() : BadRequest(new { message = "Não foi possível ativar o usuário." });
+    }
 }

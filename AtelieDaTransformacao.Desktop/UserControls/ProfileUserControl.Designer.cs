@@ -53,7 +53,7 @@ partial class ProfileUserControl
         lblAvatar.DisabledState.CustomBorderColor = Color.DarkGray;
         lblAvatar.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
         lblAvatar.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-        lblAvatar.FillColor = Color.FromArgb(145, 98, 57);
+        lblAvatar.FillColor = Color.FromArgb(164, 104, 45);
         lblAvatar.Font = new Font("Yu Gothic", 26.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
         lblAvatar.ForeColor = Color.White;
         lblAvatar.Location = new Point(222, 33);
@@ -107,7 +107,7 @@ partial class ProfileUserControl
         // 
         // _roleValueLabel
         // 
-        _roleValueLabel.BackColor = Color.FromArgb(145, 98, 57);
+        _roleValueLabel.BackColor = Color.FromArgb(164, 104, 45);
         _roleValueLabel.ForeColor = Color.White;
         _roleValueLabel.Location = new Point(172, 152);
         _roleValueLabel.Name = "_roleValueLabel";
@@ -150,7 +150,7 @@ partial class ProfileUserControl
         _titleLabel.AutoSize = true;
         _titleLabel.BackColor = Color.Transparent;
         _titleLabel.Font = new Font("Segoe UI", 17F, FontStyle.Bold);
-        _titleLabel.ForeColor = Color.FromArgb(30, 34, 43);
+        _titleLabel.ForeColor = Color.White;
         _titleLabel.Location = new Point(38, 18);
         _titleLabel.Name = "_titleLabel";
         _titleLabel.Size = new Size(137, 31);

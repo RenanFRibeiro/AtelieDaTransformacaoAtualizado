@@ -9,6 +9,8 @@ partial class UsersUserControl
     {
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
@@ -19,16 +21,14 @@ partial class UsersUserControl
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
         DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         _toolbarCard = new Guna.UI2.WinForms.Guna2Panel();
+        _activationButton = new Guna.UI2.WinForms.Guna2Button();
         _deleteButton = new Guna.UI2.WinForms.Guna2Button();
         _refreshButton = new Guna.UI2.WinForms.Guna2Button();
         _newButton = new Guna.UI2.WinForms.Guna2Button();
         _tableCard = new Guna.UI2.WinForms.Guna2Panel();
         _grid = new Guna.UI2.WinForms.Guna2DataGridView();
         _countLabel = new Label();
-        _activationButton = new Guna.UI2.WinForms.Guna2Button();
         _toolbarCard.SuspendLayout();
         _tableCard.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)_grid).BeginInit();
@@ -36,30 +36,53 @@ partial class UsersUserControl
         // 
         // _toolbarCard
         // 
-        _toolbarCard.BorderColor = Color.FromArgb(226, 229, 236);
-        _toolbarCard.BorderRadius = 12;
+        _toolbarCard.BackColor = Color.White;
+        _toolbarCard.BorderColor = Color.LightGray;
+        _toolbarCard.BorderRadius = 15;
         _toolbarCard.BorderThickness = 1;
         _toolbarCard.Controls.Add(_activationButton);
         _toolbarCard.Controls.Add(_deleteButton);
         _toolbarCard.Controls.Add(_refreshButton);
         _toolbarCard.Controls.Add(_newButton);
+        customizableEdges9.TopLeft = false;
+        customizableEdges9.TopRight = false;
         _toolbarCard.CustomizableEdges = customizableEdges9;
         _toolbarCard.Dock = DockStyle.Top;
-        _toolbarCard.FillColor = Color.White;
+        _toolbarCard.FillColor = Color.LightGray;
         _toolbarCard.Location = new Point(0, 0);
         _toolbarCard.Name = "_toolbarCard";
         _toolbarCard.ShadowDecoration.CustomizableEdges = customizableEdges10;
         _toolbarCard.Size = new Size(715, 78);
         _toolbarCard.TabIndex = 1;
         // 
+        // _activationButton
+        // 
+        _activationButton.BackColor = Color.Transparent;
+        _activationButton.BorderRadius = 7;
+        _activationButton.CustomizableEdges = customizableEdges1;
+        _activationButton.DisabledState.BorderColor = Color.DarkGray;
+        _activationButton.DisabledState.CustomBorderColor = Color.DarkGray;
+        _activationButton.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
+        _activationButton.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
+        _activationButton.FillColor = Color.MidnightBlue;
+        _activationButton.Font = new Font("Segoe UI", 9F);
+        _activationButton.ForeColor = Color.White;
+        _activationButton.Location = new Point(250, 17);
+        _activationButton.Name = "_activationButton";
+        _activationButton.ShadowDecoration.CustomizableEdges = customizableEdges2;
+        _activationButton.Size = new Size(117, 42);
+        _activationButton.TabIndex = 3;
+        _activationButton.Text = "✔️ Ativar Usúario";
+        // 
         // _deleteButton
         // 
+        _deleteButton.BackColor = Color.Transparent;
         _deleteButton.BorderRadius = 7;
         _deleteButton.CustomizableEdges = customizableEdges3;
         _deleteButton.FillColor = Color.FromArgb(192, 0, 0);
         _deleteButton.Font = new Font("Segoe UI", 9F);
         _deleteButton.ForeColor = Color.White;
-        _deleteButton.Location = new Point(392, 24);
+        _deleteButton.Location = new Point(373, 17);
         _deleteButton.Name = "_deleteButton";
         _deleteButton.ShadowDecoration.CustomizableEdges = customizableEdges4;
         _deleteButton.Size = new Size(135, 42);
@@ -68,12 +91,13 @@ partial class UsersUserControl
         // 
         // _refreshButton
         // 
+        _refreshButton.BackColor = Color.Transparent;
         _refreshButton.BorderRadius = 7;
         _refreshButton.CustomizableEdges = customizableEdges5;
         _refreshButton.FillColor = Color.Gray;
         _refreshButton.Font = new Font("Segoe UI", 9F);
         _refreshButton.ForeColor = Color.White;
-        _refreshButton.Location = new Point(173, 24);
+        _refreshButton.Location = new Point(154, 17);
         _refreshButton.Name = "_refreshButton";
         _refreshButton.ShadowDecoration.CustomizableEdges = customizableEdges6;
         _refreshButton.Size = new Size(90, 42);
@@ -82,12 +106,13 @@ partial class UsersUserControl
         // 
         // _newButton
         // 
+        _newButton.BackColor = Color.Transparent;
         _newButton.BorderRadius = 7;
         _newButton.CustomizableEdges = customizableEdges7;
         _newButton.FillColor = Color.Green;
         _newButton.Font = new Font("Segoe UI", 9F);
         _newButton.ForeColor = Color.White;
-        _newButton.Location = new Point(56, 24);
+        _newButton.Location = new Point(37, 17);
         _newButton.Name = "_newButton";
         _newButton.ShadowDecoration.CustomizableEdges = customizableEdges8;
         _newButton.Size = new Size(111, 42);
@@ -96,11 +121,14 @@ partial class UsersUserControl
         // 
         // _tableCard
         // 
-        _tableCard.BorderColor = Color.FromArgb(226, 229, 236);
-        _tableCard.BorderRadius = 12;
+        _tableCard.BackColor = Color.Transparent;
+        _tableCard.BorderColor = Color.White;
+        _tableCard.BorderRadius = 15;
         _tableCard.BorderThickness = 1;
         _tableCard.Controls.Add(_grid);
         _tableCard.Controls.Add(_countLabel);
+        customizableEdges11.TopLeft = false;
+        customizableEdges11.TopRight = false;
         _tableCard.CustomizableEdges = customizableEdges11;
         _tableCard.Dock = DockStyle.Fill;
         _tableCard.FillColor = Color.White;
@@ -121,12 +149,13 @@ partial class UsersUserControl
         dataGridViewCellStyle2.BackColor = SystemColors.Window;
         dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
         dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-        dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-        dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+        dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(225, 225, 225);
+        dataGridViewCellStyle2.SelectionForeColor = Color.Black;
         dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
         _grid.DefaultCellStyle = dataGridViewCellStyle2;
         _grid.Dock = DockStyle.Fill;
-        _grid.GridColor = Color.FromArgb(226, 229, 236);
+        _grid.GridColor = Color.Black;
+        _grid.BorderStyle = BorderStyle.FixedSingle;
         _grid.Location = new Point(14, 14);
         _grid.MultiSelect = false;
         _grid.Name = "_grid";
@@ -134,7 +163,7 @@ partial class UsersUserControl
         _grid.RowTemplate.Height = 42;
         _grid.Size = new Size(687, 276);
         _grid.TabIndex = 0;
-        _grid.ThemeStyle.GridColor = Color.FromArgb(226, 229, 236);
+        _grid.ThemeStyle.GridColor = Color.Black;
         _grid.ThemeStyle.HeaderStyle.BackColor = Color.Empty;
         _grid.ThemeStyle.HeaderStyle.Font = null;
         _grid.ThemeStyle.HeaderStyle.ForeColor = Color.Empty;
@@ -143,8 +172,8 @@ partial class UsersUserControl
         _grid.ThemeStyle.RowsStyle.Font = new Font("Segoe UI", 9F);
         _grid.ThemeStyle.RowsStyle.ForeColor = SystemColors.ControlText;
         _grid.ThemeStyle.RowsStyle.Height = 42;
-        _grid.ThemeStyle.RowsStyle.SelectionBackColor = SystemColors.Highlight;
-        _grid.ThemeStyle.RowsStyle.SelectionForeColor = SystemColors.HighlightText;
+        _grid.ThemeStyle.RowsStyle.SelectionBackColor = Color.FromArgb(225, 225, 225);
+        _grid.ThemeStyle.RowsStyle.SelectionForeColor = Color.Black;
         // 
         // _countLabel
         // 
@@ -157,27 +186,9 @@ partial class UsersUserControl
         _countLabel.TabIndex = 1;
         _countLabel.TextAlign = ContentAlignment.MiddleLeft;
         // 
-        // _activationButton
-        // 
-        _activationButton.BorderRadius = 7;
-        _activationButton.CustomizableEdges = customizableEdges1;
-        _activationButton.DisabledState.BorderColor = Color.DarkGray;
-        _activationButton.DisabledState.CustomBorderColor = Color.DarkGray;
-        _activationButton.DisabledState.FillColor = Color.FromArgb(169, 169, 169);
-        _activationButton.DisabledState.ForeColor = Color.FromArgb(141, 141, 141);
-        _activationButton.FillColor = Color.MidnightBlue;
-        _activationButton.Font = new Font("Segoe UI", 9F);
-        _activationButton.ForeColor = Color.White;
-        _activationButton.Location = new Point(269, 24);
-        _activationButton.Name = "_activationButton";
-        _activationButton.ShadowDecoration.CustomizableEdges = customizableEdges2;
-        _activationButton.Size = new Size(117, 42);
-        _activationButton.TabIndex = 3;
-        _activationButton.Text = "✔️ Ativar Usúario";
-        // 
         // UsersUserControl
         // 
-        BackColor = Color.FromArgb(245, 247, 251);
+        BackColor = Color.Transparent;
         Controls.Add(_tableCard);
         Controls.Add(_toolbarCard);
         Name = "UsersUserControl";

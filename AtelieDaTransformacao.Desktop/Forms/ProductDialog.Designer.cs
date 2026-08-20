@@ -274,7 +274,7 @@ partial class ProductDialog
         // _descriptionCaption
         // 
         _descriptionCaption.BackColor = Color.Transparent;
-        _descriptionCaption.Location = new Point(29, 88);
+        _descriptionCaption.Location = new Point(27, 88);
         _descriptionCaption.Name = "_descriptionCaption";
         _descriptionCaption.Size = new Size(100, 14);
         _descriptionCaption.TabIndex = 11;
@@ -283,7 +283,7 @@ partial class ProductDialog
         // _nameCaption
         // 
         _nameCaption.BackColor = Color.Transparent;
-        _nameCaption.Location = new Point(29, 13);
+        _nameCaption.Location = new Point(27, 17);
         _nameCaption.Name = "_nameCaption";
         _nameCaption.Size = new Size(55, 23);
         _nameCaption.TabIndex = 12;

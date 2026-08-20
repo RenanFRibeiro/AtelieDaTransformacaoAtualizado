@@ -37,21 +37,24 @@ partial class CategoriesUserControl
         // 
         // _toolbarCard
         // 
-        _toolbarCard.BorderColor = Color.FromArgb(226, 229, 236);
-        _toolbarCard.BorderRadius = 12;
+        _toolbarCard.BackColor = Color.White;
+        _toolbarCard.BorderColor = Color.LightGray;
+        _toolbarCard.BorderRadius = 15;
         _toolbarCard.BorderThickness = 1;
         _toolbarCard.Controls.Add(_refreshButton);
         _toolbarCard.Controls.Add(_deleteButton);
         _toolbarCard.Controls.Add(_editButton);
         _toolbarCard.Controls.Add(_newButton);
+        customizableEdges9.TopLeft = false;
+        customizableEdges9.TopRight = false;
         _toolbarCard.CustomizableEdges = customizableEdges9;
         _toolbarCard.Dock = DockStyle.Top;
-        _toolbarCard.FillColor = Color.White;
+        _toolbarCard.FillColor = Color.LightGray;
         _toolbarCard.Location = new Point(0, 0);
         _toolbarCard.Name = "_toolbarCard";
         _toolbarCard.Padding = new Padding(14);
         _toolbarCard.ShadowDecoration.CustomizableEdges = customizableEdges10;
-        _toolbarCard.Size = new Size(795, 78);
+        _toolbarCard.Size = new Size(795, 86);
         _toolbarCard.TabIndex = 1;
         // 
         // _refreshButton
@@ -62,10 +65,10 @@ partial class CategoriesUserControl
         _refreshButton.FillColor = Color.Gray;
         _refreshButton.Font = new Font("Segoe UI", 9F);
         _refreshButton.ForeColor = Color.FromArgb(224, 224, 224);
-        _refreshButton.Location = new Point(500, 17);
+        _refreshButton.Location = new Point(154, 17);
         _refreshButton.Name = "_refreshButton";
         _refreshButton.ShadowDecoration.CustomizableEdges = customizableEdges2;
-        _refreshButton.Size = new Size(108, 45);
+        _refreshButton.Size = new Size(90, 42);
         _refreshButton.TabIndex = 0;
         _refreshButton.Text = "🔄️ Atualizar";
         // 
@@ -77,10 +80,10 @@ partial class CategoriesUserControl
         _deleteButton.FillColor = Color.FromArgb(192, 0, 0);
         _deleteButton.Font = new Font("Segoe UI", 9F);
         _deleteButton.ForeColor = Color.FromArgb(224, 224, 224);
-        _deleteButton.Location = new Point(386, 17);
+        _deleteButton.Location = new Point(340, 17);
         _deleteButton.Name = "_deleteButton";
         _deleteButton.ShadowDecoration.CustomizableEdges = customizableEdges4;
-        _deleteButton.Size = new Size(108, 45);
+        _deleteButton.Size = new Size(77, 42);
         _deleteButton.TabIndex = 1;
         _deleteButton.Text = "🗑️ Excluir";
         // 
@@ -92,10 +95,10 @@ partial class CategoriesUserControl
         _editButton.FillColor = Color.MidnightBlue;
         _editButton.Font = new Font("Segoe UI", 9F);
         _editButton.ForeColor = Color.FromArgb(224, 224, 224);
-        _editButton.Location = new Point(272, 17);
+        _editButton.Location = new Point(250, 17);
         _editButton.Name = "_editButton";
         _editButton.ShadowDecoration.CustomizableEdges = customizableEdges6;
-        _editButton.Size = new Size(108, 45);
+        _editButton.Size = new Size(84, 42);
         _editButton.TabIndex = 2;
         _editButton.Text = "✏️ Editar";
         // 
@@ -107,28 +110,32 @@ partial class CategoriesUserControl
         _newButton.FillColor = Color.Green;
         _newButton.Font = new Font("Segoe UI", 9F);
         _newButton.ForeColor = Color.FromArgb(224, 224, 224);
-        _newButton.Location = new Point(158, 17);
+        _newButton.Location = new Point(37, 17);
         _newButton.Name = "_newButton";
         _newButton.ShadowDecoration.CustomizableEdges = customizableEdges8;
-        _newButton.Size = new Size(108, 45);
+        _newButton.Size = new Size(111, 42);
         _newButton.TabIndex = 3;
         _newButton.Text = "+ Nova Categoria";
         // 
         // _tableCard
         // 
-        _tableCard.BorderColor = Color.FromArgb(226, 229, 236);
-        _tableCard.BorderRadius = 12;
+        _tableCard.BackColor = Color.Transparent;
+        _tableCard.BorderColor = Color.White;
+        _tableCard.BorderRadius = 15;
         _tableCard.BorderThickness = 1;
         _tableCard.Controls.Add(_grid);
         _tableCard.Controls.Add(_countLabel);
+        customizableEdges11.TopLeft = false;
+        customizableEdges11.TopRight = false;
         _tableCard.CustomizableEdges = customizableEdges11;
         _tableCard.Dock = DockStyle.Fill;
         _tableCard.FillColor = Color.White;
-        _tableCard.Location = new Point(0, 78);
+        _tableCard.Location = new Point(0, 86);
+        _tableCard.Margin = new Padding(3, 3, 0, 0);
         _tableCard.Name = "_tableCard";
         _tableCard.Padding = new Padding(14, 14, 14, 40);
         _tableCard.ShadowDecoration.CustomizableEdges = customizableEdges12;
-        _tableCard.Size = new Size(795, 480);
+        _tableCard.Size = new Size(795, 472);
         _tableCard.TabIndex = 0;
         // 
         // _grid
@@ -146,15 +153,16 @@ partial class CategoriesUserControl
         dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
         _grid.DefaultCellStyle = dataGridViewCellStyle2;
         _grid.Dock = DockStyle.Fill;
-        _grid.GridColor = Color.FromArgb(226, 229, 236);
+        _grid.GridColor = Color.Black;
+        _grid.BorderStyle = BorderStyle.FixedSingle;
         _grid.Location = new Point(14, 14);
         _grid.MultiSelect = false;
         _grid.Name = "_grid";
         _grid.RowHeadersVisible = false;
         _grid.RowTemplate.Height = 42;
-        _grid.Size = new Size(767, 398);
+        _grid.Size = new Size(767, 390);
         _grid.TabIndex = 0;
-        _grid.ThemeStyle.GridColor = Color.FromArgb(226, 229, 236);
+        _grid.ThemeStyle.GridColor = Color.Black;
         _grid.ThemeStyle.HeaderStyle.BackColor = Color.Empty;
         _grid.ThemeStyle.HeaderStyle.Font = null;
         _grid.ThemeStyle.HeaderStyle.ForeColor = Color.Empty;
@@ -168,10 +176,11 @@ partial class CategoriesUserControl
         // 
         // _countLabel
         // 
+        _countLabel.BackColor = Color.Gainsboro;
         _countLabel.Dock = DockStyle.Bottom;
         _countLabel.Font = new Font("Segoe UI", 8.5F);
-        _countLabel.ForeColor = Color.FromArgb(113, 120, 135);
-        _countLabel.Location = new Point(14, 412);
+        _countLabel.ForeColor = Color.Gray;
+        _countLabel.Location = new Point(14, 404);
         _countLabel.Name = "_countLabel";
         _countLabel.Size = new Size(767, 28);
         _countLabel.TabIndex = 1;
@@ -180,7 +189,7 @@ partial class CategoriesUserControl
         // 
         // CategoriesUserControl
         // 
-        BackColor = Color.FromArgb(245, 247, 251);
+        BackColor = Color.Transparent;
         Controls.Add(_tableCard);
         Controls.Add(_toolbarCard);
         Name = "CategoriesUserControl";

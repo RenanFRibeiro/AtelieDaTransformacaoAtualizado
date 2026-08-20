@@ -13,7 +13,16 @@ public sealed class UserManagementService : IUserManagementService
     {
         var result = new List<UserSummaryDto>();
         foreach (var user in _users.Users.OrderBy(x => x.Email))
-            result.Add(new UserSummaryDto { Id = user.Id, Email = user.Email ?? user.UserName ?? string.Empty, Roles = await _users.GetRolesAsync(user) });
+        {
+            var isActive = !(user.LockoutEnd.HasValue && user.LockoutEnd.Value > DateTimeOffset.UtcNow);
+            result.Add(new UserSummaryDto
+            {
+                Id = user.Id,
+                Email = user.Email ?? user.UserName ?? string.Empty,
+                Roles = await _users.GetRolesAsync(user),
+                IsActive = isActive
+            });
+        }
         return result;
     }
 
@@ -23,6 +32,28 @@ public sealed class UserManagementService : IUserManagementService
         var user = await _users.FindByIdAsync(id);
         if (user is null) return false;
         var result = await _users.DeleteAsync(user);
+        return result.Succeeded;
+    }
+
+    public async Task<bool> DeactivateAsync(string id, string? currentUserId)
+    {
+        if (string.IsNullOrWhiteSpace(id) || string.Equals(id, currentUserId, StringComparison.OrdinalIgnoreCase)) return false;
+        var user = await _users.FindByIdAsync(id);
+        if (user is null) return false;
+        user.LockoutEnabled = true;
+        user.LockoutEnd = DateTimeOffset.MaxValue;
+        var result = await _users.UpdateAsync(user);
+        return result.Succeeded;
+    }
+
+    public async Task<bool> ActivateAsync(string id, string? currentUserId)
+    {
+        if (string.IsNullOrWhiteSpace(id)) return false;
+        var user = await _users.FindByIdAsync(id);
+        if (user is null) return false;
+        user.LockoutEnd = null;
+        user.LockoutEnabled = true;
+        var result = await _users.UpdateAsync(user);
         return result.Succeeded;
     }
 }

@@ -15,6 +15,25 @@ public partial class LoginForm : Form
         _loginButton.Click += async (_, _) => await LoginAsync();
         Load += async (_, _) => await CheckApiAsync();
         AcceptButton = _loginButton;
+        _passwordToggleButton.Click += (_, _) => TogglePassword();
+    }
+
+    private void TogglePassword()
+    {
+        try
+        {
+            if (_passwordTextBox.PasswordChar == '•')
+            {
+                _passwordTextBox.PasswordChar = '\0';
+                _passwordToggleButton.Text = "🙈"; // closed eye icon
+            }
+            else
+            {
+                _passwordTextBox.PasswordChar = '•';
+                _passwordToggleButton.Text = "👁️"; // eye icon
+            }
+        }
+        catch { }
     }
 
     private async Task CheckApiAsync()

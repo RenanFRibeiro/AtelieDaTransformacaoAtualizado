@@ -70,7 +70,8 @@ partial class DashboardUserControl
         // 
         // _headerPanel
         // 
-        _headerPanel.BackColor = Color.Transparent;
+        _headerPanel.BackColor = Color.LightGray;
+        _headerPanel.BorderRadius = 10;
         _headerPanel.Controls.Add(_statusLabel);
         _headerPanel.Controls.Add(_refreshButton);
         _headerPanel.Controls.Add(_descriptionLabel);
@@ -115,7 +116,7 @@ partial class DashboardUserControl
         // 
         _descriptionLabel.AutoSize = true;
         _descriptionLabel.Font = new Font("Segoe UI", 9.5F);
-        _descriptionLabel.ForeColor = Color.FromArgb(113, 120, 135);
+        _descriptionLabel.ForeColor = Color.Black;
         _descriptionLabel.Location = new Point(2, 35);
         _descriptionLabel.Name = "_descriptionLabel";
         _descriptionLabel.Size = new Size(358, 17);
@@ -126,7 +127,7 @@ partial class DashboardUserControl
         // 
         _welcomeLabel.AutoSize = true;
         _welcomeLabel.Font = new Font("Segoe UI", 17F, FontStyle.Bold);
-        _welcomeLabel.ForeColor = Color.FromArgb(30, 34, 43);
+        _welcomeLabel.ForeColor = Color.Black;
         _welcomeLabel.Location = new Point(0, 0);
         _welcomeLabel.Name = "_welcomeLabel";
         _welcomeLabel.Size = new Size(132, 31);
@@ -135,10 +136,13 @@ partial class DashboardUserControl
         // 
         // _cardsPanel
         // 
-        _cardsPanel.BackColor = Color.Transparent;
+        _cardsPanel.BackColor = Color.White;
+        _cardsPanel.BorderRadius = 15;
+        customizableEdges5.TopLeft = false;
+        customizableEdges5.TopRight = false;
         _cardsPanel.CustomizableEdges = customizableEdges5;
         _cardsPanel.Dock = DockStyle.Top;
-        _cardsPanel.FillColor = Color.Transparent;
+        _cardsPanel.FillColor = Color.LightGray;
         _cardsPanel.Location = new Point(0, 82);
         _cardsPanel.Name = "_cardsPanel";
         _cardsPanel.ShadowDecoration.CustomizableEdges = customizableEdges6;
@@ -217,8 +221,9 @@ partial class DashboardUserControl
         // 
         // _tableCard
         // 
-        _tableCard.BorderColor = Color.FromArgb(226, 229, 236);
-        _tableCard.BorderRadius = 12;
+        _tableCard.BackColor = Color.Transparent;
+        _tableCard.BorderColor = Color.Transparent;
+        _tableCard.BorderRadius = 15;
         _tableCard.BorderThickness = 1;
         _tableCard.Controls.Add(_grid);
         _tableCard.Controls.Add(_tableTitle);
@@ -236,18 +241,22 @@ partial class DashboardUserControl
         // 
         _grid.AllowUserToAddRows = false;
         _grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+        _grid.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+        _grid.EnableHeadersVisualStyles = false;
         _grid.ColumnHeadersHeight = 42;
         _grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
         dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
         dataGridViewCellStyle2.BackColor = SystemColors.Window;
         dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
         dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-        dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-        dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+        dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(225, 225, 225);
+        dataGridViewCellStyle2.SelectionForeColor = Color.Black;
         dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
         _grid.DefaultCellStyle = dataGridViewCellStyle2;
         _grid.Dock = DockStyle.Fill;
-        _grid.GridColor = Color.FromArgb(226, 229, 236);
+        _grid.GridColor = Color.Black;
+        _grid.BorderStyle = BorderStyle.FixedSingle;
+        _grid.CellBorderStyle = DataGridViewCellBorderStyle.Single;
         _grid.Location = new Point(16, 50);
         _grid.MultiSelect = false;
         _grid.Name = "_grid";
@@ -255,7 +264,7 @@ partial class DashboardUserControl
         _grid.RowTemplate.Height = 40;
         _grid.Size = new Size(763, 288);
         _grid.TabIndex = 0;
-        _grid.ThemeStyle.GridColor = Color.FromArgb(226, 229, 236);
+        _grid.ThemeStyle.GridColor = Color.Black;
         _grid.ThemeStyle.HeaderStyle.BackColor = Color.Empty;
         _grid.ThemeStyle.HeaderStyle.Font = null;
         _grid.ThemeStyle.HeaderStyle.ForeColor = Color.Empty;
@@ -264,8 +273,8 @@ partial class DashboardUserControl
         _grid.ThemeStyle.RowsStyle.Font = new Font("Segoe UI", 9F);
         _grid.ThemeStyle.RowsStyle.ForeColor = SystemColors.ControlText;
         _grid.ThemeStyle.RowsStyle.Height = 40;
-        _grid.ThemeStyle.RowsStyle.SelectionBackColor = SystemColors.Highlight;
-        _grid.ThemeStyle.RowsStyle.SelectionForeColor = SystemColors.HighlightText;
+        _grid.ThemeStyle.RowsStyle.SelectionBackColor = Color.FromArgb(225, 225, 225);
+        _grid.ThemeStyle.RowsStyle.SelectionForeColor = Color.Black;
         // 
         // _tableTitle
         // 

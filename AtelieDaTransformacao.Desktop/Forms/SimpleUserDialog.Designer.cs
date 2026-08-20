@@ -3,7 +3,7 @@ using AtelieDaTransformacao.Desktop.Themes;
 namespace AtelieDaTransformacao.Desktop.Forms;
 partial class SimpleUserDialog
 {
-    private System.ComponentModel.IContainer? components=null;private Guna.UI2.WinForms.Guna2BorderlessForm _borderlessForm=null!;private Guna.UI2.WinForms.Guna2DragControl _dragControl=null!;private Guna.UI2.WinForms.Guna2Panel _headerPanel=null!;private Guna.UI2.WinForms.Guna2Panel _bodyPanel=null!;private Label _titleLabel=null!;private Label _emailCaption=null!;private Label _passwordCaption=null!;private Guna.UI2.WinForms.Guna2TextBox _emailTextBox=null!;private Guna.UI2.WinForms.Guna2TextBox _passwordTextBox=null!;private Guna.UI2.WinForms.Guna2Button _cancelButton=null!;private Guna.UI2.WinForms.Guna2Button _createButton=null!;
+    private System.ComponentModel.IContainer? components=null;private Guna.UI2.WinForms.Guna2BorderlessForm _borderlessForm=null!;private Guna.UI2.WinForms.Guna2DragControl _dragControl=null!;private Guna.UI2.WinForms.Guna2Panel _headerPanel=null!;private Guna.UI2.WinForms.Guna2Panel _bodyPanel=null!;private Label _titleLabel=null!;private Label _emailCaption=null!;private Label _passwordCaption=null!;private Guna.UI2.WinForms.Guna2TextBox _emailTextBox=null!;private Guna.UI2.WinForms.Guna2TextBox _passwordTextBox=null!;private Guna.UI2.WinForms.Guna2Button _passwordToggleButton=null!;private Guna.UI2.WinForms.Guna2Button _cancelButton=null!;private Guna.UI2.WinForms.Guna2Button _createButton=null!;
     protected override void Dispose(bool disposing){if(disposing)components?.Dispose();base.Dispose(disposing);}
     private void InitializeComponent()
     {
@@ -28,6 +28,7 @@ partial class SimpleUserDialog
         _createButton = new Guna.UI2.WinForms.Guna2Button();
         _cancelButton = new Guna.UI2.WinForms.Guna2Button();
         _passwordTextBox = new Guna.UI2.WinForms.Guna2TextBox();
+        _passwordToggleButton = new Guna.UI2.WinForms.Guna2Button();
         _emailTextBox = new Guna.UI2.WinForms.Guna2TextBox();
         _passwordCaption = new Label();
         _emailCaption = new Label();
@@ -76,6 +77,7 @@ partial class SimpleUserDialog
         _bodyPanel.Controls.Add(_createButton);
         _bodyPanel.Controls.Add(_cancelButton);
         _bodyPanel.Controls.Add(_passwordTextBox);
+        _bodyPanel.Controls.Add(_passwordToggleButton);
         _bodyPanel.Controls.Add(_emailTextBox);
         _bodyPanel.Controls.Add(_passwordCaption);
         _bodyPanel.Controls.Add(_emailCaption);
@@ -90,49 +92,72 @@ partial class SimpleUserDialog
         // 
         // _createButton
         // 
+        _createButton.BorderRadius = 7;
         _createButton.CustomizableEdges = customizableEdges1;
         _createButton.FillColor = Color.FromArgb(145, 98, 57);
         _createButton.Font = new Font("Segoe UI", 9F);
         _createButton.ForeColor = Color.White;
-        _createButton.Location = new Point(0, 0);
+        _createButton.Location = new Point(391, 234);
         _createButton.Name = "_createButton";
         _createButton.ShadowDecoration.CustomizableEdges = customizableEdges2;
-        _createButton.Size = new Size(180, 45);
+        _createButton.Size = new Size(117, 38);
         _createButton.TabIndex = 0;
+        _createButton.Text = "💾 Salvar";
         // 
         // _cancelButton
         // 
+        _cancelButton.BorderRadius = 7;
         _cancelButton.CustomizableEdges = customizableEdges3;
         _cancelButton.DialogResult = DialogResult.Cancel;
+        _cancelButton.FillColor = Color.Gray;
         _cancelButton.Font = new Font("Segoe UI", 9F);
         _cancelButton.ForeColor = Color.White;
-        _cancelButton.Location = new Point(0, 0);
+        _cancelButton.Location = new Point(254, 234);
         _cancelButton.Name = "_cancelButton";
         _cancelButton.ShadowDecoration.CustomizableEdges = customizableEdges4;
-        _cancelButton.Size = new Size(180, 45);
+        _cancelButton.Size = new Size(117, 38);
         _cancelButton.TabIndex = 1;
+        _cancelButton.Text = "❌ Cancelar";
         // 
         // _passwordTextBox
         // 
+        _passwordTextBox.BorderRadius = 9;
         _passwordTextBox.CustomizableEdges = customizableEdges5;
         _passwordTextBox.DefaultText = "";
         _passwordTextBox.Font = new Font("Segoe UI", 9F);
-        _passwordTextBox.Location = new Point(0, 0);
+        _passwordTextBox.Location = new Point(24, 132);
         _passwordTextBox.Name = "_passwordTextBox";
-        _passwordTextBox.PlaceholderText = "";
+        _passwordTextBox.PasswordChar = '•';
+        _passwordTextBox.PlaceholderText = "🔒 Mínimo 6 caracteres";
         _passwordTextBox.SelectedText = "";
         _passwordTextBox.ShadowDecoration.CustomizableEdges = customizableEdges6;
         _passwordTextBox.Size = new Size(200, 36);
         _passwordTextBox.TabIndex = 2;
         // 
+        // _passwordToggleButton
+        // 
+        _passwordToggleButton.BorderRadius = 7;
+        _passwordToggleButton.Cursor = Cursors.Hand;
+        _passwordToggleButton.CustomizableEdges = customizableEdges1;
+        _passwordToggleButton.FillColor = Color.FromArgb(241, 243, 248);
+        _passwordToggleButton.Font = new Font("Segoe UI", 9F);
+        _passwordToggleButton.ForeColor = Color.FromArgb(30, 34, 43);
+        _passwordToggleButton.Location = new Point(234, 132);
+        _passwordToggleButton.Name = "_passwordToggleButton";
+        _passwordToggleButton.ShadowDecoration.CustomizableEdges = customizableEdges2;
+        _passwordToggleButton.Size = new Size(42, 36);
+        _passwordToggleButton.TabIndex = 4;
+        _passwordToggleButton.Text = "👁";
+        // 
         // _emailTextBox
         // 
+        _emailTextBox.BorderRadius = 9;
         _emailTextBox.CustomizableEdges = customizableEdges7;
         _emailTextBox.DefaultText = "";
         _emailTextBox.Font = new Font("Segoe UI", 9F);
-        _emailTextBox.Location = new Point(0, 0);
+        _emailTextBox.Location = new Point(24, 58);
         _emailTextBox.Name = "_emailTextBox";
-        _emailTextBox.PlaceholderText = "";
+        _emailTextBox.PlaceholderText = "✉️ emai@email.com";
         _emailTextBox.SelectedText = "";
         _emailTextBox.ShadowDecoration.CustomizableEdges = customizableEdges8;
         _emailTextBox.Size = new Size(200, 36);
@@ -140,17 +165,19 @@ partial class SimpleUserDialog
         // 
         // _passwordCaption
         // 
-        _passwordCaption.Location = new Point(0, 0);
+        _passwordCaption.Location = new Point(25, 112);
         _passwordCaption.Name = "_passwordCaption";
         _passwordCaption.Size = new Size(100, 23);
         _passwordCaption.TabIndex = 4;
+        _passwordCaption.Text = "Digite sua senha";
         // 
         // _emailCaption
         // 
-        _emailCaption.Location = new Point(0, 0);
+        _emailCaption.Location = new Point(25, 39);
         _emailCaption.Name = "_emailCaption";
         _emailCaption.Size = new Size(100, 23);
         _emailCaption.TabIndex = 5;
+        _emailCaption.Text = "Digite seu Email";
         // 
         // SimpleUserDialog
         // 

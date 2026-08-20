@@ -72,11 +72,13 @@ partial class MainForm
         _dashboardButton = new Guna.UI2.WinForms.Guna2Button();
         _logoutButton = new Guna.UI2.WinForms.Guna2Button();
         _brandPanel = new Guna.UI2.WinForms.Guna2Panel();
+        pnSeparador2 = new Panel();
         _brandSubtitle = new Label();
         _brandLabel = new Label();
         _roleLabel = new Label();
         _userEmailLabel = new Label();
         _contentPanel = new Guna.UI2.WinForms.Guna2Panel();
+        panel1 = new Panel();
         _topBar.SuspendLayout();
         _sidebar.SuspendLayout();
         _navPanel.SuspendLayout();
@@ -98,10 +100,15 @@ partial class MainForm
         // 
         // _topBar
         // 
-        _topBar.BackColor = Color.FromArgb(107, 69, 37);
+        _topBar.BackColor = Color.FromArgb(43, 26, 18);
+        _topBar.BorderColor = Color.FromArgb(217, 168, 91);
+        _topBar.BorderRadius = 15;
+        _topBar.Controls.Add(panel1);
         _topBar.Controls.Add(_roleBadge);
         _topBar.Controls.Add(_pageSubtitle);
         _topBar.Controls.Add(_pageTitle);
+        customizableEdges3.BottomLeft = false;
+        customizableEdges3.BottomRight = false;
         _topBar.CustomizableEdges = customizableEdges3;
         _topBar.Dock = DockStyle.Top;
         _topBar.FillColor = Color.Transparent;
@@ -130,7 +137,7 @@ partial class MainForm
         _pageSubtitle.AutoSize = true;
         _pageSubtitle.BackColor = Color.Transparent;
         _pageSubtitle.Font = new Font("Segoe UI", 9.5F);
-        _pageSubtitle.ForeColor = Color.Transparent;
+        _pageSubtitle.ForeColor = Color.White;
         _pageSubtitle.Location = new Point(30, 53);
         _pageSubtitle.Name = "_pageSubtitle";
         _pageSubtitle.Size = new Size(243, 17);
@@ -142,7 +149,7 @@ partial class MainForm
         _pageTitle.AutoSize = true;
         _pageTitle.BackColor = Color.Transparent;
         _pageTitle.Font = new Font("Segoe UI", 20F, FontStyle.Bold);
-        _pageTitle.ForeColor = Color.Transparent;
+        _pageTitle.ForeColor = Color.White;
         _pageTitle.Location = new Point(28, 14);
         _pageTitle.Name = "_pageTitle";
         _pageTitle.Size = new Size(157, 37);
@@ -151,7 +158,7 @@ partial class MainForm
         // 
         // _sidebar
         // 
-        _sidebar.BackColor = Color.FromArgb(107, 69, 37);
+        _sidebar.BackColor = Color.FromArgb(65, 40, 27);
         _sidebar.Controls.Add(_navPanel);
         _sidebar.Controls.Add(_logoutButton);
         _sidebar.Controls.Add(_brandPanel);
@@ -166,7 +173,7 @@ partial class MainForm
         // 
         // _navPanel
         // 
-        _navPanel.BackColor = Color.FromArgb(107, 69, 37);
+        _navPanel.BackColor = Color.FromArgb(65, 40, 27);
         _navPanel.Controls.Add(_profileButton);
         _navPanel.Controls.Add(_usersButton);
         _navPanel.Controls.Add(_categoriesButton);
@@ -187,70 +194,70 @@ partial class MainForm
         _profileButton.BorderRadius = 10;
         _profileButton.CustomizableEdges = customizableEdges5;
         _profileButton.FillColor = Color.FromArgb(164, 104, 45);
-        _profileButton.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
+        _profileButton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
         _profileButton.ForeColor = Color.DimGray;
         _profileButton.Location = new Point(0, 292);
         _profileButton.Name = "_profileButton";
         _profileButton.ShadowDecoration.CustomizableEdges = customizableEdges6;
         _profileButton.Size = new Size(227, 56);
         _profileButton.TabIndex = 0;
-        _profileButton.Text = "Perfil";
+        _profileButton.Text = "\U0001f935🏿 Perfil";
         // 
         // _usersButton
         // 
         _usersButton.BorderRadius = 10;
         _usersButton.CustomizableEdges = customizableEdges7;
         _usersButton.FillColor = Color.FromArgb(164, 104, 45);
-        _usersButton.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
+        _usersButton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
         _usersButton.ForeColor = Color.DimGray;
         _usersButton.Location = new Point(0, 230);
         _usersButton.Name = "_usersButton";
         _usersButton.ShadowDecoration.CustomizableEdges = customizableEdges8;
         _usersButton.Size = new Size(227, 56);
         _usersButton.TabIndex = 1;
-        _usersButton.Text = "Usuários";
+        _usersButton.Text = "\U0001f9d1‍\U0001f91d‍\U0001f9d1Usuários";
         // 
         // _categoriesButton
         // 
         _categoriesButton.BorderRadius = 10;
         _categoriesButton.CustomizableEdges = customizableEdges9;
         _categoriesButton.FillColor = Color.FromArgb(164, 104, 45);
-        _categoriesButton.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
+        _categoriesButton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
         _categoriesButton.ForeColor = Color.DimGray;
         _categoriesButton.Location = new Point(0, 168);
         _categoriesButton.Name = "_categoriesButton";
         _categoriesButton.ShadowDecoration.CustomizableEdges = customizableEdges10;
         _categoriesButton.Size = new Size(227, 56);
         _categoriesButton.TabIndex = 2;
-        _categoriesButton.Text = "Categorias";
+        _categoriesButton.Text = "🏷️ Categorias";
         // 
         // _productsButton
         // 
         _productsButton.BorderRadius = 10;
         _productsButton.CustomizableEdges = customizableEdges11;
         _productsButton.FillColor = Color.FromArgb(164, 104, 45);
-        _productsButton.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
+        _productsButton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
         _productsButton.ForeColor = Color.DimGray;
         _productsButton.Location = new Point(0, 106);
         _productsButton.Name = "_productsButton";
         _productsButton.ShadowDecoration.CustomizableEdges = customizableEdges12;
         _productsButton.Size = new Size(227, 56);
         _productsButton.TabIndex = 3;
-        _productsButton.Text = "Produtos";
+        _productsButton.Text = "🛍️ Produtos";
         // 
         // _dashboardButton
         // 
         _dashboardButton.BorderRadius = 10;
         _dashboardButton.CustomizableEdges = customizableEdges13;
         _dashboardButton.FillColor = Color.FromArgb(164, 104, 45);
-        _dashboardButton.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold);
+        _dashboardButton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
         _dashboardButton.ForeColor = Color.DimGray;
         _dashboardButton.Location = new Point(0, 44);
         _dashboardButton.Name = "_dashboardButton";
         _dashboardButton.ShadowDecoration.CustomizableEdges = customizableEdges14;
         _dashboardButton.Size = new Size(227, 56);
         _dashboardButton.TabIndex = 4;
-        _dashboardButton.Text = "Dashboard";
+        _dashboardButton.Text = "🏠 Dashboard";
         // 
         // _logoutButton
         // 
@@ -271,8 +278,9 @@ partial class MainForm
         // 
         // _brandPanel
         // 
-        _brandPanel.BackColor = Color.FromArgb(88, 52, 27);
+        _brandPanel.BackColor = Color.FromArgb(43, 26, 18);
         _brandPanel.BorderRadius = 7;
+        _brandPanel.Controls.Add(pnSeparador2);
         _brandPanel.Controls.Add(_brandSubtitle);
         _brandPanel.Controls.Add(_brandLabel);
         _brandPanel.Controls.Add(_roleLabel);
@@ -286,12 +294,22 @@ partial class MainForm
         _brandPanel.Size = new Size(227, 100);
         _brandPanel.TabIndex = 4;
         // 
+        // pnSeparador2
+        // 
+        pnSeparador2.BackColor = Color.FromArgb(217, 168, 91);
+        pnSeparador2.BorderStyle = BorderStyle.FixedSingle;
+        pnSeparador2.ForeColor = SystemColors.MenuHighlight;
+        pnSeparador2.Location = new Point(3, 29);
+        pnSeparador2.Name = "pnSeparador2";
+        pnSeparador2.Size = new Size(200, 3);
+        pnSeparador2.TabIndex = 10;
+        // 
         // _brandSubtitle
         // 
         _brandSubtitle.AutoSize = true;
         _brandSubtitle.Font = new Font("Segoe UI", 7.5F, FontStyle.Bold);
         _brandSubtitle.ForeColor = Color.FromArgb(137, 145, 160);
-        _brandSubtitle.Location = new Point(3, 44);
+        _brandSubtitle.Location = new Point(3, 41);
         _brandSubtitle.Name = "_brandSubtitle";
         _brandSubtitle.Size = new Size(128, 12);
         _brandSubtitle.TabIndex = 0;
@@ -300,19 +318,19 @@ partial class MainForm
         // _brandLabel
         // 
         _brandLabel.AutoSize = true;
-        _brandLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+        _brandLabel.Font = new Font("Yu Gothic", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
         _brandLabel.ForeColor = Color.Transparent;
-        _brandLabel.Location = new Point(0, 0);
+        _brandLabel.Location = new Point(3, 9);
         _brandLabel.Name = "_brandLabel";
-        _brandLabel.Size = new Size(170, 40);
+        _brandLabel.Size = new Size(202, 17);
         _brandLabel.TabIndex = 1;
-        _brandLabel.Text = "ATELIÊ\nDA TRANSFORMAÇÃO";
+        _brandLabel.Text = "ATELIÊ DA TRANSFORMAÇÃO";
         // 
         // _roleLabel
         // 
         _roleLabel.BackColor = Color.Transparent;
         _roleLabel.ForeColor = Color.White;
-        _roleLabel.Location = new Point(3, 62);
+        _roleLabel.Location = new Point(0, 56);
         _roleLabel.Name = "_roleLabel";
         _roleLabel.Padding = new Padding(8, 0, 8, 0);
         _roleLabel.Size = new Size(227, 16);
@@ -324,17 +342,18 @@ partial class MainForm
         _userEmailLabel.BackColor = Color.Transparent;
         _userEmailLabel.Dock = DockStyle.Bottom;
         _userEmailLabel.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
-        _userEmailLabel.ForeColor = Color.FromArgb(235, 239, 255); // visível
-        _userEmailLabel.Location = new Point(14, 618);
+        _userEmailLabel.ForeColor = Color.FromArgb(235, 239, 255);
+        _userEmailLabel.Location = new Point(0, 56);
         _userEmailLabel.Name = "_userEmailLabel";
         _userEmailLabel.Padding = new Padding(8, 0, 8, 0);
-        _userEmailLabel.Size = new Size(227, 20); // altura aumentada
+        _userEmailLabel.Size = new Size(227, 44);
         _userEmailLabel.TabIndex = 3;
         _userEmailLabel.TextAlign = ContentAlignment.MiddleLeft;
         // 
         // _contentPanel
         // 
-        _contentPanel.BackColor = Color.Transparent;
+        _contentPanel.BackColor = Color.FromArgb(43, 26, 18);
+        _contentPanel.BorderColor = Color.Transparent;
         _contentPanel.CustomizableEdges = customizableEdges1;
         _contentPanel.Dock = DockStyle.Fill;
         _contentPanel.Location = new Point(255, 92);
@@ -343,6 +362,16 @@ partial class MainForm
         _contentPanel.ShadowDecoration.CustomizableEdges = customizableEdges2;
         _contentPanel.Size = new Size(795, 558);
         _contentPanel.TabIndex = 0;
+        // 
+        // panel1
+        // 
+        panel1.BackColor = Color.FromArgb(217, 168, 91);
+        panel1.BorderStyle = BorderStyle.FixedSingle;
+        panel1.ForeColor = SystemColors.MenuHighlight;
+        panel1.Location = new Point(0, 89);
+        panel1.Name = "panel1";
+        panel1.Size = new Size(801, 3);
+        panel1.TabIndex = 11;
         // 
         // MainForm
         // 
@@ -367,4 +396,6 @@ partial class MainForm
         ResumeLayout(false);
     }
 
+    private Panel pnSeparador2;
+    private Panel panel1;
 }
