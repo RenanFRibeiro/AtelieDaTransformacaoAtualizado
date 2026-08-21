@@ -17,10 +17,29 @@ public partial class CategoriesUserControl : UserControl
     {
         InitializeComponent();
 
-        // configuração de cor de seleção do DataGridView
+        // configuração de cor de seleção do DataGridView (melhora visibilidade)
         _grid.EnableHeadersVisualStyles = false;
-        _grid.DefaultCellStyle.SelectionBackColor = Color.FromArgb(225, 225, 225); // ajuste a cor aqui
-        _grid.DefaultCellStyle.SelectionForeColor = Color.Black;
+
+        // Seleção clara (dourado/âmbar) com texto escuro — combina com tema marrom
+        _grid.DefaultCellStyle.SelectionBackColor = Color.FromArgb(217, 168, 91); // #D9A851
+        _grid.DefaultCellStyle.SelectionForeColor = Color.FromArgb(20, 20, 20);   // texto escuro
+
+        // Garantir também para o tema do Guna2 (quando aplicável)
+        try
+        {
+            _grid.ThemeStyle.RowsStyle.SelectionBackColor = Color.FromArgb(217, 168, 91);
+            _grid.ThemeStyle.RowsStyle.SelectionForeColor = Color.FromArgb(20, 20, 20);
+        }
+        catch
+        {
+            // ignora se propriedade não existir em runtime
+        }
+
+        // Cores das linhas para coerência com o resto do app
+        _grid.RowsDefaultCellStyle.BackColor = Color.FromArgb(43, 26, 18);
+        _grid.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(65, 40, 27);
+        _grid.DefaultCellStyle.BackColor = Color.FromArgb(43, 26, 18);
+        _grid.DefaultCellStyle.ForeColor = Color.FromArgb(239, 230, 220);
 
         _newButton.Visible = SessionManager.IsAdmin;
         _editButton.Visible = SessionManager.IsAdmin;

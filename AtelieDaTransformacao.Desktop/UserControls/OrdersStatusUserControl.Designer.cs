@@ -125,10 +125,10 @@ partial class OrdersStatusUserControl
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges18 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges19 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges20 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges23 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges24 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges21 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges22 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges23 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges24 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges27 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges28 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         _rootPanel = new Guna2Panel();
@@ -162,10 +162,12 @@ partial class OrdersStatusUserControl
         _statusComboBox = new Guna2ComboBox();
         _statusCaption = new Label();
         _searchFilterPanel = new Panel();
-        _searchTextBox = new Guna2TextBox();
         _searchCaption = new Label();
-        _clearButton = new Guna2Button();
+        _searchTextBox = new Guna2TextBox();
+        panel1 = new Panel();
         _exportButton = new Guna2Button();
+        panel2 = new Panel();
+        _clearButton = new Guna2Button();
         _stepsHost = new Panel();
         _stepsFlowPanel = new FlowLayoutPanel();
         _stepCreatedPanel = new Panel();
@@ -206,8 +208,6 @@ partial class OrdersStatusUserControl
         _refreshButton = new Guna2Button();
         _subtitleLabel = new Label();
         _titleLabel = new Label();
-        panel1 = new Panel();
-        panel2 = new Panel();
         _rootPanel.SuspendLayout();
         _gridCard.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)_grid).BeginInit();
@@ -219,6 +219,8 @@ partial class OrdersStatusUserControl
         _endFilterPanel.SuspendLayout();
         _statusFilterPanel.SuspendLayout();
         _searchFilterPanel.SuspendLayout();
+        panel1.SuspendLayout();
+        panel2.SuspendLayout();
         _stepsHost.SuspendLayout();
         _stepsFlowPanel.SuspendLayout();
         _stepCreatedPanel.SuspendLayout();
@@ -229,8 +231,6 @@ partial class OrdersStatusUserControl
         _stepShippedPanel.SuspendLayout();
         _stepDeliveredPanel.SuspendLayout();
         _headingPanel.SuspendLayout();
-        panel1.SuspendLayout();
-        panel2.SuspendLayout();
         SuspendLayout();
         // 
         // _rootPanel
@@ -692,6 +692,17 @@ partial class OrdersStatusUserControl
         _searchFilterPanel.Size = new Size(170, 62);
         _searchFilterPanel.TabIndex = 3;
         // 
+        // _searchCaption
+        // 
+        _searchCaption.AutoSize = true;
+        _searchCaption.Font = new Font("Segoe UI Semibold", 7.5F);
+        _searchCaption.ForeColor = Color.FromArgb(210, 195, 182);
+        _searchCaption.Location = new Point(4, 0);
+        _searchCaption.Name = "_searchCaption";
+        _searchCaption.Size = new Size(35, 12);
+        _searchCaption.TabIndex = 1;
+        _searchCaption.Text = "Buscar";
+        // 
         // _searchTextBox
         // 
         _searchTextBox.BorderColor = Color.FromArgb(120, 79, 43);
@@ -710,32 +721,15 @@ partial class OrdersStatusUserControl
         _searchTextBox.Size = new Size(168, 34);
         _searchTextBox.TabIndex = 0;
         // 
-        // _searchCaption
+        // panel1
         // 
-        _searchCaption.AutoSize = true;
-        _searchCaption.Font = new Font("Segoe UI Semibold", 7.5F);
-        _searchCaption.ForeColor = Color.FromArgb(210, 195, 182);
-        _searchCaption.Location = new Point(4, 0);
-        _searchCaption.Name = "_searchCaption";
-        _searchCaption.Size = new Size(35, 12);
-        _searchCaption.TabIndex = 1;
-        _searchCaption.Text = "Buscar";
-        // 
-        // _clearButton
-        // 
-        _clearButton.BorderRadius = 9;
-        _clearButton.Cursor = Cursors.Hand;
-        _clearButton.CustomizableEdges = customizableEdges23;
-        _clearButton.FillColor = Color.FromArgb(82, 55, 38);
-        _clearButton.Font = new Font("Segoe UI Semibold", 8.5F);
-        _clearButton.ForeColor = Color.White;
-        _clearButton.Location = new Point(15, 15);
-        _clearButton.Margin = new Padding(6, 17, 4, 0);
-        _clearButton.Name = "_clearButton";
-        _clearButton.ShadowDecoration.CustomizableEdges = customizableEdges24;
-        _clearButton.Size = new Size(72, 36);
-        _clearButton.TabIndex = 4;
-        _clearButton.Text = "Limpar";
+        panel1.BackColor = Color.Transparent;
+        panel1.Controls.Add(_exportButton);
+        panel1.Location = new Point(541, 0);
+        panel1.Margin = new Padding(0, 0, 4, 0);
+        panel1.Name = "panel1";
+        panel1.Size = new Size(101, 62);
+        panel1.TabIndex = 6;
         // 
         // _exportButton
         // 
@@ -752,6 +746,32 @@ partial class OrdersStatusUserControl
         _exportButton.Size = new Size(82, 36);
         _exportButton.TabIndex = 5;
         _exportButton.Text = "⇩ Exportar";
+        // 
+        // panel2
+        // 
+        panel2.BackColor = Color.Transparent;
+        panel2.Controls.Add(_clearButton);
+        panel2.Location = new Point(646, 0);
+        panel2.Margin = new Padding(0, 0, 4, 0);
+        panel2.Name = "panel2";
+        panel2.Size = new Size(101, 62);
+        panel2.TabIndex = 7;
+        // 
+        // _clearButton
+        // 
+        _clearButton.BorderRadius = 9;
+        _clearButton.Cursor = Cursors.Hand;
+        _clearButton.CustomizableEdges = customizableEdges23;
+        _clearButton.FillColor = Color.FromArgb(82, 55, 38);
+        _clearButton.Font = new Font("Segoe UI Semibold", 8.5F);
+        _clearButton.ForeColor = Color.White;
+        _clearButton.Location = new Point(15, 15);
+        _clearButton.Margin = new Padding(6, 17, 4, 0);
+        _clearButton.Name = "_clearButton";
+        _clearButton.ShadowDecoration.CustomizableEdges = customizableEdges24;
+        _clearButton.Size = new Size(72, 36);
+        _clearButton.TabIndex = 4;
+        _clearButton.Text = "Limpar";
         // 
         // _stepsHost
         // 
@@ -1207,7 +1227,7 @@ partial class OrdersStatusUserControl
         _refreshButton.BorderRadius = 9;
         _refreshButton.Cursor = Cursors.Hand;
         _refreshButton.CustomizableEdges = customizableEdges27;
-        _refreshButton.FillColor = Color.FromArgb(88, 52, 27);
+        _refreshButton.FillColor = Color.Silver;
         _refreshButton.Font = new Font("Segoe UI Semibold", 9F);
         _refreshButton.ForeColor = Color.White;
         _refreshButton.Location = new Point(1229, 4);
@@ -1239,26 +1259,6 @@ partial class OrdersStatusUserControl
         _titleLabel.TabIndex = 2;
         _titleLabel.Text = "Status de Pedidos";
         // 
-        // panel1
-        // 
-        panel1.BackColor = Color.Transparent;
-        panel1.Controls.Add(_exportButton);
-        panel1.Location = new Point(541, 0);
-        panel1.Margin = new Padding(0, 0, 4, 0);
-        panel1.Name = "panel1";
-        panel1.Size = new Size(101, 62);
-        panel1.TabIndex = 6;
-        // 
-        // panel2
-        // 
-        panel2.BackColor = Color.Transparent;
-        panel2.Controls.Add(_clearButton);
-        panel2.Location = new Point(646, 0);
-        panel2.Margin = new Padding(0, 0, 4, 0);
-        panel2.Name = "panel2";
-        panel2.Size = new Size(101, 62);
-        panel2.TabIndex = 7;
-        // 
         // OrdersStatusUserControl
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1282,6 +1282,8 @@ partial class OrdersStatusUserControl
         _statusFilterPanel.PerformLayout();
         _searchFilterPanel.ResumeLayout(false);
         _searchFilterPanel.PerformLayout();
+        panel1.ResumeLayout(false);
+        panel2.ResumeLayout(false);
         _stepsHost.ResumeLayout(false);
         _stepsFlowPanel.ResumeLayout(false);
         _stepCreatedPanel.ResumeLayout(false);
@@ -1293,8 +1295,6 @@ partial class OrdersStatusUserControl
         _stepDeliveredPanel.ResumeLayout(false);
         _headingPanel.ResumeLayout(false);
         _headingPanel.PerformLayout();
-        panel1.ResumeLayout(false);
-        panel2.ResumeLayout(false);
         ResumeLayout(false);
     }
 
