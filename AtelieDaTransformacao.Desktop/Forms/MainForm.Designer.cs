@@ -14,6 +14,7 @@ partial class MainForm
     private Guna.UI2.WinForms.Guna2Button _productsButton = null!;
     private Guna.UI2.WinForms.Guna2Button _categoriesButton = null!;
     private Guna.UI2.WinForms.Guna2Button _usersButton = null!;
+    private Guna.UI2.WinForms.Guna2Button _ordersStatusButton = null!;
     private Guna.UI2.WinForms.Guna2Button _profileButton = null!;
     private Guna.UI2.WinForms.Guna2Button _logoutButton = null!;
     private Guna.UI2.WinForms.Guna2Panel _topBar = null!;
@@ -39,6 +40,8 @@ partial class MainForm
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges21 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges22 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges23 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges24 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges15 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges16 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
@@ -66,6 +69,7 @@ partial class MainForm
         _sidebar = new Guna.UI2.WinForms.Guna2Panel();
         _navPanel = new Guna.UI2.WinForms.Guna2Panel();
         _profileButton = new Guna.UI2.WinForms.Guna2Button();
+        _ordersStatusButton = new Guna.UI2.WinForms.Guna2Button();
         _usersButton = new Guna.UI2.WinForms.Guna2Button();
         _categoriesButton = new Guna.UI2.WinForms.Guna2Button();
         _productsButton = new Guna.UI2.WinForms.Guna2Button();
@@ -175,6 +179,7 @@ partial class MainForm
         // 
         _navPanel.BackColor = Color.FromArgb(65, 40, 27);
         _navPanel.Controls.Add(_profileButton);
+        _navPanel.Controls.Add(_ordersStatusButton);
         _navPanel.Controls.Add(_usersButton);
         _navPanel.Controls.Add(_categoriesButton);
         _navPanel.Controls.Add(_productsButton);
@@ -196,10 +201,10 @@ partial class MainForm
         _profileButton.FillColor = Color.FromArgb(164, 104, 45);
         _profileButton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
         _profileButton.ForeColor = Color.DimGray;
-        _profileButton.Location = new Point(0, 292);
+        _profileButton.Location = new Point(0, 332);
         _profileButton.Name = "_profileButton";
         _profileButton.ShadowDecoration.CustomizableEdges = customizableEdges6;
-        _profileButton.Size = new Size(227, 56);
+        _profileButton.Size = new Size(227, 52);
         _profileButton.TabIndex = 0;
         _profileButton.Text = "\U0001f935🏿 Perfil";
         // 
@@ -210,10 +215,10 @@ partial class MainForm
         _usersButton.FillColor = Color.FromArgb(164, 104, 45);
         _usersButton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
         _usersButton.ForeColor = Color.DimGray;
-        _usersButton.Location = new Point(0, 230);
+        _usersButton.Location = new Point(0, 224);
         _usersButton.Name = "_usersButton";
         _usersButton.ShadowDecoration.CustomizableEdges = customizableEdges8;
-        _usersButton.Size = new Size(227, 56);
+        _usersButton.Size = new Size(227, 52);
         _usersButton.TabIndex = 1;
         _usersButton.Text = "\U0001f9d1‍\U0001f91d‍\U0001f9d1Usuários";
         // 
@@ -224,10 +229,10 @@ partial class MainForm
         _categoriesButton.FillColor = Color.FromArgb(164, 104, 45);
         _categoriesButton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
         _categoriesButton.ForeColor = Color.DimGray;
-        _categoriesButton.Location = new Point(0, 168);
+        _categoriesButton.Location = new Point(0, 170);
         _categoriesButton.Name = "_categoriesButton";
         _categoriesButton.ShadowDecoration.CustomizableEdges = customizableEdges10;
-        _categoriesButton.Size = new Size(227, 56);
+        _categoriesButton.Size = new Size(227, 52);
         _categoriesButton.TabIndex = 2;
         _categoriesButton.Text = "🏷️ Categorias";
         // 
@@ -238,10 +243,10 @@ partial class MainForm
         _productsButton.FillColor = Color.FromArgb(164, 104, 45);
         _productsButton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
         _productsButton.ForeColor = Color.DimGray;
-        _productsButton.Location = new Point(0, 106);
+        _productsButton.Location = new Point(0, 116);
         _productsButton.Name = "_productsButton";
         _productsButton.ShadowDecoration.CustomizableEdges = customizableEdges12;
-        _productsButton.Size = new Size(227, 56);
+        _productsButton.Size = new Size(227, 52);
         _productsButton.TabIndex = 3;
         _productsButton.Text = "🛍️ Produtos";
         // 
@@ -252,12 +257,27 @@ partial class MainForm
         _dashboardButton.FillColor = Color.FromArgb(164, 104, 45);
         _dashboardButton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
         _dashboardButton.ForeColor = Color.DimGray;
-        _dashboardButton.Location = new Point(0, 44);
+        _dashboardButton.Location = new Point(0, 62);
         _dashboardButton.Name = "_dashboardButton";
         _dashboardButton.ShadowDecoration.CustomizableEdges = customizableEdges14;
-        _dashboardButton.Size = new Size(227, 56);
+        _dashboardButton.Size = new Size(227, 52);
         _dashboardButton.TabIndex = 4;
         _dashboardButton.Text = "🏠 Dashboard";
+        // 
+        // _ordersStatusButton
+        // 
+        _ordersStatusButton.BorderRadius = 10;
+        _ordersStatusButton.CustomizableEdges = customizableEdges23;
+        _ordersStatusButton.FillColor = Color.FromArgb(164, 104, 45);
+        _ordersStatusButton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+        _ordersStatusButton.ForeColor = Color.DimGray;
+        _ordersStatusButton.Location = new Point(0, 278);
+        _ordersStatusButton.Name = "_ordersStatusButton";
+        _ordersStatusButton.ShadowDecoration.CustomizableEdges = customizableEdges24;
+        _ordersStatusButton.Size = new Size(227, 52);
+        _ordersStatusButton.TabIndex = 5;
+        _ordersStatusButton.Text = "🚚 Status de Pedidos";
+        // 
         // 
         // _logoutButton
         // 

@@ -27,6 +27,8 @@ public partial class ProductsUserControl : UserControl
         _searchTextBox.KeyDown += async (_, e) => { if (e.KeyCode == Keys.Enter) await LoadAsync(); };
         _categoryComboBox.SelectedIndexChanged += async (_, _) => { if (!_loading) await LoadAsync(); };
         _grid.CellDoubleClick += async (_, _) => await EditSelectedAsync();
+        _grid.CellContentClick += Grid_CellContentClick;
+        _grid.CellPainting += Grid_CellPainting;
         Load += async (_, _) => await LoadAsync();
     }
 
@@ -54,13 +56,77 @@ public partial class ProductsUserControl : UserControl
                 Preço = x.Price.ToString("C2"),
                 Estoque = x.StockQuantity,
                 Status = x.StockQuantity == 0 ? "Sem estoque" : x.StockQuantity <= 5 ? "Baixo" : "Disponível",
-                Destaque = x.IsFeatured ? "Sim" : "Não"
+                Destaque = x.IsFeatured ? "Sim" : "Não",
+                Acoes = "Visualizar"
             }).ToList();
             if (_grid.Columns["Id"] is not null) _grid.Columns["Id"].Visible = false;
             _countLabel.Text = $"{_items.Count} produto(s) encontrado(s)";
         }
         catch (Exception ex) { MessageBox.Show(this, ex.Message, "Erro ao carregar produtos", MessageBoxButtons.OK, MessageBoxIcon.Error); }
         finally { _loading = false; }
+    }
+
+    private void Grid_CellContentClick(object? sender, DataGridViewCellEventArgs e)
+    {
+        if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
+        if (_grid.Columns[e.ColumnIndex].Name != "Acoes") return;
+
+        var item = SelectedAt(e.RowIndex);
+        if (item is null) return;
+
+        using var dialog = new ProductDetailsDialog(item);
+        dialog.ShowDialog(FindForm());
+    }
+
+    private void Grid_CellPainting(object? sender, DataGridViewCellPaintingEventArgs e)
+    {
+        if (e.RowIndex < 0 || e.ColumnIndex < 0 || _grid.Columns[e.ColumnIndex].Name != "Status") return;
+
+        e.Handled = true;
+        e.PaintBackground(e.CellBounds, true);
+        var text = e.FormattedValue?.ToString() ?? string.Empty;
+        var bounds = new Rectangle(e.CellBounds.X + 7, e.CellBounds.Y + 6,
+            Math.Max(20, e.CellBounds.Width - 14), Math.Max(18, e.CellBounds.Height - 12));
+
+        using var path = RoundedRect(bounds, 7);
+        using var brush = new SolidBrush(ProductStatusColor(text));
+        e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+        e.Graphics.FillPath(brush, path);
+        using var font = new Font("Segoe UI Semibold", 7.5F);
+        using var textBrush = new SolidBrush(Color.White);
+        var size = e.Graphics.MeasureString(text, font);
+        e.Graphics.DrawString(text, font, textBrush,
+            bounds.X + (bounds.Width - size.Width) / 2,
+            bounds.Y + (bounds.Height - size.Height) / 2 + 1);
+        e.Paint(e.ClipBounds, DataGridViewPaintParts.Border);
+    }
+
+    private ProductDto? SelectedAt(int rowIndex)
+    {
+        if (rowIndex < 0 || rowIndex >= _grid.Rows.Count) return null;
+        if (_grid.Rows[rowIndex].Cells["Id"]?.Value is null) return null;
+        var id = Convert.ToInt32(_grid.Rows[rowIndex].Cells["Id"].Value);
+        return _items.FirstOrDefault(x => x.Id == id);
+    }
+
+    private static Color ProductStatusColor(string text) => text switch
+    {
+        "Sem estoque" => Color.FromArgb(192, 0, 0),
+        "Baixo" => Color.FromArgb(205, 145, 24),
+        "Disponível" => Color.FromArgb(35, 164, 64),
+        _ => Color.FromArgb(120, 120, 120)
+    };
+
+    private static System.Drawing.Drawing2D.GraphicsPath RoundedRect(Rectangle rect, int radius)
+    {
+        var path = new System.Drawing.Drawing2D.GraphicsPath();
+        var d = radius * 2;
+        path.AddArc(rect.X, rect.Y, d, d, 180, 90);
+        path.AddArc(rect.Right - d, rect.Y, d, d, 270, 90);
+        path.AddArc(rect.Right - d, rect.Bottom - d, d, d, 0, 90);
+        path.AddArc(rect.X, rect.Bottom - d, d, d, 90, 90);
+        path.CloseFigure();
+        return path;
     }
 
     private ProductDto? Selected()

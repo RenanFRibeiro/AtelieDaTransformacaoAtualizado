@@ -36,6 +36,7 @@ public partial class MainForm : Form
         WireNavigationButton(_productsButton, "products");
         WireNavigationButton(_categoriesButton, "categories");
         WireNavigationButton(_usersButton, "users");
+        WireNavigationButton(_ordersStatusButton, "orders-status");
         WireNavigationButton(_profileButton, "profile");
     }
 
@@ -79,6 +80,7 @@ public partial class MainForm : Form
             "products" => new ProductsUserControl(),
             "categories" => new CategoriesUserControl(),
             "users" => new UsersUserControl(),
+            "orders-status" => new OrdersStatusUserControl(),
             "profile" => new ProfileUserControl(),
             _ => new DashboardUserControl()
         };
@@ -88,6 +90,7 @@ public partial class MainForm : Form
             "products" => "Produtos",
             "categories" => "Categorias",
             "users" => "Usuários",
+            "orders-status" => "Status de Pedidos",
             "profile" => "Meu perfil",
             _ => "Dashboard"
         };
@@ -96,6 +99,7 @@ public partial class MainForm : Form
             "products" => "Cadastre, edite e acompanhe o estoque dos seus produtos.",
             "categories" => "Organize o catálogo por categorias.",
             "users" => "Gerencie os acessos administrativos ao sistema.",
+            "orders-status" => "Acompanhe o andamento dos pedidos em todas as etapas.",
             "profile" => "Confira os dados da sua sessão atual.",
             _ => "Visão geral do Ateliê da Transformação."
         };
