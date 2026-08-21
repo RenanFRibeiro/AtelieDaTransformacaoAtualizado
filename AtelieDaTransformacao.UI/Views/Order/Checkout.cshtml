@@ -1,0 +1,140 @@
+@model AtelieDaTransformacao.Application.ViewModels.CheckoutViewModel
+@using System.Linq
+
+@{
+    ViewData["Title"] = "Finalizar compra";
+}
+
+<div class="container py-5">
+    <div class="mb-4">
+        <span class="text-uppercase text-gold fw-bold small">Compra pelo site</span>
+        <h1 class="serif-title fw-bold mb-1">Finalizar pedido</h1>
+        <p class="text-muted mb-0">Revise os itens e informe os dados para entrega.</p>
+    </div>
+
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+    <form asp-action="Checkout" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="DirectProductId" />
+        <input type="hidden" asp-for="DirectQuantity" />
+
+        <div class="row g-4">
+            <div class="col-lg-7">
+                <div class="card border-0 shadow-sm rounded-4 mb-4">
+                    <div class="card-body p-4">
+                        <h4 class="serif-title fw-bold mb-4">Seus dados</h4>
+
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label asp-for="CustomerName" class="form-label fw-semibold"></label>
+                                <input asp-for="CustomerName" class="form-control form-control-lg" placeholder="Seu nome completo" />
+                                <span asp-validation-for="CustomerName" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">E-mail</label>
+                                <input value="@User.Identity?.Name" class="form-control form-control-lg" readonly />
+                                <div class="form-text">Este pedido ficará vinculado à sua conta.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="CustomerPhone" class="form-label fw-semibold"></label>
+                                <input asp-for="CustomerPhone" class="form-control form-control-lg" placeholder="(11) 99999-9999" />
+                                <span asp-validation-for="CustomerPhone" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="ShippingAddress" class="form-label fw-semibold"></label>
+                                <textarea asp-for="ShippingAddress" class="form-control" rows="3" placeholder="Rua, número, complemento, bairro, cidade e CEP"></textarea>
+                                <span asp-validation-for="ShippingAddress" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="PaymentMethod" class="form-label fw-semibold"></label>
+                                <select asp-for="PaymentMethod" class="form-select form-select-lg">
+                                    <option value="">Selecione...</option>
+                                    <option value="Pix">Pix</option>
+                                    <option value="Cartão">Cartão</option>
+                                    <option value="Transferência">Transferência</option>
+                                    <option value="A combinar">A combinar</option>
+                                </select>
+                                <span asp-validation-for="PaymentMethod" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="Notes" class="form-label fw-semibold"></label>
+                                <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Alguma observação sobre a entrega?"></textarea>
+                                <span asp-validation-for="Notes" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info border-0 rounded-4">
+                    <i class="bi bi-info-circle me-2"></i>
+                    <strong>Importante:</strong> esta etapa cria o pedido no site. O pagamento ainda não é processado por um gateway. O administrador poderá aprovar o pedido após confirmar o pagamento.
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="card border-0 shadow-sm rounded-4 sticky-lg-top" style="top:100px;">
+                    <div class="card-body p-4">
+                        <h4 class="serif-title fw-bold mb-4">Resumo do pedido</h4>
+
+                        @foreach (var item in Model.Items)
+                        {
+                            <div class="d-flex gap-3 align-items-center mb-3">
+                                <img src="@(string.IsNullOrWhiteSpace(item.Image) ? "/images/placeholder.jpg" : item.Image)"
+                                     alt="@item.Title"
+                                     class="rounded-3"
+                                     style="width:70px;height:70px;object-fit:cover;" />
+
+                                <div class="flex-grow-1">
+                                    <div class="fw-semibold">@item.Title</div>
+                                    <small class="text-muted">
+                                        @item.Quantity x @item.UnitPrice.ToString("C")
+                                    </small>
+                                </div>
+
+                                <strong>@item.Subtotal.ToString("C")</strong>
+                            </div>
+                        }
+
+                        <hr />
+
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <span class="fw-bold">Total</span>
+                            <span class="fs-3 fw-bold">@Model.Total.ToString("C")</span>
+                        </div>
+
+                        <button type="submit" class="btn btn-artisan btn-lg w-100 rounded-pill py-3">
+                            <i class="bi bi-bag-check me-2"></i>
+                            Confirmar compra pelo site
+                        </button>
+
+                        @if (!Model.DirectProductId.HasValue)
+                        {
+                            <a asp-controller="Cart" asp-action="Index" class="btn btn-outline-dark w-100 rounded-pill mt-2">
+                                Voltar ao carrinho
+                            </a>
+                        }
+
+                        @if (!string.IsNullOrWhiteSpace(ViewBag.WhatsAppLink))
+                        {
+                            <a href="@ViewBag.WhatsAppLink" target="_blank" rel="noopener"
+                               class="btn btn-success w-100 rounded-pill mt-2">
+                                <i class="bi bi-whatsapp me-2"></i>
+                                Continuar pelo WhatsApp
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

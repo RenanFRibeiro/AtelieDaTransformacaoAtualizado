@@ -1,0 +1,137 @@
+@model AtelieDaTransformacao.Domain.Entities.Order
+@using AtelieDaTransformacao.Domain.Entities
+@using AtelieDaTransformacao.Application.ViewModels
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = $"Pedido #{Model.Id}";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <span class="text-uppercase text-muted small fw-bold">Gerenciamento</span>
+        <h2 class="fw-bold m-0">Pedido #@Model.Id</h2>
+    </div>
+    <a asp-action="Index" class="btn btn-outline-dark rounded-pill">Voltar</a>
+</div>
+
+@if (TempData["SuccessMessage"] is string success)
+{
+    <div class="alert alert-success rounded-3">@success</div>
+}
+@if (TempData["ErrorMessage"] is string error)
+{
+    <div class="alert alert-danger rounded-3">@error</div>
+}
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <small class="text-muted">Status atual</small>
+                        <h3 class="fw-bold">@Model.Status.Label()</h3>
+                    </div>
+                    <i class="bi @Model.Status.Icon() fs-1 text-warning"></i>
+                </div>
+
+                <div class="d-flex flex-wrap gap-2">
+                    @foreach (var status in Enum.GetValues<OrderStatus>())
+                    {
+                        <span class="badge rounded-pill px-3 py-2 @(status == Model.Status ? "bg-dark" : "bg-light text-dark")">
+                            @status.Label()
+                        </span>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-4">
+                <h4 class="fw-bold mb-3">Itens</h4>
+
+                @foreach (var item in Model.Items)
+                {
+                    <div class="d-flex gap-3 align-items-center border-bottom py-3">
+                        <img src="@(string.IsNullOrWhiteSpace(item.ProductImage) ? "/images/placeholder.jpg" : item.ProductImage)"
+                             style="width:65px;height:65px;object-fit:cover;"
+                             class="rounded-3" alt="" />
+
+                        <div class="flex-grow-1">
+                            <strong>@item.ProductTitle</strong>
+                            <small class="text-muted d-block">@item.Quantity x @item.UnitPrice.ToString("C")</small>
+                        </div>
+
+                        <strong>@item.Subtotal.ToString("C")</strong>
+                    </div>
+                }
+
+                <div class="d-flex justify-content-between pt-3">
+                    <strong>Total</strong>
+                    <strong class="fs-4">@Model.Total.ToString("C")</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-body p-4">
+                <h4 class="fw-bold mb-3">Alterar status</h4>
+
+                <form asp-action="UpdateStatus" method="post" class="mb-3">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.Id" />
+
+                    <select name="status" class="form-select form-select-lg mb-3">
+                        @foreach (var status in Enum.GetValues<OrderStatus>())
+                        {
+                            <option value="@status" selected="@(status == Model.Status ? "selected" : null)">
+                                @status.Label()
+                            </option>
+                        }
+                    </select>
+
+                    <button class="btn btn-dark w-100 rounded-pill">
+                        <i class="bi bi-pencil-square me-1"></i> Salvar status manual
+                    </button>
+                </form>
+
+                <form asp-action="Advance" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <button class="btn btn-outline-success w-100 rounded-pill" @(Model.Status == OrderStatus.Entregue ? "disabled" : null)>
+                        <i class="bi bi-fast-forward me-1"></i>
+                        Avançar automaticamente
+                    </button>
+                </form>
+
+                <p class="small text-muted mt-3 mb-0">
+                    O avanço automático segue a ordem: criado → pendente → aprovado → separação → faturado → enviado → entregue.
+                </p>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-body p-4">
+                <h5 class="fw-bold">Cliente</h5>
+                <p class="mb-1">@Model.CustomerName</p>
+                <p class="small text-muted mb-1">@Model.CustomerEmail</p>
+                <p class="small text-muted mb-3">@Model.CustomerPhone</p>
+
+                <h5 class="fw-bold">Entrega</h5>
+                <p class="small text-muted">@Model.ShippingAddress</p>
+
+                <h5 class="fw-bold">Pagamento</h5>
+                <p class="small text-muted">@Model.PaymentMethod</p>
+
+                @if (!string.IsNullOrWhiteSpace(Model.Notes))
+                {
+                    <h5 class="fw-bold">Observações</h5>
+                    <p class="small text-muted mb-0">@Model.Notes</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>

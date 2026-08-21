@@ -1,0 +1,81 @@
+@model IEnumerable<AtelieDaTransformacao.Application.ViewModels.OrderListItemViewModel>
+@using AtelieDaTransformacao.Application.ViewModels
+
+@{
+    ViewData["Title"] = "Meus pedidos";
+}
+
+<div class="container py-5">
+    <div class="mb-4">
+        <span class="text-uppercase text-gold fw-bold small">Acompanhamento</span>
+        <h1 class="serif-title fw-bold mb-1">Meus pedidos</h1>
+        <p class="text-muted">Acompanhe o andamento das suas compras pelo site.</p>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="card border-0 shadow-sm rounded-4 text-center p-5">
+            <i class="bi bi-bag-x display-4 text-gold"></i>
+            <h3 class="serif-title fw-bold mt-3">Você ainda não possui pedidos.</h3>
+            <a asp-controller="Home" asp-action="Index" class="btn btn-artisan rounded-pill px-4 mt-2">Ver coleção</a>
+        </div>
+    }
+    else
+    {
+        <div class="row g-3">
+            @foreach (var order in Model)
+            {
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm rounded-4">
+                        <div class="card-body p-4">
+                            <div class="row align-items-center g-3">
+                                <div class="col-md-3">
+                                    <small class="text-muted d-block">Pedido</small>
+                                    <strong class="fs-5">#@order.Id</strong>
+                                    <small class="text-muted d-block">@order.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</small>
+                                </div>
+                                <div class="col-md-3">
+                                    <small class="text-muted d-block">Itens</small>
+                                    <strong>@order.ItemsCount</strong>
+                                </div>
+                                <div class="col-md-3">
+                                    <small class="text-muted d-block">Total</small>
+                                    <strong>@order.Total.ToString("C")</strong>
+                                </div>
+                                <div class="col-md-3 text-md-end">
+                                    <span class="badge rounded-pill px-3 py-2 status-badge status-@((int)order.Status)"
+                                          data-order-status="@order.Id">
+                                        <i class="bi @order.Status.Icon() me-1"></i>@order.Status.Label()
+                                    </span>
+                                    <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-outline-dark rounded-pill btn-sm ms-2">
+                                        Acompanhar
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/@@microsoft/signalr@10.0.0/dist/browser/signalr.min.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/hubs/orders")
+            .withAutomaticReconnect()
+            .build();
+
+        connection.on("OrderStatusUpdated", function (orderId, status, label, icon) {
+            const badge = document.querySelector(`[data-order-status="${orderId}"]`);
+            if (!badge) return;
+
+            badge.className = `badge rounded-pill px-3 py-2 status-badge status-${status}`;
+            badge.innerHTML = `<i class="bi ${icon} me-1"></i>${label}`;
+        });
+
+        connection.start().catch(error => console.error("SignalR:", error));
+    </script>
+}

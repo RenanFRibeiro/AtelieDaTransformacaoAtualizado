@@ -1,0 +1,92 @@
+@model IEnumerable<AtelieDaTransformacao.Domain.Entities.Order>
+@using AtelieDaTransformacao.Domain.Entities
+@using AtelieDaTransformacao.Application.ViewModels
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Pedidos";
+    var selected = ViewBag.SelectedStatus as OrderStatus?;
+}
+
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <span class="text-uppercase text-muted small fw-bold">Gestão comercial</span>
+        <h2 class="fw-bold text-dark m-0">Pedidos</h2>
+        <p class="text-muted small mb-0">Acompanhe e altere o fluxo de cada venda.</p>
+    </div>
+
+    <form method="get" class="d-flex gap-2">
+        <select name="status" class="form-select">
+            <option value="">Todos os status</option>
+            @foreach (var status in Enum.GetValues<OrderStatus>())
+            {
+                <option value="@status" selected="@(selected == status ? "selected" : null)">
+                    @status.Label()
+                </option>
+            }
+        </select>
+        <button class="btn btn-dark rounded-pill px-4">Filtrar</button>
+    </form>
+</div>
+
+@if (TempData["SuccessMessage"] is string success)
+{
+    <div class="alert alert-success rounded-3">@success</div>
+}
+@if (TempData["ErrorMessage"] is string error)
+{
+    <div class="alert alert-danger rounded-3">@error</div>
+}
+
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr class="small text-muted text-uppercase">
+                    <th class="ps-4">Pedido</th>
+                    <th>Cliente</th>
+                    <th>Itens</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th class="text-end pe-4">Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td class="ps-4">
+                            <strong>#@order.Id</strong>
+                            <small class="text-muted d-block">@order.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</small>
+                        </td>
+                        <td>
+                            <strong>@order.CustomerName</strong>
+                            <small class="text-muted d-block">@order.CustomerEmail</small>
+                        </td>
+                        <td>@order.Items.Sum(x => x.Quantity)</td>
+                        <td><strong>@order.Total.ToString("C")</strong></td>
+                        <td>
+                            <span class="badge rounded-pill px-3 py-2">
+                                <i class="bi @order.Status.Icon() me-1"></i>@order.Status.Label()
+                            </span>
+                        </td>
+                        <td class="text-end pe-4">
+                            <a asp-action="Details" asp-route-id="@order.Id"
+                               class="btn btn-sm btn-outline-dark rounded-pill px-3">
+                                Gerenciar
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5 text-muted">
+            <i class="bi bi-inbox display-5"></i>
+            <p class="mt-2 mb-0">Nenhum pedido encontrado.</p>
+        </div>
+    }
+</div>

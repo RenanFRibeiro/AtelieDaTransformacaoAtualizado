@@ -154,9 +154,8 @@ public sealed class CartController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    // Retorna a quantidade atual do carrinho (pode ser chamado anonimamente para mostrar o badge)
+    // Retorna a quantidade atual do carrinho somente para usuários autenticados.
     [HttpGet]
-    [AllowAnonymous]
     public IActionResult Count()
     {
         var total = GetCart().Sum(x => x.Quantity);
@@ -166,7 +165,6 @@ public sealed class CartController : Controller
     // Importa/mescla o carrinho enviado pelo client (localStorage) para a sessão do servidor.
     // Usamos AllowAnonymous porque pode ser chamado logo após o login/registro quando o usuário ainda estava anônimo.
     [HttpPost]
-    [AllowAnonymous]
     [IgnoreAntiforgeryToken]
     public IActionResult Import([FromBody] List<CartItemViewModel>? items)
     {

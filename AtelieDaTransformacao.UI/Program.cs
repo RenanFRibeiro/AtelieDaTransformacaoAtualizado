@@ -3,6 +3,7 @@ using AtelieDaTransformacao.Application.Services;
 using AtelieDaTransformacao.Domain.Interfaces;
 using AtelieDaTransformacao.Infrastructure.Context;
 using AtelieDaTransformacao.Infrastructure.Repositories;
+using AtelieDaTransformacao.UI.Hubs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,8 +20,9 @@ public static class Program
             ?? throw new InvalidOperationException(
                 "Connection string 'DefaultConnection' not found.");
 
-        builder.Services.AddDbContext<AtelieDaTransformacaoDbContext>(options =>
-            options.UseSqlServer(connectionString));
+        builder.Services.AddDbContext<AtelieDaTransformacaoDbContext>(
+            options =>
+                options.UseSqlServer(connectionString));
 
         builder.Services
             .AddIdentity<IdentityUser, IdentityRole>(options =>
@@ -48,6 +50,7 @@ public static class Program
         builder.Services.AddScoped<IWhatsAppService, WhatsAppService>();
 
         builder.Services.AddDistributedMemoryCache();
+
         builder.Services.AddSession(options =>
         {
             options.IdleTimeout = TimeSpan.FromHours(2);
@@ -57,16 +60,19 @@ public static class Program
 
         builder.Services.AddControllersWithViews();
 
+        builder.Services.AddSignalR();
+
         var app = builder.Build();
 
-        // O projeto enviado não contém uma pasta Migrations.
-        // EnsureCreated evita chamar MigrateAsync sem migrations.
+        // O banco é controlado pelo EF Core Migrations.
+        // Não usamos EnsureCreated nem SQL manual para evitar conflito
+        // com tabelas que já existem no banco.
         await using (var scope = app.Services.CreateAsyncScope())
         {
             var db = scope.ServiceProvider
                 .GetRequiredService<AtelieDaTransformacaoDbContext>();
 
-            await db.Database.EnsureCreatedAsync();
+            await db.Database.MigrateAsync();
         }
 
         if (!app.Environment.IsDevelopment())
@@ -76,13 +82,18 @@ public static class Program
         }
 
         app.UseHttpsRedirection();
+
         app.UseStaticFiles();
 
         app.UseRouting();
+
         app.UseSession();
 
         app.UseAuthentication();
+
         app.UseAuthorization();
+
+        app.MapHub<OrderHub>("/hubs/orders");
 
         app.MapControllerRoute(
             name: "default",

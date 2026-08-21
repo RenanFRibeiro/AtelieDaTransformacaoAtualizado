@@ -1,4 +1,4 @@
-﻿@model AtelieDaTransformacao.Application.DTOs.LoginDto
+@model AtelieDaTransformacao.Application.DTOs.LoginDto
 @{
     ViewData["Title"] = "Entrar";
 }
@@ -13,6 +13,7 @@
                 </div>
 
                 <form asp-action="Login" method="post">
+                    <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
                     <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
                     
                     <div class="form-floating mb-3">
@@ -32,7 +33,7 @@
                     </button>
 
                     <div class="text-center">
-                        <span class="small text-muted">Novo no comitê? <a asp-action="Register" class="text-decoration-none fw-semibold" style="color: var(--artisan-clay)">Criar uma credencial</a></span>
+                        <span class="small text-muted">Novo no comitê? <a asp-action="Register" asp-route-returnUrl="@ViewBag.ReturnUrl" class="text-decoration-none fw-semibold" style="color: var(--artisan-clay)">Criar uma credencial</a></span>
                     </div>
                 </form>
             </div>
