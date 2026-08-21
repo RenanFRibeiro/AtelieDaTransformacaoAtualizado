@@ -125,10 +125,10 @@ partial class OrdersStatusUserControl
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges18 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges19 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges20 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges21 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges22 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges23 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges24 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges21 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges22 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges27 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges28 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         _rootPanel = new Guna2Panel();
@@ -206,6 +206,8 @@ partial class OrdersStatusUserControl
         _refreshButton = new Guna2Button();
         _subtitleLabel = new Label();
         _titleLabel = new Label();
+        panel1 = new Panel();
+        panel2 = new Panel();
         _rootPanel.SuspendLayout();
         _gridCard.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)_grid).BeginInit();
@@ -227,6 +229,8 @@ partial class OrdersStatusUserControl
         _stepShippedPanel.SuspendLayout();
         _stepDeliveredPanel.SuspendLayout();
         _headingPanel.SuspendLayout();
+        panel1.SuspendLayout();
+        panel2.SuspendLayout();
         SuspendLayout();
         // 
         // _rootPanel
@@ -253,11 +257,11 @@ partial class OrdersStatusUserControl
         _gridCard.Controls.Add(_bottomPanel);
         _gridCard.CustomizableEdges = customizableEdges11;
         _gridCard.Dock = DockStyle.Fill;
-        _gridCard.Location = new Point(18, 304);
+        _gridCard.Location = new Point(18, 269);
         _gridCard.Name = "_gridCard";
         _gridCard.Padding = new Padding(10, 10, 10, 8);
         _gridCard.ShadowDecoration.CustomizableEdges = customizableEdges12;
-        _gridCard.Size = new Size(1429, 120);
+        _gridCard.Size = new Size(1429, 155);
         _gridCard.TabIndex = 0;
         // 
         // _grid
@@ -295,7 +299,7 @@ partial class OrdersStatusUserControl
         _grid.RowHeadersVisible = false;
         _grid.RowTemplate.Height = 36;
         _grid.ScrollBars = ScrollBars.Vertical;
-        _grid.Size = new Size(1409, 58);
+        _grid.Size = new Size(1409, 93);
         _grid.TabIndex = 0;
         _grid.ThemeStyle.AlternatingRowsStyle.BackColor = Color.FromArgb(60, 36, 24);
         _grid.ThemeStyle.GridColor = Color.FromArgb(100, 65, 39);
@@ -396,7 +400,7 @@ partial class OrdersStatusUserControl
         _bottomPanel.Controls.Add(_pageLabel);
         _bottomPanel.Controls.Add(_countLabel);
         _bottomPanel.Dock = DockStyle.Bottom;
-        _bottomPanel.Location = new Point(10, 68);
+        _bottomPanel.Location = new Point(10, 103);
         _bottomPanel.Name = "_bottomPanel";
         _bottomPanel.Size = new Size(1409, 44);
         _bottomPanel.TabIndex = 1;
@@ -425,7 +429,7 @@ partial class OrdersStatusUserControl
         _previousPageButton.Cursor = Cursors.Hand;
         _previousPageButton.CustomizableEdges = customizableEdges1;
         _previousPageButton.FillColor = Color.FromArgb(82, 55, 38);
-        _previousPageButton.Font = new Font("Segoe UI Semibold", 8.5F);
+        _previousPageButton.Font = new Font("Segoe UI Semibold", 8F);
         _previousPageButton.ForeColor = Color.White;
         _previousPageButton.Location = new Point(2, 3);
         _previousPageButton.Margin = new Padding(2, 0, 2, 0);
@@ -440,6 +444,7 @@ partial class OrdersStatusUserControl
         _page1Button.BorderRadius = 6;
         _page1Button.Cursor = Cursors.Hand;
         _page1Button.CustomizableEdges = customizableEdges3;
+        _page1Button.FillColor = Color.Gray;
         _page1Button.Font = new Font("Segoe UI Semibold", 8.5F);
         _page1Button.ForeColor = Color.White;
         _page1Button.Location = new Point(36, 3);
@@ -529,11 +534,11 @@ partial class OrdersStatusUserControl
         _filterCard.Controls.Add(_filterFlowPanel);
         _filterCard.CustomizableEdges = customizableEdges25;
         _filterCard.Dock = DockStyle.Top;
-        _filterCard.Location = new Point(18, 222);
+        _filterCard.Location = new Point(18, 189);
         _filterCard.Name = "_filterCard";
         _filterCard.Padding = new Padding(10, 7, 10, 7);
         _filterCard.ShadowDecoration.CustomizableEdges = customizableEdges26;
-        _filterCard.Size = new Size(1429, 82);
+        _filterCard.Size = new Size(1429, 80);
         _filterCard.TabIndex = 1;
         // 
         // _filterFlowPanel
@@ -543,13 +548,13 @@ partial class OrdersStatusUserControl
         _filterFlowPanel.Controls.Add(_endFilterPanel);
         _filterFlowPanel.Controls.Add(_statusFilterPanel);
         _filterFlowPanel.Controls.Add(_searchFilterPanel);
-        _filterFlowPanel.Controls.Add(_clearButton);
-        _filterFlowPanel.Controls.Add(_exportButton);
+        _filterFlowPanel.Controls.Add(panel1);
+        _filterFlowPanel.Controls.Add(panel2);
         _filterFlowPanel.Dock = DockStyle.Fill;
         _filterFlowPanel.Location = new Point(10, 7);
         _filterFlowPanel.Margin = new Padding(0);
         _filterFlowPanel.Name = "_filterFlowPanel";
-        _filterFlowPanel.Size = new Size(1409, 68);
+        _filterFlowPanel.Size = new Size(1409, 66);
         _filterFlowPanel.TabIndex = 0;
         _filterFlowPanel.WrapContents = false;
         // 
@@ -561,7 +566,7 @@ partial class OrdersStatusUserControl
         _startFilterPanel.Location = new Point(0, 0);
         _startFilterPanel.Margin = new Padding(0, 0, 4, 0);
         _startFilterPanel.Name = "_startFilterPanel";
-        _startFilterPanel.Size = new Size(102, 62);
+        _startFilterPanel.Size = new Size(119, 62);
         _startFilterPanel.TabIndex = 0;
         // 
         // _startDatePicker
@@ -579,7 +584,7 @@ partial class OrdersStatusUserControl
         _startDatePicker.MinDate = new DateTime(1753, 1, 1, 0, 0, 0, 0);
         _startDatePicker.Name = "_startDatePicker";
         _startDatePicker.ShadowDecoration.CustomizableEdges = customizableEdges14;
-        _startDatePicker.Size = new Size(100, 34);
+        _startDatePicker.Size = new Size(116, 34);
         _startDatePicker.TabIndex = 0;
         _startDatePicker.Value = new DateTime(2026, 8, 21, 15, 6, 27, 122);
         // 
@@ -599,10 +604,10 @@ partial class OrdersStatusUserControl
         _endFilterPanel.BackColor = Color.Transparent;
         _endFilterPanel.Controls.Add(_endDatePicker);
         _endFilterPanel.Controls.Add(_endCaption);
-        _endFilterPanel.Location = new Point(106, 0);
+        _endFilterPanel.Location = new Point(123, 0);
         _endFilterPanel.Margin = new Padding(0, 0, 4, 0);
         _endFilterPanel.Name = "_endFilterPanel";
-        _endFilterPanel.Size = new Size(102, 62);
+        _endFilterPanel.Size = new Size(117, 62);
         _endFilterPanel.TabIndex = 1;
         // 
         // _endDatePicker
@@ -620,7 +625,7 @@ partial class OrdersStatusUserControl
         _endDatePicker.MinDate = new DateTime(1753, 1, 1, 0, 0, 0, 0);
         _endDatePicker.Name = "_endDatePicker";
         _endDatePicker.ShadowDecoration.CustomizableEdges = customizableEdges16;
-        _endDatePicker.Size = new Size(100, 34);
+        _endDatePicker.Size = new Size(114, 34);
         _endDatePicker.TabIndex = 0;
         _endDatePicker.Value = new DateTime(2026, 8, 21, 15, 6, 27, 134);
         // 
@@ -640,10 +645,10 @@ partial class OrdersStatusUserControl
         _statusFilterPanel.BackColor = Color.Transparent;
         _statusFilterPanel.Controls.Add(_statusComboBox);
         _statusFilterPanel.Controls.Add(_statusCaption);
-        _statusFilterPanel.Location = new Point(212, 0);
+        _statusFilterPanel.Location = new Point(244, 0);
         _statusFilterPanel.Margin = new Padding(0, 0, 4, 0);
         _statusFilterPanel.Name = "_statusFilterPanel";
-        _statusFilterPanel.Size = new Size(104, 62);
+        _statusFilterPanel.Size = new Size(119, 62);
         _statusFilterPanel.TabIndex = 2;
         // 
         // _statusComboBox
@@ -662,7 +667,7 @@ partial class OrdersStatusUserControl
         _statusComboBox.Location = new Point(0, 18);
         _statusComboBox.Name = "_statusComboBox";
         _statusComboBox.ShadowDecoration.CustomizableEdges = customizableEdges18;
-        _statusComboBox.Size = new Size(102, 36);
+        _statusComboBox.Size = new Size(116, 36);
         _statusComboBox.TabIndex = 0;
         // 
         // _statusCaption
@@ -679,9 +684,9 @@ partial class OrdersStatusUserControl
         // _searchFilterPanel
         // 
         _searchFilterPanel.BackColor = Color.Transparent;
-        _searchFilterPanel.Controls.Add(_searchTextBox);
         _searchFilterPanel.Controls.Add(_searchCaption);
-        _searchFilterPanel.Location = new Point(320, 0);
+        _searchFilterPanel.Controls.Add(_searchTextBox);
+        _searchFilterPanel.Location = new Point(367, 0);
         _searchFilterPanel.Margin = new Padding(0, 0, 4, 0);
         _searchFilterPanel.Name = "_searchFilterPanel";
         _searchFilterPanel.Size = new Size(170, 62);
@@ -696,7 +701,7 @@ partial class OrdersStatusUserControl
         _searchTextBox.FillColor = Color.FromArgb(55, 33, 23);
         _searchTextBox.Font = new Font("Segoe UI", 8.5F);
         _searchTextBox.ForeColor = Color.White;
-        _searchTextBox.Location = new Point(0, 18);
+        _searchTextBox.Location = new Point(-1, 20);
         _searchTextBox.Name = "_searchTextBox";
         _searchTextBox.PlaceholderForeColor = Color.FromArgb(170, 155, 143);
         _searchTextBox.PlaceholderText = "Digite nº pedido, cliente...";
@@ -720,14 +725,14 @@ partial class OrdersStatusUserControl
         // 
         _clearButton.BorderRadius = 9;
         _clearButton.Cursor = Cursors.Hand;
-        _clearButton.CustomizableEdges = customizableEdges21;
+        _clearButton.CustomizableEdges = customizableEdges23;
         _clearButton.FillColor = Color.FromArgb(82, 55, 38);
         _clearButton.Font = new Font("Segoe UI Semibold", 8.5F);
         _clearButton.ForeColor = Color.White;
-        _clearButton.Location = new Point(500, 17);
+        _clearButton.Location = new Point(15, 15);
         _clearButton.Margin = new Padding(6, 17, 4, 0);
         _clearButton.Name = "_clearButton";
-        _clearButton.ShadowDecoration.CustomizableEdges = customizableEdges22;
+        _clearButton.ShadowDecoration.CustomizableEdges = customizableEdges24;
         _clearButton.Size = new Size(72, 36);
         _clearButton.TabIndex = 4;
         _clearButton.Text = "Limpar";
@@ -736,14 +741,14 @@ partial class OrdersStatusUserControl
         // 
         _exportButton.BorderRadius = 9;
         _exportButton.Cursor = Cursors.Hand;
-        _exportButton.CustomizableEdges = customizableEdges23;
+        _exportButton.CustomizableEdges = customizableEdges21;
         _exportButton.FillColor = Color.FromArgb(82, 55, 38);
         _exportButton.Font = new Font("Segoe UI Semibold", 8.5F);
         _exportButton.ForeColor = Color.White;
-        _exportButton.Location = new Point(580, 17);
+        _exportButton.Location = new Point(8, 15);
         _exportButton.Margin = new Padding(4, 17, 4, 0);
         _exportButton.Name = "_exportButton";
-        _exportButton.ShadowDecoration.CustomizableEdges = customizableEdges24;
+        _exportButton.ShadowDecoration.CustomizableEdges = customizableEdges22;
         _exportButton.Size = new Size(82, 36);
         _exportButton.TabIndex = 5;
         _exportButton.Text = "⇩ Exportar";
@@ -753,9 +758,9 @@ partial class OrdersStatusUserControl
         _stepsHost.BackColor = Color.Transparent;
         _stepsHost.Controls.Add(_stepsFlowPanel);
         _stepsHost.Dock = DockStyle.Top;
-        _stepsHost.Location = new Point(18, 80);
+        _stepsHost.Location = new Point(18, 75);
         _stepsHost.Name = "_stepsHost";
-        _stepsHost.Size = new Size(1429, 142);
+        _stepsHost.Size = new Size(1429, 114);
         _stepsHost.TabIndex = 2;
         // 
         // _stepsFlowPanel
@@ -774,12 +779,12 @@ partial class OrdersStatusUserControl
         _stepsFlowPanel.Controls.Add(_stepShippedPanel);
         _stepsFlowPanel.Controls.Add(_connector6);
         _stepsFlowPanel.Controls.Add(_stepDeliveredPanel);
-        _stepsFlowPanel.Dock = DockStyle.Fill;
+        _stepsFlowPanel.Dock = DockStyle.Top;
         _stepsFlowPanel.Location = new Point(0, 0);
         _stepsFlowPanel.Margin = new Padding(0);
         _stepsFlowPanel.Name = "_stepsFlowPanel";
         _stepsFlowPanel.Padding = new Padding(4, 4, 4, 0);
-        _stepsFlowPanel.Size = new Size(1429, 142);
+        _stepsFlowPanel.Size = new Size(1429, 111);
         _stepsFlowPanel.TabIndex = 0;
         _stepsFlowPanel.WrapContents = false;
         // 
@@ -792,7 +797,7 @@ partial class OrdersStatusUserControl
         _stepCreatedPanel.Location = new Point(4, 4);
         _stepCreatedPanel.Margin = new Padding(0);
         _stepCreatedPanel.Name = "_stepCreatedPanel";
-        _stepCreatedPanel.Size = new Size(82, 132);
+        _stepCreatedPanel.Size = new Size(82, 112);
         _stepCreatedPanel.TabIndex = 0;
         // 
         // _stepCreatedDescription
@@ -801,7 +806,7 @@ partial class OrdersStatusUserControl
         _stepCreatedDescription.ForeColor = Color.FromArgb(204, 190, 177);
         _stepCreatedDescription.Location = new Point(0, 68);
         _stepCreatedDescription.Name = "_stepCreatedDescription";
-        _stepCreatedDescription.Size = new Size(82, 58);
+        _stepCreatedDescription.Size = new Size(82, 44);
         _stepCreatedDescription.TabIndex = 0;
         _stepCreatedDescription.Text = "Compra registrada\nno sistema.";
         _stepCreatedDescription.TextAlign = ContentAlignment.TopCenter;
@@ -822,6 +827,7 @@ partial class OrdersStatusUserControl
         _stepCreatedIcon.BackColor = Color.FromArgb(70, 43, 27);
         _stepCreatedIcon.BorderStyle = BorderStyle.FixedSingle;
         _stepCreatedIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
+        _stepCreatedIcon.ForeColor = Color.White;
         _stepCreatedIcon.Location = new Point(21, 0);
         _stepCreatedIcon.Name = "_stepCreatedIcon";
         _stepCreatedIcon.Size = new Size(40, 40);
@@ -850,7 +856,7 @@ partial class OrdersStatusUserControl
         _stepPendingPanel.Location = new Point(94, 4);
         _stepPendingPanel.Margin = new Padding(0);
         _stepPendingPanel.Name = "_stepPendingPanel";
-        _stepPendingPanel.Size = new Size(82, 132);
+        _stepPendingPanel.Size = new Size(82, 112);
         _stepPendingPanel.TabIndex = 2;
         // 
         // _stepPendingDescription
@@ -859,7 +865,7 @@ partial class OrdersStatusUserControl
         _stepPendingDescription.ForeColor = Color.FromArgb(204, 190, 177);
         _stepPendingDescription.Location = new Point(0, 68);
         _stepPendingDescription.Name = "_stepPendingDescription";
-        _stepPendingDescription.Size = new Size(82, 58);
+        _stepPendingDescription.Size = new Size(82, 44);
         _stepPendingDescription.TabIndex = 0;
         _stepPendingDescription.Text = "Aguardando a\naprovação do pagamento.";
         _stepPendingDescription.TextAlign = ContentAlignment.TopCenter;
@@ -880,6 +886,7 @@ partial class OrdersStatusUserControl
         _stepPendingIcon.BackColor = Color.FromArgb(70, 43, 27);
         _stepPendingIcon.BorderStyle = BorderStyle.FixedSingle;
         _stepPendingIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
+        _stepPendingIcon.ForeColor = Color.White;
         _stepPendingIcon.Location = new Point(21, 0);
         _stepPendingIcon.Name = "_stepPendingIcon";
         _stepPendingIcon.Size = new Size(40, 40);
@@ -908,7 +915,7 @@ partial class OrdersStatusUserControl
         _stepApprovedPanel.Location = new Point(184, 4);
         _stepApprovedPanel.Margin = new Padding(0);
         _stepApprovedPanel.Name = "_stepApprovedPanel";
-        _stepApprovedPanel.Size = new Size(82, 132);
+        _stepApprovedPanel.Size = new Size(82, 112);
         _stepApprovedPanel.TabIndex = 4;
         // 
         // _stepApprovedDescription
@@ -917,7 +924,7 @@ partial class OrdersStatusUserControl
         _stepApprovedDescription.ForeColor = Color.FromArgb(204, 190, 177);
         _stepApprovedDescription.Location = new Point(0, 68);
         _stepApprovedDescription.Name = "_stepApprovedDescription";
-        _stepApprovedDescription.Size = new Size(82, 58);
+        _stepApprovedDescription.Size = new Size(82, 44);
         _stepApprovedDescription.TabIndex = 0;
         _stepApprovedDescription.Text = "Pagamento confirmado\ne pedido liberado.";
         _stepApprovedDescription.TextAlign = ContentAlignment.TopCenter;
@@ -938,6 +945,7 @@ partial class OrdersStatusUserControl
         _stepApprovedIcon.BackColor = Color.FromArgb(70, 43, 27);
         _stepApprovedIcon.BorderStyle = BorderStyle.FixedSingle;
         _stepApprovedIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
+        _stepApprovedIcon.ForeColor = Color.White;
         _stepApprovedIcon.Location = new Point(21, 0);
         _stepApprovedIcon.Name = "_stepApprovedIcon";
         _stepApprovedIcon.Size = new Size(40, 40);
@@ -966,7 +974,7 @@ partial class OrdersStatusUserControl
         _stepSeparationPanel.Location = new Point(274, 4);
         _stepSeparationPanel.Margin = new Padding(0);
         _stepSeparationPanel.Name = "_stepSeparationPanel";
-        _stepSeparationPanel.Size = new Size(82, 132);
+        _stepSeparationPanel.Size = new Size(82, 112);
         _stepSeparationPanel.TabIndex = 6;
         // 
         // _stepSeparationDescription
@@ -975,7 +983,7 @@ partial class OrdersStatusUserControl
         _stepSeparationDescription.ForeColor = Color.FromArgb(204, 190, 177);
         _stepSeparationDescription.Location = new Point(0, 68);
         _stepSeparationDescription.Name = "_stepSeparationDescription";
-        _stepSeparationDescription.Size = new Size(82, 58);
+        _stepSeparationDescription.Size = new Size(82, 44);
         _stepSeparationDescription.TabIndex = 0;
         _stepSeparationDescription.Text = "Produto localizado\ne embalado.";
         _stepSeparationDescription.TextAlign = ContentAlignment.TopCenter;
@@ -996,6 +1004,7 @@ partial class OrdersStatusUserControl
         _stepSeparationIcon.BackColor = Color.FromArgb(70, 43, 27);
         _stepSeparationIcon.BorderStyle = BorderStyle.FixedSingle;
         _stepSeparationIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
+        _stepSeparationIcon.ForeColor = Color.White;
         _stepSeparationIcon.Location = new Point(21, 0);
         _stepSeparationIcon.Name = "_stepSeparationIcon";
         _stepSeparationIcon.Size = new Size(40, 40);
@@ -1024,7 +1033,7 @@ partial class OrdersStatusUserControl
         _stepInvoicedPanel.Location = new Point(364, 4);
         _stepInvoicedPanel.Margin = new Padding(0);
         _stepInvoicedPanel.Name = "_stepInvoicedPanel";
-        _stepInvoicedPanel.Size = new Size(82, 132);
+        _stepInvoicedPanel.Size = new Size(82, 112);
         _stepInvoicedPanel.TabIndex = 8;
         // 
         // _stepInvoicedDescription
@@ -1033,7 +1042,7 @@ partial class OrdersStatusUserControl
         _stepInvoicedDescription.ForeColor = Color.FromArgb(204, 190, 177);
         _stepInvoicedDescription.Location = new Point(0, 68);
         _stepInvoicedDescription.Name = "_stepInvoicedDescription";
-        _stepInvoicedDescription.Size = new Size(82, 58);
+        _stepInvoicedDescription.Size = new Size(82, 44);
         _stepInvoicedDescription.TabIndex = 0;
         _stepInvoicedDescription.Text = "Nota Fiscal\nemitida.";
         _stepInvoicedDescription.TextAlign = ContentAlignment.TopCenter;
@@ -1054,6 +1063,7 @@ partial class OrdersStatusUserControl
         _stepInvoicedIcon.BackColor = Color.FromArgb(70, 43, 27);
         _stepInvoicedIcon.BorderStyle = BorderStyle.FixedSingle;
         _stepInvoicedIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
+        _stepInvoicedIcon.ForeColor = Color.White;
         _stepInvoicedIcon.Location = new Point(21, 0);
         _stepInvoicedIcon.Name = "_stepInvoicedIcon";
         _stepInvoicedIcon.Size = new Size(40, 40);
@@ -1082,7 +1092,7 @@ partial class OrdersStatusUserControl
         _stepShippedPanel.Location = new Point(454, 4);
         _stepShippedPanel.Margin = new Padding(0);
         _stepShippedPanel.Name = "_stepShippedPanel";
-        _stepShippedPanel.Size = new Size(82, 132);
+        _stepShippedPanel.Size = new Size(82, 112);
         _stepShippedPanel.TabIndex = 10;
         // 
         // _stepShippedDescription
@@ -1091,7 +1101,7 @@ partial class OrdersStatusUserControl
         _stepShippedDescription.ForeColor = Color.FromArgb(204, 190, 177);
         _stepShippedDescription.Location = new Point(0, 68);
         _stepShippedDescription.Name = "_stepShippedDescription";
-        _stepShippedDescription.Size = new Size(82, 58);
+        _stepShippedDescription.Size = new Size(82, 44);
         _stepShippedDescription.TabIndex = 0;
         _stepShippedDescription.Text = "Pacote coletado\npela transportadora.";
         _stepShippedDescription.TextAlign = ContentAlignment.TopCenter;
@@ -1112,6 +1122,7 @@ partial class OrdersStatusUserControl
         _stepShippedIcon.BackColor = Color.FromArgb(70, 43, 27);
         _stepShippedIcon.BorderStyle = BorderStyle.FixedSingle;
         _stepShippedIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
+        _stepShippedIcon.ForeColor = Color.White;
         _stepShippedIcon.Location = new Point(21, 0);
         _stepShippedIcon.Name = "_stepShippedIcon";
         _stepShippedIcon.Size = new Size(40, 40);
@@ -1140,7 +1151,7 @@ partial class OrdersStatusUserControl
         _stepDeliveredPanel.Location = new Point(544, 4);
         _stepDeliveredPanel.Margin = new Padding(0);
         _stepDeliveredPanel.Name = "_stepDeliveredPanel";
-        _stepDeliveredPanel.Size = new Size(82, 132);
+        _stepDeliveredPanel.Size = new Size(82, 112);
         _stepDeliveredPanel.TabIndex = 12;
         // 
         // _stepDeliveredDescription
@@ -1149,7 +1160,7 @@ partial class OrdersStatusUserControl
         _stepDeliveredDescription.ForeColor = Color.FromArgb(204, 190, 177);
         _stepDeliveredDescription.Location = new Point(0, 68);
         _stepDeliveredDescription.Name = "_stepDeliveredDescription";
-        _stepDeliveredDescription.Size = new Size(82, 58);
+        _stepDeliveredDescription.Size = new Size(82, 44);
         _stepDeliveredDescription.TabIndex = 0;
         _stepDeliveredDescription.Text = "Produto entregue\nao destinatário.";
         _stepDeliveredDescription.TextAlign = ContentAlignment.TopCenter;
@@ -1170,6 +1181,7 @@ partial class OrdersStatusUserControl
         _stepDeliveredIcon.BackColor = Color.FromArgb(70, 43, 27);
         _stepDeliveredIcon.BorderStyle = BorderStyle.FixedSingle;
         _stepDeliveredIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
+        _stepDeliveredIcon.ForeColor = Color.White;
         _stepDeliveredIcon.Location = new Point(21, 0);
         _stepDeliveredIcon.Name = "_stepDeliveredIcon";
         _stepDeliveredIcon.Size = new Size(40, 40);
@@ -1186,7 +1198,7 @@ partial class OrdersStatusUserControl
         _headingPanel.Dock = DockStyle.Top;
         _headingPanel.Location = new Point(18, 14);
         _headingPanel.Name = "_headingPanel";
-        _headingPanel.Size = new Size(1429, 66);
+        _headingPanel.Size = new Size(1429, 61);
         _headingPanel.TabIndex = 3;
         // 
         // _refreshButton
@@ -1227,6 +1239,26 @@ partial class OrdersStatusUserControl
         _titleLabel.TabIndex = 2;
         _titleLabel.Text = "Status de Pedidos";
         // 
+        // panel1
+        // 
+        panel1.BackColor = Color.Transparent;
+        panel1.Controls.Add(_exportButton);
+        panel1.Location = new Point(541, 0);
+        panel1.Margin = new Padding(0, 0, 4, 0);
+        panel1.Name = "panel1";
+        panel1.Size = new Size(101, 62);
+        panel1.TabIndex = 6;
+        // 
+        // panel2
+        // 
+        panel2.BackColor = Color.Transparent;
+        panel2.Controls.Add(_clearButton);
+        panel2.Location = new Point(646, 0);
+        panel2.Margin = new Padding(0, 0, 4, 0);
+        panel2.Name = "panel2";
+        panel2.Size = new Size(101, 62);
+        panel2.TabIndex = 7;
+        // 
         // OrdersStatusUserControl
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
@@ -1261,6 +1293,11 @@ partial class OrdersStatusUserControl
         _stepDeliveredPanel.ResumeLayout(false);
         _headingPanel.ResumeLayout(false);
         _headingPanel.PerformLayout();
+        panel1.ResumeLayout(false);
+        panel2.ResumeLayout(false);
         ResumeLayout(false);
     }
+
+    private Panel panel1;
+    private Panel panel2;
 }
