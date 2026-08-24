@@ -270,8 +270,7 @@ partial class OrdersStatusUserControl
         _grid.AllowUserToDeleteRows = false;
         _grid.AllowUserToResizeColumns = false;
         _grid.AllowUserToResizeRows = false;
-        dataGridViewCellStyle1.BackColor = Color.FromArgb(60, 36, 24);
-        _grid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+        dataGridViewCellStyle1.BackColor = Color.White;
         dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
         dataGridViewCellStyle2.BackColor = Color.FromArgb(74, 46, 29);
         dataGridViewCellStyle2.Font = new Font("Segoe UI Semibold", 8.5F);
@@ -283,17 +282,18 @@ partial class OrdersStatusUserControl
         _grid.ColumnHeadersHeight = 38;
         _grid.Columns.AddRange(new DataGridViewColumn[] { _numberColumn, _dateColumn, _customerColumn, _totalColumn, _statusColumn, _lastUpdateColumn, _actionsColumn });
         dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-        dataGridViewCellStyle4.BackColor = SystemColors.Window;
+        dataGridViewCellStyle4.BackColor = Color.White;
         dataGridViewCellStyle4.Font = new Font("Segoe UI", 8.5F);
-        dataGridViewCellStyle4.ForeColor = Color.FromArgb(239, 230, 220);
+        dataGridViewCellStyle4.ForeColor = Color.Black;
         dataGridViewCellStyle4.Padding = new Padding(6, 0, 6, 0);
-        dataGridViewCellStyle4.SelectionBackColor = Color.FromArgb(92, 58, 35);
-        dataGridViewCellStyle4.SelectionForeColor = Color.White;
+        dataGridViewCellStyle4.SelectionBackColor = Color.LightGray;
+        dataGridViewCellStyle4.SelectionForeColor = Color.Black;
         dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
         _grid.DefaultCellStyle = dataGridViewCellStyle4;
         _grid.Dock = DockStyle.Fill;
         _grid.GridColor = Color.FromArgb(100, 65, 39);
         _grid.Location = new Point(10, 10);
+        _grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         _grid.MultiSelect = false;
         _grid.Name = "_grid";
         _grid.RowHeadersVisible = false;
@@ -301,18 +301,18 @@ partial class OrdersStatusUserControl
         _grid.ScrollBars = ScrollBars.Vertical;
         _grid.Size = new Size(1409, 93);
         _grid.TabIndex = 0;
-        _grid.ThemeStyle.AlternatingRowsStyle.BackColor = Color.FromArgb(60, 36, 24);
+        _grid.ThemeStyle.AlternatingRowsStyle.BackColor = Color.White;
         _grid.ThemeStyle.GridColor = Color.FromArgb(100, 65, 39);
         _grid.ThemeStyle.HeaderStyle.BackColor = Color.FromArgb(74, 46, 29);
         _grid.ThemeStyle.HeaderStyle.Font = new Font("Segoe UI Semibold", 8.5F);
         _grid.ThemeStyle.HeaderStyle.HeaightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
         _grid.ThemeStyle.HeaderStyle.Height = 38;
-        _grid.ThemeStyle.RowsStyle.BackColor = SystemColors.Window;
+        _grid.ThemeStyle.RowsStyle.BackColor = Color.White;
         _grid.ThemeStyle.RowsStyle.Font = new Font("Segoe UI", 8.5F);
-        _grid.ThemeStyle.RowsStyle.ForeColor = Color.FromArgb(239, 230, 220);
+        _grid.ThemeStyle.RowsStyle.ForeColor = Color.Black;
         _grid.ThemeStyle.RowsStyle.Height = 36;
-        _grid.ThemeStyle.RowsStyle.SelectionBackColor = Color.FromArgb(92, 58, 35);
-        _grid.ThemeStyle.RowsStyle.SelectionForeColor = Color.White;
+        _grid.ThemeStyle.RowsStyle.SelectionBackColor = Color.LightGray;
+        _grid.ThemeStyle.RowsStyle.SelectionForeColor = Color.Black;
         // 
         // _numberColumn
         // 
@@ -379,8 +379,8 @@ partial class OrdersStatusUserControl
         // 
         _actionsColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
         dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-        dataGridViewCellStyle3.BackColor = Color.FromArgb(82, 55, 38);
-        dataGridViewCellStyle3.ForeColor = Color.White;
+        dataGridViewCellStyle3.BackColor = Color.White;
+        dataGridViewCellStyle3.ForeColor = Color.Black;
         dataGridViewCellStyle3.SelectionBackColor = Color.FromArgb(103, 70, 46);
         dataGridViewCellStyle3.SelectionForeColor = Color.White;
         _actionsColumn.DefaultCellStyle = dataGridViewCellStyle3;

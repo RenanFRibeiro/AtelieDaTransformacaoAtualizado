@@ -170,9 +170,9 @@ public sealed partial class OrdersStatusUserControl : UserControl
         _page1Button.Enabled = totalPages >= 1;
         _page2Button.Visible = totalPages >= 2;
         _page3Button.Visible = totalPages >= 3;
-        _page1Button.FillColor = _currentPage == 1 ? _gold : Color.FromArgb(82, 55, 38);
-        _page2Button.FillColor = _currentPage == 2 ? _gold : Color.FromArgb(82, 55, 38);
-        _page3Button.FillColor = _currentPage == 3 ? _gold : Color.FromArgb(82, 55, 38);
+        _page1Button.FillColor = _currentPage == 1 ? _gold : Color.FromArgb(220, 220, 220);
+        _page2Button.FillColor = _currentPage == 2 ? _gold : Color.FromArgb(220, 220, 220);
+        _page3Button.FillColor = _currentPage == 3 ? _gold : Color.FromArgb(220, 220, 220);
     }
 
     private void Grid_CurrentCellDirtyStateChanged(object? sender, EventArgs e)

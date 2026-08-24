@@ -146,11 +146,11 @@ partial class CategoriesUserControl
         _grid.ColumnHeadersHeight = 42;
         _grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
         dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-        dataGridViewCellStyle2.BackColor = SystemColors.Window;
+        dataGridViewCellStyle2.BackColor = Color.White;
         dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-        dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-        dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-        dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+        dataGridViewCellStyle2.ForeColor = LibraryTheme.Text;
+        dataGridViewCellStyle2.SelectionBackColor = LibraryTheme.Accent;
+        dataGridViewCellStyle2.SelectionForeColor = Color.White;
         dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
         _grid.DefaultCellStyle = dataGridViewCellStyle2;
         _grid.Dock = DockStyle.Fill;
@@ -167,12 +167,12 @@ partial class CategoriesUserControl
         _grid.ThemeStyle.HeaderStyle.Font = null;
         _grid.ThemeStyle.HeaderStyle.ForeColor = Color.Empty;
         _grid.ThemeStyle.HeaderStyle.Height = 42;
-        _grid.ThemeStyle.RowsStyle.BackColor = SystemColors.Window;
+        _grid.ThemeStyle.RowsStyle.BackColor = Color.White;
         _grid.ThemeStyle.RowsStyle.Font = new Font("Segoe UI", 9F);
-        _grid.ThemeStyle.RowsStyle.ForeColor = SystemColors.ControlText;
+        _grid.ThemeStyle.RowsStyle.ForeColor = LibraryTheme.Text;
         _grid.ThemeStyle.RowsStyle.Height = 42;
-        _grid.ThemeStyle.RowsStyle.SelectionBackColor = SystemColors.Highlight;
-        _grid.ThemeStyle.RowsStyle.SelectionForeColor = SystemColors.HighlightText;
+        _grid.ThemeStyle.RowsStyle.SelectionBackColor = LibraryTheme.Accent;
+        _grid.ThemeStyle.RowsStyle.SelectionForeColor = Color.White;
         // 
         // _countLabel
         // 
