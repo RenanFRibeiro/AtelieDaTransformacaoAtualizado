@@ -15,6 +15,7 @@ public partial class DashboardUserControl : UserControl
         InitializeComponent();
 
         _refreshButton.Click += async (_, _) => await LoadAsync();
+        _recentRefreshButton.Click += async (_, _) => await LoadAsync();
         Load += async (_, _) => await LoadAsync();
     }
 

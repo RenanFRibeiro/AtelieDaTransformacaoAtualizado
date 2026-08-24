@@ -3,7 +3,7 @@ using AtelieDaTransformacao.Desktop.Themes;
 namespace AtelieDaTransformacao.Desktop.UserControls;
 partial class ProfileUserControl
 {
-    private System.ComponentModel.IContainer? components=null;private Guna.UI2.WinForms.Guna2Panel _card=null!;private Label _titleLabel=null!;private Label _emailCaptionLabel=null!;private Label _emailValueLabel=null!;private Label _roleCaptionLabel=null!;private Label _roleValueLabel=null!;private Label _sessionCaptionLabel=null!;private Label _sessionValueLabel=null!;private Label _permissionsCaptionLabel=null!;private Label _permissionsValueLabel=null!;    protected override void Dispose(bool disposing){if(disposing)components?.Dispose();base.Dispose(disposing);}
+    private System.ComponentModel.IContainer? components=null;private Guna.UI2.WinForms.Guna2Panel _card=null!;private Label _titleLabel=null!;private Label _emailCaptionLabel=null!;private Label _emailValueLabel=null!;private Label _roleCaptionLabel=null!;private Label _roleValueLabel=null!;private Label _sessionCaptionLabel=null!;private Label _sessionValueLabel=null!;private Label _permissionsCaptionLabel=null!;private Label _permissionsValueLabel=null!;private Guna.UI2.WinForms.Guna2Button _editProfileButton=null!;    protected override void Dispose(bool disposing){if(disposing)components?.Dispose();base.Dispose(disposing);}
     private void InitializeComponent()
     {
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
@@ -20,6 +20,7 @@ partial class ProfileUserControl
         _emailValueLabel = new Label();
         _emailCaptionLabel = new Label();
         _titleLabel = new Label();
+        _editProfileButton = new Guna.UI2.WinForms.Guna2Button();
         _card.SuspendLayout();
         SuspendLayout();
         // 
@@ -28,6 +29,7 @@ partial class ProfileUserControl
         _card.BorderColor = Color.FromArgb(226, 229, 236);
         _card.BorderRadius = 12;
         _card.BorderThickness = 1;
+        _card.Controls.Add(_editProfileButton);
         _card.Controls.Add(lblAvatar);
         _card.Controls.Add(_permissionsValueLabel);
         _card.Controls.Add(_permissionsCaptionLabel);
@@ -43,7 +45,7 @@ partial class ProfileUserControl
         _card.Name = "_card";
         _card.Padding = new Padding(24);
         _card.ShadowDecoration.CustomizableEdges = customizableEdges3;
-        _card.Size = new Size(516, 382);
+        _card.Size = new Size(516, 430);
         _card.TabIndex = 1;
         // 
         // lblAvatar
@@ -71,7 +73,7 @@ partial class ProfileUserControl
         _permissionsValueLabel.Font = new Font("Yu Gothic", 9F);
         _permissionsValueLabel.Location = new Point(22, 339);
         _permissionsValueLabel.Name = "_permissionsValueLabel";
-        _permissionsValueLabel.Size = new Size(100, 19);
+        _permissionsValueLabel.Size = new Size(490, 19);
         _permissionsValueLabel.TabIndex = 0;
         _permissionsValueLabel.Text = "...";
         // 
@@ -145,6 +147,18 @@ partial class ProfileUserControl
         _emailCaptionLabel.TabIndex = 7;
         _emailCaptionLabel.Text = "E-MAIL";
         // 
+        // _editProfileButton
+        _editProfileButton.BackColor = Color.Transparent;
+        _editProfileButton.BorderRadius = 9;
+        _editProfileButton.FillColor = Color.FromArgb(88, 52, 27);
+        _editProfileButton.Font = new Font("Segoe UI Semibold", 9F);
+        _editProfileButton.ForeColor = Color.White;
+        _editProfileButton.Location = new Point(340, 375);
+        _editProfileButton.Name = "_editProfileButton";
+        _editProfileButton.Size = new Size(150, 38);
+        _editProfileButton.TabIndex = 9;
+        _editProfileButton.Text = "✏️ Editar Perfil";
+        //
         // _titleLabel
         // 
         _titleLabel.AutoSize = true;
@@ -163,7 +177,7 @@ partial class ProfileUserControl
         Controls.Add(_card);
         Controls.Add(_titleLabel);
         Name = "ProfileUserControl";
-        Size = new Size(593, 463);
+        Size = new Size(593, 515);
         _card.ResumeLayout(false);
         ResumeLayout(false);
         PerformLayout();

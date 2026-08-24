@@ -39,6 +39,7 @@ partial class DashboardUserControl
 
     private Guna.UI2.WinForms.Guna2Panel _tableCard = null!;
     private Label _tableTitle = null!;
+    private Guna.UI2.WinForms.Guna2Button _recentRefreshButton = null!;
     private Guna.UI2.WinForms.Guna2DataGridView _grid = null!;
 
     protected override void Dispose(bool disposing)
@@ -106,6 +107,7 @@ partial class DashboardUserControl
         _tableCard = new Guna.UI2.WinForms.Guna2Panel();
         _grid = new Guna.UI2.WinForms.Guna2DataGridView();
         _tableTitle = new Label();
+        _recentRefreshButton = new Guna.UI2.WinForms.Guna2Button();
         _headerPanel.SuspendLayout();
         _cardsPanel.SuspendLayout();
         cardUsuarios.SuspendLayout();
@@ -453,6 +455,7 @@ partial class DashboardUserControl
         _tableCard.BorderRadius = 15;
         _tableCard.BorderThickness = 1;
         _tableCard.Controls.Add(_grid);
+        _tableCard.Controls.Add(_recentRefreshButton);
         _tableCard.Controls.Add(_tableTitle);
         _tableCard.CustomizableEdges = customizableEdges23;
         _tableCard.Dock = DockStyle.Fill;
@@ -510,6 +513,19 @@ partial class DashboardUserControl
         _grid.ThemeStyle.RowsStyle.Height = 38;
         _grid.ThemeStyle.RowsStyle.SelectionBackColor = Color.FromArgb(235, 238, 244);
         _grid.ThemeStyle.RowsStyle.SelectionForeColor = Color.FromArgb(45, 49, 56);
+        //
+        // _recentRefreshButton
+        //
+        _recentRefreshButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+        _recentRefreshButton.BorderRadius = 8;
+        _recentRefreshButton.FillColor = Color.FromArgb(88, 52, 27);
+        _recentRefreshButton.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+        _recentRefreshButton.ForeColor = Color.White;
+        _recentRefreshButton.Location = new Point(650, 17);
+        _recentRefreshButton.Name = "_recentRefreshButton";
+        _recentRefreshButton.Size = new Size(128, 32);
+        _recentRefreshButton.TabIndex = 2;
+        _recentRefreshButton.Text = "↻ Atualizar";
         // 
         // _tableTitle
         // 
@@ -519,7 +535,7 @@ partial class DashboardUserControl
         _tableTitle.ForeColor = Color.FromArgb(30, 34, 43);
         _tableTitle.Location = new Point(16, 16);
         _tableTitle.Name = "_tableTitle";
-        _tableTitle.Size = new Size(763, 34);
+        _tableTitle.Size = new Size(610, 34);
         _tableTitle.TabIndex = 1;
         _tableTitle.Text = "Produtos recentes";
         // 

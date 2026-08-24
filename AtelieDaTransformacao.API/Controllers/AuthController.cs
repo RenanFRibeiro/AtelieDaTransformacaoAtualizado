@@ -65,6 +65,54 @@ public sealed class AuthController : ControllerBase
         });
     }
 
+    [HttpPut("profile")]
+    [Authorize]
+    public async Task<ActionResult<UserDto>> UpdateProfile(UpdateProfileDto dto)
+    {
+        var user = await _users.GetUserAsync(User);
+        if (user is null)
+            return Unauthorized(new { message = "Usuário não encontrado." });
+
+        var email = dto.Email.Trim();
+        if (string.IsNullOrWhiteSpace(email))
+            return BadRequest(new { message = "Informe o e-mail." });
+
+        var existing = await _users.FindByEmailAsync(email);
+        if (existing is not null && existing.Id != user.Id)
+            return Conflict(new { message = "Já existe um usuário com este e-mail." });
+
+        var wantsPasswordChange = !string.IsNullOrWhiteSpace(dto.NewPassword);
+        if (wantsPasswordChange)
+        {
+            if (string.IsNullOrWhiteSpace(dto.CurrentPassword))
+                return BadRequest(new { message = "Informe a senha atual para alterar a senha." });
+
+            var passwordCheck = await _signIn.CheckPasswordSignInAsync(user, dto.CurrentPassword, false);
+            if (!passwordCheck.Succeeded)
+                return BadRequest(new { message = "A senha atual está incorreta." });
+        }
+
+        if (!string.Equals(user.Email, email, StringComparison.OrdinalIgnoreCase))
+        {
+            var emailResult = await _users.SetEmailAsync(user, email);
+            if (!emailResult.Succeeded)
+                return BadRequest(new { message = "Não foi possível alterar o e-mail.", errors = emailResult.Errors.Select(e => e.Description) });
+
+            var userNameResult = await _users.SetUserNameAsync(user, email);
+            if (!userNameResult.Succeeded)
+                return BadRequest(new { message = "Não foi possível atualizar o usuário.", errors = userNameResult.Errors.Select(e => e.Description) });
+        }
+
+        if (wantsPasswordChange)
+        {
+            var passwordResult = await _users.ChangePasswordAsync(user, dto.CurrentPassword, dto.NewPassword);
+            if (!passwordResult.Succeeded)
+                return BadRequest(new { message = "Não foi possível alterar a senha.", errors = passwordResult.Errors.Select(e => e.Description) });
+        }
+
+        return Ok(await ToUserDto(user));
+    }
+
     [HttpGet("me")]
     [Authorize]
     public async Task<ActionResult<UserDto>> Me()

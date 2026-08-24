@@ -1,3 +1,4 @@
+using System.Drawing;
 using System.Globalization;
 using AtelieDaTransformacao.Desktop.DTOs;
 using AtelieDaTransformacao.Desktop.Themes;

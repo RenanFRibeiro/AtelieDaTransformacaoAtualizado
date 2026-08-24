@@ -210,9 +210,10 @@ public partial class CategoriesUserControl : UserControl
             if (_grid.Columns["Id"] is not null)
                 _grid.Columns["Id"].Visible = false;
 
-            // Contador
+            // Contadores: rodapé + card de resumo no topo.
             _countLabel.Text =
                 $"{_items.Count} categoria(s) cadastrada(s)";
+            _categoryCountValue.Text = _items.Count.ToString("N0");
 
             // ========================================================
             // GARANTE O PADRÃO VISUAL APÓS CARREGAR O DATASOURCE
@@ -404,5 +405,10 @@ public partial class CategoriesUserControl : UserControl
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
         }
+    }
+
+    private void _deleteButton_Click(object sender, EventArgs e)
+    {
+
     }
 }

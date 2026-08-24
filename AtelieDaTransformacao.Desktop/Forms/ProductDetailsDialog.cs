@@ -1,3 +1,5 @@
+using System.Drawing;
+using System.Globalization;
 using AtelieDaTransformacao.Desktop.DTOs;
 
 namespace AtelieDaTransformacao.Desktop.Forms;
@@ -17,7 +19,7 @@ public sealed partial class ProductDetailsDialog : Form
     {
         _titleLabel.Text = _product.Title;
         _categoryValue.Text = string.IsNullOrWhiteSpace(_product.CategoryName) ? "Sem categoria" : _product.CategoryName;
-        _priceValue.Text = _product.Price.ToString("C2", new System.Globalization.CultureInfo("pt-BR"));
+        _priceValue.Text = _product.Price.ToString("C2", CultureInfo.GetCultureInfo("pt-BR"));
         _stockValue.Text = _product.StockQuantity.ToString();
         _statusValue.Text = _product.StockQuantity == 0 ? "Sem estoque" : _product.StockQuantity <= 5 ? "Baixo" : "Disponível";
         _featuredValue.Text = _product.IsFeatured ? "Sim" : "Não";

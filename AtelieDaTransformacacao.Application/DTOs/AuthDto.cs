@@ -36,3 +36,14 @@ public sealed class LoginResponseDto
     public DateTime ExpiresAtUtc { get; set; }
     public UserDto User { get; set; } = new();
 }
+
+public sealed class UpdateProfileDto
+{
+    [Required, EmailAddress]
+    public string Email { get; set; } = string.Empty;
+
+    public string CurrentPassword { get; set; } = string.Empty;
+
+    [MinLength(6)]
+    public string NewPassword { get; set; } = string.Empty;
+}

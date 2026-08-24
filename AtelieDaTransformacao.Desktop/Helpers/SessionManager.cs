@@ -15,6 +15,13 @@ public static class SessionManager
         IsAdmin = Roles.Any(r => string.Equals(r, "Admin", StringComparison.OrdinalIgnoreCase));
     }
 
+    public static void UpdateProfile(string email, IEnumerable<string> roles)
+    {
+        Email = email;
+        Roles = roles.ToArray();
+        IsAdmin = Roles.Any(r => string.Equals(r, "Admin", StringComparison.OrdinalIgnoreCase));
+    }
+
     public static void Clear()
     {
         Token = null;
