@@ -66,8 +66,9 @@
                         <td>@(order.Items?.Sum(x => x.Quantity) ?? 0)</td>
                         <td><strong>@order.Total.ToString("C")</strong></td>
                         <td>
-                            <span class="badge rounded-pill px-3 py-2">
-                                <i class="bi @order.Status.Icon() me-1"></i>@order.Status.Label()
+                            <span class="badge order-status-badge status-@order.Status.ToString().ToLowerInvariant().Replace(" ", "-") rounded-pill px-3 py-2 d-inline-flex align-items-center gap-1">
+                                <i class="bi @order.Status.Icon()"></i>
+                                <span>@order.Status.Label()</span>
                             </span>
                         </td>
                         <td class="text-end pe-4">
