@@ -15,6 +15,7 @@ namespace AtelieDaTransformacao.Infrastructure.Context
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; } //•	Define o DbSet para Customer; representa a tabela Customers.
+        public DbSet<ProductImage> ProductImages { get; set; }   // NOVO
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) //•	Método override onde se configura o modelo EF (mapeamentos, constraints, relacionamentos).
         {

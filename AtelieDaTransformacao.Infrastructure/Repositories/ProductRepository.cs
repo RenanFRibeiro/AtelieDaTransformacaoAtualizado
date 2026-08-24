@@ -72,5 +72,53 @@ namespace AtelieDaTransformacao.Infrastructure.Repositories
         {
             return await _context.Products.CountAsync();//•	Executa a contagem no banco de forma assíncrona e retorna o resultado.
         }
+
+        public async Task<ProductImage> AddImageAsync(int productId, string url, string source)
+        {
+            var maxOrder = await _context.ProductImages
+                .Where(i => i.ProductId == productId)
+                .Select(i => (int?)i.SortOrder)
+                .MaxAsync() ?? -1;
+
+            var image = new ProductImage
+            {
+                ProductId = productId,
+                Url = url,
+                Source = source,
+                SortOrder = maxOrder + 1
+            };
+
+            _context.ProductImages.Add(image);
+            await _context.SaveChangesAsync();
+            return image;
+        }
+
+        public async Task<ProductImage?> GetImageAsync(int imageId)
+            => await _context.ProductImages.FindAsync(imageId);
+
+        public async Task DeleteImageAsync(int imageId)
+        {
+            var image = await _context.ProductImages.FindAsync(imageId);
+            if (image != null)
+            {
+                _context.ProductImages.Remove(image);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task ReorderImagesAsync(List<int> orderedImageIds)
+        {
+            var images = await _context.ProductImages
+                .Where(i => orderedImageIds.Contains(i.Id))
+                .ToListAsync();
+
+            for (int i = 0; i < orderedImageIds.Count; i++)
+            {
+                var image = images.FirstOrDefault(x => x.Id == orderedImageIds[i]);
+                if (image != null) image.SortOrder = i;
+            }
+
+            await _context.SaveChangesAsync();
+        }
     }
 }
