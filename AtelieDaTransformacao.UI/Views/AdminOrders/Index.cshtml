@@ -63,7 +63,7 @@
                             <strong>@order.CustomerName</strong>
                             <small class="text-muted d-block">@order.CustomerEmail</small>
                         </td>
-                        <td>@order.Items.Sum(x => x.Quantity)</td>
+                        <td>@(order.Items?.Sum(x => x.Quantity) ?? 0)</td>
                         <td><strong>@order.Total.ToString("C")</strong></td>
                         <td>
                             <span class="badge rounded-pill px-3 py-2">
