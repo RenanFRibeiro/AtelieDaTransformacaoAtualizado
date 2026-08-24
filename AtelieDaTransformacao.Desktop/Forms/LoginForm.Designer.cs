@@ -38,24 +38,25 @@ partial class LoginForm
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges14 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges11 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         _borderlessForm = new Guna.UI2.WinForms.Guna2BorderlessForm(components);
         _dragControl = new Guna.UI2.WinForms.Guna2DragControl(components);
         _brandPanel = new Guna.UI2.WinForms.Guna2Panel();
         pnSeparador2 = new Panel();
+        _featureLabel = new Label();
         _brandDescription = new Label();
         _brandLabel = new Label();
-        _featureLabel = new Label();
         _loginCard = new Guna.UI2.WinForms.Guna2Panel();
+        _passwordToggleButton = new Guna.UI2.WinForms.Guna2Button();
         btnMinimize = new Guna.UI2.WinForms.Guna2ControlBox();
         btnClose = new Guna.UI2.WinForms.Guna2ControlBox();
         _versionLabel = new Label();
@@ -63,7 +64,6 @@ partial class LoginForm
         _statusLabel = new Label();
         _loginButton = new Guna.UI2.WinForms.Guna2Button();
         _passwordTextBox = new Guna.UI2.WinForms.Guna2TextBox();
-        _passwordToggleButton = new Guna.UI2.WinForms.Guna2Button();
         _passwordLabel = new Label();
         _emailTextBox = new Guna.UI2.WinForms.Guna2TextBox();
         _emailLabel = new Label();
@@ -111,6 +111,18 @@ partial class LoginForm
         pnSeparador2.Size = new Size(180, 5);
         pnSeparador2.TabIndex = 9;
         // 
+        // _featureLabel
+        // 
+        _featureLabel.AutoSize = true;
+        _featureLabel.BackColor = Color.Transparent;
+        _featureLabel.Font = new Font("Segoe UI Semibold", 7F);
+        _featureLabel.ForeColor = Color.DarkGray;
+        _featureLabel.Location = new Point(3, 429);
+        _featureLabel.Name = "_featureLabel";
+        _featureLabel.Size = new Size(315, 12);
+        _featureLabel.TabIndex = 0;
+        _featureLabel.Text = "●  API conectada   ●  Autenticação segura   ●  Controle de estoque ";
+        // 
         // _brandDescription
         // 
         _brandDescription.AutoSize = true;
@@ -134,18 +146,6 @@ partial class LoginForm
         _brandLabel.Size = new Size(261, 64);
         _brandLabel.TabIndex = 2;
         _brandLabel.Text = "ATELIÊ\nDA TRANSFORMAÇÃO";
-        // 
-        // _featureLabel
-        // 
-        _featureLabel.AutoSize = true;
-        _featureLabel.BackColor = Color.Transparent;
-        _featureLabel.Font = new Font("Segoe UI Semibold", 7F);
-        _featureLabel.ForeColor = Color.DarkGray;
-        _featureLabel.Location = new Point(3, 429);
-        _featureLabel.Name = "_featureLabel";
-        _featureLabel.Size = new Size(315, 12);
-        _featureLabel.TabIndex = 0;
-        _featureLabel.Text = "●  API conectada   ●  Autenticação segura   ●  Controle de estoque ";
         // 
         // _loginCard
         // 
@@ -172,6 +172,23 @@ partial class LoginForm
         _loginCard.ShadowDecoration.CustomizableEdges = customizableEdges12;
         _loginCard.Size = new Size(480, 450);
         _loginCard.TabIndex = 0;
+        // 
+        // _passwordToggleButton
+        // 
+        _passwordToggleButton.BackColor = Color.Transparent;
+        _passwordToggleButton.BorderColor = Color.Transparent;
+        _passwordToggleButton.BorderRadius = 7;
+        _passwordToggleButton.Cursor = Cursors.Hand;
+        _passwordToggleButton.CustomizableEdges = customizableEdges1;
+        _passwordToggleButton.FillColor = Color.Transparent;
+        _passwordToggleButton.Font = new Font("Segoe UI", 9.5F);
+        _passwordToggleButton.ForeColor = Color.Gray;
+        _passwordToggleButton.Location = new Point(358, 191);
+        _passwordToggleButton.Name = "_passwordToggleButton";
+        _passwordToggleButton.ShadowDecoration.CustomizableEdges = customizableEdges2;
+        _passwordToggleButton.Size = new Size(46, 32);
+        _passwordToggleButton.TabIndex = 11;
+        _passwordToggleButton.Text = "👁";
         // 
         // btnMinimize
         // 
@@ -257,22 +274,6 @@ partial class LoginForm
         _passwordTextBox.ShadowDecoration.CustomizableEdges = customizableEdges8;
         _passwordTextBox.Size = new Size(358, 42);
         _passwordTextBox.TabIndex = 4;
-        // 
-        // _passwordToggleButton
-        // 
-        _passwordToggleButton.BackColor = Color.Transparent;
-        _passwordToggleButton.BorderRadius = 7;
-        _passwordToggleButton.Cursor = Cursors.Hand;
-        _passwordToggleButton.CustomizableEdges = customizableEdges1;
-        _passwordToggleButton.FillColor = Color.Transparent;
-        _passwordToggleButton.Font = new Font("Segoe UI", 9.5F);
-        _passwordToggleButton.ForeColor = Color.FromArgb(30, 34, 43);
-        _passwordToggleButton.Location = new Point(358, 191);
-        _passwordToggleButton.Name = "_passwordToggleButton";
-        _passwordToggleButton.ShadowDecoration.CustomizableEdges = customizableEdges2;
-        _passwordToggleButton.Size = new Size(46, 32);
-        _passwordToggleButton.TabIndex = 11;
-        _passwordToggleButton.Text = "👁";
         // 
         // _passwordLabel
         // 

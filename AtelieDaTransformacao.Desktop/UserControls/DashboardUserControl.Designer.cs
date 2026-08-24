@@ -194,6 +194,8 @@ partial class DashboardUserControl
         _cardsPanel.Controls.Add(guna2Panel2);
         _cardsPanel.Controls.Add(cardGames);
         _cardsPanel.Controls.Add(pnlCorGames);
+        customizableEdges21.TopLeft = false;
+        customizableEdges21.TopRight = false;
         _cardsPanel.CustomizableEdges = customizableEdges21;
         _cardsPanel.Dock = DockStyle.Top;
         _cardsPanel.FillColor = Color.LightGray;
@@ -235,7 +237,7 @@ partial class DashboardUserControl
         cardUsuariosLblTitulo.AutoSize = true;
         cardUsuariosLblTitulo.BackColor = Color.Transparent;
         cardUsuariosLblTitulo.Font = new Font("Century Gothic", 12F, FontStyle.Bold);
-        cardUsuariosLblTitulo.ForeColor = Color.FromArgb(108, 76, 52);
+        cardUsuariosLblTitulo.ForeColor = Color.Green;
         cardUsuariosLblTitulo.Location = new Point(20, 19);
         cardUsuariosLblTitulo.Name = "cardUsuariosLblTitulo";
         cardUsuariosLblTitulo.Size = new Size(143, 19);
@@ -367,7 +369,7 @@ partial class DashboardUserControl
         label3.AutoSize = true;
         label3.BackColor = Color.Transparent;
         label3.Font = new Font("Century Gothic", 12F, FontStyle.Bold);
-        label3.ForeColor = Color.FromArgb(0, 77, 147);
+        label3.ForeColor = Color.FromArgb(192, 0, 0);
         label3.Location = new Point(12, 19);
         label3.Name = "label3";
         label3.Size = new Size(92, 19);

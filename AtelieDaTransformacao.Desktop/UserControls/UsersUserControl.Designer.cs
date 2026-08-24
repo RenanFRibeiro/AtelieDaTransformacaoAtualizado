@@ -87,8 +87,10 @@ partial class UsersUserControl
         _toolbarCard.Controls.Add(_activeCard);
         _toolbarCard.Controls.Add(_refreshButton);
         _toolbarCard.Controls.Add(_newButton);
+        customizableEdges9.TopLeft = false;
+        customizableEdges9.TopRight = false;
         _toolbarCard.CustomizableEdges = customizableEdges9;
-        _toolbarCard.FillColor = Color.White;
+        _toolbarCard.FillColor = Color.LightGray;
         _toolbarCard.Location = new Point(8, 8);
         _toolbarCard.Name = "_toolbarCard";
         _toolbarCard.ShadowDecoration.CustomizableEdges = customizableEdges9;
@@ -114,7 +116,6 @@ partial class UsersUserControl
         // 
         _inactiveCard.BackColor = Color.White;
         _inactiveCard.BorderColor = Color.LightGray;
-        _inactiveCard.BorderRadius = 12;
         _inactiveCard.BorderThickness = 1;
         _inactiveCard.Controls.Add(_inactiveDescriptionLabel);
         _inactiveCard.Controls.Add(_inactiveCountLabel);
@@ -194,7 +195,6 @@ partial class UsersUserControl
         // 
         _activeCard.BackColor = Color.White;
         _activeCard.BorderColor = Color.LightGray;
-        _activeCard.BorderRadius = 12;
         _activeCard.BorderThickness = 1;
         _activeCard.Controls.Add(_activeDescriptionLabel);
         _activeCard.Controls.Add(_activeCountLabel);
@@ -289,17 +289,16 @@ partial class UsersUserControl
         // 
         _tableCard.BackColor = Color.Transparent;
         _tableCard.BorderColor = Color.White;
-        _tableCard.BorderRadius = 15;
         _tableCard.BorderThickness = 1;
         _tableCard.Controls.Add(_grid);
         _tableCard.Controls.Add(_countLabel);
         _tableCard.CustomizableEdges = customizableEdges10;
         _tableCard.FillColor = Color.White;
-        _tableCard.Location = new Point(8, 138);
+        _tableCard.Location = new Point(8, 126);
         _tableCard.Name = "_tableCard";
         _tableCard.Padding = new Padding(14);
         _tableCard.ShadowDecoration.CustomizableEdges = customizableEdges10;
-        _tableCard.Size = new Size(975, 500);
+        _tableCard.Size = new Size(975, 512);
         _tableCard.TabIndex = 6;
         // 
         // _grid
