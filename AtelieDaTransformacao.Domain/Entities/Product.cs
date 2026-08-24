@@ -28,6 +28,20 @@ namespace AtelieDaTransformacao.Domain.Entities
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public virtual ProductCategory? Category { get; set; }
+
+        public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
+    }
+
+    public class ProductImage
+    {
+        public int Id { get; set; }
+        public int ProductId { get; set; }
+        public virtual Product? Product { get; set; }
+        public string Url { get; set; } = string.Empty;
+        public int SortOrder { get; set; }                 
+        public string Source { get; set; } = "upload";      
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+
     }
 
     /// <summary>

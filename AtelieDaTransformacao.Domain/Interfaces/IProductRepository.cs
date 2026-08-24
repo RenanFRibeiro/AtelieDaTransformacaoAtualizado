@@ -25,5 +25,11 @@ namespace AtelieDaTransformacao.Domain.Interfaces
         Task UpdateAsync(Product product);
         Task DeleteAsync(int id);
         Task<int> CountAsync();
+
+        // IMAGEM
+        Task<ProductImage> AddImageAsync(int productId, string url, string source);
+        Task<ProductImage?> GetImageAsync(int imageId);
+        Task DeleteImageAsync(int imageId);
+        Task ReorderImagesAsync(List<int> orderedImageIds);
     }
 }
