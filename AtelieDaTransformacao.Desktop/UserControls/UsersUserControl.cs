@@ -30,6 +30,8 @@ public partial class UsersUserControl : UserControl
             _grid.DataSource = _items.Select(x => new { x.Id, Usuário = x.Email, Perfil = x.Roles.Count == 0 ? "Usuário" : string.Join(", ", x.Roles), Ativo = x.IsActive ? "Sim" : "Não" }).ToList();
             if (_grid.Columns["Id"] is not null) _grid.Columns["Id"].Visible = false;
             _countLabel.Text = $"{_items.Count} usuário(s)";
+            _activeUsersCountLabel.Text = _items.Count(x => x.IsActive).ToString("N0");
+            _inactiveUsersCountLabel.Text = _items.Count(x => !x.IsActive).ToString("N0");
         }
         catch (Exception ex) { MessageBox.Show(this, ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error); }
     }

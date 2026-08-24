@@ -1,6 +1,6 @@
+using System.Globalization;
 using AtelieDaTransformacao.Desktop.DTOs;
 using AtelieDaTransformacao.Desktop.Services;
-using AtelieDaTransformacao.Desktop.Themes;
 
 namespace AtelieDaTransformacao.Desktop.UserControls;
 
@@ -8,10 +8,12 @@ public partial class DashboardUserControl : UserControl
 {
     private readonly ProductsApiService _products = new();
     private readonly CategoriesApiService _categories = new();
+    private readonly UsersApiService _users = new();
 
     public DashboardUserControl()
     {
         InitializeComponent();
+
         _refreshButton.Click += async (_, _) => await LoadAsync();
         Load += async (_, _) => await LoadAsync();
     }
@@ -21,47 +23,47 @@ public partial class DashboardUserControl : UserControl
         try
         {
             _statusLabel.Text = "Atualizando dados...";
+
             var products = await _products.GetAllAsync() ?? new List<ProductDto>();
             var categories = await _categories.GetAllAsync() ?? new List<CategoryDto>();
-            var featured = products.Count(x => x.IsFeatured);
-            var stock = products.Sum(x => x.StockQuantity);
-            var low = products.Count(x => x.StockQuantity > 0 && x.StockQuantity <= 5);
+            var users = await _users.GetAllAsync() ?? new List<UserSummaryDto>();
 
-            _productsValueLabel.Text = products.Count.ToString();
-            _stockValueLabel.Text = stock.ToString();
-            _categoriesValueLabel.Text = categories.Count.ToString();
-            _lowStockValueLabel.Text = low.ToString();
-            _featuredValueLabel.Text = featured.ToString();
+            // Produtos = quantidade de produtos cadastrados.
+            // Estoque = soma das unidades disponíveis em todos os produtos.
+            // Categorias = quantidade de categorias cadastradas.
+            var productsCount = products.Count;
+            var stockCount = products.Sum(x => x.StockQuantity);
+            var categoriesCount = categories.Count;
+            var activeUsersCount = users.Count(x => x.IsActive);
 
-            _grid.DataSource = products.OrderByDescending(x => x.Id).Take(10)
+            cardGamesLblNumero.Text = productsCount.ToString("N0");
+            label2.Text = stockCount.ToString("N0");
+            cardCategoriasLblNumero.Text = categoriesCount.ToString("N0");
+            cardUsuariosLblNumero.Text = activeUsersCount.ToString("N0");
+
+            // Mostra os 10 produtos mais recentes abaixo dos cards.
+            _grid.DataSource = products
+                .OrderByDescending(x => x.Id)
+                .Take(10)
                 .Select(x => new
                 {
                     Produto = x.Title,
                     Categoria = x.CategoryName,
-                    Preço = x.Price.ToString("C2"),
+                    Preço = x.Price.ToString("C2", CultureInfo.CurrentCulture),
                     Estoque = x.StockQuantity,
-                    Status = x.StockQuantity == 0 ? "Sem estoque" : x.StockQuantity <= 5 ? "Estoque baixo" : "Disponível"
-                }).ToList();
+                    Status = x.StockQuantity == 0
+                        ? "Sem estoque"
+                        : x.StockQuantity <= 5
+                            ? "Estoque baixo"
+                            : "Disponível"
+                })
+                .ToList();
+
             _statusLabel.Text = $"Atualizado em {DateTime.Now:dd/MM/yyyy HH:mm}";
         }
         catch (Exception ex)
         {
-            _statusLabel.Text = ex.Message;
+            _statusLabel.Text = $"Erro ao atualizar: {ex.Message}";
         }
-    }
-
-    private void cardGames_Paint(object sender, PaintEventArgs e)
-    {
-
-    }
-
-    private void guna2Panel1_Paint(object sender, PaintEventArgs e)
-    {
-
-    }
-
-    private void cardCategorias_Paint(object sender, PaintEventArgs e)
-    {
-
     }
 }

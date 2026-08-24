@@ -1,59 +1,80 @@
-using AtelieDaTransformacao.Desktop.Themes;
+using Guna.UI2.WinForms.Suite;
 
 namespace AtelieDaTransformacao.Desktop.UserControls;
 
 partial class DashboardUserControl
 {
     private System.ComponentModel.IContainer? components = null;
+
     private Guna.UI2.WinForms.Guna2Panel _headerPanel = null!;
     private Label _welcomeLabel = null!;
     private Label _descriptionLabel = null!;
     private Guna.UI2.WinForms.Guna2Button _refreshButton = null!;
     private Label _statusLabel = null!;
     private Guna.UI2.WinForms.Guna2Panel _cardsPanel = null!;
-    private Guna.UI2.WinForms.Guna2Panel _productsCard = null!;
-    private Guna.UI2.WinForms.Guna2Panel _stockCard = null!;
-    private Guna.UI2.WinForms.Guna2Panel _categoriesCard = null!;
-    private Guna.UI2.WinForms.Guna2Panel _lowStockCard = null!;
-    private Guna.UI2.WinForms.Guna2Panel _featuredCard = null!;
-    private Label _productsCaptionLabel = null!;
-    private Label _productsValueLabel = null!;
-    private Label _stockCaptionLabel = null!;
-    private Label _stockValueLabel = null!;
-    private Label _categoriesCaptionLabel = null!;
-    private Label _categoriesValueLabel = null!;
-    private Label _lowStockCaptionLabel = null!;
-    private Label _lowStockValueLabel = null!;
-    private Label _featuredCaptionLabel = null!;
-    private Label _featuredValueLabel = null!;
+
+    private Guna.UI2.WinForms.Guna2Panel cardGames = null!;
+    private Guna.UI2.WinForms.Guna2Panel pnlCorGames = null!;
+    private Label cardGamesLblDesc = null!;
+    private Label cardGamesLblNumero = null!;
+    private Label cardGamesLblTitulo = null!;
+
+    private Guna.UI2.WinForms.Guna2Panel guna2Panel1 = null!;
+    private Guna.UI2.WinForms.Guna2Panel guna2Panel2 = null!;
+    private Label label1 = null!;
+    private Label label2 = null!;
+    private Label label3 = null!;
+
+    private Guna.UI2.WinForms.Guna2Panel cardCategorias = null!;
+    private Guna.UI2.WinForms.Guna2Panel pnlCorCategorias = null!;
+    private Label cardCategoriasLblNumero = null!;
+    private Label cardCategoriasLblTitulo = null!;
+    private Label cardCategoriasLblDesc = null!;
+
+    private Guna.UI2.WinForms.Guna2Panel cardUsuarios = null!;
+    private Guna.UI2.WinForms.Guna2Panel pnlCorUsuarios = null!;
+    private Label cardUsuariosLblNumero = null!;
+    private Label cardUsuariosLblTitulo = null!;
+    private Label cardUsuariosLblDesc = null!;
+
     private Guna.UI2.WinForms.Guna2Panel _tableCard = null!;
     private Label _tableTitle = null!;
     private Guna.UI2.WinForms.Guna2DataGridView _grid = null!;
 
-    protected override void Dispose(bool disposing) { if (disposing) components?.Dispose(); base.Dispose(disposing); }
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+            components?.Dispose();
+
+        base.Dispose(disposing);
+    }
 
     private void InitializeComponent()
     {
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges17 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges18 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges11 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges13 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges14 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges15 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges16 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges19 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges20 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        CustomizableEdges customizableEdges3 = new CustomizableEdges();
+        CustomizableEdges customizableEdges4 = new CustomizableEdges();
+        CustomizableEdges customizableEdges1 = new CustomizableEdges();
+        CustomizableEdges customizableEdges2 = new CustomizableEdges();
+        CustomizableEdges customizableEdges21 = new CustomizableEdges();
+        CustomizableEdges customizableEdges22 = new CustomizableEdges();
+        CustomizableEdges customizableEdges5 = new CustomizableEdges();
+        CustomizableEdges customizableEdges6 = new CustomizableEdges();
+        CustomizableEdges customizableEdges7 = new CustomizableEdges();
+        CustomizableEdges customizableEdges8 = new CustomizableEdges();
+        CustomizableEdges customizableEdges9 = new CustomizableEdges();
+        CustomizableEdges customizableEdges10 = new CustomizableEdges();
+        CustomizableEdges customizableEdges11 = new CustomizableEdges();
+        CustomizableEdges customizableEdges12 = new CustomizableEdges();
+        CustomizableEdges customizableEdges13 = new CustomizableEdges();
+        CustomizableEdges customizableEdges14 = new CustomizableEdges();
+        CustomizableEdges customizableEdges15 = new CustomizableEdges();
+        CustomizableEdges customizableEdges16 = new CustomizableEdges();
+        CustomizableEdges customizableEdges17 = new CustomizableEdges();
+        CustomizableEdges customizableEdges18 = new CustomizableEdges();
+        CustomizableEdges customizableEdges19 = new CustomizableEdges();
+        CustomizableEdges customizableEdges20 = new CustomizableEdges();
+        CustomizableEdges customizableEdges23 = new CustomizableEdges();
+        CustomizableEdges customizableEdges24 = new CustomizableEdges();
         DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
         DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
         _headerPanel = new Guna.UI2.WinForms.Guna2Panel();
@@ -62,39 +83,35 @@ partial class DashboardUserControl
         _descriptionLabel = new Label();
         _welcomeLabel = new Label();
         _cardsPanel = new Guna.UI2.WinForms.Guna2Panel();
-        guna2Panel2 = new Guna.UI2.WinForms.Guna2Panel();
-        guna2Panel1 = new Guna.UI2.WinForms.Guna2Panel();
-        label1 = new Label();
-        label2 = new Label();
-        label3 = new Label();
-        pnlCorGames = new Guna.UI2.WinForms.Guna2Panel();
-        cardGames = new Guna.UI2.WinForms.Guna2Panel();
-        cardGamesLblDesc = new Label();
-        cardGamesLblNumero = new Label();
-        cardGamesLblTitulo = new Label();
-        pnlCorCategorias = new Guna.UI2.WinForms.Guna2Panel();
+        cardUsuarios = new Guna.UI2.WinForms.Guna2Panel();
+        cardUsuariosLblNumero = new Label();
+        cardUsuariosLblTitulo = new Label();
+        cardUsuariosLblDesc = new Label();
+        pnlCorUsuarios = new Guna.UI2.WinForms.Guna2Panel();
         cardCategorias = new Guna.UI2.WinForms.Guna2Panel();
         cardCategoriasLblNumero = new Label();
         cardCategoriasLblTitulo = new Label();
         cardCategoriasLblDesc = new Label();
-        _productsCaptionLabel = new Label();
-        _productsValueLabel = new Label();
-        _stockCaptionLabel = new Label();
-        _stockValueLabel = new Label();
-        _categoriesCaptionLabel = new Label();
-        _categoriesValueLabel = new Label();
-        _lowStockCaptionLabel = new Label();
-        _lowStockValueLabel = new Label();
-        _featuredCaptionLabel = new Label();
-        _featuredValueLabel = new Label();
+        pnlCorCategorias = new Guna.UI2.WinForms.Guna2Panel();
+        guna2Panel1 = new Guna.UI2.WinForms.Guna2Panel();
+        label1 = new Label();
+        label2 = new Label();
+        label3 = new Label();
+        guna2Panel2 = new Guna.UI2.WinForms.Guna2Panel();
+        cardGames = new Guna.UI2.WinForms.Guna2Panel();
+        cardGamesLblDesc = new Label();
+        cardGamesLblNumero = new Label();
+        cardGamesLblTitulo = new Label();
+        pnlCorGames = new Guna.UI2.WinForms.Guna2Panel();
         _tableCard = new Guna.UI2.WinForms.Guna2Panel();
         _grid = new Guna.UI2.WinForms.Guna2DataGridView();
         _tableTitle = new Label();
         _headerPanel.SuspendLayout();
         _cardsPanel.SuspendLayout();
+        cardUsuarios.SuspendLayout();
+        cardCategorias.SuspendLayout();
         guna2Panel1.SuspendLayout();
         cardGames.SuspendLayout();
-        cardCategorias.SuspendLayout();
         _tableCard.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)_grid).BeginInit();
         SuspendLayout();
@@ -114,7 +131,7 @@ partial class DashboardUserControl
         _headerPanel.Name = "_headerPanel";
         _headerPanel.ShadowDecoration.CustomizableEdges = customizableEdges4;
         _headerPanel.Size = new Size(795, 82);
-        _headerPanel.TabIndex = 2;
+        _headerPanel.TabIndex = 0;
         // 
         // _statusLabel
         // 
@@ -124,9 +141,9 @@ partial class DashboardUserControl
         _statusLabel.ForeColor = Color.FromArgb(113, 120, 135);
         _statusLabel.Location = new Point(1430, 20);
         _statusLabel.Name = "_statusLabel";
-        _statusLabel.Size = new Size(130, 15);
+        _statusLabel.Size = new Size(78, 15);
         _statusLabel.TabIndex = 0;
-        _statusLabel.Text = "Resumo em tempo real";
+        _statusLabel.Text = "Carregando...";
         // 
         // _refreshButton
         // 
@@ -169,179 +186,108 @@ partial class DashboardUserControl
         // 
         _cardsPanel.BackColor = Color.White;
         _cardsPanel.BorderRadius = 15;
-        _cardsPanel.Controls.Add(guna2Panel2);
-        _cardsPanel.Controls.Add(guna2Panel1);
-        _cardsPanel.Controls.Add(pnlCorGames);
-        _cardsPanel.Controls.Add(cardGames);
-        _cardsPanel.Controls.Add(pnlCorCategorias);
+        _cardsPanel.Controls.Add(cardUsuarios);
+        _cardsPanel.Controls.Add(pnlCorUsuarios);
         _cardsPanel.Controls.Add(cardCategorias);
-        customizableEdges17.TopLeft = false;
-        customizableEdges17.TopRight = false;
-        _cardsPanel.CustomizableEdges = customizableEdges17;
+        _cardsPanel.Controls.Add(pnlCorCategorias);
+        _cardsPanel.Controls.Add(guna2Panel1);
+        _cardsPanel.Controls.Add(guna2Panel2);
+        _cardsPanel.Controls.Add(cardGames);
+        _cardsPanel.Controls.Add(pnlCorGames);
+        _cardsPanel.CustomizableEdges = customizableEdges21;
         _cardsPanel.Dock = DockStyle.Top;
         _cardsPanel.FillColor = Color.LightGray;
         _cardsPanel.Location = new Point(0, 82);
         _cardsPanel.Name = "_cardsPanel";
-        _cardsPanel.ShadowDecoration.CustomizableEdges = customizableEdges18;
-        _cardsPanel.Size = new Size(795, 122);
+        _cardsPanel.Padding = new Padding(28, 10, 28, 10);
+        _cardsPanel.ShadowDecoration.CustomizableEdges = customizableEdges22;
+        _cardsPanel.Size = new Size(795, 142);
         _cardsPanel.TabIndex = 1;
         // 
-        // guna2Panel2
+        // cardUsuarios
         // 
-        guna2Panel2.CustomizableEdges = customizableEdges5;
-        guna2Panel2.FillColor = Color.FromArgb(0, 77, 147);
-        guna2Panel2.Location = new Point(296, 1);
-        guna2Panel2.Name = "guna2Panel2";
-        guna2Panel2.ShadowDecoration.CustomizableEdges = customizableEdges6;
-        guna2Panel2.Size = new Size(210, 10);
-        guna2Panel2.TabIndex = 4;
+        cardUsuarios.BackColor = Color.Transparent;
+        cardUsuarios.BorderRadius = 10;
+        cardUsuarios.Controls.Add(cardUsuariosLblNumero);
+        cardUsuarios.Controls.Add(cardUsuariosLblTitulo);
+        cardUsuarios.Controls.Add(cardUsuariosLblDesc);
+        cardUsuarios.CustomizableEdges = customizableEdges5;
+        cardUsuarios.FillColor = Color.White;
+        cardUsuarios.Location = new Point(590, 12);
+        cardUsuarios.Name = "cardUsuarios";
+        cardUsuarios.ShadowDecoration.CustomizableEdges = customizableEdges6;
+        cardUsuarios.Size = new Size(180, 118);
+        cardUsuarios.TabIndex = 8;
         // 
-        // guna2Panel1
+        // cardUsuariosLblNumero
         // 
-        guna2Panel1.BackColor = Color.Transparent;
-        guna2Panel1.BorderRadius = 10;
-        guna2Panel1.Controls.Add(label1);
-        guna2Panel1.Controls.Add(label2);
-        guna2Panel1.Controls.Add(label3);
-        guna2Panel1.CustomizableEdges = customizableEdges7;
-        guna2Panel1.FillColor = Color.Transparent;
-        guna2Panel1.Location = new Point(296, 9);
-        guna2Panel1.Name = "guna2Panel1";
-        guna2Panel1.ShadowDecoration.CustomizableEdges = customizableEdges8;
-        guna2Panel1.Size = new Size(210, 112);
-        guna2Panel1.TabIndex = 6;
-        guna2Panel1.Paint += guna2Panel1_Paint;
+        cardUsuariosLblNumero.AutoSize = true;
+        cardUsuariosLblNumero.BackColor = Color.Transparent;
+        cardUsuariosLblNumero.Font = new Font("Segoe UI", 24F, FontStyle.Bold);
+        cardUsuariosLblNumero.Location = new Point(20, 38);
+        cardUsuariosLblNumero.Name = "cardUsuariosLblNumero";
+        cardUsuariosLblNumero.Size = new Size(38, 45);
+        cardUsuariosLblNumero.TabIndex = 0;
+        cardUsuariosLblNumero.Text = "0";
         // 
-        // label1
+        // cardUsuariosLblTitulo
         // 
-        label1.AutoSize = true;
-        label1.BackColor = Color.Transparent;
-        label1.Font = new Font("Century Gothic", 8.25F);
-        label1.ForeColor = SystemColors.ActiveCaptionText;
-        label1.Location = new Point(12, 83);
-        label1.Name = "label1";
-        label1.Size = new Size(166, 16);
-        label1.TabIndex = 3;
-        label1.Text = "Total de produtos no estoque";
+        cardUsuariosLblTitulo.AutoSize = true;
+        cardUsuariosLblTitulo.BackColor = Color.Transparent;
+        cardUsuariosLblTitulo.Font = new Font("Century Gothic", 12F, FontStyle.Bold);
+        cardUsuariosLblTitulo.ForeColor = Color.FromArgb(108, 76, 52);
+        cardUsuariosLblTitulo.Location = new Point(20, 19);
+        cardUsuariosLblTitulo.Name = "cardUsuariosLblTitulo";
+        cardUsuariosLblTitulo.Size = new Size(143, 19);
+        cardUsuariosLblTitulo.TabIndex = 1;
+        cardUsuariosLblTitulo.Text = "👥 Usuários ativos";
         // 
-        // label2
+        // cardUsuariosLblDesc
         // 
-        label2.AutoSize = true;
-        label2.BackColor = Color.Transparent;
-        label2.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
-        label2.Location = new Point(12, 38);
-        label2.Name = "label2";
-        label2.Size = new Size(38, 45);
-        label2.TabIndex = 2;
-        label2.Text = "0";
+        cardUsuariosLblDesc.AutoSize = true;
+        cardUsuariosLblDesc.BackColor = Color.Transparent;
+        cardUsuariosLblDesc.Font = new Font("Century Gothic", 8.25F);
+        cardUsuariosLblDesc.ForeColor = Color.Black;
+        cardUsuariosLblDesc.Location = new Point(20, 83);
+        cardUsuariosLblDesc.Name = "cardUsuariosLblDesc";
+        cardUsuariosLblDesc.Size = new Size(142, 16);
+        cardUsuariosLblDesc.TabIndex = 2;
+        cardUsuariosLblDesc.Text = "Contas ativas no sistema";
         // 
-        // label3
+        // pnlCorUsuarios
         // 
-        label3.AutoSize = true;
-        label3.BackColor = Color.Transparent;
-        label3.Font = new Font("Century Gothic", 12F, FontStyle.Bold);
-        label3.ForeColor = Color.FromArgb(0, 77, 147);
-        label3.Location = new Point(12, 19);
-        label3.Name = "label3";
-        label3.Size = new Size(92, 19);
-        label3.TabIndex = 1;
-        label3.Text = "📦 Estoque";
-        // 
-        // pnlCorGames
-        // 
-        pnlCorGames.CustomizableEdges = customizableEdges9;
-        pnlCorGames.FillColor = Color.FromArgb(0, 77, 147);
-        pnlCorGames.Location = new Point(28, 1);
-        pnlCorGames.Name = "pnlCorGames";
-        pnlCorGames.ShadowDecoration.CustomizableEdges = customizableEdges10;
-        pnlCorGames.Size = new Size(210, 10);
-        pnlCorGames.TabIndex = 2;
-        // 
-        // cardGames
-        // 
-        cardGames.BackColor = Color.Transparent;
-        cardGames.BorderRadius = 10;
-        cardGames.Controls.Add(cardGamesLblDesc);
-        cardGames.Controls.Add(cardGamesLblNumero);
-        cardGames.Controls.Add(cardGamesLblTitulo);
-        cardGames.CustomizableEdges = customizableEdges11;
-        cardGames.FillColor = Color.Transparent;
-        cardGames.Location = new Point(28, 2);
-        cardGames.Name = "cardGames";
-        cardGames.ShadowDecoration.CustomizableEdges = customizableEdges12;
-        cardGames.Size = new Size(210, 118);
-        cardGames.TabIndex = 4;
-        cardGames.Paint += cardGames_Paint;
-        // 
-        // cardGamesLblDesc
-        // 
-        cardGamesLblDesc.AutoSize = true;
-        cardGamesLblDesc.BackColor = Color.Transparent;
-        cardGamesLblDesc.Font = new Font("Century Gothic", 8.25F);
-        cardGamesLblDesc.ForeColor = SystemColors.ActiveCaptionText;
-        cardGamesLblDesc.Location = new Point(12, 83);
-        cardGamesLblDesc.Name = "cardGamesLblDesc";
-        cardGamesLblDesc.Size = new Size(174, 16);
-        cardGamesLblDesc.TabIndex = 3;
-        cardGamesLblDesc.Text = "Total de produtos cadastrados";
-        // 
-        // cardGamesLblNumero
-        // 
-        cardGamesLblNumero.AutoSize = true;
-        cardGamesLblNumero.BackColor = Color.Transparent;
-        cardGamesLblNumero.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
-        cardGamesLblNumero.Location = new Point(12, 38);
-        cardGamesLblNumero.Name = "cardGamesLblNumero";
-        cardGamesLblNumero.Size = new Size(38, 45);
-        cardGamesLblNumero.TabIndex = 2;
-        cardGamesLblNumero.Text = "0";
-        // 
-        // cardGamesLblTitulo
-        // 
-        cardGamesLblTitulo.AutoSize = true;
-        cardGamesLblTitulo.BackColor = Color.Transparent;
-        cardGamesLblTitulo.Font = new Font("Century Gothic", 12F, FontStyle.Bold);
-        cardGamesLblTitulo.ForeColor = Color.FromArgb(0, 77, 147);
-        cardGamesLblTitulo.Location = new Point(12, 19);
-        cardGamesLblTitulo.Name = "cardGamesLblTitulo";
-        cardGamesLblTitulo.Size = new Size(98, 19);
-        cardGamesLblTitulo.TabIndex = 1;
-        cardGamesLblTitulo.Text = "\U0001fab5 Produtos";
-        // 
-        // pnlCorCategorias
-        // 
-        pnlCorCategorias.CustomizableEdges = customizableEdges13;
-        pnlCorCategorias.FillColor = Color.FromArgb(248, 148, 27);
-        pnlCorCategorias.Location = new Point(551, 1);
-        pnlCorCategorias.Name = "pnlCorCategorias";
-        pnlCorCategorias.ShadowDecoration.CustomizableEdges = customizableEdges14;
-        pnlCorCategorias.Size = new Size(210, 10);
-        pnlCorCategorias.TabIndex = 5;
+        pnlCorUsuarios.CustomizableEdges = customizableEdges7;
+        pnlCorUsuarios.FillColor = Color.FromArgb(108, 76, 52);
+        pnlCorUsuarios.Location = new Point(590, 12);
+        pnlCorUsuarios.Name = "pnlCorUsuarios";
+        pnlCorUsuarios.ShadowDecoration.CustomizableEdges = customizableEdges8;
+        pnlCorUsuarios.Size = new Size(180, 10);
+        pnlCorUsuarios.TabIndex = 9;
         // 
         // cardCategorias
         // 
         cardCategorias.BackColor = Color.Transparent;
+        cardCategorias.BorderRadius = 10;
         cardCategorias.Controls.Add(cardCategoriasLblNumero);
         cardCategorias.Controls.Add(cardCategoriasLblTitulo);
         cardCategorias.Controls.Add(cardCategoriasLblDesc);
-        cardCategorias.CustomizableEdges = customizableEdges15;
-        cardCategorias.FillColor = Color.Transparent;
-        cardCategorias.Location = new Point(551, 1);
+        cardCategorias.CustomizableEdges = customizableEdges9;
+        cardCategorias.FillColor = Color.White;
+        cardCategorias.Location = new Point(400, 12);
         cardCategorias.Name = "cardCategorias";
-        cardCategorias.ShadowDecoration.CustomizableEdges = customizableEdges16;
-        cardCategorias.Size = new Size(210, 120);
-        cardCategorias.TabIndex = 3;
-        cardCategorias.Paint += cardCategorias_Paint;
+        cardCategorias.ShadowDecoration.CustomizableEdges = customizableEdges10;
+        cardCategorias.Size = new Size(180, 118);
+        cardCategorias.TabIndex = 6;
         // 
         // cardCategoriasLblNumero
         // 
         cardCategoriasLblNumero.AutoSize = true;
         cardCategoriasLblNumero.BackColor = Color.Transparent;
-        cardCategoriasLblNumero.Font = new Font("Segoe UI", 24F, FontStyle.Bold, GraphicsUnit.Point, 0);
+        cardCategoriasLblNumero.Font = new Font("Segoe UI", 24F, FontStyle.Bold);
         cardCategoriasLblNumero.Location = new Point(20, 38);
         cardCategoriasLblNumero.Name = "cardCategoriasLblNumero";
         cardCategoriasLblNumero.Size = new Size(38, 45);
-        cardCategoriasLblNumero.TabIndex = 2;
+        cardCategoriasLblNumero.TabIndex = 0;
         cardCategoriasLblNumero.Text = "0";
         // 
         // cardCategoriasLblTitulo
@@ -361,82 +307,142 @@ partial class DashboardUserControl
         cardCategoriasLblDesc.AutoSize = true;
         cardCategoriasLblDesc.BackColor = Color.Transparent;
         cardCategoriasLblDesc.Font = new Font("Century Gothic", 8.25F);
-        cardCategoriasLblDesc.ForeColor = SystemColors.ActiveCaptionText;
+        cardCategoriasLblDesc.ForeColor = Color.Black;
         cardCategoriasLblDesc.Location = new Point(20, 83);
         cardCategoriasLblDesc.Name = "cardCategoriasLblDesc";
         cardCategoriasLblDesc.Size = new Size(111, 16);
-        cardCategoriasLblDesc.TabIndex = 0;
+        cardCategoriasLblDesc.TabIndex = 2;
         cardCategoriasLblDesc.Text = "Total de categorias";
         // 
-        // _productsCaptionLabel
+        // pnlCorCategorias
         // 
-        _productsCaptionLabel.Location = new Point(0, 0);
-        _productsCaptionLabel.Name = "_productsCaptionLabel";
-        _productsCaptionLabel.Size = new Size(100, 23);
-        _productsCaptionLabel.TabIndex = 0;
+        pnlCorCategorias.CustomizableEdges = customizableEdges11;
+        pnlCorCategorias.FillColor = Color.FromArgb(248, 148, 27);
+        pnlCorCategorias.Location = new Point(400, 12);
+        pnlCorCategorias.Name = "pnlCorCategorias";
+        pnlCorCategorias.ShadowDecoration.CustomizableEdges = customizableEdges12;
+        pnlCorCategorias.Size = new Size(180, 10);
+        pnlCorCategorias.TabIndex = 7;
         // 
-        // _productsValueLabel
+        // guna2Panel1
         // 
-        _productsValueLabel.Location = new Point(0, 0);
-        _productsValueLabel.Name = "_productsValueLabel";
-        _productsValueLabel.Size = new Size(100, 23);
-        _productsValueLabel.TabIndex = 0;
+        guna2Panel1.BackColor = Color.Transparent;
+        guna2Panel1.BorderRadius = 10;
+        guna2Panel1.Controls.Add(label1);
+        guna2Panel1.Controls.Add(label2);
+        guna2Panel1.Controls.Add(label3);
+        guna2Panel1.CustomizableEdges = customizableEdges13;
+        guna2Panel1.FillColor = Color.White;
+        guna2Panel1.Location = new Point(210, 12);
+        guna2Panel1.Name = "guna2Panel1";
+        guna2Panel1.ShadowDecoration.CustomizableEdges = customizableEdges14;
+        guna2Panel1.Size = new Size(180, 118);
+        guna2Panel1.TabIndex = 4;
         // 
-        // _stockCaptionLabel
+        // label1
         // 
-        _stockCaptionLabel.Location = new Point(0, 0);
-        _stockCaptionLabel.Name = "_stockCaptionLabel";
-        _stockCaptionLabel.Size = new Size(100, 23);
-        _stockCaptionLabel.TabIndex = 0;
+        label1.AutoSize = true;
+        label1.BackColor = Color.Transparent;
+        label1.Font = new Font("Century Gothic", 8.25F);
+        label1.ForeColor = Color.Black;
+        label1.Location = new Point(5, 83);
+        label1.Name = "label1";
+        label1.Size = new Size(172, 16);
+        label1.TabIndex = 0;
+        label1.Text = "Total de unidades em estoque";
         // 
-        // _stockValueLabel
+        // label2
         // 
-        _stockValueLabel.Location = new Point(0, 0);
-        _stockValueLabel.Name = "_stockValueLabel";
-        _stockValueLabel.Size = new Size(100, 23);
-        _stockValueLabel.TabIndex = 0;
+        label2.AutoSize = true;
+        label2.BackColor = Color.Transparent;
+        label2.Font = new Font("Segoe UI", 24F, FontStyle.Bold);
+        label2.Location = new Point(12, 38);
+        label2.Name = "label2";
+        label2.Size = new Size(38, 45);
+        label2.TabIndex = 1;
+        label2.Text = "0";
         // 
-        // _categoriesCaptionLabel
+        // label3
         // 
-        _categoriesCaptionLabel.Location = new Point(0, 0);
-        _categoriesCaptionLabel.Name = "_categoriesCaptionLabel";
-        _categoriesCaptionLabel.Size = new Size(100, 23);
-        _categoriesCaptionLabel.TabIndex = 0;
+        label3.AutoSize = true;
+        label3.BackColor = Color.Transparent;
+        label3.Font = new Font("Century Gothic", 12F, FontStyle.Bold);
+        label3.ForeColor = Color.FromArgb(0, 77, 147);
+        label3.Location = new Point(12, 19);
+        label3.Name = "label3";
+        label3.Size = new Size(92, 19);
+        label3.TabIndex = 2;
+        label3.Text = "📦 Estoque";
         // 
-        // _categoriesValueLabel
+        // guna2Panel2
         // 
-        _categoriesValueLabel.Location = new Point(0, 0);
-        _categoriesValueLabel.Name = "_categoriesValueLabel";
-        _categoriesValueLabel.Size = new Size(100, 23);
-        _categoriesValueLabel.TabIndex = 0;
+        guna2Panel2.CustomizableEdges = customizableEdges15;
+        guna2Panel2.FillColor = Color.FromArgb(0, 77, 147);
+        guna2Panel2.Location = new Point(210, 12);
+        guna2Panel2.Name = "guna2Panel2";
+        guna2Panel2.ShadowDecoration.CustomizableEdges = customizableEdges16;
+        guna2Panel2.Size = new Size(180, 10);
+        guna2Panel2.TabIndex = 5;
         // 
-        // _lowStockCaptionLabel
+        // cardGames
         // 
-        _lowStockCaptionLabel.Location = new Point(0, 0);
-        _lowStockCaptionLabel.Name = "_lowStockCaptionLabel";
-        _lowStockCaptionLabel.Size = new Size(100, 23);
-        _lowStockCaptionLabel.TabIndex = 0;
+        cardGames.BackColor = Color.Transparent;
+        cardGames.BorderRadius = 10;
+        cardGames.Controls.Add(cardGamesLblDesc);
+        cardGames.Controls.Add(cardGamesLblNumero);
+        cardGames.Controls.Add(cardGamesLblTitulo);
+        cardGames.CustomizableEdges = customizableEdges17;
+        cardGames.FillColor = Color.White;
+        cardGames.Location = new Point(20, 12);
+        cardGames.Name = "cardGames";
+        cardGames.ShadowDecoration.CustomizableEdges = customizableEdges18;
+        cardGames.Size = new Size(180, 118);
+        cardGames.TabIndex = 2;
         // 
-        // _lowStockValueLabel
+        // cardGamesLblDesc
         // 
-        _lowStockValueLabel.Location = new Point(0, 0);
-        _lowStockValueLabel.Name = "_lowStockValueLabel";
-        _lowStockValueLabel.Size = new Size(100, 23);
-        _lowStockValueLabel.TabIndex = 0;
+        cardGamesLblDesc.AutoSize = true;
+        cardGamesLblDesc.BackColor = Color.Transparent;
+        cardGamesLblDesc.Font = new Font("Century Gothic", 8.25F);
+        cardGamesLblDesc.ForeColor = Color.Black;
+        cardGamesLblDesc.Location = new Point(4, 83);
+        cardGamesLblDesc.Name = "cardGamesLblDesc";
+        cardGamesLblDesc.Size = new Size(174, 16);
+        cardGamesLblDesc.TabIndex = 0;
+        cardGamesLblDesc.Text = "Total de produtos cadastrados";
         // 
-        // _featuredCaptionLabel
+        // cardGamesLblNumero
         // 
-        _featuredCaptionLabel.Location = new Point(0, 0);
-        _featuredCaptionLabel.Name = "_featuredCaptionLabel";
-        _featuredCaptionLabel.Size = new Size(100, 23);
-        _featuredCaptionLabel.TabIndex = 0;
+        cardGamesLblNumero.AutoSize = true;
+        cardGamesLblNumero.BackColor = Color.Transparent;
+        cardGamesLblNumero.Font = new Font("Segoe UI", 24F, FontStyle.Bold);
+        cardGamesLblNumero.Location = new Point(12, 38);
+        cardGamesLblNumero.Name = "cardGamesLblNumero";
+        cardGamesLblNumero.Size = new Size(38, 45);
+        cardGamesLblNumero.TabIndex = 1;
+        cardGamesLblNumero.Text = "0";
         // 
-        // _featuredValueLabel
+        // cardGamesLblTitulo
         // 
-        _featuredValueLabel.Location = new Point(0, 0);
-        _featuredValueLabel.Name = "_featuredValueLabel";
-        _featuredValueLabel.Size = new Size(100, 23);
-        _featuredValueLabel.TabIndex = 0;
+        cardGamesLblTitulo.AutoSize = true;
+        cardGamesLblTitulo.BackColor = Color.Transparent;
+        cardGamesLblTitulo.Font = new Font("Century Gothic", 12F, FontStyle.Bold);
+        cardGamesLblTitulo.ForeColor = Color.FromArgb(0, 77, 147);
+        cardGamesLblTitulo.Location = new Point(12, 19);
+        cardGamesLblTitulo.Name = "cardGamesLblTitulo";
+        cardGamesLblTitulo.Size = new Size(98, 19);
+        cardGamesLblTitulo.TabIndex = 2;
+        cardGamesLblTitulo.Text = "\U0001f9f5 Produtos";
+        // 
+        // pnlCorGames
+        // 
+        pnlCorGames.CustomizableEdges = customizableEdges19;
+        pnlCorGames.FillColor = Color.FromArgb(0, 77, 147);
+        pnlCorGames.Location = new Point(20, 12);
+        pnlCorGames.Name = "pnlCorGames";
+        pnlCorGames.ShadowDecoration.CustomizableEdges = customizableEdges20;
+        pnlCorGames.Size = new Size(180, 10);
+        pnlCorGames.TabIndex = 3;
         // 
         // _tableCard
         // 
@@ -446,55 +452,62 @@ partial class DashboardUserControl
         _tableCard.BorderThickness = 1;
         _tableCard.Controls.Add(_grid);
         _tableCard.Controls.Add(_tableTitle);
-        _tableCard.CustomizableEdges = customizableEdges19;
+        _tableCard.CustomizableEdges = customizableEdges23;
         _tableCard.Dock = DockStyle.Fill;
         _tableCard.FillColor = Color.White;
-        _tableCard.Location = new Point(0, 204);
+        _tableCard.Location = new Point(0, 224);
         _tableCard.Name = "_tableCard";
         _tableCard.Padding = new Padding(16);
-        _tableCard.ShadowDecoration.CustomizableEdges = customizableEdges20;
-        _tableCard.Size = new Size(795, 354);
-        _tableCard.TabIndex = 0;
+        _tableCard.ShadowDecoration.CustomizableEdges = customizableEdges24;
+        _tableCard.Size = new Size(795, 334);
+        _tableCard.TabIndex = 10;
         // 
         // _grid
         // 
         _grid.AllowUserToAddRows = false;
-        _grid.BorderStyle = BorderStyle.FixedSingle;
-        _grid.CellBorderStyle = DataGridViewCellBorderStyle.Single;
+        _grid.AllowUserToDeleteRows = false;
+        _grid.AllowUserToResizeRows = false;
         _grid.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+        dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+        dataGridViewCellStyle1.BackColor = Color.FromArgb(245, 247, 251);
+        dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+        dataGridViewCellStyle1.ForeColor = Color.FromArgb(55, 61, 72);
+        dataGridViewCellStyle1.SelectionBackColor = Color.FromArgb(245, 247, 251);
+        dataGridViewCellStyle1.SelectionForeColor = Color.FromArgb(55, 61, 72);
+        dataGridViewCellStyle1.WrapMode = DataGridViewTriState.False;
         _grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
-        _grid.ColumnHeadersHeight = 42;
-        _grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
+        _grid.ColumnHeadersHeight = 38;
         dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-        dataGridViewCellStyle2.BackColor = SystemColors.Window;
+        dataGridViewCellStyle2.BackColor = Color.White;
         dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
-        dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-        dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(225, 225, 225);
-        dataGridViewCellStyle2.SelectionForeColor = Color.Black;
+        dataGridViewCellStyle2.ForeColor = Color.FromArgb(45, 49, 56);
+        dataGridViewCellStyle2.SelectionBackColor = Color.FromArgb(235, 238, 244);
+        dataGridViewCellStyle2.SelectionForeColor = Color.FromArgb(45, 49, 56);
         dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
         _grid.DefaultCellStyle = dataGridViewCellStyle2;
         _grid.Dock = DockStyle.Fill;
-        _grid.GridColor = Color.Black;
+        _grid.GridColor = Color.FromArgb(230, 233, 238);
         _grid.Location = new Point(16, 50);
         _grid.MultiSelect = false;
         _grid.Name = "_grid";
+        _grid.ReadOnly = true;
         _grid.RowHeadersVisible = false;
-        _grid.RowTemplate.Height = 40;
-        _grid.Size = new Size(763, 288);
+        _grid.RowTemplate.Height = 38;
+        _grid.Size = new Size(763, 268);
         _grid.TabIndex = 0;
-        _grid.ThemeStyle.GridColor = Color.Black;
-        _grid.ThemeStyle.HeaderStyle.BackColor = Color.Empty;
+        _grid.ThemeStyle.GridColor = Color.FromArgb(230, 233, 238);
+        _grid.ThemeStyle.HeaderStyle.BackColor = Color.FromArgb(245, 247, 251);
         _grid.ThemeStyle.HeaderStyle.BorderStyle = DataGridViewHeaderBorderStyle.Single;
-        _grid.ThemeStyle.HeaderStyle.Font = null;
-        _grid.ThemeStyle.HeaderStyle.ForeColor = Color.Empty;
-        _grid.ThemeStyle.HeaderStyle.Height = 42;
-        _grid.ThemeStyle.RowsStyle.BackColor = SystemColors.Window;
-        _grid.ThemeStyle.RowsStyle.BorderStyle = DataGridViewCellBorderStyle.Single;
+        _grid.ThemeStyle.HeaderStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+        _grid.ThemeStyle.HeaderStyle.ForeColor = Color.FromArgb(55, 61, 72);
+        _grid.ThemeStyle.HeaderStyle.HeaightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+        _grid.ThemeStyle.HeaderStyle.Height = 38;
+        _grid.ThemeStyle.ReadOnly = true;
         _grid.ThemeStyle.RowsStyle.Font = new Font("Segoe UI", 9F);
-        _grid.ThemeStyle.RowsStyle.ForeColor = SystemColors.ControlText;
-        _grid.ThemeStyle.RowsStyle.Height = 40;
-        _grid.ThemeStyle.RowsStyle.SelectionBackColor = Color.FromArgb(225, 225, 225);
-        _grid.ThemeStyle.RowsStyle.SelectionForeColor = Color.Black;
+        _grid.ThemeStyle.RowsStyle.ForeColor = Color.FromArgb(45, 49, 56);
+        _grid.ThemeStyle.RowsStyle.Height = 38;
+        _grid.ThemeStyle.RowsStyle.SelectionBackColor = Color.FromArgb(235, 238, 244);
+        _grid.ThemeStyle.RowsStyle.SelectionForeColor = Color.FromArgb(45, 49, 56);
         // 
         // _tableTitle
         // 
@@ -519,36 +532,16 @@ partial class DashboardUserControl
         _headerPanel.ResumeLayout(false);
         _headerPanel.PerformLayout();
         _cardsPanel.ResumeLayout(false);
+        cardUsuarios.ResumeLayout(false);
+        cardUsuarios.PerformLayout();
+        cardCategorias.ResumeLayout(false);
+        cardCategorias.PerformLayout();
         guna2Panel1.ResumeLayout(false);
         guna2Panel1.PerformLayout();
         cardGames.ResumeLayout(false);
         cardGames.PerformLayout();
-        cardCategorias.ResumeLayout(false);
-        cardCategorias.PerformLayout();
         _tableCard.ResumeLayout(false);
         ((System.ComponentModel.ISupportInitialize)_grid).EndInit();
         ResumeLayout(false);
     }
-
-    private static Guna.UI2.WinForms.Guna2Panel MakeCard() => new() { Width = 205, Height = 106, BorderRadius = 12, BorderThickness = 1, BorderColor = LibraryTheme.Border, FillColor = Color.White };
-    private void AddCard(Guna.UI2.WinForms.Guna2Panel card, Label caption, Label value, string title, string initial, int x)
-    {
-        card.Location = new Point(x, 5); card.Anchor = AnchorStyles.Top | AnchorStyles.Left; caption.AutoSize = true; caption.Text = title; caption.Font = new Font("Segoe UI", 8F, FontStyle.Bold); caption.ForeColor = LibraryTheme.Muted; caption.Location = new Point(18, 15); value.AutoSize = true; value.Text = initial; value.Font = new Font("Segoe UI", 22F, FontStyle.Bold); value.ForeColor = LibraryTheme.Text; value.Location = new Point(18, 37); card.Controls.Add(value); card.Controls.Add(caption); _cardsPanel.Controls.Add(card);
-    }
-
-    private Guna.UI2.WinForms.Guna2Panel pnlCorCategorias;
-    private Guna.UI2.WinForms.Guna2Panel cardCategorias;
-    private Label cardCategoriasLblNumero;
-    private Label cardCategoriasLblTitulo;
-    private Label cardCategoriasLblDesc;
-    private Guna.UI2.WinForms.Guna2Panel cardGames;
-    private Guna.UI2.WinForms.Guna2Panel pnlCorGames;
-    private Label cardGamesLblDesc;
-    private Label cardGamesLblNumero;
-    private Label cardGamesLblTitulo;
-    private Guna.UI2.WinForms.Guna2Panel guna2Panel2;
-    private Guna.UI2.WinForms.Guna2Panel guna2Panel1;
-    private Label label1;
-    private Label label2;
-    private Label label3;
 }
