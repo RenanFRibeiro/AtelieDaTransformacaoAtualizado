@@ -39,11 +39,12 @@
                 <div class="d-flex flex-wrap gap-2">
                     @foreach (var status in Enum.GetValues<OrderStatus>())
                     {
-                        <span class="badge rounded-pill px-3 py-2 @(status == Model.Status ? "bg-dark" : "bg-light text-dark")">
-                            @status.Label()
+                        <span class="badge order-status-badge status-@status.ToString().ToLowerInvariant().Replace(" ", "-") rounded-pill px-3 py-2 d-inline-flex align-items-center gap-1">
+                            <i class="bi @status.Icon()"></i>
+                            <span>@status.Label()</span>
                         </span>
                     }
-                </div>
+               </div>
             </div>
         </div>
 
