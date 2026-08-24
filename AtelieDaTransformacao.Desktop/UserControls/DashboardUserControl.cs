@@ -49,4 +49,19 @@ public partial class DashboardUserControl : UserControl
             _statusLabel.Text = ex.Message;
         }
     }
+
+    private void cardGames_Paint(object sender, PaintEventArgs e)
+    {
+
+    }
+
+    private void guna2Panel1_Paint(object sender, PaintEventArgs e)
+    {
+
+    }
+
+    private void cardCategorias_Paint(object sender, PaintEventArgs e)
+    {
+
+    }
 }
