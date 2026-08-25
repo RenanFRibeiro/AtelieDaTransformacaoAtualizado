@@ -1,116 +1,164 @@
-using System.Threading.Tasks;
+using System.Security.Claims;
+using AtelieDaTransformacao.Application.DTOs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using AtelieDaTransformacao.Application.DTOs;
 
 namespace AtelieDaTransformacao.UI.Controllers;
 
-/// <summary>
-/// Controller responsável pela gestão de autenticação de utilizadores (Login, Registo e Logout).
-/// </summary>
 public class AccountController : Controller
 {
+    private const string RegistrationReasonKey = "RegistrationReason";
+
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly UserManager<IdentityUser> _userManager;
 
-    public AccountController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
+    public AccountController(
+        SignInManager<IdentityUser> signInManager,
+        UserManager<IdentityUser> userManager)
     {
         _signInManager = signInManager;
         _userManager = userManager;
     }
 
-    /// <summary>
-    /// Exibe a página de login do sistema.
-    /// </summary>
     [HttpGet]
-    public IActionResult Login()
+    public IActionResult Login(string? returnUrl = null)
     {
-        return View();
+        ViewBag.ReturnUrl = SafeReturnUrl(returnUrl);
+        return View(new LoginDto());
     }
 
-    /// <summary>
-    /// Processa a tentativa de login do utilizador.
-    /// </summary>
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Login(LoginDto model, string returnUrl = null)
+    public async Task<IActionResult> Login(LoginDto model, string? returnUrl = null)
     {
-        if (!ModelState.IsValid) return View(model);
+        ViewBag.ReturnUrl = SafeReturnUrl(returnUrl);
 
-        var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, isPersistent: false, lockoutOnFailure: false);
+        if (!ModelState.IsValid)
+            return View(model);
+
+        var result = await _signInManager.PasswordSignInAsync(
+            model.Email.Trim(),
+            model.Password,
+            isPersistent: false,
+            lockoutOnFailure: false);
 
         if (result.Succeeded)
         {
-            // Proteção: Se a rota anterior gravada na memória tentar empurrar o utilizador para o /Admin,
-            // e ele for um utilizador comum, ignoramos o redirecionamento antigo e mandamos para a Vitrina (Home)
-            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl) && !returnUrl.Contains("/Admin"))
-            {
-                return Redirect(returnUrl);
-            }
+            var safeReturnUrl = SafeReturnUrl(returnUrl);
+            if (!string.IsNullOrWhiteSpace(safeReturnUrl))
+                return Redirect(safeReturnUrl);
 
-            // Caso contrário, vai direto para a página pública
             return RedirectToAction("Index", "Home");
         }
 
-        ModelState.AddModelError(string.Empty, "Dados de acesso inválidos.");
+        if (result.IsLockedOut)
+        {
+            ModelState.AddModelError(string.Empty,
+                "Esta conta está temporariamente bloqueada. Tente novamente mais tarde.");
+        }
+        else
+        {
+            ModelState.AddModelError(string.Empty,
+                "E-mail ou senha inválidos.");
+        }
+
         return View(model);
     }
 
-    /// <summary>
-    /// Exibe a página de registo de novos perfis.
-    /// </summary>
     [HttpGet]
-    public IActionResult Register(string returnUrl = null)
+    public IActionResult Register(string? returnUrl = null)
     {
-        ViewBag.RegistrationReason = TempData.Peek("RegistrationReason") as string;
-        ViewBag.ReturnUrl = returnUrl;
+        ViewBag.RegistrationReason = TempData.Peek(RegistrationReasonKey) as string;
+        ViewBag.ReturnUrl = SafeReturnUrl(returnUrl);
 
         return View(new RegisterDto());
     }
 
-    /// <summary>
-    /// Regista um novo utilizador no sistema utilizando Identity e redireciona para a Vitrina.
-    /// </summary>
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Register(RegisterDto model, string returnUrl = null)
+    public async Task<IActionResult> Register(RegisterDto model, string? returnUrl = null)
     {
-        ViewBag.RegistrationReason = TempData.Peek("RegistrationReason") as string;
-        ViewBag.ReturnUrl = returnUrl;
+        ViewBag.RegistrationReason = TempData.Peek(RegistrationReasonKey) as string;
+        ViewBag.ReturnUrl = SafeReturnUrl(returnUrl);
 
-        if (!ModelState.IsValid) return View(model);
+        if (!ModelState.IsValid)
+            return View(model);
 
-        var user = new IdentityUser { UserName = model.Email, Email = model.Email };
+        model.FirstName = model.FirstName.Trim();
+        model.LastName = model.LastName.Trim();
+        model.Phone = model.Phone.Trim();
+        model.Address = model.Address.Trim();
+        model.AddressNumber = model.AddressNumber.Trim();
+        model.Complement = model.Complement.Trim();
+        model.District = model.District.Trim();
+        model.City = model.City.Trim();
+        model.State = model.State.Trim().ToUpperInvariant();
+        model.PostalCode = model.PostalCode.Trim();
+        model.Email = model.Email.Trim().ToLowerInvariant();
+
+        var existing = await _userManager.FindByEmailAsync(model.Email);
+        if (existing != null)
+        {
+            ModelState.AddModelError(nameof(model.Email),
+                "Já existe uma conta com este e-mail. Faça login para continuar.");
+            return View(model);
+        }
+
+        var user = new IdentityUser
+        {
+            UserName = model.Email,
+            Email = model.Email,
+            PhoneNumber = model.Phone
+        };
+
         var result = await _userManager.CreateAsync(user, model.Password);
 
-        if (result.Succeeded)
+        if (!result.Succeeded)
         {
-            // Efetua o login automático logo após a criação da conta
-            await _signInManager.SignInAsync(user, isPersistent: false);
+            foreach (var error in result.Errors)
+                ModelState.AddModelError(string.Empty, FriendlyIdentityError(error));
 
-            // Se o cadastro foi iniciado ao tentar entrar em contato com o vendedor,
-            // volta para a ação original. Como o usuário já está autenticado,
-            // ContactSeller liberará o redirecionamento para o WhatsApp.
-            if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-
-            return RedirectToAction("Index", "Home");
+            return View(model);
         }
 
-        foreach (var error in result.Errors)
+        var claims = new[]
         {
-            ModelState.AddModelError(string.Empty, error.Description);
+            new Claim(ClaimTypes.GivenName, model.FirstName),
+            new Claim(ClaimTypes.Surname, model.LastName),
+            new Claim(ClaimTypes.MobilePhone, model.Phone),
+            new Claim(ClaimTypes.StreetAddress, model.Address),
+            new Claim("Atelie:AddressNumber", model.AddressNumber),
+            new Claim("Atelie:Complement", model.Complement),
+            new Claim("Atelie:District", model.District),
+            new Claim(ClaimTypes.Locality, model.City),
+            new Claim(ClaimTypes.StateOrProvince, model.State),
+            new Claim(ClaimTypes.PostalCode, model.PostalCode)
+        };
+
+        var claimResult = await _userManager.AddClaimsAsync(user, claims);
+        if (!claimResult.Succeeded)
+        {
+            await _userManager.DeleteAsync(user);
+
+            foreach (var error in claimResult.Errors)
+                ModelState.AddModelError(string.Empty, FriendlyIdentityError(error));
+
+            return View(model);
         }
 
-        // Devolve o modelo para não quebrar a View se houver erros de validação
-        return View(model);
+        await _signInManager.SignInAsync(user, isPersistent: false);
+        TempData.Remove(RegistrationReasonKey);
+
+        var safeUrl = SafeReturnUrl(returnUrl);
+        if (!string.IsNullOrWhiteSpace(safeUrl))
+            return Redirect(safeUrl);
+
+        TempData["SuccessMessage"] =
+            $"Bem-vindo(a), {model.FirstName}! Sua conta foi criada com sucesso.";
+
+        return RedirectToAction("Index", "Home");
     }
 
-    /// <summary>
-    /// Efetua o logout do utilizador e redireciona para a página pública.
-    /// </summary>
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
@@ -119,12 +167,41 @@ public class AccountController : Controller
         return RedirectToAction("Index", "Home");
     }
 
-    /// <summary>
-    /// Exibe a página de acesso negado quando um utilizador tenta aceder a uma área sem permissões.
-    /// </summary>
     [HttpGet]
-    public IActionResult AccessDenied()
+    public IActionResult AccessDenied() => View();
+
+    private string? SafeReturnUrl(string? returnUrl)
     {
-        return View();
+        if (string.IsNullOrWhiteSpace(returnUrl) || !Url.IsLocalUrl(returnUrl))
+            return null;
+
+        var path = returnUrl.Split('?', '#')[0];
+        if (path.StartsWith("/Admin", StringComparison.OrdinalIgnoreCase) &&
+            !User.IsInRole("Admin"))
+        {
+            return null;
+        }
+
+        return returnUrl;
+    }
+
+    private static string FriendlyIdentityError(IdentityError error)
+    {
+        return error.Code switch
+        {
+            "DuplicateUserName" or "DuplicateEmail" =>
+                "Já existe uma conta cadastrada com este e-mail.",
+            "PasswordTooShort" =>
+                "A senha precisa ter pelo menos 6 caracteres.",
+            "PasswordRequiresDigit" =>
+                "A senha precisa conter pelo menos um número.",
+            "PasswordRequiresUpper" =>
+                "A senha precisa conter pelo menos uma letra maiúscula.",
+            "PasswordRequiresLower" =>
+                "A senha precisa conter pelo menos uma letra minúscula.",
+            "PasswordRequiresNonAlphanumeric" =>
+                "A senha precisa conter pelo menos um caractere especial.",
+            _ => error.Description
+        };
     }
 }

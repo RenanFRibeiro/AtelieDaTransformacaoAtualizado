@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using AtelieDaTransformacao.Domain.Entities;
+using AtelieDaTransformacao.Domain.Enums;
 
 namespace AtelieDaTransformacao.Application.ViewModels;
 

@@ -121,17 +121,19 @@
                             <span class="fs-4 fw-bold">R$ @Model.Total.ToString("N2")</span>
                         </div>
 
-                        <a asp-controller="Order" asp-action="Checkout"
-                           class="btn btn-artisan btn-lg w-100 rounded-pill py-3 mb-2">
-                            <i class="bi bi-bag-check me-2"></i> Comprar pelo site
-                        </a>
+                        <form asp-controller="Order" asp-action="Checkout" method="post" class="mb-2">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-artisan btn-lg w-100 rounded-pill py-3">
+                                <i class="bi bi-credit-card-2-front me-2"></i> Comprar pelo site
+                            </button>
+                        </form>
 
                         <a href="@ViewBag.WhatsAppLink" target="_blank" rel="noopener" class="btn btn-success btn-lg w-100 rounded-pill py-3" style="background-color:#25d366;border:none;">
-                            <i class="bi bi-whatsapp me-2"></i> Finalizar pelo WhatsApp
+                            <i class="bi bi-whatsapp me-2"></i> Comprar pelo WhatsApp
                         </a>
 
                         <p class="small text-muted text-center mt-3 mb-0">
-                            O site monta a mensagem com os itens e abre o WhatsApp do vendedor. O pagamento e a entrega serão combinados diretamente com ele.
+                            Pelo site, o pedido é criado e você acompanha cada etapa. Pelo WhatsApp, você continua negociando diretamente com o vendedor.
                         </p>
                     </div>
                 </div>

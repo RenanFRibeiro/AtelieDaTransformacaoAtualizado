@@ -1,135 +1,283 @@
-using AtelieDaTransformacao.Application.ViewModels;
-using AtelieDaTransformacao.Domain.Entities;
-using AtelieDaTransformacao.Infrastructure.Context;
+using AtelieDaTransformacao.Application.Interfaces;
+using AtelieDaTransformacao.Domain.Enums;
+using AtelieDaTransformacao.Domain.Interfaces;
 using AtelieDaTransformacao.UI.Hubs;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
 
 namespace AtelieDaTransformacao.UI.Controllers;
 
 [Authorize(Roles = "Admin")]
 public sealed class AdminOrdersController : Controller
 {
-    private readonly AtelieDaTransformacaoDbContext _db;
-    private readonly IHubContext<OrderHub> _hub;
+    private readonly IOrderService _orderService;
+    private readonly IOrderRepository _repository;
+    private readonly IHubContext<OrderStatusHub> _hub;
 
     public AdminOrdersController(
-        AtelieDaTransformacaoDbContext db,
-        IHubContext<OrderHub> hub)
+        IOrderService orderService,
+        IOrderRepository repository,
+        IHubContext<OrderStatusHub> hub)
     {
-        _db = db;
+        _orderService = orderService;
+        _repository = repository;
         _hub = hub;
     }
 
+    // =========================================================
+    // LISTA DE PEDIDOS
+    // =========================================================
+
     [HttpGet]
-    public async Task<IActionResult> Index(OrderStatus? status)
+    public async Task<IActionResult> Index()
     {
-        var query = _db.Orders
-            .AsNoTracking()
-            .Include(x => x.Items)
-            .OrderByDescending(x => x.CreatedAt)
-            .AsQueryable();
-
-        if (status.HasValue)
-            query = query.Where(x => x.Status == status.Value)
-                         .OrderByDescending(x => x.CreatedAt);
-
-        var orders = await query.ToListAsync();
-
-        ViewBag.SelectedStatus = status;
+        var orders =
+            await _orderService.GetAllAsync();
 
         return View(orders);
     }
 
-    [HttpGet]
-    public async Task<IActionResult> Details(int id)
-    {
-        var order = await _db.Orders
-            .AsNoTracking()
-            .Include(x => x.Items)
-            .FirstOrDefaultAsync(x => x.Id == id);
+    // =========================================================
+    // DETALHES DO PEDIDO
+    // =========================================================
 
-        if (order is null)
-            return NotFound();
+    [HttpGet]
+    public async Task<IActionResult> Details(
+        int id)
+    {
+        var order =
+            await _orderService.GetByIdAsync(id);
+
+        if (order == null)
+        {
+            TempData["ErrorMessage"] =
+                "Pedido não encontrado.";
+
+            return RedirectToAction(
+                nameof(Index));
+        }
 
         return View(order);
     }
+
+    // =========================================================
+    // ALTERAR STATUS MANUALMENTE
+    // =========================================================
 
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> UpdateStatus(
         int id,
-        OrderStatus status)
+        OrderStatus status,
+        bool autoAdvance = false)
     {
-        var order = await _db.Orders
-            .Include(x => x.Items)
-            .FirstOrDefaultAsync(x => x.Id == id);
+        var order =
+            await _repository.GetByIdAsync(id);
 
-        if (order is null)
+        if (order == null)
         {
-            TempData["ErrorMessage"] = "Pedido não encontrado.";
-            return RedirectToAction(nameof(Index));
+            TempData["ErrorMessage"] =
+                "Pedido não encontrado.";
+
+            return RedirectToAction(
+                nameof(Index));
         }
 
-        if (!Enum.IsDefined(status))
+        var changed =
+            await _repository.UpdateStatusAsync(
+                id,
+                status,
+                autoAdvance);
+
+        if (!changed)
         {
-            TempData["ErrorMessage"] = "Status inválido.";
-            return RedirectToAction(nameof(Details), new { id });
+            TempData["ErrorMessage"] =
+                "Não foi possível atualizar o pedido.";
+
+            return RedirectToAction(
+                nameof(Index));
         }
 
-        order.Status = status;
-        order.UpdatedAt = DateTime.UtcNow;
-
-        await _db.SaveChangesAsync();
-
-        await NotifyCustomerAsync(order);
+        await NotifyStatusAsync(
+            id,
+            order.UserId);
 
         TempData["SuccessMessage"] =
-            $"Pedido #{order.Id} atualizado para \"{status.Label()}\".";
+            $"Pedido {order.OrderNumber} atualizado para {status.ToDisplayName()}.";
 
-        return RedirectToAction(nameof(Details), new { id });
+        return RedirectToAction(
+            nameof(Details),
+            new
+            {
+                id
+            });
     }
+
+    // =========================================================
+    // MANTÉM SetStatus PARA COMPATIBILIDADE
+    // =========================================================
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Advance(int id)
+    public Task<IActionResult> SetStatus(
+        int id,
+        OrderStatus status,
+        bool autoAdvance = false)
     {
-        var order = await _db.Orders
-            .FirstOrDefaultAsync(x => x.Id == id);
-
-        if (order is null)
-        {
-            TempData["ErrorMessage"] = "Pedido não encontrado.";
-            return RedirectToAction(nameof(Index));
-        }
-
-        if (order.Status == OrderStatus.Entregue)
-        {
-            TempData["ErrorMessage"] =
-                "Este pedido já está na etapa final.";
-            return RedirectToAction(nameof(Details), new { id });
-        }
-
-        order.Status = (OrderStatus)((int)order.Status + 1);
-        order.UpdatedAt = DateTime.UtcNow;
-
-        await _db.SaveChangesAsync();
-        await NotifyCustomerAsync(order);
-
-        TempData["SuccessMessage"] =
-            $"Fluxo avançado automaticamente para \"{order.Status.Label()}\".";
-
-        return RedirectToAction(nameof(Details), new { id });
+        return UpdateStatus(
+            id,
+            status,
+            autoAdvance);
     }
 
-    private Task NotifyCustomerAsync(Order order) =>
-        _hub.Clients.User(order.UserId).SendAsync(
-            "OrderStatusUpdated",
-            order.Id,
-            (int)order.Status,
-            order.Status.Label(),
-            order.Status.Icon(),
-            order.UpdatedAt.ToString("O"));
+    // =========================================================
+    // ATIVAR / DESATIVAR AUTOMAÇÃO
+    // =========================================================
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ToggleAutomation(
+        int id,
+        bool enabled)
+    {
+        var order =
+            await _repository.GetByIdAsync(id);
+
+        if (order == null)
+        {
+            TempData["ErrorMessage"] =
+                "Pedido não encontrado.";
+
+            return RedirectToAction(
+                nameof(Index));
+        }
+
+        var changed =
+            await _repository.SetAutoAdvanceAsync(
+                id,
+                enabled);
+
+        if (changed)
+        {
+            await NotifyStatusAsync(
+                id,
+                order.UserId);
+
+            TempData["SuccessMessage"] =
+                enabled
+                    ? $"Automação ativada para {order.OrderNumber}."
+                    : $"Automação desativada para {order.OrderNumber}.";
+        }
+
+        return RedirectToAction(
+            nameof(Details),
+            new
+            {
+                id
+            });
+    }
+
+    // =========================================================
+    // AVANÇAR ETAPA
+    // =========================================================
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Advance(
+        int id)
+    {
+        var order =
+            await _repository.GetByIdAsync(id);
+
+        if (order == null)
+        {
+            TempData["ErrorMessage"] =
+                "Pedido não encontrado.";
+
+            return RedirectToAction(
+                nameof(Index));
+        }
+
+        var next =
+            order.Status.GetNext();
+
+        if (!next.HasValue)
+        {
+            TempData["ErrorMessage"] =
+                "O pedido já está entregue.";
+
+            return RedirectToAction(
+                nameof(Details),
+                new
+                {
+                    id
+                });
+        }
+
+        var changed =
+            await _repository.UpdateStatusAsync(
+                id,
+                next.Value);
+
+        if (!changed)
+        {
+            TempData["ErrorMessage"] =
+                "Não foi possível avançar o pedido.";
+
+            return RedirectToAction(
+                nameof(Details),
+                new
+                {
+                    id
+                });
+        }
+
+        await NotifyStatusAsync(
+            id,
+            order.UserId);
+
+        TempData["SuccessMessage"] =
+            $"Pedido {order.OrderNumber} avançou para {next.Value.ToDisplayName()}.";
+
+        return RedirectToAction(
+            nameof(Details),
+            new
+            {
+                id
+            });
+    }
+
+    // =========================================================
+    // SIGNALR
+    // =========================================================
+
+    private async Task NotifyStatusAsync(
+        int orderId,
+        string userId)
+    {
+        var order =
+            await _orderService.GetByIdAsync(
+                orderId);
+
+        if (order == null)
+            return;
+
+        await _hub
+            .Clients
+            .Group(
+                OrderStatusHub.GroupName(userId))
+            .SendAsync(
+                "StatusUpdated",
+                new
+                {
+                    orderId = order.Id,
+                    orderNumber = order.OrderNumber,
+                    status = (int)order.Status,
+                    statusName = order.StatusName,
+                    autoAdvance = order.AutoAdvance,
+                    updatedAt = order.UpdatedAt.ToString("O")
+                });
+    }
 }

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-PT">
 <head>
     <meta charset="utf-8" />
@@ -127,13 +127,13 @@
                             <a class="nav-link" asp-controller="Admin" asp-action="Index"><i class="bi bi-grid-1x2-fill me-2"></i>Dashboard</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="AdminOrders" asp-action="Index"><i class="bi bi-box-seam me-2"></i>Pedidos</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" asp-controller="Admin" asp-action="CreateProduct"><i class="bi bi-plus-circle-fill me-2"></i>Nova Peça</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Admin" asp-action="CreateCategory"><i class="bi bi-folder-plus me-2"></i>Nova Categoria</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="AdminOrders" asp-action="Index"><i class="bi bi-receipt me-2"></i>Pedidos</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-info" asp-controller="Home" asp-action="Index" target="_blank"><i class="bi bi-eye-fill me-2"></i>Ver Loja</a>
@@ -165,13 +165,13 @@
                                 <a class="nav-link" asp-controller="Admin" asp-action="Index"><i class="bi bi-grid-1x2-fill me-2"></i>Dashboard</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="AdminOrders" asp-action="Index"><i class="bi bi-box-seam me-2"></i>Pedidos</a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link" asp-controller="Admin" asp-action="CreateProduct"><i class="bi bi-plus-circle-fill me-2"></i>Nova Peça</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" asp-controller="Admin" asp-action="CreateCategory"><i class="bi bi-folder-plus me-2"></i>Nova Categoria</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="AdminOrders" asp-action="Index"><i class="bi bi-receipt me-2"></i>Pedidos</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-info" asp-controller="Home" asp-action="Index" target="_blank"><i class="bi bi-eye-fill me-2"></i>Ver Loja</a>
@@ -201,32 +201,15 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             // 1. Marcar link ativo na navegação baseado na URL atual
-            // Seleciona apenas o link cujo href mais especificamente corresponde à URL atual,
-            // evitando que rotas "pai" (ex: /Admin) fiquem marcadas junto com rotas "filhas"
-            // (ex: /Admin/CreateProduct).
             const currentUrl = window.location.pathname.toLowerCase();
             const navLinks = document.querySelectorAll('.nav-link');
 
-            let bestMatch = null;
-            let bestMatchLength = 0;
-
             navLinks.forEach(link => {
                 const href = link.getAttribute('href');
-                if (!href || href === "#") return;
-                const hrefLower = href.toLowerCase();
-
-                const isExactMatch = currentUrl === hrefLower;
-                const isChildMatch = hrefLower !== "/" && currentUrl.startsWith(hrefLower + "/");
-
-                if ((isExactMatch || isChildMatch) && hrefLower.length > bestMatchLength) {
-                    bestMatch = link;
-                    bestMatchLength = hrefLower.length;
+                if (href && currentUrl.includes(href.toLowerCase()) && href !== "/") {
+                    link.classList.add('active');
                 }
             });
-
-            if (bestMatch) {
-                bestMatch.classList.add('active');
-            }
 
             // 2. Feedback visual nos inputs de formulário (.form-active)
             const inputs = document.querySelectorAll(".form-control, .form-select");

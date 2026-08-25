@@ -4,6 +4,7 @@ using AtelieDaTransformacao.Domain.Interfaces;
 using AtelieDaTransformacao.Infrastructure.Context;
 using AtelieDaTransformacao.Infrastructure.Repositories;
 using AtelieDaTransformacao.UI.Hubs;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,71 +16,208 @@ public static class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        // =========================================================
+        // CONNECTION STRING
+        // =========================================================
+
         var connectionString =
-            builder.Configuration.GetConnectionString("DefaultConnection")
+            builder.Configuration.GetConnectionString(
+                "DefaultConnection")
             ?? throw new InvalidOperationException(
                 "Connection string 'DefaultConnection' not found.");
 
-        builder.Services.AddDbContext<AtelieDaTransformacaoDbContext>(
+
+        // =========================================================
+        // DATABASE
+        // =========================================================
+
+        builder.Services.AddDbContext<
+            AtelieDaTransformacaoDbContext>(
             options =>
-                options.UseSqlServer(connectionString));
+                options.UseSqlServer(
+                    connectionString));
+
+
+        // =========================================================
+        // IDENTITY
+        // =========================================================
 
         builder.Services
-            .AddIdentity<IdentityUser, IdentityRole>(options =>
-            {
-                options.Password.RequireDigit = false;
-                options.Password.RequiredLength = 6;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireLowercase = false;
-            })
-            .AddEntityFrameworkStores<AtelieDaTransformacaoDbContext>()
+            .AddIdentity<IdentityUser, IdentityRole>(
+                options =>
+                {
+                    options.Password.RequireDigit =
+                        false;
+
+                    options.Password.RequiredLength =
+                        6;
+
+                    options.Password.RequireNonAlphanumeric =
+                        false;
+
+                    options.Password.RequireUppercase =
+                        false;
+
+                    options.Password.RequireLowercase =
+                        false;
+
+                    options.User.RequireUniqueEmail =
+                        true;
+                })
+            .AddEntityFrameworkStores<
+                AtelieDaTransformacaoDbContext>()
             .AddDefaultTokenProviders();
 
-        builder.Services.ConfigureApplicationCookie(options =>
-        {
-            options.LoginPath = "/Account/Login";
-            options.AccessDeniedPath = "/Account/AccessDenied";
-        });
 
-        builder.Services.AddScoped<IProductRepository, ProductRepository>();
-        builder.Services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
+        // =========================================================
+        // COOKIE DE AUTENTICAÇÃO
+        // =========================================================
 
-        builder.Services.AddScoped<IProductService, ProductService>();
-        builder.Services.AddScoped<IProductCategoryService, ProductCategoryService>();
-        builder.Services.AddScoped<IWhatsAppService, WhatsAppService>();
+        builder.Services.ConfigureApplicationCookie(
+            options =>
+            {
+                options.LoginPath =
+                    "/Account/Login";
+
+                options.AccessDeniedPath =
+                    "/Account/AccessDenied";
+
+                options.ExpireTimeSpan =
+                    TimeSpan.FromHours(8);
+
+                options.SlidingExpiration =
+                    true;
+            });
+
+
+        // =========================================================
+        // PRODUCT REPOSITORIES
+        // =========================================================
+
+        builder.Services.AddScoped<
+            IProductRepository,
+            ProductRepository>();
+
+        builder.Services.AddScoped<
+            IProductCategoryRepository,
+            ProductCategoryRepository>();
+
+
+        // =========================================================
+        // ORDER REPOSITORY
+        // =========================================================
+
+        builder.Services.AddScoped<
+            IOrderRepository,
+            OrderRepository>();
+
+
+        // =========================================================
+        // PRODUCT SERVICES
+        // =========================================================
+
+        builder.Services.AddScoped<
+            IProductService,
+            ProductService>();
+
+        builder.Services.AddScoped<
+            IProductCategoryService,
+            ProductCategoryService>();
+
+
+        // =========================================================
+        // ORDER SERVICE
+        // =========================================================
+
+        builder.Services.AddScoped<
+            IOrderService,
+            OrderService>();
+
+
+        // =========================================================
+        // WHATSAPP
+        // =========================================================
+
+        builder.Services.AddScoped<
+            IWhatsAppService,
+            WhatsAppService>();
+
+
+        // =========================================================
+        // SESSION
+        // =========================================================
 
         builder.Services.AddDistributedMemoryCache();
 
-        builder.Services.AddSession(options =>
-        {
-            options.IdleTimeout = TimeSpan.FromHours(2);
-            options.Cookie.HttpOnly = true;
-            options.Cookie.IsEssential = true;
-        });
+        builder.Services.AddSession(
+            options =>
+            {
+                options.IdleTimeout =
+                    TimeSpan.FromHours(2);
+
+                options.Cookie.HttpOnly =
+                    true;
+
+                options.Cookie.IsEssential =
+                    true;
+            });
+
+
+        // =========================================================
+        // MVC
+        // =========================================================
 
         builder.Services.AddControllersWithViews();
 
+
+        // =========================================================
+        // SIGNALR
+        // =========================================================
+
         builder.Services.AddSignalR();
 
-        var app = builder.Build();
 
-        // O banco é controlado pelo EF Core Migrations.
-        // Não usamos EnsureCreated nem SQL manual para evitar conflito
-        // com tabelas que já existem no banco.
-        await using (var scope = app.Services.CreateAsyncScope())
+        // =========================================================
+        // BUILD
+        // =========================================================
+
+        var app =
+            builder.Build();
+
+
+        // =========================================================
+        // DATABASE MIGRATIONS
+        // =========================================================
+
+        await using (
+            var scope =
+                app.Services.CreateAsyncScope())
         {
-            var db = scope.ServiceProvider
-                .GetRequiredService<AtelieDaTransformacaoDbContext>();
+            var db =
+                scope.ServiceProvider
+                    .GetRequiredService<
+                        AtelieDaTransformacaoDbContext>();
 
             await db.Database.MigrateAsync();
         }
 
+
+        // =========================================================
+        // ERROR HANDLING
+        // =========================================================
+
         if (!app.Environment.IsDevelopment())
         {
-            app.UseExceptionHandler("/Home/Error");
+            app.UseExceptionHandler(
+                "/Home/Error");
+
             app.UseHsts();
         }
+
+
+        // =========================================================
+        // HTTP PIPELINE
+        // =========================================================
 
         app.UseHttpsRedirection();
 
@@ -93,11 +231,28 @@ public static class Program
 
         app.UseAuthorization();
 
-        app.MapHub<OrderHub>("/hubs/orders");
+
+        // =========================================================
+        // SIGNALR HUB
+        // =========================================================
+
+        app.MapHub<OrderStatusHub>(
+            "/hubs/orders");
+
+
+        // =========================================================
+        // MVC ROUTE
+        // =========================================================
 
         app.MapControllerRoute(
             name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}");
+            pattern:
+                "{controller=Home}/{action=Index}/{id?}");
+
+
+        // =========================================================
+        // START
+        // =========================================================
 
         await app.RunAsync();
     }

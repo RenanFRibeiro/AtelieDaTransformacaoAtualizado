@@ -1,0 +1,457 @@
+@model AtelieDaTransformacao.Application.DTOs.OrderDetailsDto
+@using AtelieDaTransformacao.Domain.Enums
+
+@{
+    ViewData["Title"] = $"Pedido {Model.OrderNumber}";
+
+    var steps = Enum.GetValues<OrderStatus>();
+    var currentIndex = (int)Model.Status;
+}
+
+<div class="container py-5"
+     data-order-id="@Model.Id">
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+
+        <div>
+
+            <span class="text-uppercase text-gold fw-bold small">
+                Pedido confirmado
+            </span>
+
+            <h1 class="serif-title fw-bold mb-1">
+                @Model.OrderNumber
+            </h1>
+
+            <p class="text-muted mb-0">
+
+                Atualização mais recente:
+
+                <span id="updatedAt">
+
+                    @Model.UpdatedAt
+                    .ToLocalTime()
+                    .ToString("dd/MM/yyyy HH:mm:ss")
+
+                </span>
+
+            </p>
+
+        </div>
+
+
+        <a asp-action="Index"
+           class="btn btn-outline-dark rounded-pill px-4">
+
+            <i class="bi bi-arrow-left me-1"></i>
+
+            Meus pedidos
+
+        </a>
+
+    </div>
+
+
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+        <div class="card-body p-4 p-lg-5">
+
+            <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 align-items-lg-center">
+
+                <div>
+
+                    <span class="small text-muted">
+                        Status atual
+                    </span>
+
+                    <h2 class="serif-title fw-bold mb-1"
+                        id="statusName">
+
+                        @Model.StatusName
+
+                    </h2>
+
+                    <p class="text-muted mb-0">
+
+                        Você verá a atualização automaticamente
+                        quando o administrador mudar o pedido.
+
+                    </p>
+
+                </div>
+
+
+                @if (Model.AutoAdvance)
+                {
+                    <span id="automationBadge"
+                          class="badge rounded-pill text-bg-success px-3 py-2">
+
+                        <i class="bi bi-arrow-repeat me-1"></i>
+
+                        Automação ativa
+
+                    </span>
+                }
+                else
+                {
+                    <span id="automationBadge"
+                          class="badge rounded-pill text-bg-secondary px-3 py-2">
+
+                        <i class="bi bi-person-gear me-1"></i>
+
+                        Atualização manual
+
+                    </span>
+                }
+
+            </div>
+
+
+            <div class="row g-2 mt-5">
+
+                @for (var i = 0; i < steps.Length; i++)
+                {
+                    var step = steps[i];
+
+                    var active =
+                        i <= currentIndex;
+
+                    var label =
+                        step.ToDisplayName();
+
+                    <div class="col-6 col-md">
+
+                        <div class="text-center p-2 h-100 rounded-3
+                            @(active
+                               ? "bg-dark text-white"
+                               : "bg-light text-muted")"
+                             data-step="@((int)step)">
+
+                            <div class="fw-bold small">
+
+                                @(i + 1). @label
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="row g-4">
+
+        <div class="col-lg-7">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body p-4">
+
+                    <h4 class="serif-title fw-bold mb-4">
+                        Itens do pedido
+                    </h4>
+
+
+                    @if (Model.Items != null &&
+                         Model.Items.Count > 0)
+                    {
+                        foreach (var item in Model.Items)
+                        {
+                            <div class="d-flex justify-content-between gap-3 py-3 border-bottom">
+
+                                <div>
+
+                                    <strong>
+                                        @item.Title
+                                    </strong>
+
+                                    <small class="text-muted d-block">
+
+                                        Quantidade:
+                                        @item.Quantity
+
+                                    </small>
+
+                                </div>
+
+
+                                <div class="text-end">
+
+                                    <small class="text-muted d-block">
+
+                                        R$
+                                        @item.UnitPrice.ToString("N2")
+                                        cada
+
+                                    </small>
+
+                                    <strong>
+
+                                        R$
+                                        @item.Subtotal.ToString("N2")
+
+                                    </strong>
+
+                                </div>
+
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="alert alert-light">
+
+                            Nenhum item encontrado neste pedido.
+
+                        </div>
+                    }
+
+
+                    <div class="d-flex justify-content-between pt-4">
+
+                        <strong>
+                            Total
+                        </strong>
+
+                        <strong class="fs-4">
+
+                            R$
+                            @Model.Total.ToString("N2")
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-lg-5">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body p-4">
+
+                    <h4 class="serif-title fw-bold">
+                        Próximas etapas
+                    </h4>
+
+                    <p class="text-muted">
+
+                        Criado →
+                        Pendente →
+                        Aprovado →
+                        Separação →
+                        Faturado →
+                        Enviado →
+                        Entregue.
+
+                    </p>
+
+                    <hr />
+
+
+                    <div class="small text-muted">
+
+                        <div class="mb-2">
+
+                            <strong>
+                                Forma de compra:
+                            </strong>
+
+                            pelo site
+
+                        </div>
+
+
+                        <div class="mb-2">
+
+                            <strong>
+                                Cliente:
+                            </strong>
+
+                            @Model.UserEmail
+
+                        </div>
+
+
+                        <div class="mb-2">
+
+                            <strong>
+                                Número do pedido:
+                            </strong>
+
+                            @Model.OrderNumber
+
+                        </div>
+
+
+                        <div>
+
+                            <strong>
+                                Criado em:
+                            </strong>
+
+                            @Model.CreatedAt
+                            .ToLocalTime()
+                            .ToString("dd/MM/yyyy HH:mm")
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script>
+
+        const orderId = @Model.Id;
+
+
+        function renderStatus(data) {
+
+            const statusName =
+                document.getElementById(
+                    "statusName"
+                );
+
+            const updatedAt =
+                document.getElementById(
+                    "updatedAt"
+                );
+
+            const badge =
+                document.getElementById(
+                    "automationBadge"
+                );
+
+
+            if (statusName) {
+                statusName.textContent =
+                    data.statusName;
+            }
+
+
+            if (updatedAt) {
+                updatedAt.textContent =
+                    new Date(
+                        data.updatedAt
+                    ).toLocaleString(
+                        "pt-BR"
+                    );
+            }
+
+
+            document
+                .querySelectorAll(
+                    "[data-step]"
+                )
+                .forEach(
+                    step => {
+                        const number =
+                            Number(
+                                step.dataset.step
+                            );
+
+                        const active =
+                            number <=
+                            Number(
+                                data.status
+                            );
+
+                        step.className =
+                            "text-center p-2 h-100 rounded-3 " +
+                            (
+                                active
+                                    ? "bg-dark text-white"
+                                    : "bg-light text-muted"
+                            );
+                    }
+                );
+
+
+            if (badge) {
+                badge.className =
+                    "badge rounded-pill px-3 py-2 " +
+                    (
+                        data.autoAdvance
+                            ? "text-bg-success"
+                            : "text-bg-secondary"
+                    );
+
+
+                badge.innerHTML =
+                    data.autoAdvance
+                        ? '<i class="bi bi-arrow-repeat me-1"></i> Automação ativa'
+                        : '<i class="bi bi-person-gear me-1"></i> Atualização manual';
+            }
+
+        }
+
+
+        async function refresh() {
+
+            try {
+                const response =
+                    await fetch(
+                        `/Order/Status/${orderId}`,
+                        {
+                            cache: "no-store"
+                        }
+                    );
+
+
+                if (!response.ok)
+                    return;
+
+
+                const data =
+                    await response.json();
+
+
+                renderStatus(
+                    data
+                );
+            }
+            catch (error) {
+                console.error(
+                    "Erro ao atualizar pedido:",
+                    error
+                );
+            }
+
+        }
+
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            () => {
+                setInterval(
+                    refresh,
+                    10000
+                );
+            }
+        );
+
+    </script>
+
+}

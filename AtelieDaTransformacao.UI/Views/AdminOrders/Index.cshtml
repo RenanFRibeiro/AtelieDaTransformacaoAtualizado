@@ -1,54 +1,39 @@
-@model IEnumerable<AtelieDaTransformacao.Domain.Entities.Order>
-@using AtelieDaTransformacao.Domain.Entities
-@using AtelieDaTransformacao.Application.ViewModels
-
+@model IReadOnlyList<AtelieDaTransformacao.Application.DTOs.OrderListDto>
+@using AtelieDaTransformacao.Domain.Enums
 @{
     Layout = "_AdminLayout";
     ViewData["Title"] = "Pedidos";
-    var selected = ViewBag.SelectedStatus as OrderStatus?;
+    var statuses = Enum.GetValues<OrderStatus>();
 }
 
-<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+<div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
     <div>
-        <span class="text-uppercase text-muted small fw-bold">Gestão comercial</span>
         <h2 class="fw-bold text-dark m-0">Pedidos</h2>
-        <p class="text-muted small mb-0">Acompanhe e altere o fluxo de cada venda.</p>
+        <p class="text-muted small m-0">Altere manualmente ou ative a progressão automática de cada pedido.</p>
     </div>
-
-    <form method="get" class="d-flex gap-2">
-        <select name="status" class="form-select">
-            <option value="">Todos os status</option>
-            @foreach (var status in Enum.GetValues<OrderStatus>())
-            {
-                <option value="@status" selected="@(selected == status ? "selected" : null)">
-                    @status.Label()
-                </option>
-            }
-        </select>
-        <button class="btn btn-dark rounded-pill px-4">Filtrar</button>
-    </form>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-dark rounded-pill">Ver loja</a>
 </div>
 
 @if (TempData["SuccessMessage"] is string success)
 {
-    <div class="alert alert-success rounded-3">@success</div>
+    <div class="alert alert-success">@success</div>
 }
 @if (TempData["ErrorMessage"] is string error)
 {
-    <div class="alert alert-danger rounded-3">@error</div>
+    <div class="alert alert-danger">@error</div>
 }
 
-<div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
     <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
+        <table class="table align-middle mb-0">
             <thead class="table-light">
-                <tr class="small text-muted text-uppercase">
+                <tr class="small text-uppercase text-muted">
                     <th class="ps-4">Pedido</th>
                     <th>Cliente</th>
-                    <th>Itens</th>
                     <th>Total</th>
                     <th>Status</th>
-                    <th class="text-end pe-4">Ação</th>
+                    <th>Automação</th>
+                    <th class="text-end pe-4">Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -56,38 +41,62 @@
                 {
                     <tr>
                         <td class="ps-4">
-                            <strong>#@order.Id</strong>
+                            <strong>@order.OrderNumber</strong>
                             <small class="text-muted d-block">@order.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</small>
                         </td>
+                        <td class="small">@order.UserEmail</td>
+                        <td class="fw-semibold">R$ @order.Total.ToString("N2")</td>
                         <td>
-                            <strong>@order.CustomerName</strong>
-                            <small class="text-muted d-block">@order.CustomerEmail</small>
+                            <form asp-action="SetStatus" method="post" class="d-flex gap-2 align-items-center">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@order.Id" />
+                                <input type="hidden" name="autoAdvance" value="@order.AutoAdvance.ToString().ToLowerInvariant()" />
+                                <select name="status" class="form-select form-select-sm" style="min-width: 150px;">
+                                    @foreach (var status in statuses)
+                                    {
+                                        if (status == order.Status)
+                                        {
+                                            <option value="@((int)status)" selected>@status.ToDisplayName()</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@((int)status)">@status.ToDisplayName()</option>
+                                        }
+                                    }
+                                </select>
+                                <button class="btn btn-sm btn-dark rounded-pill">Salvar</button>
+                            </form>
                         </td>
-                        <td>@(order.Items?.Sum(x => x.Quantity) ?? 0)</td>
-                        <td><strong>@order.Total.ToString("C")</strong></td>
                         <td>
-                            <span class="badge order-status-badge status-@order.Status.ToString().ToLowerInvariant().Replace(" ", "-") rounded-pill px-3 py-2 d-inline-flex align-items-center gap-1">
-                                <i class="bi @order.Status.Icon()"></i>
-                                <span>@order.Status.Label()</span>
-                            </span>
+                            <form asp-action="ToggleAutomation" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@order.Id" />
+                                <input type="hidden" name="enabled" value="@(!order.AutoAdvance).ToString().ToLowerInvariant()" />
+                                <button class="btn btn-sm rounded-pill @(order.AutoAdvance ? "btn-success" : "btn-outline-secondary")">
+                                    <i class="bi bi-arrow-repeat me-1"></i>@(order.AutoAdvance ? "Ativa" : "Manual")
+                                </button>
+                            </form>
                         </td>
                         <td class="text-end pe-4">
-                            <a asp-action="Details" asp-route-id="@order.Id"
-                               class="btn btn-sm btn-outline-dark rounded-pill px-3">
-                                Gerenciar
-                            </a>
+                            <div class="d-inline-flex gap-2">
+                                @if (order.Status != OrderStatus.Entregue)
+                                {
+                                    <form asp-action="Advance" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@order.Id" />
+                                        <button class="btn btn-sm btn-outline-primary rounded-pill">Avançar</button>
+                                    </form>
+                                }
+                                <a asp-controller="Order" asp-action="Details" asp-route-id="@order.Id" target="_blank" class="btn btn-sm btn-outline-dark rounded-pill">Abrir</a>
+                            </div>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
+</div>
 
-    @if (!Model.Any())
-    {
-        <div class="text-center py-5 text-muted">
-            <i class="bi bi-inbox display-5"></i>
-            <p class="mt-2 mb-0">Nenhum pedido encontrado.</p>
-        </div>
-    }
+<div class="alert alert-light border mt-4 small">
+    <strong>Automação:</strong> quando ativada, o sistema avança o pedido automaticamente em intervalos pré-configurados. O administrador pode intervir manualmente a qualquer momento.
 </div>

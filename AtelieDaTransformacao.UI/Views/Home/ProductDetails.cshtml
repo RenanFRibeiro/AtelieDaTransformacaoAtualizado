@@ -45,45 +45,41 @@
                 {
                     @if (User.Identity?.IsAuthenticated == true)
                     {
-                        <form asp-controller="Cart" asp-action="Add" method="post" class="mb-3">
+                        <form asp-controller="Cart" asp-action="Add" method="post">
                             @Html.AntiForgeryToken()
                             <input type="hidden" name="id" value="@Model.Id" />
 
-                            <div class="row g-2">
+                            <div class="row g-2 mb-3">
                                 <div class="col-4">
                                     <label for="quantity" class="form-label small fw-semibold">Quantidade</label>
                                     <input id="quantity" name="quantity" type="number" min="1" max="@Model.StockQuantity" value="1" class="form-control form-control-lg" />
+                                    <script>
+                                        document.getElementById('quantity')?.addEventListener('input', function () {
+                                            const target = document.getElementById('buyNowQuantity');
+                                            if (target) target.value = this.value;
+                                        });
+                                    </script>
                                 </div>
                                 <div class="col-8 d-flex align-items-end">
-                                    <button type="submit" class="btn btn-outline-dark btn-lg w-100 py-3 rounded-3 shadow-sm">
-                                        <i class="bi bi-cart-plus me-1"></i> Adicionar ao carrinho
+                                    <button type="submit" class="btn btn-artisan btn-lg w-100 py-3 rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-2">
+                                        <i class="bi bi-cart-plus"></i> Adicionar ao carrinho
                                     </button>
                                 </div>
                             </div>
                         </form>
 
-                        <div class="row g-2">
-                            <div class="col-md-6">
-                                <a asp-controller="Order"
-                                   asp-action="BuyNow"
-                                   asp-route-id="@Model.Id"
-                                   asp-route-quantity="1"
-                                   id="buyNowLink"
-                                   class="btn btn-artisan w-100 py-3 rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-2">
-                                    <i class="bi bi-bag-check"></i>
-                                    Comprar pelo site
-                                </a>
-                            </div>
-                            <div class="col-md-6">
-                                <a asp-controller="Home"
-                                   asp-action="ContactSeller"
-                                   asp-route-id="@Model.Id"
-                                   class="btn btn-success w-100 py-3 rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-2">
-                                    <i class="bi bi-whatsapp"></i>
-                                    Comprar pelo WhatsApp
-                                </a>
-                            </div>
-                        </div>
+                        <form asp-controller="Order" asp-action="BuyNow" method="post" class="mb-2">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <input type="hidden" name="quantity" id="buyNowQuantity" value="1" />
+                            <button type="submit" class="btn btn-artisan w-100 py-3 rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-2">
+                                <i class="bi bi-credit-card-2-front"></i> Comprar pelo site
+                            </button>
+                        </form>
+
+                        <a asp-controller="Home" asp-action="ContactSeller" asp-route-id="@Model.Id" class="btn btn-success w-100 py-3 rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-2">
+                            <i class="bi bi-whatsapp"></i> Comprar somente esta peça pelo WhatsApp
+                        </a>
                     }
                     else
                     {
@@ -91,34 +87,15 @@
                             <div class="d-flex gap-2 align-items-start">
                                 <i class="bi bi-person-lock text-gold fs-5"></i>
                                 <div>
-                                    <strong>Cadastro necessário para comprar</strong>
-                                    <p class="small text-muted mb-0 mt-1">
-                                        Crie sua conta para comprar pelo site ou entrar em contato com o vendedor.
-                                    </p>
+                                    <strong>Cadastro necessário para entrar em contato</strong>
+                                    <p class="small text-muted mb-0 mt-1">Crie sua conta para falar com o vendedor e iniciar a compra desta peça.</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="row g-2">
-                            <div class="col-md-6">
-                                <a asp-controller="Account"
-                                   asp-action="Register"
-                                   asp-route-returnUrl="@Url.Action("BuyNow", "Order", new { id = Model.Id, quantity = 1 })"
-                                   class="btn btn-artisan w-100 py-3 rounded-3 shadow-sm">
-                                    <i class="bi bi-bag-check me-1"></i>
-                                    Criar conta e comprar
-                                </a>
-                            </div>
-                            <div class="col-md-6">
-                                <a asp-controller="Account"
-                                   asp-action="Register"
-                                   asp-route-returnUrl="@Url.Action("ContactSeller", "Home", new { id = Model.Id })"
-                                   class="btn btn-success w-100 py-3 rounded-3 shadow-sm">
-                                    <i class="bi bi-whatsapp me-1"></i>
-                                    Criar conta e falar
-                                </a>
-                            </div>
-                        </div>
+                        <a asp-controller="Home" asp-action="ContactSeller" asp-route-id="@Model.Id" class="btn btn-success w-100 py-3 rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-2">
+                            <i class="bi bi-whatsapp"></i> Criar conta e falar com o vendedor
+                        </a>
                     }
                 }
                 else
@@ -131,21 +108,3 @@
         </div>
     </div>
 </div>
-
-@section Scripts {
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const quantity = document.getElementById("quantity");
-            const buyNowLink = document.getElementById("buyNowLink");
-
-            if (!quantity || !buyNowLink) return;
-
-            quantity.addEventListener("input", function () {
-                const value = Math.max(1, Number(quantity.value || 1));
-                const url = new URL(buyNowLink.href, window.location.origin);
-                url.searchParams.set("quantity", value);
-                buyNowLink.href = url.pathname + url.search;
-            });
-        });
-    </script>
-}

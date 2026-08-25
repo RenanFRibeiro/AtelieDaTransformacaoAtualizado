@@ -1,6 +1,8 @@
 @model AtelieDaTransformacao.Application.ViewModels.OrderDetailsViewModel
+
 @using AtelieDaTransformacao.Application.ViewModels
 @using AtelieDaTransformacao.Domain.Entities
+@using AtelieDaTransformacao.Domain.Enums
 
 @{
     ViewData["Title"] = $"Pedido #{Model.Id}";
@@ -8,116 +10,289 @@
 }
 
 <div class="container py-5">
+
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+
         <div>
-            <span class="text-uppercase text-gold fw-bold small">Acompanhamento em tempo real</span>
-            <h1 class="serif-title fw-bold mb-1">Pedido #@Model.Id</h1>
+            <span class="text-uppercase text-gold fw-bold small">
+                Acompanhamento em tempo real
+            </span>
+
+            <h1 class="serif-title fw-bold mb-1">
+                Pedido #@Model.Id
+            </h1>
+
             <p class="text-muted mb-0">
-                Criado em @Model.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")
+                Criado em
+                @Model.CreatedAt
+                .ToLocalTime()
+                .ToString("dd/MM/yyyy HH:mm")
             </p>
         </div>
-        <a asp-action="MyOrders" class="btn btn-outline-dark rounded-pill">
-            <i class="bi bi-arrow-left me-1"></i> Meus pedidos
+
+        <a asp-action="MyOrders"
+           class="btn btn-outline-dark rounded-pill">
+
+            <i class="bi bi-arrow-left me-1"></i>
+            Meus pedidos
+
         </a>
+
     </div>
 
-    <div id="liveAlert" class="alert alert-success rounded-4 d-none">
+
+    <!-- AVISO DE ATUALIZAÇÃO -->
+
+    <div id="liveAlert"
+         class="alert alert-success rounded-4 d-none">
+
         <i class="bi bi-broadcast me-2"></i>
+
         O status do seu pedido foi atualizado.
+
     </div>
+
+
+    <!-- STATUS -->
 
     <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
+
         <div class="card-body p-4 p-lg-5">
+
             <div class="d-flex justify-content-between align-items-center mb-4">
+
                 <div>
-                    <span class="text-muted small">Status atual</span>
-                    <h3 id="statusLabel" class="serif-title fw-bold mb-0">@Model.Status.Label()</h3>
+
+                    <span class="text-muted small">
+                        Status atual
+                    </span>
+
+                    <h3 id="statusLabel"
+                        class="serif-title fw-bold mb-0">
+
+                        @Model.Status.ToDisplayName()
+
+                    </h3>
+
                 </div>
-                <div id="statusIcon" class="rounded-circle bg-light p-3 fs-3 text-gold">
-                    <i class="bi @Model.Status.Icon()"></i>
+
+
+                <div id="statusIcon"
+                     class="rounded-circle bg-light p-3 fs-3 text-gold">
+
+                    <i class="bi bi-box-seam"></i>
+
                 </div>
+
             </div>
+
+
+            <!-- LINHA DO TEMPO -->
 
             <div class="order-timeline">
+
                 @foreach (var status in statuses)
                 {
-                    var isCurrentOrPast = (int)status <= (int)Model.Status;
-                    <div class="timeline-step @(isCurrentOrPast ? "completed" : "") @(status == Model.Status ? "current" : "")"
+                    var isCurrentOrPast =
+                        (int)status <= (int)Model.Status;
+
+                    <div class="timeline-step
+                        @(isCurrentOrPast ? "completed" : "")
+                        @(status == Model.Status ? "current" : "")"
                          data-status-step="@((int)status)">
+
                         <div class="timeline-dot">
-                            <i class="bi @status.Icon()"></i>
+
+                            @switch (status)
+                            {
+                                case OrderStatus.Criado:
+                                    <i class="bi bi-plus-circle"></i>
+                                    break;
+
+                                case OrderStatus.Pendente:
+                                    <i class="bi bi-hourglass-split"></i>
+                                    break;
+
+                                case OrderStatus.Aprovado:
+                                    <i class="bi bi-check-circle"></i>
+                                    break;
+
+                                case OrderStatus.Separacao:
+                                    <i class="bi bi-box-seam"></i>
+                                    break;
+
+                                case OrderStatus.Faturado:
+                                    <i class="bi bi-receipt"></i>
+                                    break;
+
+                                case OrderStatus.Enviado:
+                                    <i class="bi bi-truck"></i>
+                                    break;
+
+                                case OrderStatus.Entregue:
+                                    <i class="bi bi-house-check"></i>
+                                    break;
+                            }
+
                         </div>
-                        <div class="timeline-label">@status.Label()</div>
+
+                        <div class="timeline-label">
+
+                            @status.ToDisplayName()
+
+                        </div>
+
                     </div>
                 }
+
             </div>
+
         </div>
+
     </div>
 
+
+    <!-- PRODUTOS + INFORMAÇÕES -->
+
     <div class="row g-4">
+
         <div class="col-lg-7">
+
             <div class="card border-0 shadow-sm rounded-4 h-100">
+
                 <div class="card-body p-4">
-                    <h4 class="serif-title fw-bold mb-4">Itens do pedido</h4>
+
+                    <h4 class="serif-title fw-bold mb-4">
+                        Itens do pedido
+                    </h4>
+
 
                     @foreach (var item in Model.Items)
                     {
                         <div class="d-flex gap-3 align-items-center border-bottom py-3">
-                            <img src="@(string.IsNullOrWhiteSpace(item.ProductImage) ? "/images/placeholder.jpg" : item.ProductImage)"
-                                 class="rounded-3"
-                                 style="width:75px;height:75px;object-fit:cover;"
-                                 alt="@item.ProductTitle" />
 
                             <div class="flex-grow-1">
-                                <strong>@item.ProductTitle</strong>
-                                <div class="small text-muted">@item.Quantity x @item.UnitPrice.ToString("C")</div>
+
+                                <strong>
+                                    @item.ProductTitle
+                                </strong>
+
+                                <div class="small text-muted">
+
+                                    @item.Quantity x
+                                    @item.UnitPrice.ToString("C")
+
+                                </div>
+
                             </div>
 
-                            <strong>@item.Subtotal.ToString("C")</strong>
+                            <strong>
+
+                                @item.Subtotal.ToString("C")
+
+                            </strong>
+
                         </div>
                     }
 
+
                     <div class="d-flex justify-content-between pt-4">
-                        <strong>Total</strong>
-                        <strong class="fs-4">@Model.Total.ToString("C")</strong>
+
+                        <strong>
+                            Total
+                        </strong>
+
+                        <strong class="fs-4">
+
+                            @Model.Total.ToString("C")
+
+                        </strong>
+
                     </div>
+
                 </div>
+
             </div>
+
         </div>
 
+
         <div class="col-lg-5">
+
+
+            <!-- ENTREGA -->
+
             <div class="card border-0 shadow-sm rounded-4 mb-4">
+
                 <div class="card-body p-4">
-                    <h4 class="serif-title fw-bold mb-4">Entrega</h4>
-                    <p class="mb-1 fw-semibold">@Model.CustomerName</p>
-                    <p class="small text-muted mb-2">@Model.CustomerPhone</p>
-                    <p class="small text-muted mb-0">@Model.ShippingAddress</p>
+
+                    <h4 class="serif-title fw-bold mb-4">
+                        Entrega
+                    </h4>
+
+                    <p class="mb-1 fw-semibold">
+                        @Model.CustomerName
+                    </p>
+
+                    <p class="small text-muted mb-2">
+                        @Model.CustomerPhone
+                    </p>
+
+                    <p class="small text-muted mb-0">
+                        @Model.ShippingAddress
+                    </p>
+
                 </div>
+
             </div>
 
+
+            <!-- PAGAMENTO -->
+
             <div class="card border-0 shadow-sm rounded-4">
+
                 <div class="card-body p-4">
-                    <h5 class="fw-bold">Pagamento</h5>
-                    <p class="text-muted mb-3">@Model.PaymentMethod</p>
+
+                    <h5 class="fw-bold">
+                        Pagamento
+                    </h5>
+
+                    <p class="text-muted mb-3">
+                        @Model.PaymentMethod
+                    </p>
+
 
                     @if (!string.IsNullOrWhiteSpace(Model.Notes))
                     {
-                        <h5 class="fw-bold">Observações</h5>
-                        <p class="text-muted mb-0">@Model.Notes</p>
+                        <h5 class="fw-bold">
+                            Observações
+                        </h5>
+
+                        <p class="text-muted mb-0">
+                            @Model.Notes
+                        </p>
                     }
+
                 </div>
+
             </div>
+
         </div>
+
     </div>
+
 </div>
 
+
 <style>
+
     .order-timeline {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
         gap: 4px;
         position: relative;
     }
+
 
     .timeline-step {
         position: relative;
@@ -126,19 +301,28 @@
         min-width: 0;
     }
 
-    .timeline-step::before {
-        content: "";
-        position: absolute;
-        top: 22px;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: #e9ecef;
-        z-index: 0;
-    }
 
-    .timeline-step:first-child::before { left: 50%; }
-    .timeline-step:last-child::before { right: 50%; }
+        .timeline-step::before {
+            content: "";
+            position: absolute;
+            top: 22px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #e9ecef;
+            z-index: 0;
+        }
+
+
+        .timeline-step:first-child::before {
+            left: 50%;
+        }
+
+
+        .timeline-step:last-child::before {
+            right: 50%;
+        }
+
 
     .timeline-dot {
         position: relative;
@@ -153,32 +337,42 @@
         justify-content: center;
     }
 
+
     .timeline-step.completed {
-        color: var(--artisan-clay, #b85a3a);
+        color: var( --artisan-clay, #b85a3a );
     }
 
-    .timeline-step.completed .timeline-dot {
-        background: rgba(184, 90, 58, .12);
+
+        .timeline-step.completed
+        .timeline-dot {
+            background: rgba( 184, 90, 58, .12 );
+        }
+
+
+        .timeline-step.completed::before {
+            background: var( --artisan-clay, #b85a3a );
+        }
+
+
+    .timeline-step.current
+    .timeline-dot {
+        box-shadow: 0 0 0 5px rgba( 223, 183, 108, .25 );
     }
 
-    .timeline-step.completed::before {
-        background: var(--artisan-clay, #b85a3a);
-    }
-
-    .timeline-step.current .timeline-dot {
-        box-shadow: 0 0 0 5px rgba(223,183,108,.25);
-    }
 
     .timeline-label {
         font-size: .78rem;
         font-weight: 600;
     }
 
+
     @@media (max-width: 767px) {
+
         .order-timeline {
             grid-template-columns: 1fr;
             gap: 12px;
         }
+
 
         .timeline-step {
             display: grid;
@@ -187,73 +381,312 @@
             text-align: left;
         }
 
-        .timeline-step::before {
-            left: 22px !important;
-            right: auto !important;
-            top: 46px;
-            bottom: -14px;
-            width: 3px;
-            height: auto;
-        }
 
-        .timeline-step:last-child::before {
-            display: none;
-        }
+            .timeline-step::before {
+                left: 22px !important;
+                right: auto !important;
+                top: 46px;
+                bottom: -14px;
+                width: 3px;
+                height: auto;
+            }
+
+
+            .timeline-step:last-child::before {
+                display: none;
+            }
+
 
         .timeline-dot {
             margin: 0;
         }
     }
+
 </style>
 
+
 @section Scripts {
+
     <script src="https://cdn.jsdelivr.net/npm/@@microsoft/signalr@10.0.0/dist/browser/signalr.min.js"></script>
+
     <script>
+
         const orderId = @Model.Id;
-        const liveAlert = document.getElementById("liveAlert");
-        const statusLabel = document.getElementById("statusLabel");
-        const statusIcon = document.getElementById("statusIcon");
 
-        function applyStatus(status, label, icon) {
-            statusLabel.textContent = label;
-            statusIcon.innerHTML = `<i class="bi ${icon}"></i>`;
+        const liveAlert =
+            document.getElementById("liveAlert");
 
-            document.querySelectorAll("[data-status-step]").forEach(step => {
-                const stepStatus = Number(step.dataset.statusStep);
-                step.classList.toggle("completed", stepStatus <= status);
-                step.classList.toggle("current", stepStatus === status);
-            });
+        const statusLabel =
+            document.getElementById("statusLabel");
 
-            liveAlert.classList.remove("d-none");
-            setTimeout(() => liveAlert.classList.add("d-none"), 4500);
+        const statusIcon =
+            document.getElementById("statusIcon");
+
+
+        function getStatusIcon(status) {
+
+            switch (Number(status)) {
+
+                case 0:
+                    return "bi-plus-circle";
+
+                case 1:
+                    return "bi-hourglass-split";
+
+                case 2:
+                    return "bi-check-circle";
+
+                case 3:
+                    return "bi-box-seam";
+
+                case 4:
+                    return "bi-receipt";
+
+                case 5:
+                    return "bi-truck";
+
+                case 6:
+                    return "bi-house-check";
+
+                default:
+                    return "bi-box-seam";
+            }
+
         }
 
-        const connection = new signalR.HubConnectionBuilder()
-            .withUrl("/hubs/orders")
-            .withAutomaticReconnect()
-            .build();
 
-        connection.on("OrderStatusUpdated", function (updatedOrderId, status, label, icon) {
-            if (Number(updatedOrderId) !== orderId) return;
-            applyStatus(status, label, icon);
-        });
+        function getStatusName(status) {
 
-        connection.start().catch(error => {
-            console.error("SignalR:", error);
+            switch (Number(status)) {
 
-            // Fallback: consulta o status a cada 10 segundos.
-            setInterval(async () => {
-                try {
-                    const response = await fetch(`/Order/Status?id=${orderId}`);
-                    if (!response.ok) return;
+                case 0:
+                    return "Criado";
 
-                    const data = await response.json();
-                    const current = document.querySelector(".timeline-step.current");
-                    if (current && Number(current.dataset.statusStep) !== data.status) {
-                        window.location.reload();
+                case 1:
+                    return "Pendente";
+
+                case 2:
+                    return "Aprovado";
+
+                case 3:
+                    return "Separação";
+
+                case 4:
+                    return "Faturado";
+
+                case 5:
+                    return "Enviado";
+
+                case 6:
+                    return "Entregue";
+
+                default:
+                    return "Desconhecido";
+            }
+
+        }
+
+
+        function applyStatus(
+            status,
+            label,
+            icon
+        ) {
+
+            statusLabel.textContent =
+                label ||
+                getStatusName(status);
+
+            statusIcon.innerHTML =
+                `<i class="bi ${icon ||
+                getStatusIcon(status)
+                }"></i>`;
+
+
+            document
+                .querySelectorAll(
+                    "[data-status-step]"
+                )
+                .forEach(step => {
+
+                    const stepStatus =
+                        Number(
+                            step.dataset
+                                .statusStep
+                        );
+
+                    step.classList.toggle(
+                        "completed",
+                        stepStatus <= status
+                    );
+
+                    step.classList.toggle(
+                        "current",
+                        stepStatus === status
+                    );
+
+                });
+
+
+            liveAlert.classList.remove(
+                "d-none"
+            );
+
+
+            setTimeout(
+                () =>
+                    liveAlert.classList.add(
+                        "d-none"
+                    ),
+                4500
+            );
+
+        }
+
+
+        async function refreshStatus() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        `/Order/Status?id=${orderId}`,
+                        {
+                            cache:
+                                "no-store"
+                        }
+                    );
+
+
+                if (!response.ok)
+                    return;
+
+
+                const data =
+                    await response.json();
+
+
+                const current =
+                    document.querySelector(
+                        ".timeline-step.current"
+                    );
+
+
+                const currentStatus =
+                    current
+                        ? Number(
+                            current.dataset
+                                .statusStep
+                        )
+                        : -1;
+
+
+                if (
+                    currentStatus !==
+                    Number(data.status)
+                ) {
+
+                    applyStatus(
+                        data.status,
+                        data.statusName,
+                        getStatusIcon(
+                            data.status
+                        )
+                    );
+
+                }
+
+            }
+            catch (error) {
+
+                console.error(
+                    "Erro ao atualizar pedido:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            async () => {
+
+                if (
+                    typeof signalR !==
+                    "undefined"
+                ) {
+
+                    try {
+
+                        const connection =
+                            new signalR
+                                .HubConnectionBuilder()
+                                .withUrl(
+                                    "/hubs/orders"
+                                )
+                                .withAutomaticReconnect()
+                                .build();
+
+
+                        connection.on(
+                            "OrderStatusUpdated",
+                            function(
+                                updatedOrderId,
+                                status,
+                                label,
+                                icon
+                            ) {
+
+                                if (
+                                    Number(
+                                        updatedOrderId
+                                    ) !== orderId
+                                ) {
+                                    return;
+                                }
+
+
+                                applyStatus(
+                                    status,
+                                    label,
+                                    icon
+                                );
+
+                            }
+                        );
+
+
+                        await connection.start();
+
                     }
-                } catch { }
-            }, 10000);
-        });
+                    catch (error) {
+
+                        console.error(
+                            "SignalR:",
+                            error
+                        );
+
+                    }
+
+                }
+
+
+                /*
+                 * Fallback:
+                 * consulta o servidor
+                 * a cada 10 segundos.
+                 */
+
+                setInterval(
+                    refreshStatus,
+                    10000
+                );
+
+            }
+        );
+
     </script>
+
 }

@@ -1,138 +1,343 @@
-@model AtelieDaTransformacao.Domain.Entities.Order
-@using AtelieDaTransformacao.Domain.Entities
-@using AtelieDaTransformacao.Application.ViewModels
+@model AtelieDaTransformacao.Application.DTOs.OrderDetailsDto
+@using AtelieDaTransformacao.Domain.Enums
 
 @{
     Layout = "_AdminLayout";
     ViewData["Title"] = $"Pedido #{Model.Id}";
+
+    var statuses = Enum.GetValues<OrderStatus>();
 }
 
 <div class="d-flex justify-content-between align-items-center mb-4">
+
     <div>
-        <span class="text-uppercase text-muted small fw-bold">Gerenciamento</span>
-        <h2 class="fw-bold m-0">Pedido #@Model.Id</h2>
+        <span class="text-uppercase text-muted small fw-bold">
+            Gerenciamento
+        </span>
+
+        <h2 class="fw-bold m-0">
+            Pedido #@Model.Id
+        </h2>
+
+        <small class="text-muted">
+            @Model.OrderNumber
+        </small>
     </div>
-    <a asp-action="Index" class="btn btn-outline-dark rounded-pill">Voltar</a>
+
+    <a asp-action="Index"
+       class="btn btn-outline-dark rounded-pill">
+        <i class="bi bi-arrow-left me-1"></i>
+        Voltar
+    </a>
+
 </div>
 
 @if (TempData["SuccessMessage"] is string success)
 {
-    <div class="alert alert-success rounded-3">@success</div>
+    <div class="alert alert-success rounded-3">
+        @success
+    </div>
 }
+
 @if (TempData["ErrorMessage"] is string error)
 {
-    <div class="alert alert-danger rounded-3">@error</div>
+    <div class="alert alert-danger rounded-3">
+        @error
+    </div>
 }
 
 <div class="row g-4">
+
+    <!-- COLUNA PRINCIPAL -->
     <div class="col-lg-8">
+
+        <!-- STATUS -->
         <div class="card border-0 shadow-sm rounded-4 mb-4">
+
             <div class="card-body p-4">
+
                 <div class="d-flex justify-content-between align-items-center mb-4">
+
                     <div>
-                        <small class="text-muted">Status atual</small>
-                        <h3 class="fw-bold">@Model.Status.Label()</h3>
+
+                        <small class="text-muted">
+                            Status atual
+                        </small>
+
+                        <h3 class="fw-bold mb-0">
+                            @Model.StatusName
+                        </h3>
+
                     </div>
-                    <i class="bi @Model.Status.Icon() fs-1 text-warning"></i>
+
+                    <i class="bi bi-box-seam fs-1 text-warning"></i>
+
                 </div>
 
                 <div class="d-flex flex-wrap gap-2">
-                    @foreach (var status in Enum.GetValues<OrderStatus>())
+
+                    @foreach (var status in statuses)
                     {
-                        <span class="badge order-status-badge status-@status.ToString().ToLowerInvariant().Replace(" ", "-") rounded-pill px-3 py-2 d-inline-flex align-items-center gap-1">
-                            <i class="bi @status.Icon()"></i>
-                            <span>@status.Label()</span>
+                        var active =
+                            status == Model.Status;
+
+                        <span class="badge rounded-pill px-3 py-2
+                            @(active
+                                ? "bg-dark"
+                                : "bg-light text-dark")">
+
+                            @status.ToDisplayName()
+
                         </span>
                     }
-               </div>
+
+                </div>
+
             </div>
+
         </div>
 
+        <!-- ITENS -->
         <div class="card border-0 shadow-sm rounded-4">
+
             <div class="card-body p-4">
-                <h4 class="fw-bold mb-3">Itens</h4>
 
-                @foreach (var item in Model.Items)
+                <h4 class="fw-bold mb-3">
+                    Itens do pedido
+                </h4>
+
+                @if (Model.Items != null &&
+                     Model.Items.Count > 0)
                 {
-                    <div class="d-flex gap-3 align-items-center border-bottom py-3">
-                        <img src="@(string.IsNullOrWhiteSpace(item.ProductImage) ? "/images/placeholder.jpg" : item.ProductImage)"
-                             style="width:65px;height:65px;object-fit:cover;"
-                             class="rounded-3" alt="" />
+                    foreach (var item in Model.Items)
+                    {
+                        <div class="d-flex gap-3 align-items-center border-bottom py-3">
 
-                        <div class="flex-grow-1">
-                            <strong>@item.ProductTitle</strong>
-                            <small class="text-muted d-block">@item.Quantity x @item.UnitPrice.ToString("C")</small>
+                            <div class="flex-grow-1">
+
+                                <strong>
+                                    @item.Title
+                                </strong>
+
+                                <small class="text-muted d-block">
+                                    @item.Quantity x
+                                    R$ @item.UnitPrice.ToString("N2")
+                                </small>
+
+                            </div>
+
+                            <strong>
+                                R$ @item.Subtotal.ToString("N2")
+                            </strong>
+
                         </div>
-
-                        <strong>@item.Subtotal.ToString("C")</strong>
+                    }
+                }
+                else
+                {
+                    <div class="alert alert-light">
+                        Nenhum item encontrado neste pedido.
                     </div>
                 }
 
                 <div class="d-flex justify-content-between pt-3">
-                    <strong>Total</strong>
-                    <strong class="fs-4">@Model.Total.ToString("C")</strong>
+
+                    <strong>
+                        Total
+                    </strong>
+
+                    <strong class="fs-4">
+                        R$ @Model.Total.ToString("N2")
+                    </strong>
+
                 </div>
+
             </div>
+
         </div>
+
     </div>
 
+    <!-- COLUNA LATERAL -->
     <div class="col-lg-4">
+
+        <!-- ALTERAR STATUS -->
         <div class="card border-0 shadow-sm rounded-4 mb-4">
+
             <div class="card-body p-4">
-                <h4 class="fw-bold mb-3">Alterar status</h4>
 
-                <form asp-action="UpdateStatus" method="post" class="mb-3">
+                <h4 class="fw-bold mb-3">
+                    Alterar status
+                </h4>
+
+                <form asp-action="UpdateStatus"
+                      method="post"
+                      class="mb-3">
+
                     @Html.AntiForgeryToken()
-                    <input type="hidden" name="id" value="@Model.Id" />
 
-                    <select name="status" class="form-select form-select-lg mb-3">
-                        @foreach (var status in Enum.GetValues<OrderStatus>())
+                    <input type="hidden"
+                           name="id"
+                           value="@Model.Id" />
+
+                    <select name="status"
+                            class="form-select form-select-lg mb-3">
+
+                        @foreach (var status in statuses)
                         {
-                            <option value="@status" selected="@(status == Model.Status ? "selected" : null)">
-                                @status.Label()
-                            </option>
+                            if (status == Model.Status)
+                            {
+                                <option value="@status"
+                                        selected>
+                                    @status.ToDisplayName()
+                                </option>
+                            }
+                            else
+                            {
+                                <option value="@status">
+                                    @status.ToDisplayName()
+                                </option>
+                            }
                         }
+
                     </select>
 
-                    <button class="btn btn-dark w-100 rounded-pill">
-                        <i class="bi bi-pencil-square me-1"></i> Salvar status manual
+                    <div class="form-check mb-3">
+
+                        <input class="form-check-input"
+                               type="checkbox"
+                               name="autoAdvance"
+                               value="true"
+                               id="autoAdvance"
+                        @(Model.AutoAdvance ? "checked" : "") />
+
+                        <label class="form-check-label"
+                               for="autoAdvance">
+                            Ativar avanço automático
+                        </label>
+
+                    </div>
+
+                    <button type="submit"
+                            class="btn btn-dark w-100 rounded-pill">
+
+                        <i class="bi bi-pencil-square me-1"></i>
+                        Salvar status
+
                     </button>
+
                 </form>
 
-                <form asp-action="Advance" method="post">
+                <form asp-action="Advance"
+                      method="post">
+
                     @Html.AntiForgeryToken()
-                    <input type="hidden" name="id" value="@Model.Id" />
-                    <button class="btn btn-outline-success w-100 rounded-pill" @(Model.Status == OrderStatus.Entregue ? "disabled" : null)>
-                        <i class="bi bi-fast-forward me-1"></i>
-                        Avançar automaticamente
-                    </button>
+
+                    <input type="hidden"
+                           name="id"
+                           value="@Model.Id" />
+
+                    @if (Model.Status == OrderStatus.Entregue)
+                    {
+                        <button type="button"
+                                class="btn btn-outline-secondary w-100 rounded-pill"
+                                disabled>
+
+                            Pedido já entregue
+
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="submit"
+                                class="btn btn-outline-success w-100 rounded-pill">
+
+                            <i class="bi bi-fast-forward me-1"></i>
+                            Avançar etapa
+
+                        </button>
+                    }
+
                 </form>
 
                 <p class="small text-muted mt-3 mb-0">
-                    O avanço automático segue a ordem: criado → pendente → aprovado → separação → faturado → enviado → entregue.
+                    Ordem:
+                    Criado → Pendente → Aprovado →
+                    Separação → Faturado → Enviado → Entregue.
                 </p>
+
             </div>
+
         </div>
 
+        <!-- CLIENTE -->
         <div class="card border-0 shadow-sm rounded-4">
+
             <div class="card-body p-4">
-                <h5 class="fw-bold">Cliente</h5>
-                <p class="mb-1">@Model.CustomerName</p>
-                <p class="small text-muted mb-1">@Model.CustomerEmail</p>
-                <p class="small text-muted mb-3">@Model.CustomerPhone</p>
 
-                <h5 class="fw-bold">Entrega</h5>
-                <p class="small text-muted">@Model.ShippingAddress</p>
+                <h5 class="fw-bold">
+                    Cliente
+                </h5>
 
-                <h5 class="fw-bold">Pagamento</h5>
-                <p class="small text-muted">@Model.PaymentMethod</p>
+                <p class="small text-muted">
+                    @Model.UserEmail
+                </p>
 
-                @if (!string.IsNullOrWhiteSpace(Model.Notes))
+                <hr />
+
+                <h5 class="fw-bold">
+                    Pedido
+                </h5>
+
+                <p class="small text-muted mb-1">
+                    <strong>Número:</strong>
+                    @Model.OrderNumber
+                </p>
+
+                <p class="small text-muted mb-1">
+                    <strong>Forma de compra:</strong>
+                    Pelo site
+                </p>
+
+                <p class="small text-muted mb-1">
+                    <strong>Criado em:</strong>
+                    @Model.CreatedAt
+                    .ToLocalTime()
+                    .ToString("dd/MM/yyyy HH:mm")
+                </p>
+
+                <p class="small text-muted mb-0">
+                    <strong>Última atualização:</strong>
+                    @Model.UpdatedAt
+                    .ToLocalTime()
+                    .ToString("dd/MM/yyyy HH:mm")
+                </p>
+
+                <hr />
+
+                <h5 class="fw-bold">
+                    Automação
+                </h5>
+
+                @if (Model.AutoAdvance)
                 {
-                    <h5 class="fw-bold">Observações</h5>
-                    <p class="small text-muted mb-0">@Model.Notes</p>
+                    <span class="badge text-bg-success">
+                        <i class="bi bi-arrow-repeat me-1"></i>
+                        Ativa
+                    </span>
                 }
+                else
+                {
+                    <span class="badge text-bg-secondary">
+                        <i class="bi bi-person-gear me-1"></i>
+                        Manual
+                    </span>
+                }
+
             </div>
+
         </div>
+
     </div>
+
 </div>
