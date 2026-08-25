@@ -41,13 +41,13 @@
 
                     <!-- Ações (direita) -->
                     <div class="d-flex align-items-center ms-auto header-actions-v3">
-                        <a class="quote-link-v3 d-inline-flex align-items-center" asp-controller="Quote" asp-action="Index" title="Solicitar orçamento">
-                            <i class="bi bi-pencil-square" aria-hidden="true"></i>
-                            <span>Orçamento</span>
-                        </a>
-
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
+                            <a class="quote-link-v3 d-inline-flex align-items-center" asp-controller="Quote" asp-action="Index" title="Solicitar orçamento">
+                                <i class="bi bi-pencil-square" aria-hidden="true"></i>
+                                <span>Orçamento</span>
+                            </a>
+
                             if (User.IsInRole("Admin"))
                             {
                                 <a class="header-menu-link-v3 d-inline-flex align-items-center" asp-controller="Admin" asp-action="Index" title="Painel do Artesão">

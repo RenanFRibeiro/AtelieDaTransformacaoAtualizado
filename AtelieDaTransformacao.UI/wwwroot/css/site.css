@@ -614,14 +614,42 @@ div.position-fixed.bottom-0 button {
     flex-shrink: 0;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 992px) {
+    /* Layout do header: marca à esquerda, navegação realmente centralizada e ações à direita. */
+    .navbar-artisan > .container {
+        position: relative;
+        max-width: 100%;
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+    }
+
+    .navbar-artisan .navbar-collapse {
+        position: relative;
+        min-width: 0;
+    }
+
+    .navbar-artisan .navbar-nav {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        margin: 0 !important;
+        width: max-content;
+        gap: 0.15rem;
+    }
+
     .navbar-artisan .navbar-brand {
-        margin-right: 1.5rem;
+        margin-right: 0;
+        padding-left: 0;
     }
 
     .navbar-artisan .nav-link-artisan {
-        padding-left: 0.78rem !important;
-        padding-right: 0.78rem !important;
+        padding-left: 0.9rem !important;
+        padding-right: 0.9rem !important;
+    }
+
+    .navbar-artisan .header-actions-v3 {
+        margin-left: auto !important;
     }
 }
 
