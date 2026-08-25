@@ -11,20 +11,62 @@ public sealed class CheckoutViewModel
 
     public List<CheckoutItemViewModel> Items { get; set; } = new();
 
-    [Required(ErrorMessage = "Informe seu nome.")]
+    [Required(ErrorMessage = "Informe seu nome completo.")]
     [StringLength(150)]
-    [Display(Name = "Nome")]
+    [Display(Name = "Nome completo")]
     public string CustomerName { get; set; } = string.Empty;
 
+    [Required(ErrorMessage = "Informe seu e-mail.")]
+    [EmailAddress(ErrorMessage = "Informe um e-mail válido.")]
+    [StringLength(180)]
+    [Display(Name = "E-mail")]
+    public string CustomerEmail { get; set; } = string.Empty;
+
     [Required(ErrorMessage = "Informe seu telefone.")]
+    [Phone(ErrorMessage = "Informe um telefone válido.")]
     [StringLength(30)]
-    [Display(Name = "Telefone")]
+    [Display(Name = "Telefone / WhatsApp")]
     public string CustomerPhone { get; set; } = string.Empty;
 
+    [Required(ErrorMessage = "Informe o CEP.")]
+    [StringLength(9)]
+    [RegularExpression("^\\d{5}-?\\d{3}$", ErrorMessage = "Informe um CEP válido.")]
+    [Display(Name = "CEP")]
+    public string PostalCode { get; set; } = string.Empty;
+
     [Required(ErrorMessage = "Informe o endereço de entrega.")]
-    [StringLength(500)]
-    [Display(Name = "Endereço de entrega")]
+    [StringLength(180)]
+    [Display(Name = "Endereço")]
     public string ShippingAddress { get; set; } = string.Empty;
+
+    [Required(ErrorMessage = "Informe o número.")]
+    [StringLength(20)]
+    [Display(Name = "Número")]
+    public string AddressNumber { get; set; } = string.Empty;
+
+    [StringLength(80)]
+    [Display(Name = "Complemento")]
+    public string Complement { get; set; } = string.Empty;
+
+    [Required(ErrorMessage = "Informe o bairro.")]
+    [StringLength(100)]
+    [Display(Name = "Bairro")]
+    public string District { get; set; } = string.Empty;
+
+    [Required(ErrorMessage = "Informe a cidade.")]
+    [StringLength(100)]
+    [Display(Name = "Cidade")]
+    public string City { get; set; } = string.Empty;
+
+    [Required(ErrorMessage = "Informe o estado.")]
+    [StringLength(2, MinimumLength = 2)]
+    [RegularExpression("^[A-Za-z]{2}$", ErrorMessage = "Use a UF com 2 letras.")]
+    [Display(Name = "Estado")]
+    public string State { get; set; } = string.Empty;
+
+    [Required(ErrorMessage = "Escolha como deseja receber o pedido.")]
+    [Display(Name = "Entrega ou retirada")]
+    public string DeliveryMethod { get; set; } = "Entrega";
 
     [Required(ErrorMessage = "Selecione uma forma de pagamento.")]
     [Display(Name = "Forma de pagamento")]

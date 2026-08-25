@@ -35,11 +35,15 @@ public class OrderDetailsDto : OrderListDto
     // Propriedades adicionadas para a view Details.cshtml
     public string CustomerName { get; set; } = string.Empty;
 
+    public string CustomerEmail { get; set; } = string.Empty;
+
     public string? CustomerPhone { get; set; }
 
     public string ShippingAddress { get; set; } = string.Empty;
 
     public string PaymentMethod { get; set; } = string.Empty;
+
+    public string DeliveryMethod { get; set; } = string.Empty;
 
     public string? Notes { get; set; }
 }

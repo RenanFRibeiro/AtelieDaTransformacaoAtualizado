@@ -1,140 +1,241 @@
 @model AtelieDaTransformacao.Application.ViewModels.CheckoutViewModel
-@using System.Linq
 
 @{
     ViewData["Title"] = "Finalizar compra";
 }
 
 <div class="container py-5">
-    <div class="mb-4">
-        <span class="text-uppercase text-gold fw-bold small">Compra pelo site</span>
-        <h1 class="serif-title fw-bold mb-1">Finalizar pedido</h1>
-        <p class="text-muted mb-0">Revise os itens e informe os dados para entrega.</p>
-    </div>
+    <div class="row g-4 align-items-start">
+        <div class="col-lg-8">
+            <div class="mb-4">
+                <span class="text-uppercase text-gold fw-bold small">Compra segura e personalizada</span>
+                <h1 class="serif-title fw-bold mb-2">Finalizar compra</h1>
+                <p class="text-muted mb-0">Seus dados foram preenchidos automaticamente a partir do seu cadastro. Revise antes de confirmar.</p>
+            </div>
 
-    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+            <form asp-action="Checkout" method="post" id="checkoutForm">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="DirectProductId" />
+                <input type="hidden" asp-for="DirectQuantity" />
 
-    <form asp-action="Checkout" method="post">
-        @Html.AntiForgeryToken()
-        <input type="hidden" asp-for="DirectProductId" />
-        <input type="hidden" asp-for="DirectQuantity" />
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger rounded-4"></div>
 
-        <div class="row g-4">
-            <div class="col-lg-7">
                 <div class="card border-0 shadow-sm rounded-4 mb-4">
-                    <div class="card-body p-4">
-                        <h4 class="serif-title fw-bold mb-4">Seus dados</h4>
+                    <div class="card-body p-4 p-lg-5">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div>
+                                <span class="small text-muted">01</span>
+                                <h4 class="serif-title fw-bold mb-1">Seus dados</h4>
+                                <p class="small text-muted mb-0">Você pode corrigir qualquer informação antes de confirmar.</p>
+                            </div>
+                            <i class="bi bi-person-check fs-2 text-gold"></i>
+                        </div>
 
                         <div class="row g-3">
-                            <div class="col-12">
+                            <div class="col-md-6">
                                 <label asp-for="CustomerName" class="form-label fw-semibold"></label>
-                                <input asp-for="CustomerName" class="form-control form-control-lg" placeholder="Seu nome completo" />
+                                <input asp-for="CustomerName" class="form-control form-control-lg rounded-3" autocomplete="name" />
                                 <span asp-validation-for="CustomerName" class="text-danger small"></span>
                             </div>
-
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold">E-mail</label>
-                                <input value="@User.Identity?.Name" class="form-control form-control-lg" readonly />
-                                <div class="form-text">Este pedido ficará vinculado à sua conta.</div>
+                                <label asp-for="CustomerEmail" class="form-label fw-semibold"></label>
+                                <input asp-for="CustomerEmail" class="form-control form-control-lg rounded-3" autocomplete="email" />
+                                <span asp-validation-for="CustomerEmail" class="text-danger small"></span>
                             </div>
-
                             <div class="col-md-6">
                                 <label asp-for="CustomerPhone" class="form-label fw-semibold"></label>
-                                <input asp-for="CustomerPhone" class="form-control form-control-lg" placeholder="(11) 99999-9999" />
+                                <input asp-for="CustomerPhone" class="form-control form-control-lg rounded-3" autocomplete="tel" />
                                 <span asp-validation-for="CustomerPhone" class="text-danger small"></span>
-                            </div>
-
-                            <div class="col-12">
-                                <label asp-for="ShippingAddress" class="form-label fw-semibold"></label>
-                                <textarea asp-for="ShippingAddress" class="form-control" rows="3" placeholder="Rua, número, complemento, bairro, cidade e CEP"></textarea>
-                                <span asp-validation-for="ShippingAddress" class="text-danger small"></span>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label asp-for="PaymentMethod" class="form-label fw-semibold"></label>
-                                <select asp-for="PaymentMethod" class="form-select form-select-lg">
-                                    <option value="">Selecione...</option>
-                                    <option value="Pix">Pix</option>
-                                    <option value="Cartão">Cartão</option>
-                                    <option value="Transferência">Transferência</option>
-                                    <option value="A combinar">A combinar</option>
-                                </select>
-                                <span asp-validation-for="PaymentMethod" class="text-danger small"></span>
-                            </div>
-
-                            <div class="col-12">
-                                <label asp-for="Notes" class="form-label fw-semibold"></label>
-                                <textarea asp-for="Notes" class="form-control" rows="3" placeholder="Alguma observação sobre a entrega?"></textarea>
-                                <span asp-validation-for="Notes" class="text-danger small"></span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="alert alert-info border-0 rounded-4">
-                    <i class="bi bi-info-circle me-2"></i>
-                    <strong>Importante:</strong> esta etapa cria o pedido no site. O pagamento ainda não é processado por um gateway. O administrador poderá aprovar o pedido após confirmar o pagamento.
-                </div>
-            </div>
-
-            <div class="col-lg-5">
-                <div class="card border-0 shadow-sm rounded-4 sticky-lg-top" style="top:100px;">
-                    <div class="card-body p-4">
-                        <h4 class="serif-title fw-bold mb-4">Resumo do pedido</h4>
-
-                        @foreach (var item in Model.Items)
-                        {
-                            <div class="d-flex gap-3 align-items-center mb-3">
-                                <img src="@(string.IsNullOrWhiteSpace(item.Image) ? "/images/placeholder.jpg" : item.Image)"
-                                     alt="@item.Title"
-                                     class="rounded-3"
-                                     style="width:70px;height:70px;object-fit:cover;" />
-
-                                <div class="flex-grow-1">
-                                    <div class="fw-semibold">@item.Title</div>
-                                    <small class="text-muted">
-                                        @item.Quantity x @item.UnitPrice.ToString("C")
-                                    </small>
-                                </div>
-
-                                <strong>@item.Subtotal.ToString("C")</strong>
-                            </div>
-                        }
-
-                        <hr />
-
+                <div class="card border-0 shadow-sm rounded-4 mb-4">
+                    <div class="card-body p-4 p-lg-5">
                         <div class="d-flex justify-content-between align-items-center mb-4">
-                            <span class="fw-bold">Total</span>
-                            <span class="fs-3 fw-bold">@Model.Total.ToString("C")</span>
+                            <div>
+                                <span class="small text-muted">02</span>
+                                <h4 class="serif-title fw-bold mb-1">Entrega</h4>
+                                <p class="small text-muted mb-0">O endereço abaixo veio do seu cadastro.</p>
+                            </div>
+                            <i class="bi bi-truck fs-2 text-gold"></i>
                         </div>
 
-                        <button type="submit" class="btn btn-artisan btn-lg w-100 rounded-pill py-3">
-                            <i class="bi bi-bag-check me-2"></i>
-                            Confirmar compra pelo site
-                        </button>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label asp-for="DeliveryMethod" class="form-label fw-semibold"></label>
+                                <select asp-for="DeliveryMethod" class="form-select form-select-lg rounded-3" id="deliveryMethod">
+                                    <option value="Entrega">Entrega</option>
+                                    <option value="Retirada no ateliê">Retirada no ateliê</option>
+                                </select>
+                                <span asp-validation-for="DeliveryMethod" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="PostalCode" class="form-label fw-semibold"></label>
+                                <input asp-for="PostalCode" class="form-control form-control-lg rounded-3" autocomplete="postal-code" />
+                                <span asp-validation-for="PostalCode" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-8">
+                                <label asp-for="ShippingAddress" class="form-label fw-semibold"></label>
+                                <input asp-for="ShippingAddress" class="form-control form-control-lg rounded-3" autocomplete="street-address" />
+                                <span asp-validation-for="ShippingAddress" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="AddressNumber" class="form-label fw-semibold"></label>
+                                <input asp-for="AddressNumber" class="form-control form-control-lg rounded-3" autocomplete="address-line2" />
+                                <span asp-validation-for="AddressNumber" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="Complement" class="form-label fw-semibold"></label>
+                                <input asp-for="Complement" class="form-control form-control-lg rounded-3" autocomplete="address-line2" />
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="District" class="form-label fw-semibold"></label>
+                                <input asp-for="District" class="form-control form-control-lg rounded-3" autocomplete="address-level3" />
+                                <span asp-validation-for="District" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <label asp-for="City" class="form-label fw-semibold"></label>
+                                <input asp-for="City" class="form-control form-control-lg rounded-3" autocomplete="address-level2" />
+                                <span asp-validation-for="City" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-2">
+                                <label asp-for="State" class="form-label fw-semibold"></label>
+                                <input asp-for="State" maxlength="2" class="form-control form-control-lg rounded-3 text-uppercase" autocomplete="address-level1" />
+                                <span asp-validation-for="State" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                        @if (!Model.DirectProductId.HasValue)
-                        {
-                            <a asp-controller="Cart" asp-action="Index" class="btn btn-outline-dark w-100 rounded-pill mt-2">
-                                Voltar ao carrinho
-                            </a>
-                        }
+                <div class="card border-0 shadow-sm rounded-4 mb-4">
+                    <div class="card-body p-4 p-lg-5">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div>
+                                <span class="small text-muted">03</span>
+                                <h4 class="serif-title fw-bold mb-1">Pagamento</h4>
+                                <p class="small text-muted mb-0">Escolha a opção que deseja combinar com o vendedor.</p>
+                            </div>
+                            <i class="bi bi-wallet2 fs-2 text-gold"></i>
+                        </div>
 
-                        @if (!string.IsNullOrWhiteSpace(ViewBag.WhatsAppLink))
-                        {
-                            <a href="@ViewBag.WhatsAppLink" target="_blank" rel="noopener"
-                               class="btn btn-success w-100 rounded-pill mt-2">
-                                <i class="bi bi-whatsapp me-2"></i>
-                                Continuar pelo WhatsApp
-                            </a>
-                        }
+                        <div class="row g-3">
+                            @foreach (var method in new[] { "Pix", "Cartão de crédito", "Cartão de débito", "Transferência bancária", "A combinar" })
+                            {
+                                var id = "payment_" + method.Replace(" ", "_").Replace("ã", "a").Replace("é", "e").Replace("á", "a");
+                                <div class="col-md-6">
+                                    <label class="payment-option border rounded-4 p-3 d-flex gap-3 align-items-center h-100">
+                                        <input class="form-check-input mt-0" type="radio" asp-for="PaymentMethod" value="@method" />
+                                        <span>
+                                            <strong class="d-block">@method</strong>
+                                            <small class="text-muted">Forma registrada no pedido</small>
+                                        </span>
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                        <span asp-validation-for="PaymentMethod" class="text-danger small"></span>
+
+                        <div class="alert alert-warning rounded-4 mt-4 mb-0">
+                            <i class="bi bi-info-circle me-2"></i>
+                            O site registra a forma de pagamento escolhida, mas o processamento financeiro ainda é confirmado com o vendedor. Nenhum cartão é cobrado nesta etapa.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-0 shadow-sm rounded-4 mb-4">
+                    <div class="card-body p-4 p-lg-5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <span class="small text-muted">04</span>
+                                <h4 class="serif-title fw-bold mb-1">Observações</h4>
+                            </div>
+                            <i class="bi bi-chat-left-text fs-2 text-gold"></i>
+                        </div>
+                        <label asp-for="Notes" class="form-label fw-semibold"></label>
+                        <textarea asp-for="Notes" class="form-control rounded-4" rows="4" placeholder="Alguma instrução para entrega, retirada ou atendimento?"></textarea>
+                        <span asp-validation-for="Notes" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-column flex-md-row gap-2 justify-content-end">
+                    <a asp-controller="Cart" asp-action="Index" class="btn btn-outline-dark rounded-pill px-4 py-3">Voltar ao carrinho</a>
+                    <button type="submit" class="btn btn-artisan rounded-pill px-5 py-3 fw-semibold" id="confirmCheckoutButton">
+                        <i class="bi bi-check2-circle me-2"></i> Confirmar compra
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 sticky-lg-top" style="top:100px;">
+                <div class="card-body p-4">
+                    <span class="text-uppercase text-gold fw-bold small">Resumo</span>
+                    <h3 class="serif-title fw-bold mb-4">Seu pedido</h3>
+
+                    @foreach (var item in Model.Items)
+                    {
+                        <div class="d-flex gap-3 align-items-center mb-3">
+                            <img src="@(string.IsNullOrWhiteSpace(item.Image) ? "/images/placeholder.jpg" : item.Image)" alt="@item.Title" class="rounded-3" style="width:58px;height:58px;object-fit:cover;" />
+                            <div class="flex-grow-1">
+                                <strong class="d-block">@item.Title</strong>
+                                <small class="text-muted">@item.Quantity x R$ @item.UnitPrice.ToString("N2")</small>
+                            </div>
+                            <strong>R$ @item.Subtotal.ToString("N2")</strong>
+                        </div>
+                    }
+
+                    <hr />
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-muted">Itens</span>
+                        <strong>@Model.Items.Sum(x => x.Quantity)</strong>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="fw-bold">Total</span>
+                        <span class="fs-4 fw-bold">R$ @Model.Total.ToString("N2")</span>
+                    </div>
+
+                    <div class="alert alert-light border rounded-4 mt-4 mb-0">
+                        <i class="bi bi-shield-check text-gold me-2"></i>
+                        <small>Depois da confirmação, seu pedido receberá um número e você poderá acompanhar o status pelo site.</small>
                     </div>
                 </div>
             </div>
         </div>
-    </form>
+    </div>
 </div>
+
+<style>
+    .payment-option { cursor: pointer; transition: .2s ease; background: #fff; }
+    .payment-option:hover { transform: translateY(-1px); box-shadow: 0 .35rem 1rem rgba(0,0,0,.06); }
+    .payment-option:has(input:checked) { border-color: var(--artisan-clay,#b85a3a) !important; box-shadow: 0 0 0 2px rgba(184,90,58,.12); }
+</style>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.getElementById('checkoutForm')?.addEventListener('submit', function () {
+            const button = document.getElementById('confirmCheckoutButton');
+            if (!button) return;
+            button.disabled = true;
+            button.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Criando pedido...';
+        });
+
+        const delivery = document.getElementById('deliveryMethod');
+        const addressFields = ['PostalCode','ShippingAddress','AddressNumber','District','City','State'];
+
+        function syncDeliveryFields() {
+            const pickup = delivery?.value === 'Retirada no ateliê';
+            addressFields.forEach(name => {
+                const el = document.getElementById(name);
+                if (!el) return;
+                el.disabled = pickup;
+                el.closest('.col-md-4, .col-md-8, .col-md-2')?.classList.toggle('opacity-50', pickup);
+            });
+        }
+
+        delivery?.addEventListener('change', syncDeliveryFields);
+        syncDeliveryFields();
+    </script>
 }

@@ -12,14 +12,11 @@ public sealed class Order
 
     public string UserEmail { get; set; } = string.Empty;
 
-    // Dados informados no checkout
-    public string? CustomerName { get; set; }
-    public string? CustomerPhone { get; set; }
-    public string? ShippingAddress { get; set; }
-    public string? PaymentMethod { get; set; }
-    public string? Notes { get; set; }
-
     public string ItemsJson { get; set; } = "[]";
+
+    // Snapshot dos dados informados no checkout. Mantém histórico sem depender
+    // das informações que o cliente possa alterar futuramente no Identity.
+    public string CheckoutJson { get; set; } = "{}";
 
     public decimal Total { get; set; }
 
@@ -51,4 +48,21 @@ public sealed class OrderItemSnapshot
 
     public decimal Subtotal =>
         UnitPrice * Quantity;
+}
+
+public sealed class OrderCheckoutSnapshot
+{
+    public string CustomerName { get; set; } = string.Empty;
+    public string CustomerEmail { get; set; } = string.Empty;
+    public string CustomerPhone { get; set; } = string.Empty;
+    public string PostalCode { get; set; } = string.Empty;
+    public string ShippingAddress { get; set; } = string.Empty;
+    public string AddressNumber { get; set; } = string.Empty;
+    public string Complement { get; set; } = string.Empty;
+    public string District { get; set; } = string.Empty;
+    public string City { get; set; } = string.Empty;
+    public string State { get; set; } = string.Empty;
+    public string DeliveryMethod { get; set; } = string.Empty;
+    public string PaymentMethod { get; set; } = string.Empty;
+    public string Notes { get; set; } = string.Empty;
 }

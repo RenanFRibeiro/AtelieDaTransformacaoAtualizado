@@ -30,21 +30,9 @@ public sealed class OrderConfiguration
             .HasColumnType("nvarchar(max)")
             .IsRequired();
 
-        // Dados opcionais/legados preenchidos pelo checkout.
-        builder.Property(x => x.CustomerName)
-            .HasMaxLength(150);
-
-        builder.Property(x => x.CustomerPhone)
-            .HasMaxLength(30);
-
-        builder.Property(x => x.ShippingAddress)
-            .HasMaxLength(500);
-
-        builder.Property(x => x.PaymentMethod)
-            .HasMaxLength(100);
-
-        builder.Property(x => x.Notes)
-            .HasMaxLength(1000);
+        builder.Property(x => x.CheckoutJson)
+            .HasColumnType("nvarchar(max)")
+            .IsRequired();
 
         builder.Property(x => x.Total)
             .HasColumnType("decimal(18,2)")

@@ -20,165 +20,113 @@ public sealed class OrderService : IOrderService
         _repository = repository;
     }
 
-    // ============================================================
-    // PEDIDOS DO USUÁRIO
-    // ============================================================
-
-    public async Task<IReadOnlyList<OrderListDto>> GetByUserIdAsync(
-        string userId)
-    {
-        var orders = await _repository.GetByUserIdAsync(userId);
-
-        return orders
-            .Select(ToListDto)
-            .ToList();
-    }
-
-    // ============================================================
-    // TODOS OS PEDIDOS
-    // ============================================================
+    public async Task<IReadOnlyList<OrderListDto>> GetByUserIdAsync(string userId)
+        => (await _repository.GetByUserIdAsync(userId)).Select(ToListDto).ToList();
 
     public async Task<IReadOnlyList<OrderListDto>> GetAllAsync()
+        => (await _repository.GetAllAsync()).Select(ToListDto).ToList();
+
+    public async Task<OrderDetailsDto?> GetByIdForUserAsync(int id, string userId)
     {
-        var orders = await _repository.GetAllAsync();
-
-        return orders
-            .Select(ToListDto)
-            .ToList();
+        var order = await _repository.GetByIdForUserAsync(id, userId);
+        return order is null ? null : ToDetailsDto(order);
     }
-
-    // ============================================================
-    // PEDIDO DO USUÁRIO POR ID
-    // ============================================================
-
-    public async Task<OrderDetailsDto?> GetByIdForUserAsync(
-        int id,
-        string userId)
-    {
-        var order = await _repository.GetByIdForUserAsync(
-            id,
-            userId);
-
-        if (order == null)
-            return null;
-
-        return ToDetailsDto(order);
-    }
-
-    // ============================================================
-    // PEDIDO POR ID
-    // ============================================================
 
     public async Task<OrderDetailsDto?> GetByIdAsync(int id)
     {
         var order = await _repository.GetByIdAsync(id);
-
-        if (order == null)
-            return null;
-
-        return ToDetailsDto(order);
+        return order is null ? null : ToDetailsDto(order);
     }
 
-    // ============================================================
-    // CONVERTE ORDER -> ORDER LIST DTO
-    // ============================================================
-
-    private static OrderListDto ToListDto(Order order)
+    private static OrderListDto ToListDto(Order order) => new()
     {
-        return new OrderListDto
-        {
-            Id = order.Id,
-
-            OrderNumber = order.OrderNumber,
-
-            UserId = order.UserId,
-
-            UserEmail = order.UserEmail,
-
-            Total = order.Total,
-
-            Status = order.Status,
-
-            StatusName = order.Status.ToDisplayName(),
-
-            AutoAdvance = order.AutoAdvance,
-
-            CreatedAt = order.CreatedAt,
-
-            UpdatedAt = order.UpdatedAt,
-
-            StatusChangedAt = order.StatusChangedAt
-        };
-    }
-
-    // ============================================================
-    // CONVERTE ORDER -> ORDER DETAILS DTO
-    // ============================================================
+        Id = order.Id,
+        OrderNumber = order.OrderNumber,
+        UserId = order.UserId,
+        UserEmail = order.UserEmail,
+        Total = order.Total,
+        Status = order.Status,
+        StatusName = order.Status.ToDisplayName(),
+        AutoAdvance = order.AutoAdvance,
+        CreatedAt = order.CreatedAt,
+        UpdatedAt = order.UpdatedAt,
+        StatusChangedAt = order.StatusChangedAt
+    };
 
     private static OrderDetailsDto ToDetailsDto(Order order)
     {
+        var checkout = DeserializeCheckout(order.CheckoutJson);
+
         return new OrderDetailsDto
         {
             Id = order.Id,
-
             OrderNumber = order.OrderNumber,
-
             UserId = order.UserId,
-
             UserEmail = order.UserEmail,
-
             Total = order.Total,
-
             Status = order.Status,
-
             StatusName = order.Status.ToDisplayName(),
-
             AutoAdvance = order.AutoAdvance,
-
             CreatedAt = order.CreatedAt,
-
             UpdatedAt = order.UpdatedAt,
-
             StatusChangedAt = order.StatusChangedAt,
-
-            CustomerName = order.CustomerName ?? string.Empty,
-            CustomerPhone = order.CustomerPhone,
-            ShippingAddress = order.ShippingAddress ?? string.Empty,
-            PaymentMethod = order.PaymentMethod ?? string.Empty,
-            Notes = order.Notes,
-
-            Items = DeserializeItems(order.ItemsJson)
+            Items = DeserializeItems(order.ItemsJson),
+            CustomerName = checkout.CustomerName,
+            CustomerEmail = checkout.CustomerEmail,
+            CustomerPhone = checkout.CustomerPhone,
+            ShippingAddress = BuildShippingAddress(checkout),
+            PaymentMethod = checkout.PaymentMethod,
+            DeliveryMethod = checkout.DeliveryMethod,
+            Notes = checkout.Notes
         };
     }
 
-    // ============================================================
-    // DESSERIALIZA OS ITENS DO PEDIDO
-    // ============================================================
-
-    private static List<AtelieDaTransformacao.Domain.Entities.OrderItemSnapshot>
-        DeserializeItems(string json)
+    private static List<OrderItemSnapshot> DeserializeItems(string? json)
     {
         if (string.IsNullOrWhiteSpace(json))
-        {
-            return new List<
-                AtelieDaTransformacao.Domain.Entities.OrderItemSnapshot>();
-        }
+            return new();
 
         try
         {
-            var items =
-                JsonSerializer.Deserialize<
-                    List<AtelieDaTransformacao.Domain.Entities.OrderItemSnapshot>
-                >(json);
-
-            return items
-                ?? new List<
-                    AtelieDaTransformacao.Domain.Entities.OrderItemSnapshot>();
+            return JsonSerializer.Deserialize<List<OrderItemSnapshot>>(json) ?? new();
         }
         catch (JsonException)
         {
-            return new List<
-                AtelieDaTransformacao.Domain.Entities.OrderItemSnapshot>();
+            return new();
         }
+    }
+
+    private static OrderCheckoutSnapshot DeserializeCheckout(string? json)
+    {
+        if (string.IsNullOrWhiteSpace(json))
+            return new();
+
+        try
+        {
+            return JsonSerializer.Deserialize<OrderCheckoutSnapshot>(json) ?? new();
+        }
+        catch (JsonException)
+        {
+            return new();
+        }
+    }
+
+    private static string BuildShippingAddress(OrderCheckoutSnapshot snapshot)
+    {
+        var lines = new List<string>();
+        var first = string.Join(", ", new[] { snapshot.ShippingAddress, snapshot.AddressNumber }
+            .Where(x => !string.IsNullOrWhiteSpace(x)));
+
+        if (!string.IsNullOrWhiteSpace(first)) lines.Add(first);
+        if (!string.IsNullOrWhiteSpace(snapshot.Complement)) lines.Add(snapshot.Complement);
+        if (!string.IsNullOrWhiteSpace(snapshot.District)) lines.Add(snapshot.District);
+
+        var city = string.Join(" - ", new[] { snapshot.City, snapshot.State }
+            .Where(x => !string.IsNullOrWhiteSpace(x)));
+
+        if (!string.IsNullOrWhiteSpace(city)) lines.Add(city);
+        if (!string.IsNullOrWhiteSpace(snapshot.PostalCode)) lines.Add($"CEP {snapshot.PostalCode}");
+
+        return string.Join(" | ", lines);
     }
 }
