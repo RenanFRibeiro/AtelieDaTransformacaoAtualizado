@@ -19,8 +19,8 @@
 </head>
 <body class="d-flex flex-column min-vh-100" style="--artisan-gold: #dfb76c; --artisan-clay: #b85a3a; --artisan-wood: #1a1512;">
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-artisan-dark navbar-artisan py-3 shadow-sm sticky-top">
-            <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-artisan-dark navbar-artisan py-2 shadow-sm fixed-top">
+             <div class="container">
                 <!-- Marca (esquerda) -->
                 <a class="navbar-brand d-flex align-items-center fw-bold fs-2" asp-controller="Home" asp-action="Index">
                     <i class="bi bi-tree-fill text-gold me-2 fs-3" aria-hidden="true"></i>
@@ -93,6 +93,9 @@
             </div>
         </nav>
     </header>
+
+    <!-- Spacer para compensar a navbar fixed-top -->
+    <div class="navbar-fixed-spacer" aria-hidden="true"></div>
 
     @if (ViewContext.RouteData.Values["controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["action"]?.ToString() == "Index")
     {

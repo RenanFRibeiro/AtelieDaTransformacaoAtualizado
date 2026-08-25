@@ -8,6 +8,7 @@
     --artisan-sand: #fbf9f6; /* Areia Escovada (Background Global) */
     --artisan-linen: #f3eee6; /* Linho Cru (Superfícies Secundárias) */
     --text-main: #2a2421; /* Antracite Orgânico */
+    --navbar-height: 72px; /* ajuste centralizado da altura da navbar */
 }
 
 /* Base da Aplicação */
@@ -279,6 +280,86 @@ div.position-fixed.bottom-0 button {
         z-index: 1050 !important;
     }
 }
+
+/* =========================
+   Ajustes para Navbar fixa
+   ========================= */
+
+/* Forçar altura / alinhamento quando a navbar estiver fixa */
+.navbar-artisan.fixed-top {
+    height: var(--navbar-height);
+    min-height: var(--navbar-height);
+    align-items: center;
+    z-index: 1030; /* garantir sobreposição adequada */
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+/* Espaçador usado logo após o header para evitar sobreposição do conteúdo */
+.navbar-fixed-spacer {
+    height: var(--navbar-height);
+    width: 100%;
+    display: block;
+}
+
+/* Marca (logo) — reduzir tamanho e melhorar legibilidade */
+.navbar-brand {
+    font-size: 1.1rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+/* Ícone da marca menor para compactar altura */
+.navbar-brand .bi {
+    font-size: 1.15rem;
+}
+
+/* Ações (botões) do header — tamanho e espaçamento mais compacto */
+.header-actions .action-btn {
+    padding: .35rem .6rem;
+    font-size: .9rem;
+    border-radius: .6rem;
+}
+
+/* Botões ghost/link do header: melhorar touch-target e espaçamento */
+.header-actions .btn-ghost {
+    padding: .35rem .5rem;
+    font-size: .88rem;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 991.98px) {
+    :root {
+        --navbar-height: 88px; /* mais espaço em mobile quando o menu expande */
+    }
+
+    .navbar-artisan.fixed-top {
+        height: auto;
+        padding-top: .6rem;
+        padding-bottom: .6rem;
+    }
+
+    .navbar-fixed-spacer {
+        height: calc(var(--navbar-height));
+    }
+
+    .navbar-brand {
+        font-size: 1rem;
+    }
+
+    .header-actions .action-btn {
+        padding: .35rem .5rem;
+        font-size: .85rem;
+    }
+
+    /* Evitar que o conteúdo do main fique colado no topo quando o collapse abre */
+    .navbar-collapse {
+        padding-top: .4rem;
+    }
+}
+
 /* === EXPERIÊNCIA COMERCIAL === */
 .eyebrow { color: var(--artisan-clay); font-size: .78rem; font-weight: 800; letter-spacing: .16em; }
 .business-intro, .page-hero { background: linear-gradient(180deg, #fff 0%, var(--artisan-sand) 100%); border-radius: 0 0 2rem 2rem; }
