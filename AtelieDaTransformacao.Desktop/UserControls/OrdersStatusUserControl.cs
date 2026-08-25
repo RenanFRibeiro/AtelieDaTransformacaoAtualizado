@@ -343,9 +343,6 @@ public sealed partial class OrdersStatusUserControl : UserControl
                 GetStatusText(
                     item.Status),
 
-                item.LastUpdate.ToString(
-                    "dd/MM/yyyy HH:mm"),
-
                 "Detalhes");
         }
 
@@ -598,26 +595,12 @@ public sealed partial class OrdersStatusUserControl : UserControl
                     updatedOrder.Status);
 
             /*
-             * Atualiza a célula de
-             * Última Atualização.
-             */
-            _grid.Rows[rowIndex]
-                .Cells[
-                    _lastUpdateColumn.Index
-                ]
-                .Value =
-                item.LastUpdate.ToString(
-                    "dd/MM/yyyy HH:mm");
-
-            /*
-             * Redesenha as células.
+             * Redesenha somente o status.
+             * A coluna de data não é mais exibida: ela foi substituída
+             * pela coluna Ações/Detalhes.
              */
             _grid.InvalidateCell(
                 _statusColumn.Index,
-                rowIndex);
-
-            _grid.InvalidateCell(
-                _lastUpdateColumn.Index,
                 rowIndex);
         }
         catch (Exception ex)
@@ -639,14 +622,6 @@ public sealed partial class OrdersStatusUserControl : UserControl
                 .Value =
                 GetStatusText(
                     previousStatus);
-
-            _grid.Rows[rowIndex]
-                .Cells[
-                    _lastUpdateColumn.Index
-                ]
-                .Value =
-                previousLastUpdate.ToString(
-                    "dd/MM/yyyy HH:mm");
 
             _grid.InvalidateRow(
                 rowIndex);
@@ -843,7 +818,7 @@ public sealed partial class OrdersStatusUserControl : UserControl
             new StringBuilder();
 
         sb.AppendLine(
-            "Nº Pedido;Data;Cliente;Valor Total;Status;Última Atualização");
+            "Nº Pedido;Data;Cliente;Valor Total;Status;Ações");
 
         foreach (var item in _filteredItems)
         {

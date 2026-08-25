@@ -283,7 +283,7 @@ partial class OrdersStatusUserControl
         dataGridViewCellStyle2.SelectionForeColor = Color.White;
         _grid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
         _grid.ColumnHeadersHeight = 38;
-        _grid.Columns.AddRange(new DataGridViewColumn[] { _numberColumn, _dateColumn, _customerColumn, _totalColumn, _statusColumn, _lastUpdateColumn, _actionsColumn });
+        _grid.Columns.AddRange(new DataGridViewColumn[] { _numberColumn, _dateColumn, _customerColumn, _totalColumn, _statusColumn, _actionsColumn });
         dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
         dataGridViewCellStyle4.BackColor = Color.White;
         dataGridViewCellStyle4.Font = new Font("Segoe UI", 8.5F);
@@ -1158,6 +1158,42 @@ partial class OrdersStatusUserControl
         _stepDeliveredIcon.TabIndex = 0;
         _stepDeliveredIcon.Text = "✓";
         _stepDeliveredIcon.TextAlign = ContentAlignment.MiddleCenter;
+        // Adiciona novamente os elementos visuais de cada etapa ao respectivo painel.
+        _stepCreatedPanel.Controls.Add(_stepCreatedDescription);
+        _stepCreatedPanel.Controls.Add(_stepCreatedName);
+        _stepCreatedPanel.Controls.Add(_stepCreatedIcon);
+
+        _stepPendingPanel.Controls.Add(_stepPendingDescription);
+        _stepPendingPanel.Controls.Add(_stepPendingName);
+        _stepPendingPanel.Controls.Add(_stepPendingIcon);
+
+        _stepApprovedPanel.Controls.Add(_stepApprovedDescription);
+        _stepApprovedPanel.Controls.Add(_stepApprovedName);
+        _stepApprovedPanel.Controls.Add(_stepApprovedIcon);
+
+        _stepSeparationPanel.Controls.Add(_stepSeparationDescription);
+        _stepSeparationPanel.Controls.Add(_stepSeparationName);
+        _stepSeparationPanel.Controls.Add(_stepSeparationIcon);
+
+        _stepInvoicedPanel.Controls.Add(_stepInvoicedDescription);
+        _stepInvoicedPanel.Controls.Add(_stepInvoicedName);
+        _stepInvoicedPanel.Controls.Add(_stepInvoicedIcon);
+
+        _stepShippedPanel.Controls.Add(_stepShippedDescription);
+        _stepShippedPanel.Controls.Add(_stepShippedName);
+        _stepShippedPanel.Controls.Add(_stepShippedIcon);
+
+        _stepDeliveredPanel.Controls.Add(_stepDeliveredDescription);
+        _stepDeliveredPanel.Controls.Add(_stepDeliveredName);
+        _stepDeliveredPanel.Controls.Add(_stepDeliveredIcon);
+
+        // Garante o botão "Detalhes" na coluna Ações.
+        dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+        _actionsColumn.DefaultCellStyle = dataGridViewCellStyle3;
+        _actionsColumn.HeaderText = "Ações";
+        _actionsColumn.Text = "Detalhes";
+        _actionsColumn.UseColumnTextForButtonValue = true;
+
         // 
         // _numberColumn
         // 
@@ -1217,23 +1253,13 @@ partial class OrdersStatusUserControl
         _statusColumn.Name = "_statusColumn";
         _statusColumn.Width = 182;
         // 
-        // _lastUpdateColumn
-        // 
-        _lastUpdateColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-        _lastUpdateColumn.FillWeight = 16F;
-        _lastUpdateColumn.Frozen = true;
-        _lastUpdateColumn.HeaderText = "Última Atualização";
-        _lastUpdateColumn.MinimumWidth = 100;
-        _lastUpdateColumn.Name = "_lastUpdateColumn";
-        _lastUpdateColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
-        _lastUpdateColumn.Width = 242;
-        // 
         // _actionsColumn
         // 
         _actionsColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
         dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
         dataGridViewCellStyle3.BackColor = Color.White;
         dataGridViewCellStyle3.ForeColor = Color.Black;
+        dataGridViewCellStyle3.Padding = new Padding(8, 4, 8, 4);
         dataGridViewCellStyle3.SelectionBackColor = Color.FromArgb(103, 70, 46);
         dataGridViewCellStyle3.SelectionForeColor = Color.White;
         _actionsColumn.DefaultCellStyle = dataGridViewCellStyle3;
@@ -1241,12 +1267,13 @@ partial class OrdersStatusUserControl
         _actionsColumn.FlatStyle = FlatStyle.Flat;
         _actionsColumn.Frozen = true;
         _actionsColumn.HeaderText = "Ações";
+        _actionsColumn.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
         _actionsColumn.MinimumWidth = 74;
         _actionsColumn.Name = "_actionsColumn";
         _actionsColumn.Resizable = DataGridViewTriState.False;
         _actionsColumn.Text = "Detalhes";
         _actionsColumn.UseColumnTextForButtonValue = true;
-        _actionsColumn.Width = 152;
+        _actionsColumn.Width = 120;
         // 
         // OrdersStatusUserControl
         // 
