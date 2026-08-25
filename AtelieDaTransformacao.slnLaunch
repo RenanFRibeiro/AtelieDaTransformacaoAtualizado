@@ -8,11 +8,6 @@
         "DebugTarget": "http"
       },
       {
-        "Path": "AtelieDaTransformacao.Desktop\\AtelieDaTransformacao.Desktop.csproj",
-        "Action": "Start",
-        "DebugTarget": "AtelieDaTransformacao.Desktop"
-      },
-      {
         "Path": "AtelieDaTransformacao.UI\\AtelieDaTransformacao.UI.csproj",
         "Action": "Start",
         "DebugTarget": "http"
