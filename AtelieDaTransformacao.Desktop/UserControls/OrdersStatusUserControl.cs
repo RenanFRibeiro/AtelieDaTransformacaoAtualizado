@@ -38,20 +38,6 @@ public sealed partial class OrdersStatusUserControl : UserControl
         ConfigureFilters();
 
         Load += OrdersStatusUserControl_Load;
-        EnsureStatusFlowVisible();
-    }
-
-    private void EnsureStatusFlowVisible()
-    {
-        _stepsFlowPanel.Visible = true;
-        _stepsFlowPanel.FlowDirection = FlowDirection.LeftToRight;
-        _stepsFlowPanel.WrapContents = false;
-        _stepsFlowPanel.AutoSize = false;
-        _stepsFlowPanel.Dock = DockStyle.Top;
-        _stepsFlowPanel.Location = new Point(0, 0);
-
-        foreach (Control control in _stepsFlowPanel.Controls)
-            control.Visible = true;
     }
 
     private void ConfigureEvents()

@@ -41,12 +41,14 @@ partial class OrderDetailsDialog
     private void InitializeComponent()
     {
         components = new System.ComponentModel.Container();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         _borderlessForm = new Guna2BorderlessForm(components);
         _dragControl = new Guna2DragControl(components);
         _headerPanel = new Guna2Panel();
@@ -68,6 +70,7 @@ partial class OrderDetailsDialog
         _statusValueLabel = new Label();
         _lastUpdateCaptionLabel = new Label();
         _lastUpdateValueLabel = new Label();
+        btnClose = new Guna2ControlBox();
         _headerPanel.SuspendLayout();
         _bodyPanel.SuspendLayout();
         _detailsTable.SuspendLayout();
@@ -88,17 +91,17 @@ partial class OrderDetailsDialog
         // 
         // _headerPanel
         // 
-        // usar cor do tema escuro para o header
         _headerPanel.BackColor = Color.FromArgb(43, 26, 18);
+        _headerPanel.Controls.Add(btnClose);
         _headerPanel.Controls.Add(_subtitleLabel);
         _headerPanel.Controls.Add(_titleLabel);
-        _headerPanel.CustomizableEdges = customizableEdges5;
+        _headerPanel.CustomizableEdges = customizableEdges7;
         _headerPanel.Dock = DockStyle.Top;
         _headerPanel.FillColor = Color.FromArgb(43, 26, 18);
         _headerPanel.Location = new Point(0, 0);
         _headerPanel.Name = "_headerPanel";
         _headerPanel.Padding = new Padding(22, 14, 22, 10);
-        _headerPanel.ShadowDecoration.CustomizableEdges = customizableEdges6;
+        _headerPanel.ShadowDecoration.CustomizableEdges = customizableEdges8;
         _headerPanel.Size = new Size(1280, 84);
         _headerPanel.TabIndex = 1;
         // 
@@ -106,7 +109,7 @@ partial class OrderDetailsDialog
         // 
         _subtitleLabel.AutoSize = true;
         _subtitleLabel.Font = new Font("Segoe UI", 9F);
-        _subtitleLabel.ForeColor = Color.FromArgb(220, 205, 192); // bege claro
+        _subtitleLabel.ForeColor = Color.FromArgb(220, 205, 192);
         _subtitleLabel.Location = new Point(24, 48);
         _subtitleLabel.Name = "_subtitleLabel";
         _subtitleLabel.Size = new Size(194, 15);
@@ -117,7 +120,7 @@ partial class OrderDetailsDialog
         // 
         _titleLabel.AutoSize = true;
         _titleLabel.Font = new Font("Segoe UI", 17F, FontStyle.Bold);
-        _titleLabel.ForeColor = Color.FromArgb(239, 230, 220); // off-white
+        _titleLabel.ForeColor = Color.FromArgb(239, 230, 220);
         _titleLabel.Location = new Point(22, 14);
         _titleLabel.Name = "_titleLabel";
         _titleLabel.Size = new Size(88, 31);
@@ -131,7 +134,6 @@ partial class OrderDetailsDialog
         _bodyPanel.Controls.Add(_detailsTable);
         _bodyPanel.CustomizableEdges = customizableEdges3;
         _bodyPanel.Dock = DockStyle.Fill;
-        // usar cor do tema escuro para o corpo (melhora contraste com texto claro)
         _bodyPanel.FillColor = Color.FromArgb(43, 26, 18);
         _bodyPanel.Location = new Point(0, 84);
         _bodyPanel.Name = "_bodyPanel";
@@ -162,7 +164,7 @@ partial class OrderDetailsDialog
         _flowLabel.BackColor = Color.FromArgb(43, 26, 18);
         _flowLabel.Dock = DockStyle.Top;
         _flowLabel.Font = new Font("Segoe UI", 8.5F);
-        _flowLabel.ForeColor = Color.FromArgb(220, 205, 192); // bege claro
+        _flowLabel.ForeColor = Color.FromArgb(220, 205, 192);
         _flowLabel.Location = new Point(22, 288);
         _flowLabel.Name = "_flowLabel";
         _flowLabel.Padding = new Padding(0, 14, 0, 0);
@@ -206,7 +208,7 @@ partial class OrderDetailsDialog
         // 
         _numberCaptionLabel.Dock = DockStyle.Fill;
         _numberCaptionLabel.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
-        _numberCaptionLabel.ForeColor = Color.FromArgb(220, 205, 192); // caption bege claro
+        _numberCaptionLabel.ForeColor = Color.FromArgb(220, 205, 192);
         _numberCaptionLabel.Location = new Point(3, 0);
         _numberCaptionLabel.Name = "_numberCaptionLabel";
         _numberCaptionLabel.Size = new Size(149, 45);
@@ -218,7 +220,7 @@ partial class OrderDetailsDialog
         // 
         _numberValueLabel.Dock = DockStyle.Fill;
         _numberValueLabel.Font = new Font("Segoe UI", 9.5F);
-        _numberValueLabel.ForeColor = Color.FromArgb(239, 230, 220); // valor off-white
+        _numberValueLabel.ForeColor = Color.FromArgb(239, 230, 220);
         _numberValueLabel.Location = new Point(158, 0);
         _numberValueLabel.Name = "_numberValueLabel";
         _numberValueLabel.Size = new Size(1075, 45);
@@ -340,6 +342,19 @@ partial class OrderDetailsDialog
         _lastUpdateValueLabel.TabIndex = 11;
         _lastUpdateValueLabel.TextAlign = ContentAlignment.MiddleLeft;
         // 
+        // btnClose
+        // 
+        btnClose.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+        btnClose.CustomizableEdges = customizableEdges5;
+        btnClose.FillColor = Color.Transparent;
+        btnClose.IconColor = Color.White;
+        btnClose.Location = new Point(1233, 12);
+        btnClose.Name = "btnClose";
+        btnClose.ShadowDecoration.CustomizableEdges = customizableEdges6;
+        btnClose.Size = new Size(35, 30);
+        btnClose.TabIndex = 3;
+        btnClose.Click += btnClose_Click;
+        // 
         // OrderDetailsDialog
         // 
         BackColor = Color.FromArgb(43, 26, 18);
@@ -359,4 +374,6 @@ partial class OrderDetailsDialog
         _detailsTable.ResumeLayout(false);
         ResumeLayout(false);
     }
+
+    private Guna2ControlBox btnClose;
 }

@@ -206,6 +206,7 @@ partial class ProductsUserControl
         _grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
         _grid.Dock = DockStyle.Fill;
         _grid.GridColor = Color.FromArgb(220, 220, 220);
+        _grid.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
         _grid.MultiSelect = false;
         _grid.ReadOnly = true;
         _grid.RowHeadersVisible = false;
@@ -244,7 +245,7 @@ partial class ProductsUserControl
         actionStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
         actionStyle.BackColor = LibraryTheme.Accent;
         actionStyle.ForeColor = Color.White;
-        actionStyle.SelectionBackColor = LibraryTheme.AccentDark;
+        actionStyle.SelectionBackColor = LibraryTheme.Accent;
         actionStyle.SelectionForeColor = Color.White;
         _actionsColumn.DefaultCellStyle = actionStyle;
 

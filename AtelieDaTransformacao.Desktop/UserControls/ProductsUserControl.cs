@@ -108,6 +108,11 @@ public partial class ProductsUserControl : UserControl
         _grid.RowHeadersVisible =
             false;
 
+        // O mouse sobre a tabela não deve alterar a aparência das linhas.
+        // A seleção visual acontece somente quando a linha é realmente selecionada/clicada.
+        _grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+        _grid.MultiSelect = false;
+
         _grid.ColumnHeadersHeight =
             42;
 
@@ -533,6 +538,9 @@ public partial class ProductsUserControl : UserControl
                     (buttonBounds.Height -
                         size.Height) / 2);
 
+            // Mantém as divisões da tabela sempre visíveis, inclusive ao passar o mouse.
+            e.Paint(e.ClipBounds, DataGridViewPaintParts.Border);
+
             return;
         }
 
@@ -619,6 +627,9 @@ public partial class ProductsUserControl : UserControl
                         size.Height) / 2 +
                     1);
 
+            // Mantém as divisões da tabela sempre visíveis, inclusive ao passar o mouse.
+            e.Paint(e.ClipBounds, DataGridViewPaintParts.Border);
+
             return;
         }
 
@@ -686,6 +697,10 @@ public partial class ProductsUserControl : UserControl
             normalTextBrush,
             textBounds,
             stringFormat);
+
+        // A pintura personalizada não deve apagar as linhas da grade.
+        // Desenhamos somente a borda depois do conteúdo para que ela permaneça fixa.
+        e.Paint(e.ClipBounds, DataGridViewPaintParts.Border);
     }
 
     // ================================================================

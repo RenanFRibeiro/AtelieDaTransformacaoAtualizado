@@ -61,4 +61,9 @@ public sealed partial class OrderDetailsDialog : Form
         OrderStatus.Delivered => LibraryTheme.Success,
         _ => Color.White
     };
+
+    private void btnClose_Click(object sender, EventArgs e)
+    {
+        Close();
+    }
 }
