@@ -6,10 +6,13 @@ partial class ProfileUserControl
     private System.ComponentModel.IContainer? components=null;private Guna.UI2.WinForms.Guna2Panel _card=null!;private Label _titleLabel=null!;private Label _emailCaptionLabel=null!;private Label _emailValueLabel=null!;private Label _roleCaptionLabel=null!;private Label _roleValueLabel=null!;private Label _sessionCaptionLabel=null!;private Label _sessionValueLabel=null!;private Label _permissionsCaptionLabel=null!;private Label _permissionsValueLabel=null!;private Guna.UI2.WinForms.Guna2Button _editProfileButton=null!;    protected override void Dispose(bool disposing){if(disposing)components?.Dispose();base.Dispose(disposing);}
     private void InitializeComponent()
     {
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         _card = new Guna.UI2.WinForms.Guna2Panel();
+        _editProfileButton = new Guna.UI2.WinForms.Guna2Button();
         lblAvatar = new Guna.UI2.WinForms.Guna2CircleButton();
         _permissionsValueLabel = new Label();
         _permissionsCaptionLabel = new Label();
@@ -20,7 +23,6 @@ partial class ProfileUserControl
         _emailValueLabel = new Label();
         _emailCaptionLabel = new Label();
         _titleLabel = new Label();
-        _editProfileButton = new Guna.UI2.WinForms.Guna2Button();
         _card.SuspendLayout();
         SuspendLayout();
         // 
@@ -39,14 +41,29 @@ partial class ProfileUserControl
         _card.Controls.Add(_roleCaptionLabel);
         _card.Controls.Add(_emailValueLabel);
         _card.Controls.Add(_emailCaptionLabel);
-        _card.CustomizableEdges = customizableEdges2;
+        _card.CustomizableEdges = customizableEdges4;
         _card.FillColor = Color.White;
         _card.Location = new Point(38, 52);
         _card.Name = "_card";
         _card.Padding = new Padding(24);
-        _card.ShadowDecoration.CustomizableEdges = customizableEdges3;
+        _card.ShadowDecoration.CustomizableEdges = customizableEdges5;
         _card.Size = new Size(516, 430);
         _card.TabIndex = 1;
+        // 
+        // _editProfileButton
+        // 
+        _editProfileButton.BackColor = Color.Transparent;
+        _editProfileButton.BorderRadius = 9;
+        _editProfileButton.CustomizableEdges = customizableEdges1;
+        _editProfileButton.FillColor = Color.MidnightBlue;
+        _editProfileButton.Font = new Font("Segoe UI Semibold", 9F);
+        _editProfileButton.ForeColor = Color.White;
+        _editProfileButton.Location = new Point(340, 375);
+        _editProfileButton.Name = "_editProfileButton";
+        _editProfileButton.ShadowDecoration.CustomizableEdges = customizableEdges2;
+        _editProfileButton.Size = new Size(150, 38);
+        _editProfileButton.TabIndex = 9;
+        _editProfileButton.Text = "✏️ Editar Perfil";
         // 
         // lblAvatar
         // 
@@ -60,7 +77,7 @@ partial class ProfileUserControl
         lblAvatar.ForeColor = Color.White;
         lblAvatar.Location = new Point(222, 33);
         lblAvatar.Name = "lblAvatar";
-        lblAvatar.ShadowDecoration.CustomizableEdges = customizableEdges1;
+        lblAvatar.ShadowDecoration.CustomizableEdges = customizableEdges3;
         lblAvatar.ShadowDecoration.Mode = Guna.UI2.WinForms.Enums.ShadowMode.Circle;
         lblAvatar.Size = new Size(88, 88);
         lblAvatar.TabIndex = 8;
@@ -147,18 +164,6 @@ partial class ProfileUserControl
         _emailCaptionLabel.TabIndex = 7;
         _emailCaptionLabel.Text = "E-MAIL";
         // 
-        // _editProfileButton
-        _editProfileButton.BackColor = Color.Transparent;
-        _editProfileButton.BorderRadius = 9;
-        _editProfileButton.FillColor = Color.FromArgb(88, 52, 27);
-        _editProfileButton.Font = new Font("Segoe UI Semibold", 9F);
-        _editProfileButton.ForeColor = Color.White;
-        _editProfileButton.Location = new Point(340, 375);
-        _editProfileButton.Name = "_editProfileButton";
-        _editProfileButton.Size = new Size(150, 38);
-        _editProfileButton.TabIndex = 9;
-        _editProfileButton.Text = "✏️ Editar Perfil";
-        //
         // _titleLabel
         // 
         _titleLabel.AutoSize = true;

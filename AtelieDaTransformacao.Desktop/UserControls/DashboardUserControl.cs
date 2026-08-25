@@ -17,6 +17,8 @@ public partial class DashboardUserControl : UserControl
         _refreshButton.Click += async (_, _) => await LoadAsync();
         _recentRefreshButton.Click += async (_, _) => await LoadAsync();
         Load += async (_, _) => await LoadAsync();
+        _cardsPanel.Resize += CardsPanel_Resize;
+        CenterSummaryCards();
     }
 
     private async Task LoadAsync()
@@ -66,5 +68,26 @@ public partial class DashboardUserControl : UserControl
         {
             _statusLabel.Text = $"Erro ao atualizar: {ex.Message}";
         }
+    }
+
+
+private void CardsPanel_Resize(object? sender, EventArgs e)
+    {
+        CenterSummaryCards();
+    }
+
+    private void CenterSummaryCards()
+    {
+        const int cardWidth = 180;
+        const int gap = 10;
+        const int totalWidth = (cardWidth * 4) + (gap * 3);
+        const int top = 12;
+
+        var left = Math.Max(0, (_cardsPanel.ClientSize.Width - totalWidth) / 2);
+
+        cardGames.Location = new Point(left, top);
+        guna2Panel1.Location = new Point(left + cardWidth + gap, top);
+        cardCategorias.Location = new Point(left + (cardWidth + gap) * 2, top);
+        cardUsuarios.Location = new Point(left + (cardWidth + gap) * 3, top);
     }
 }

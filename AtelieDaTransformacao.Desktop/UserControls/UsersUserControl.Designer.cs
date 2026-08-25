@@ -13,13 +13,11 @@ partial class UsersUserControl
     private Guna.UI2.WinForms.Guna2Button _activationButton = null!;
 
     private Guna.UI2.WinForms.Guna2Panel _activeCard = null!;
-    private Guna.UI2.WinForms.Guna2Panel _activeTopBar = null!;
     private Label _activeTitleLabel = null!;
     private Label _activeCountLabel = null!;
     private Label _activeDescriptionLabel = null!;
 
     private Guna.UI2.WinForms.Guna2Panel _inactiveCard = null!;
-    private Guna.UI2.WinForms.Guna2Panel _inactiveTopBar = null!;
     private Label _inactiveTitleLabel = null!;
     private Label _inactiveCountLabel = null!;
     private Label _inactiveDescriptionLabel = null!;
@@ -38,16 +36,14 @@ partial class UsersUserControl
 
     private void InitializeComponent()
     {
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
         DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
         _toolbarCard = new Guna.UI2.WinForms.Guna2Panel();
@@ -56,13 +52,11 @@ partial class UsersUserControl
         _inactiveDescriptionLabel = new Label();
         _inactiveCountLabel = new Label();
         _inactiveTitleLabel = new Label();
-        _inactiveTopBar = new Guna.UI2.WinForms.Guna2Panel();
         _activationButton = new Guna.UI2.WinForms.Guna2Button();
         _activeCard = new Guna.UI2.WinForms.Guna2Panel();
         _activeDescriptionLabel = new Label();
         _activeCountLabel = new Label();
         _activeTitleLabel = new Label();
-        _activeTopBar = new Guna.UI2.WinForms.Guna2Panel();
         _refreshButton = new Guna.UI2.WinForms.Guna2Button();
         _newButton = new Guna.UI2.WinForms.Guna2Button();
         _tableCard = new Guna.UI2.WinForms.Guna2Panel();
@@ -77,7 +71,7 @@ partial class UsersUserControl
         // 
         // _toolbarCard
         // 
-        _toolbarCard.BackColor = Color.White;
+        _toolbarCard.BackColor = Color.LightGray;
         _toolbarCard.BorderColor = Color.LightGray;
         _toolbarCard.BorderRadius = 15;
         _toolbarCard.BorderThickness = 1;
@@ -87,13 +81,13 @@ partial class UsersUserControl
         _toolbarCard.Controls.Add(_activeCard);
         _toolbarCard.Controls.Add(_refreshButton);
         _toolbarCard.Controls.Add(_newButton);
-        customizableEdges9.TopLeft = false;
-        customizableEdges9.TopRight = false;
-        _toolbarCard.CustomizableEdges = customizableEdges9;
+        customizableEdges7.TopLeft = false;
+        customizableEdges7.TopRight = false;
+        _toolbarCard.CustomizableEdges = customizableEdges7;
         _toolbarCard.FillColor = Color.LightGray;
         _toolbarCard.Location = new Point(8, 8);
         _toolbarCard.Name = "_toolbarCard";
-        _toolbarCard.ShadowDecoration.CustomizableEdges = customizableEdges9;
+        _toolbarCard.ShadowDecoration.CustomizableEdges = customizableEdges7;
         _toolbarCard.Size = new Size(975, 120);
         _toolbarCard.TabIndex = 0;
         // 
@@ -114,18 +108,18 @@ partial class UsersUserControl
         // 
         // _inactiveCard
         // 
-        _inactiveCard.BackColor = Color.White;
+        _inactiveCard.BackColor = Color.LightGray;
         _inactiveCard.BorderColor = Color.LightGray;
+        _inactiveCard.BorderRadius = 10;
         _inactiveCard.BorderThickness = 1;
         _inactiveCard.Controls.Add(_inactiveDescriptionLabel);
         _inactiveCard.Controls.Add(_inactiveCountLabel);
         _inactiveCard.Controls.Add(_inactiveTitleLabel);
-        _inactiveCard.Controls.Add(_inactiveTopBar);
-        _inactiveCard.CustomizableEdges = customizableEdges3;
+        _inactiveCard.CustomizableEdges = customizableEdges2;
         _inactiveCard.FillColor = Color.White;
         _inactiveCard.Location = new Point(742, 17);
         _inactiveCard.Name = "_inactiveCard";
-        _inactiveCard.ShadowDecoration.CustomizableEdges = customizableEdges3;
+        _inactiveCard.ShadowDecoration.CustomizableEdges = customizableEdges2;
         _inactiveCard.Size = new Size(218, 84);
         _inactiveCard.TabIndex = 5;
         // 
@@ -144,7 +138,7 @@ partial class UsersUserControl
         // _inactiveCountLabel
         // 
         _inactiveCountLabel.BackColor = Color.Transparent;
-        _inactiveCountLabel.Font = new Font("Yu Gothic", 20.25F, FontStyle.Bold);
+        _inactiveCountLabel.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold);
         _inactiveCountLabel.ForeColor = Color.Black;
         _inactiveCountLabel.Location = new Point(14, 34);
         _inactiveCountLabel.Name = "_inactiveCountLabel";
@@ -156,7 +150,7 @@ partial class UsersUserControl
         // _inactiveTitleLabel
         // 
         _inactiveTitleLabel.BackColor = Color.Transparent;
-        _inactiveTitleLabel.Font = new Font("Yu Gothic", 12F, FontStyle.Bold);
+        _inactiveTitleLabel.Font = new Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
         _inactiveTitleLabel.ForeColor = Color.Red;
         _inactiveTitleLabel.Location = new Point(14, 13);
         _inactiveTitleLabel.Name = "_inactiveTitleLabel";
@@ -165,46 +159,35 @@ partial class UsersUserControl
         _inactiveTitleLabel.Text = "● Usuários Inativos";
         _inactiveTitleLabel.TextAlign = ContentAlignment.MiddleLeft;
         // 
-        // _inactiveTopBar
-        // 
-        _inactiveTopBar.BackColor = Color.Transparent;
-        _inactiveTopBar.CustomizableEdges = customizableEdges2;
-        _inactiveTopBar.FillColor = Color.Red;
-        _inactiveTopBar.Location = new Point(0, 0);
-        _inactiveTopBar.Name = "_inactiveTopBar";
-        _inactiveTopBar.ShadowDecoration.CustomizableEdges = customizableEdges2;
-        _inactiveTopBar.Size = new Size(218, 6);
-        _inactiveTopBar.TabIndex = 0;
-        // 
         // _activationButton
         // 
         _activationButton.BackColor = Color.Transparent;
         _activationButton.BorderRadius = 7;
-        _activationButton.CustomizableEdges = customizableEdges4;
+        _activationButton.CustomizableEdges = customizableEdges3;
         _activationButton.FillColor = Color.MidnightBlue;
         _activationButton.Font = new Font("Segoe UI", 9F);
         _activationButton.ForeColor = Color.White;
         _activationButton.Location = new Point(235, 39);
         _activationButton.Name = "_activationButton";
-        _activationButton.ShadowDecoration.CustomizableEdges = customizableEdges4;
+        _activationButton.ShadowDecoration.CustomizableEdges = customizableEdges3;
         _activationButton.Size = new Size(117, 42);
         _activationButton.TabIndex = 2;
         _activationButton.Text = "✔️ Ativar Usúario";
         // 
         // _activeCard
         // 
-        _activeCard.BackColor = Color.White;
+        _activeCard.BackColor = Color.LightGray;
         _activeCard.BorderColor = Color.LightGray;
+        _activeCard.BorderRadius = 10;
         _activeCard.BorderThickness = 1;
         _activeCard.Controls.Add(_activeDescriptionLabel);
         _activeCard.Controls.Add(_activeCountLabel);
         _activeCard.Controls.Add(_activeTitleLabel);
-        _activeCard.Controls.Add(_activeTopBar);
-        _activeCard.CustomizableEdges = customizableEdges6;
+        _activeCard.CustomizableEdges = customizableEdges4;
         _activeCard.FillColor = Color.White;
         _activeCard.Location = new Point(513, 17);
         _activeCard.Name = "_activeCard";
-        _activeCard.ShadowDecoration.CustomizableEdges = customizableEdges6;
+        _activeCard.ShadowDecoration.CustomizableEdges = customizableEdges4;
         _activeCard.Size = new Size(218, 84);
         _activeCard.TabIndex = 4;
         // 
@@ -223,7 +206,7 @@ partial class UsersUserControl
         // _activeCountLabel
         // 
         _activeCountLabel.BackColor = Color.Transparent;
-        _activeCountLabel.Font = new Font("Yu Gothic", 20.25F, FontStyle.Bold);
+        _activeCountLabel.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold);
         _activeCountLabel.ForeColor = Color.Black;
         _activeCountLabel.Location = new Point(14, 34);
         _activeCountLabel.Name = "_activeCountLabel";
@@ -235,7 +218,7 @@ partial class UsersUserControl
         // _activeTitleLabel
         // 
         _activeTitleLabel.BackColor = Color.Transparent;
-        _activeTitleLabel.Font = new Font("Yu Gothic", 12F, FontStyle.Bold);
+        _activeTitleLabel.Font = new Font("Century Gothic", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
         _activeTitleLabel.ForeColor = Color.Green;
         _activeTitleLabel.Location = new Point(14, 13);
         _activeTitleLabel.Name = "_activeTitleLabel";
@@ -244,28 +227,17 @@ partial class UsersUserControl
         _activeTitleLabel.Text = "● Usuários Ativos";
         _activeTitleLabel.TextAlign = ContentAlignment.MiddleLeft;
         // 
-        // _activeTopBar
-        // 
-        _activeTopBar.BackColor = Color.Transparent;
-        _activeTopBar.CustomizableEdges = customizableEdges5;
-        _activeTopBar.FillColor = Color.Green;
-        _activeTopBar.Location = new Point(0, 0);
-        _activeTopBar.Name = "_activeTopBar";
-        _activeTopBar.ShadowDecoration.CustomizableEdges = customizableEdges5;
-        _activeTopBar.Size = new Size(218, 6);
-        _activeTopBar.TabIndex = 0;
-        // 
         // _refreshButton
         // 
         _refreshButton.BackColor = Color.Transparent;
         _refreshButton.BorderRadius = 7;
-        _refreshButton.CustomizableEdges = customizableEdges7;
+        _refreshButton.CustomizableEdges = customizableEdges5;
         _refreshButton.FillColor = Color.Gray;
         _refreshButton.Font = new Font("Segoe UI", 9F);
         _refreshButton.ForeColor = Color.White;
         _refreshButton.Location = new Point(137, 39);
         _refreshButton.Name = "_refreshButton";
-        _refreshButton.ShadowDecoration.CustomizableEdges = customizableEdges7;
+        _refreshButton.ShadowDecoration.CustomizableEdges = customizableEdges5;
         _refreshButton.Size = new Size(90, 42);
         _refreshButton.TabIndex = 1;
         _refreshButton.Text = "🔄️ Atualizar";
@@ -274,13 +246,13 @@ partial class UsersUserControl
         // 
         _newButton.BackColor = Color.Transparent;
         _newButton.BorderRadius = 7;
-        _newButton.CustomizableEdges = customizableEdges8;
+        _newButton.CustomizableEdges = customizableEdges6;
         _newButton.FillColor = Color.Green;
         _newButton.Font = new Font("Segoe UI", 9F);
         _newButton.ForeColor = Color.White;
         _newButton.Location = new Point(18, 39);
         _newButton.Name = "_newButton";
-        _newButton.ShadowDecoration.CustomizableEdges = customizableEdges8;
+        _newButton.ShadowDecoration.CustomizableEdges = customizableEdges6;
         _newButton.Size = new Size(111, 42);
         _newButton.TabIndex = 0;
         _newButton.Text = "+ Novo Usuário";
@@ -292,12 +264,12 @@ partial class UsersUserControl
         _tableCard.BorderThickness = 1;
         _tableCard.Controls.Add(_grid);
         _tableCard.Controls.Add(_countLabel);
-        _tableCard.CustomizableEdges = customizableEdges10;
+        _tableCard.CustomizableEdges = customizableEdges8;
         _tableCard.FillColor = Color.White;
         _tableCard.Location = new Point(8, 126);
         _tableCard.Name = "_tableCard";
         _tableCard.Padding = new Padding(14);
-        _tableCard.ShadowDecoration.CustomizableEdges = customizableEdges10;
+        _tableCard.ShadowDecoration.CustomizableEdges = customizableEdges8;
         _tableCard.Size = new Size(975, 512);
         _tableCard.TabIndex = 6;
         // 

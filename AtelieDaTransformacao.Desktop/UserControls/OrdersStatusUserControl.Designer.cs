@@ -939,133 +939,266 @@ partial class OrdersStatusUserControl
         _stepsFlowPanel.Size = new Size(1429, 111);
         _stepsFlowPanel.TabIndex = 0;
         _stepsFlowPanel.WrapContents = false;
+        _stepsFlowPanel.FlowDirection = FlowDirection.LeftToRight;
+        _stepsFlowPanel.AutoSize = false;
 
         // ============================================================
-        // STEP CREATED
+        // ORDER STATUS FLOW
+        // Kept explicitly inside InitializeComponent so the WinForms
+        // Designer can render and select every status step.
         // ============================================================
 
-        ConfigureStep(
-            _stepCreatedPanel,
-            _stepCreatedIcon,
-            _stepCreatedName,
-            _stepCreatedDescription,
-            "▣",
-            "Criado",
-            "Compra registrada\nno sistema.");
+        _stepCreatedPanel.BackColor = Color.Transparent;
+        _stepCreatedPanel.Margin = new Padding(0);
+        _stepCreatedPanel.Size = new Size(82, 112);
+        _stepCreatedPanel.Controls.Add(_stepCreatedDescription);
+        _stepCreatedPanel.Controls.Add(_stepCreatedName);
+        _stepCreatedPanel.Controls.Add(_stepCreatedIcon);
 
-        // ============================================================
-        // CONNECTOR 1
-        // ============================================================
+        _stepCreatedIcon.BackColor = Color.FromArgb(70, 43, 27);
+        _stepCreatedIcon.BorderStyle = BorderStyle.FixedSingle;
+        _stepCreatedIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
+        _stepCreatedIcon.ForeColor = Color.White;
+        _stepCreatedIcon.Location = new Point(21, 0);
+        _stepCreatedIcon.Size = new Size(40, 40);
+        _stepCreatedIcon.Text = "▣";
+        _stepCreatedIcon.TextAlign = ContentAlignment.MiddleCenter;
 
-        ConfigureConnector(_connector1);
+        _stepCreatedName.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+        _stepCreatedName.ForeColor = Color.White;
+        _stepCreatedName.Location = new Point(0, 45);
+        _stepCreatedName.Size = new Size(82, 20);
+        _stepCreatedName.Text = "Criado";
+        _stepCreatedName.TextAlign = ContentAlignment.TopCenter;
 
-        // ============================================================
-        // STEP PENDING
-        // ============================================================
+        _stepCreatedDescription.Font = new Font("Segoe UI", 6.5F);
+        _stepCreatedDescription.ForeColor = Color.FromArgb(204, 190, 177);
+        _stepCreatedDescription.Location = new Point(0, 68);
+        _stepCreatedDescription.Size = new Size(82, 44);
+        _stepCreatedDescription.Text = "Compra registrada\nno sistema.";
+        _stepCreatedDescription.TextAlign = ContentAlignment.TopCenter;
 
-        ConfigureStep(
-            _stepPendingPanel,
-            _stepPendingIcon,
-            _stepPendingName,
-            _stepPendingDescription,
-            "⌛",
-            "Pendente",
-            "Aguardando a\naprovação do pagamento.");
+        _connector1.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+        _connector1.ForeColor = Color.FromArgb(151, 101, 52);
+        _connector1.Margin = new Padding(0);
+        _connector1.Size = new Size(8, 40);
+        _connector1.Text = "────";
+        _connector1.TextAlign = ContentAlignment.MiddleCenter;
 
-        // ============================================================
-        // CONNECTOR 2
-        // ============================================================
+        _stepPendingPanel.BackColor = Color.Transparent;
+        _stepPendingPanel.Margin = new Padding(0);
+        _stepPendingPanel.Size = new Size(82, 112);
+        _stepPendingPanel.Controls.Add(_stepPendingDescription);
+        _stepPendingPanel.Controls.Add(_stepPendingName);
+        _stepPendingPanel.Controls.Add(_stepPendingIcon);
 
-        ConfigureConnector(_connector2);
+        _stepPendingIcon.BackColor = Color.FromArgb(70, 43, 27);
+        _stepPendingIcon.BorderStyle = BorderStyle.FixedSingle;
+        _stepPendingIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
+        _stepPendingIcon.ForeColor = Color.White;
+        _stepPendingIcon.Location = new Point(21, 0);
+        _stepPendingIcon.Size = new Size(40, 40);
+        _stepPendingIcon.Text = "⌛";
+        _stepPendingIcon.TextAlign = ContentAlignment.MiddleCenter;
 
-        // ============================================================
-        // STEP APPROVED
-        // ============================================================
+        _stepPendingName.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+        _stepPendingName.ForeColor = Color.White;
+        _stepPendingName.Location = new Point(0, 45);
+        _stepPendingName.Size = new Size(82, 20);
+        _stepPendingName.Text = "Pendente";
+        _stepPendingName.TextAlign = ContentAlignment.TopCenter;
 
-        ConfigureStep(
-            _stepApprovedPanel,
-            _stepApprovedIcon,
-            _stepApprovedName,
-            _stepApprovedDescription,
-            "✓",
-            "Aprovado",
-            "Pagamento confirmado\ne pedido liberado.");
+        _stepPendingDescription.Font = new Font("Segoe UI", 6.5F);
+        _stepPendingDescription.ForeColor = Color.FromArgb(204, 190, 177);
+        _stepPendingDescription.Location = new Point(0, 68);
+        _stepPendingDescription.Size = new Size(82, 44);
+        _stepPendingDescription.Text = "Aguardando a\naprovação do pagamento.";
+        _stepPendingDescription.TextAlign = ContentAlignment.TopCenter;
 
-        // ============================================================
-        // CONNECTOR 3
-        // ============================================================
+        _connector2.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+        _connector2.ForeColor = Color.FromArgb(151, 101, 52);
+        _connector2.Margin = new Padding(0);
+        _connector2.Size = new Size(8, 40);
+        _connector2.Text = "────";
+        _connector2.TextAlign = ContentAlignment.MiddleCenter;
 
-        ConfigureConnector(_connector3);
+        _stepApprovedPanel.BackColor = Color.Transparent;
+        _stepApprovedPanel.Margin = new Padding(0);
+        _stepApprovedPanel.Size = new Size(82, 112);
+        _stepApprovedPanel.Controls.Add(_stepApprovedDescription);
+        _stepApprovedPanel.Controls.Add(_stepApprovedName);
+        _stepApprovedPanel.Controls.Add(_stepApprovedIcon);
 
-        // ============================================================
-        // STEP SEPARATION
-        // ============================================================
+        _stepApprovedIcon.BackColor = Color.FromArgb(70, 43, 27);
+        _stepApprovedIcon.BorderStyle = BorderStyle.FixedSingle;
+        _stepApprovedIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
+        _stepApprovedIcon.ForeColor = Color.White;
+        _stepApprovedIcon.Location = new Point(21, 0);
+        _stepApprovedIcon.Size = new Size(40, 40);
+        _stepApprovedIcon.Text = "✓";
+        _stepApprovedIcon.TextAlign = ContentAlignment.MiddleCenter;
 
-        ConfigureStep(
-            _stepSeparationPanel,
-            _stepSeparationIcon,
-            _stepSeparationName,
-            _stepSeparationDescription,
-            "□",
-            "Separação",
-            "Produto localizado\ne embalado.");
+        _stepApprovedName.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+        _stepApprovedName.ForeColor = Color.White;
+        _stepApprovedName.Location = new Point(0, 45);
+        _stepApprovedName.Size = new Size(82, 20);
+        _stepApprovedName.Text = "Aprovado";
+        _stepApprovedName.TextAlign = ContentAlignment.TopCenter;
 
-        // ============================================================
-        // CONNECTOR 4
-        // ============================================================
+        _stepApprovedDescription.Font = new Font("Segoe UI", 6.5F);
+        _stepApprovedDescription.ForeColor = Color.FromArgb(204, 190, 177);
+        _stepApprovedDescription.Location = new Point(0, 68);
+        _stepApprovedDescription.Size = new Size(82, 44);
+        _stepApprovedDescription.Text = "Pagamento confirmado\ne pedido liberado.";
+        _stepApprovedDescription.TextAlign = ContentAlignment.TopCenter;
 
-        ConfigureConnector(_connector4);
+        _connector3.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+        _connector3.ForeColor = Color.FromArgb(151, 101, 52);
+        _connector3.Margin = new Padding(0);
+        _connector3.Size = new Size(8, 40);
+        _connector3.Text = "────";
+        _connector3.TextAlign = ContentAlignment.MiddleCenter;
 
-        // ============================================================
-        // STEP INVOICED
-        // ============================================================
+        _stepSeparationPanel.BackColor = Color.Transparent;
+        _stepSeparationPanel.Margin = new Padding(0);
+        _stepSeparationPanel.Size = new Size(82, 112);
+        _stepSeparationPanel.Controls.Add(_stepSeparationDescription);
+        _stepSeparationPanel.Controls.Add(_stepSeparationName);
+        _stepSeparationPanel.Controls.Add(_stepSeparationIcon);
 
-        ConfigureStep(
-            _stepInvoicedPanel,
-            _stepInvoicedIcon,
-            _stepInvoicedName,
-            _stepInvoicedDescription,
-            "▤",
-            "Faturado",
-            "Nota Fiscal\nemitida.");
+        _stepSeparationIcon.BackColor = Color.FromArgb(70, 43, 27);
+        _stepSeparationIcon.BorderStyle = BorderStyle.FixedSingle;
+        _stepSeparationIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
+        _stepSeparationIcon.ForeColor = Color.White;
+        _stepSeparationIcon.Location = new Point(21, 0);
+        _stepSeparationIcon.Size = new Size(40, 40);
+        _stepSeparationIcon.Text = "□";
+        _stepSeparationIcon.TextAlign = ContentAlignment.MiddleCenter;
 
-        // ============================================================
-        // CONNECTOR 5
-        // ============================================================
+        _stepSeparationName.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+        _stepSeparationName.ForeColor = Color.White;
+        _stepSeparationName.Location = new Point(0, 45);
+        _stepSeparationName.Size = new Size(82, 20);
+        _stepSeparationName.Text = "Separação";
+        _stepSeparationName.TextAlign = ContentAlignment.TopCenter;
 
-        ConfigureConnector(_connector5);
+        _stepSeparationDescription.Font = new Font("Segoe UI", 6.5F);
+        _stepSeparationDescription.ForeColor = Color.FromArgb(204, 190, 177);
+        _stepSeparationDescription.Location = new Point(0, 68);
+        _stepSeparationDescription.Size = new Size(82, 44);
+        _stepSeparationDescription.Text = "Produto localizado\ne embalado.";
+        _stepSeparationDescription.TextAlign = ContentAlignment.TopCenter;
 
-        // ============================================================
-        // STEP SHIPPED
-        // ============================================================
+        _connector4.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+        _connector4.ForeColor = Color.FromArgb(151, 101, 52);
+        _connector4.Margin = new Padding(0);
+        _connector4.Size = new Size(8, 40);
+        _connector4.Text = "────";
+        _connector4.TextAlign = ContentAlignment.MiddleCenter;
 
-        ConfigureStep(
-            _stepShippedPanel,
-            _stepShippedIcon,
-            _stepShippedName,
-            _stepShippedDescription,
-            "▰",
-            "Enviado",
-            "Pacote coletado\npela transportadora.");
+        _stepInvoicedPanel.BackColor = Color.Transparent;
+        _stepInvoicedPanel.Margin = new Padding(0);
+        _stepInvoicedPanel.Size = new Size(82, 112);
+        _stepInvoicedPanel.Controls.Add(_stepInvoicedDescription);
+        _stepInvoicedPanel.Controls.Add(_stepInvoicedName);
+        _stepInvoicedPanel.Controls.Add(_stepInvoicedIcon);
 
-        // ============================================================
-        // CONNECTOR 6
-        // ============================================================
+        _stepInvoicedIcon.BackColor = Color.FromArgb(70, 43, 27);
+        _stepInvoicedIcon.BorderStyle = BorderStyle.FixedSingle;
+        _stepInvoicedIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
+        _stepInvoicedIcon.ForeColor = Color.White;
+        _stepInvoicedIcon.Location = new Point(21, 0);
+        _stepInvoicedIcon.Size = new Size(40, 40);
+        _stepInvoicedIcon.Text = "▤";
+        _stepInvoicedIcon.TextAlign = ContentAlignment.MiddleCenter;
 
-        ConfigureConnector(_connector6);
+        _stepInvoicedName.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+        _stepInvoicedName.ForeColor = Color.White;
+        _stepInvoicedName.Location = new Point(0, 45);
+        _stepInvoicedName.Size = new Size(82, 20);
+        _stepInvoicedName.Text = "Faturado";
+        _stepInvoicedName.TextAlign = ContentAlignment.TopCenter;
 
-        // ============================================================
-        // STEP DELIVERED
-        // ============================================================
+        _stepInvoicedDescription.Font = new Font("Segoe UI", 6.5F);
+        _stepInvoicedDescription.ForeColor = Color.FromArgb(204, 190, 177);
+        _stepInvoicedDescription.Location = new Point(0, 68);
+        _stepInvoicedDescription.Size = new Size(82, 44);
+        _stepInvoicedDescription.Text = "Nota Fiscal\nemitida.";
+        _stepInvoicedDescription.TextAlign = ContentAlignment.TopCenter;
 
-        ConfigureStep(
-            _stepDeliveredPanel,
-            _stepDeliveredIcon,
-            _stepDeliveredName,
-            _stepDeliveredDescription,
-            "✓",
-            "Entregue",
-            "Produto entregue\nao destinatário.");
+        _connector5.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+        _connector5.ForeColor = Color.FromArgb(151, 101, 52);
+        _connector5.Margin = new Padding(0);
+        _connector5.Size = new Size(8, 40);
+        _connector5.Text = "────";
+        _connector5.TextAlign = ContentAlignment.MiddleCenter;
+
+        _stepShippedPanel.BackColor = Color.Transparent;
+        _stepShippedPanel.Margin = new Padding(0);
+        _stepShippedPanel.Size = new Size(82, 112);
+        _stepShippedPanel.Controls.Add(_stepShippedDescription);
+        _stepShippedPanel.Controls.Add(_stepShippedName);
+        _stepShippedPanel.Controls.Add(_stepShippedIcon);
+
+        _stepShippedIcon.BackColor = Color.FromArgb(70, 43, 27);
+        _stepShippedIcon.BorderStyle = BorderStyle.FixedSingle;
+        _stepShippedIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
+        _stepShippedIcon.ForeColor = Color.White;
+        _stepShippedIcon.Location = new Point(21, 0);
+        _stepShippedIcon.Size = new Size(40, 40);
+        _stepShippedIcon.Text = "▰";
+        _stepShippedIcon.TextAlign = ContentAlignment.MiddleCenter;
+
+        _stepShippedName.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+        _stepShippedName.ForeColor = Color.White;
+        _stepShippedName.Location = new Point(0, 45);
+        _stepShippedName.Size = new Size(82, 20);
+        _stepShippedName.Text = "Enviado";
+        _stepShippedName.TextAlign = ContentAlignment.TopCenter;
+
+        _stepShippedDescription.Font = new Font("Segoe UI", 6.5F);
+        _stepShippedDescription.ForeColor = Color.FromArgb(204, 190, 177);
+        _stepShippedDescription.Location = new Point(0, 68);
+        _stepShippedDescription.Size = new Size(82, 44);
+        _stepShippedDescription.Text = "Pacote coletado\npela transportadora.";
+        _stepShippedDescription.TextAlign = ContentAlignment.TopCenter;
+
+        _connector6.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+        _connector6.ForeColor = Color.FromArgb(151, 101, 52);
+        _connector6.Margin = new Padding(0);
+        _connector6.Size = new Size(8, 40);
+        _connector6.Text = "────";
+        _connector6.TextAlign = ContentAlignment.MiddleCenter;
+
+        _stepDeliveredPanel.BackColor = Color.Transparent;
+        _stepDeliveredPanel.Margin = new Padding(0);
+        _stepDeliveredPanel.Size = new Size(82, 112);
+        _stepDeliveredPanel.Controls.Add(_stepDeliveredDescription);
+        _stepDeliveredPanel.Controls.Add(_stepDeliveredName);
+        _stepDeliveredPanel.Controls.Add(_stepDeliveredIcon);
+
+        _stepDeliveredIcon.BackColor = Color.FromArgb(70, 43, 27);
+        _stepDeliveredIcon.BorderStyle = BorderStyle.FixedSingle;
+        _stepDeliveredIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
+        _stepDeliveredIcon.ForeColor = Color.White;
+        _stepDeliveredIcon.Location = new Point(21, 0);
+        _stepDeliveredIcon.Size = new Size(40, 40);
+        _stepDeliveredIcon.Text = "✓";
+        _stepDeliveredIcon.TextAlign = ContentAlignment.MiddleCenter;
+
+        _stepDeliveredName.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+        _stepDeliveredName.ForeColor = Color.White;
+        _stepDeliveredName.Location = new Point(0, 45);
+        _stepDeliveredName.Size = new Size(82, 20);
+        _stepDeliveredName.Text = "Entregue";
+        _stepDeliveredName.TextAlign = ContentAlignment.TopCenter;
+
+        _stepDeliveredDescription.Font = new Font("Segoe UI", 6.5F);
+        _stepDeliveredDescription.ForeColor = Color.FromArgb(204, 190, 177);
+        _stepDeliveredDescription.Location = new Point(0, 68);
+        _stepDeliveredDescription.Size = new Size(82, 44);
+        _stepDeliveredDescription.Text = "Produto entregue\nao destinatário.";
+        _stepDeliveredDescription.TextAlign = ContentAlignment.TopCenter;
 
         // ============================================================
         // HEADING
@@ -1172,54 +1305,4 @@ partial class OrdersStatusUserControl
         ResumeLayout(false);
     }
 
-    private static void ConfigureStep(
-        Panel panel,
-        Label icon,
-        Label name,
-        Label description,
-        string iconText,
-        string nameText,
-        string descriptionText)
-    {
-        panel.BackColor = Color.Transparent;
-        panel.Margin = new Padding(0);
-        panel.Size = new Size(82, 112);
-
-        icon.BackColor = Color.FromArgb(70, 43, 27);
-        icon.BorderStyle = BorderStyle.FixedSingle;
-        icon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
-        icon.ForeColor = Color.White;
-        icon.Location = new Point(21, 0);
-        icon.Size = new Size(40, 40);
-        icon.Text = iconText;
-        icon.TextAlign = ContentAlignment.MiddleCenter;
-
-        name.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
-        name.ForeColor = Color.White;
-        name.Location = new Point(0, 45);
-        name.Size = new Size(82, 20);
-        name.Text = nameText;
-        name.TextAlign = ContentAlignment.TopCenter;
-
-        description.Font = new Font("Segoe UI", 6.5F);
-        description.ForeColor = Color.FromArgb(204, 190, 177);
-        description.Location = new Point(0, 68);
-        description.Size = new Size(82, 44);
-        description.Text = descriptionText;
-        description.TextAlign = ContentAlignment.TopCenter;
-
-        panel.Controls.Add(description);
-        panel.Controls.Add(name);
-        panel.Controls.Add(icon);
-    }
-
-    private static void ConfigureConnector(Label connector)
-    {
-        connector.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
-        connector.ForeColor = Color.FromArgb(151, 101, 52);
-        connector.Margin = new Padding(0);
-        connector.Size = new Size(8, 40);
-        connector.Text = "────";
-        connector.TextAlign = ContentAlignment.MiddleCenter;
-    }
 }

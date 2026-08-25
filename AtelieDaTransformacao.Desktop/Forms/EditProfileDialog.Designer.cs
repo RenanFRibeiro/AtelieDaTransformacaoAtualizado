@@ -13,6 +13,8 @@ partial class EditProfileDialog
     private Guna.UI2.WinForms.Guna2TextBox _newPasswordTextBox = null!;
     private Guna.UI2.WinForms.Guna2Button _saveButton = null!;
     private Guna.UI2.WinForms.Guna2Button _cancelButton = null!;
+    private Guna.UI2.WinForms.Guna2Button _currentPasswordToggleButton = null!;
+    private Guna.UI2.WinForms.Guna2Button _newPasswordToggleButton = null!;
 
     protected override void Dispose(bool disposing)
     {
@@ -24,18 +26,22 @@ partial class EditProfileDialog
 
     private void InitializeComponent()
     {
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges21 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges22 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges23 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges24 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges25 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges26 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges27 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges28 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges29 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges30 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges31 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges32 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges11 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges13 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges14 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges15 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges16 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         _titleLabel = new Label();
         _subtitleLabel = new Label();
         _emailCaptionLabel = new Label();
@@ -46,6 +52,8 @@ partial class EditProfileDialog
         _newPasswordTextBox = new Guna.UI2.WinForms.Guna2TextBox();
         _saveButton = new Guna.UI2.WinForms.Guna2Button();
         _cancelButton = new Guna.UI2.WinForms.Guna2Button();
+        _currentPasswordToggleButton = new Guna.UI2.WinForms.Guna2Button();
+        _newPasswordToggleButton = new Guna.UI2.WinForms.Guna2Button();
         btnClose = new Guna.UI2.WinForms.Guna2ControlBox();
         SuspendLayout();
         // 
@@ -108,14 +116,14 @@ partial class EditProfileDialog
         // 
         _emailTextBox.BorderColor = Color.FromArgb(215, 218, 225);
         _emailTextBox.BorderRadius = 8;
-        _emailTextBox.CustomizableEdges = customizableEdges21;
+        _emailTextBox.CustomizableEdges = customizableEdges1;
         _emailTextBox.DefaultText = "";
         _emailTextBox.Font = new Font("Segoe UI", 9.5F);
         _emailTextBox.Location = new Point(30, 98);
         _emailTextBox.Name = "_emailTextBox";
         _emailTextBox.PlaceholderText = "E-mail";
         _emailTextBox.SelectedText = "";
-        _emailTextBox.ShadowDecoration.CustomizableEdges = customizableEdges22;
+        _emailTextBox.ShadowDecoration.CustomizableEdges = customizableEdges2;
         _emailTextBox.Size = new Size(400, 38);
         _emailTextBox.TabIndex = 5;
         // 
@@ -123,7 +131,7 @@ partial class EditProfileDialog
         // 
         _currentPasswordTextBox.BorderColor = Color.FromArgb(215, 218, 225);
         _currentPasswordTextBox.BorderRadius = 8;
-        _currentPasswordTextBox.CustomizableEdges = customizableEdges23;
+        _currentPasswordTextBox.CustomizableEdges = customizableEdges3;
         _currentPasswordTextBox.DefaultText = "";
         _currentPasswordTextBox.Font = new Font("Segoe UI", 9.5F);
         _currentPasswordTextBox.Location = new Point(30, 158);
@@ -131,7 +139,7 @@ partial class EditProfileDialog
         _currentPasswordTextBox.PasswordChar = '●';
         _currentPasswordTextBox.PlaceholderText = "Senha atual (necessária para trocar a senha)";
         _currentPasswordTextBox.SelectedText = "";
-        _currentPasswordTextBox.ShadowDecoration.CustomizableEdges = customizableEdges24;
+        _currentPasswordTextBox.ShadowDecoration.CustomizableEdges = customizableEdges4;
         _currentPasswordTextBox.Size = new Size(400, 38);
         _currentPasswordTextBox.TabIndex = 6;
         // 
@@ -139,7 +147,7 @@ partial class EditProfileDialog
         // 
         _newPasswordTextBox.BorderColor = Color.FromArgb(215, 218, 225);
         _newPasswordTextBox.BorderRadius = 8;
-        _newPasswordTextBox.CustomizableEdges = customizableEdges25;
+        _newPasswordTextBox.CustomizableEdges = customizableEdges5;
         _newPasswordTextBox.DefaultText = "";
         _newPasswordTextBox.Font = new Font("Segoe UI", 9.5F);
         _newPasswordTextBox.Location = new Point(30, 218);
@@ -147,21 +155,21 @@ partial class EditProfileDialog
         _newPasswordTextBox.PasswordChar = '●';
         _newPasswordTextBox.PlaceholderText = "Nova senha (deixe vazio para não alterar)";
         _newPasswordTextBox.SelectedText = "";
-        _newPasswordTextBox.ShadowDecoration.CustomizableEdges = customizableEdges26;
+        _newPasswordTextBox.ShadowDecoration.CustomizableEdges = customizableEdges6;
         _newPasswordTextBox.Size = new Size(400, 38);
         _newPasswordTextBox.TabIndex = 7;
         // 
         // _saveButton
         // 
         _saveButton.BorderRadius = 9;
-        _saveButton.CustomizableEdges = customizableEdges27;
+        _saveButton.CustomizableEdges = customizableEdges7;
         _saveButton.FillColor = Color.FromArgb(88, 52, 27);
         _saveButton.Font = new Font("Segoe UI Semibold", 9F);
         _saveButton.ForeColor = Color.White;
         _saveButton.Location = new Point(343, 293);
         _saveButton.Name = "_saveButton";
-        _saveButton.ShadowDecoration.CustomizableEdges = customizableEdges28;
-        _saveButton.Size = new Size(90, 40);
+        _saveButton.ShadowDecoration.CustomizableEdges = customizableEdges8;
+        _saveButton.Size = new Size(96, 40);
         _saveButton.TabIndex = 8;
         _saveButton.Text = "💾 Salvar ";
         _saveButton.Click += SaveButton_Click;
@@ -169,27 +177,62 @@ partial class EditProfileDialog
         // _cancelButton
         // 
         _cancelButton.BorderRadius = 9;
-        _cancelButton.CustomizableEdges = customizableEdges29;
-        _cancelButton.FillColor = Color.FromArgb(235, 235, 235);
+        _cancelButton.CustomizableEdges = customizableEdges9;
+        _cancelButton.FillColor = Color.Gray;
         _cancelButton.Font = new Font("Segoe UI Semibold", 9F);
-        _cancelButton.ForeColor = Color.FromArgb(45, 45, 45);
-        _cancelButton.Location = new Point(247, 293);
+        _cancelButton.ForeColor = Color.White;
+        _cancelButton.Location = new Point(242, 293);
         _cancelButton.Name = "_cancelButton";
-        _cancelButton.ShadowDecoration.CustomizableEdges = customizableEdges30;
-        _cancelButton.Size = new Size(90, 40);
+        _cancelButton.PressedColor = Color.White;
+        _cancelButton.ShadowDecoration.CustomizableEdges = customizableEdges10;
+        _cancelButton.Size = new Size(95, 40);
         _cancelButton.TabIndex = 9;
         _cancelButton.Text = "❌ Cancelar";
         _cancelButton.Click += CancelButton_Click;
         // 
+        // _currentPasswordToggleButton
+        // 
+        _currentPasswordToggleButton.BackColor = Color.Transparent;
+        _currentPasswordToggleButton.BorderColor = Color.Transparent;
+        _currentPasswordToggleButton.BorderRadius = 7;
+        _currentPasswordToggleButton.Cursor = Cursors.Hand;
+        _currentPasswordToggleButton.CustomizableEdges = customizableEdges11;
+        _currentPasswordToggleButton.FillColor = Color.Transparent;
+        _currentPasswordToggleButton.Font = new Font("Segoe UI", 10F);
+        _currentPasswordToggleButton.ForeColor = Color.Gray;
+        _currentPasswordToggleButton.Location = new Point(385, 161);
+        _currentPasswordToggleButton.Name = "_currentPasswordToggleButton";
+        _currentPasswordToggleButton.ShadowDecoration.CustomizableEdges = customizableEdges12;
+        _currentPasswordToggleButton.Size = new Size(40, 32);
+        _currentPasswordToggleButton.TabIndex = 11;
+        _currentPasswordToggleButton.Text = "👁️";
+        // 
+        // _newPasswordToggleButton
+        // 
+        _newPasswordToggleButton.BackColor = Color.Transparent;
+        _newPasswordToggleButton.BorderColor = Color.Transparent;
+        _newPasswordToggleButton.BorderRadius = 7;
+        _newPasswordToggleButton.Cursor = Cursors.Hand;
+        _newPasswordToggleButton.CustomizableEdges = customizableEdges13;
+        _newPasswordToggleButton.FillColor = Color.Transparent;
+        _newPasswordToggleButton.Font = new Font("Segoe UI", 10F);
+        _newPasswordToggleButton.ForeColor = Color.Gray;
+        _newPasswordToggleButton.Location = new Point(385, 221);
+        _newPasswordToggleButton.Name = "_newPasswordToggleButton";
+        _newPasswordToggleButton.ShadowDecoration.CustomizableEdges = customizableEdges14;
+        _newPasswordToggleButton.Size = new Size(40, 32);
+        _newPasswordToggleButton.TabIndex = 12;
+        _newPasswordToggleButton.Text = "👁️";
+        // 
         // btnClose
         // 
         btnClose.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-        btnClose.CustomizableEdges = customizableEdges31;
+        btnClose.CustomizableEdges = customizableEdges15;
         btnClose.FillColor = Color.Transparent;
         btnClose.IconColor = Color.Gray;
         btnClose.Location = new Point(413, 12);
         btnClose.Name = "btnClose";
-        btnClose.ShadowDecoration.CustomizableEdges = customizableEdges32;
+        btnClose.ShadowDecoration.CustomizableEdges = customizableEdges16;
         btnClose.Size = new Size(35, 30);
         btnClose.TabIndex = 10;
         btnClose.Click += btnClose_Click;
@@ -203,6 +246,8 @@ partial class EditProfileDialog
         Controls.Add(btnClose);
         Controls.Add(_cancelButton);
         Controls.Add(_saveButton);
+        Controls.Add(_newPasswordToggleButton);
+        Controls.Add(_currentPasswordToggleButton);
         Controls.Add(_newPasswordTextBox);
         Controls.Add(_currentPasswordTextBox);
         Controls.Add(_emailTextBox);

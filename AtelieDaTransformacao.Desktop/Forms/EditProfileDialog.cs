@@ -15,6 +15,9 @@ public sealed partial class EditProfileDialog : Form
         _emailTextBox.Text = SessionManager.Email ?? string.Empty;
         AcceptButton = _saveButton;
         CancelButton = _cancelButton;
+
+        _currentPasswordToggleButton.Click += CurrentPasswordToggleButton_Click;
+        _newPasswordToggleButton.Click += NewPasswordToggleButton_Click;
     }
 
     private async void SaveButton_Click(object? sender, EventArgs e)
@@ -77,6 +80,32 @@ public sealed partial class EditProfileDialog : Form
         {
             _saveButton.Enabled = true;
             _cancelButton.Enabled = true;
+        }
+    }
+
+    private void CurrentPasswordToggleButton_Click(object? sender, EventArgs e)
+    {
+        TogglePasswordVisibility(_currentPasswordTextBox, _currentPasswordToggleButton);
+    }
+
+    private void NewPasswordToggleButton_Click(object? sender, EventArgs e)
+    {
+        TogglePasswordVisibility(_newPasswordTextBox, _newPasswordToggleButton);
+    }
+
+    private static void TogglePasswordVisibility(
+        Guna.UI2.WinForms.Guna2TextBox textBox,
+        Guna.UI2.WinForms.Guna2Button toggleButton)
+    {
+        if (textBox.PasswordChar == '●')
+        {
+            textBox.PasswordChar = '\0';
+            toggleButton.Text = "🙈";
+        }
+        else
+        {
+            textBox.PasswordChar = '●';
+            toggleButton.Text = "👁️";
         }
     }
 

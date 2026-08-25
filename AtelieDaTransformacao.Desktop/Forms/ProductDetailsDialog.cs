@@ -8,11 +8,36 @@ public sealed partial class ProductDetailsDialog : Form
 {
     private readonly ProductDto _product;
 
+    // Construtor sem parâmetros usado pelo Windows Forms Designer.
+    public ProductDetailsDialog()
+    {
+        _product = new ProductDto
+        {
+            Title = "Produto de exemplo",
+            CategoryName = "Categoria",
+            Price = 0m,
+            StockQuantity = 0,
+            Description = "Descrição de exemplo.",
+            Image = string.Empty,
+            IsFeatured = false
+        };
+
+        InitializeComponent();
+        _closeButton.Click += CloseButton_Click;
+        LoadProduct();
+    }
+
     public ProductDetailsDialog(ProductDto product)
     {
         _product = product ?? throw new ArgumentNullException(nameof(product));
         InitializeComponent();
+        _closeButton.Click += CloseButton_Click;
         LoadProduct();
+    }
+
+    private void CloseButton_Click(object? sender, EventArgs e)
+    {
+        Close();
     }
 
     private void LoadProduct()

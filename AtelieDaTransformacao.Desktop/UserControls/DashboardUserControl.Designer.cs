@@ -74,10 +74,12 @@ partial class DashboardUserControl
         CustomizableEdges customizableEdges18 = new CustomizableEdges();
         CustomizableEdges customizableEdges19 = new CustomizableEdges();
         CustomizableEdges customizableEdges20 = new CustomizableEdges();
-        CustomizableEdges customizableEdges23 = new CustomizableEdges();
-        CustomizableEdges customizableEdges24 = new CustomizableEdges();
+        CustomizableEdges customizableEdges25 = new CustomizableEdges();
+        CustomizableEdges customizableEdges26 = new CustomizableEdges();
         DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
         DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+        CustomizableEdges customizableEdges23 = new CustomizableEdges();
+        CustomizableEdges customizableEdges24 = new CustomizableEdges();
         _headerPanel = new Guna.UI2.WinForms.Guna2Panel();
         _statusLabel = new Label();
         _refreshButton = new Guna.UI2.WinForms.Guna2Button();
@@ -106,8 +108,8 @@ partial class DashboardUserControl
         pnlCorGames = new Guna.UI2.WinForms.Guna2Panel();
         _tableCard = new Guna.UI2.WinForms.Guna2Panel();
         _grid = new Guna.UI2.WinForms.Guna2DataGridView();
-        _tableTitle = new Label();
         _recentRefreshButton = new Guna.UI2.WinForms.Guna2Button();
+        _tableTitle = new Label();
         _headerPanel.SuspendLayout();
         _cardsPanel.SuspendLayout();
         cardUsuarios.SuspendLayout();
@@ -121,6 +123,7 @@ partial class DashboardUserControl
         // _headerPanel
         // 
         _headerPanel.BackColor = Color.LightGray;
+        _headerPanel.BorderColor = Color.LightGray;
         _headerPanel.BorderRadius = 10;
         _headerPanel.Controls.Add(_statusLabel);
         _headerPanel.Controls.Add(_refreshButton);
@@ -267,6 +270,7 @@ partial class DashboardUserControl
         pnlCorUsuarios.ShadowDecoration.CustomizableEdges = customizableEdges8;
         pnlCorUsuarios.Size = new Size(180, 10);
         pnlCorUsuarios.TabIndex = 9;
+        pnlCorUsuarios.Visible = false;
         // 
         // cardCategorias
         // 
@@ -327,6 +331,7 @@ partial class DashboardUserControl
         pnlCorCategorias.ShadowDecoration.CustomizableEdges = customizableEdges12;
         pnlCorCategorias.Size = new Size(180, 10);
         pnlCorCategorias.TabIndex = 7;
+        pnlCorCategorias.Visible = false;
         // 
         // guna2Panel1
         // 
@@ -387,6 +392,7 @@ partial class DashboardUserControl
         guna2Panel2.ShadowDecoration.CustomizableEdges = customizableEdges16;
         guna2Panel2.Size = new Size(180, 10);
         guna2Panel2.TabIndex = 5;
+        guna2Panel2.Visible = false;
         // 
         // cardGames
         // 
@@ -447,6 +453,7 @@ partial class DashboardUserControl
         pnlCorGames.ShadowDecoration.CustomizableEdges = customizableEdges20;
         pnlCorGames.Size = new Size(180, 10);
         pnlCorGames.TabIndex = 3;
+        pnlCorGames.Visible = false;
         // 
         // _tableCard
         // 
@@ -457,13 +464,13 @@ partial class DashboardUserControl
         _tableCard.Controls.Add(_grid);
         _tableCard.Controls.Add(_recentRefreshButton);
         _tableCard.Controls.Add(_tableTitle);
-        _tableCard.CustomizableEdges = customizableEdges23;
+        _tableCard.CustomizableEdges = customizableEdges25;
         _tableCard.Dock = DockStyle.Fill;
         _tableCard.FillColor = Color.White;
         _tableCard.Location = new Point(0, 224);
         _tableCard.Name = "_tableCard";
         _tableCard.Padding = new Padding(16);
-        _tableCard.ShadowDecoration.CustomizableEdges = customizableEdges24;
+        _tableCard.ShadowDecoration.CustomizableEdges = customizableEdges26;
         _tableCard.Size = new Size(795, 334);
         _tableCard.TabIndex = 10;
         // 
@@ -513,16 +520,18 @@ partial class DashboardUserControl
         _grid.ThemeStyle.RowsStyle.Height = 38;
         _grid.ThemeStyle.RowsStyle.SelectionBackColor = Color.FromArgb(235, 238, 244);
         _grid.ThemeStyle.RowsStyle.SelectionForeColor = Color.FromArgb(45, 49, 56);
-        //
+        // 
         // _recentRefreshButton
-        //
+        // 
         _recentRefreshButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
         _recentRefreshButton.BorderRadius = 8;
+        _recentRefreshButton.CustomizableEdges = customizableEdges23;
         _recentRefreshButton.FillColor = Color.FromArgb(88, 52, 27);
         _recentRefreshButton.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
         _recentRefreshButton.ForeColor = Color.White;
         _recentRefreshButton.Location = new Point(650, 17);
         _recentRefreshButton.Name = "_recentRefreshButton";
+        _recentRefreshButton.ShadowDecoration.CustomizableEdges = customizableEdges24;
         _recentRefreshButton.Size = new Size(128, 32);
         _recentRefreshButton.TabIndex = 2;
         _recentRefreshButton.Text = "↻ Atualizar";
@@ -535,7 +544,7 @@ partial class DashboardUserControl
         _tableTitle.ForeColor = Color.FromArgb(30, 34, 43);
         _tableTitle.Location = new Point(16, 16);
         _tableTitle.Name = "_tableTitle";
-        _tableTitle.Size = new Size(610, 34);
+        _tableTitle.Size = new Size(763, 34);
         _tableTitle.TabIndex = 1;
         _tableTitle.Text = "Produtos recentes";
         // 
