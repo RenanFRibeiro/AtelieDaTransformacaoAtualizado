@@ -9,7 +9,6 @@ namespace AtelieDaTransformacao.Desktop.UserControls;
 public partial class UsersUserControl : UserControl
 {
     private readonly UsersApiService _service = new();
-    private readonly AuthApiService _auth = new();
     private List<UserSummaryDto> _items = new();
 
     public UsersUserControl()
@@ -65,7 +64,7 @@ public partial class UsersUserControl : UserControl
 
         try
         {
-            await _auth.RegisterAsync(new RegisterRequestDto
+            await _service.CreateDesktopAsync(new RegisterRequestDto
             {
                 Email = dialog.Email,
                 Password = dialog.Password,

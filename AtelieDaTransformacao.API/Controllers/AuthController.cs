@@ -45,13 +45,32 @@ public sealed class AuthController : ControllerBase
 
     [HttpPost("login")]
     [AllowAnonymous]
-    public async Task<ActionResult<LoginResponseDto>> Login(LoginDto dto)
+    public Task<ActionResult<LoginResponseDto>> Login(LoginDto dto) => LoginInternalAsync(dto, requireDesktopOrigin: false);
+
+    // Rota exclusiva do aplicativo Desktop.
+    // Somente contas marcadas como criadas pelo Desktop podem obter token por esta rota.
+    [HttpPost("desktop-login")]
+    [AllowAnonymous]
+    public Task<ActionResult<LoginResponseDto>> DesktopLogin(LoginDto dto) => LoginInternalAsync(dto, requireDesktopOrigin: true);
+
+    private async Task<ActionResult<LoginResponseDto>> LoginInternalAsync(LoginDto dto, bool requireDesktopOrigin)
     {
         var user = await _users.FindByEmailAsync(dto.Email.Trim());
         if (user is null) return Unauthorized(new { message = "E-mail ou senha inválidos." });
 
         var result = await _signIn.CheckPasswordSignInAsync(user, dto.Password, false);
         if (!result.Succeeded) return Unauthorized(new { message = "E-mail ou senha inválidos." });
+
+        if (requireDesktopOrigin)
+        {
+            var claims = await _users.GetClaimsAsync(user);
+            var isDesktopUser = claims.Any(c =>
+                c.Type == "created_by" &&
+                string.Equals(c.Value, "desktop", StringComparison.OrdinalIgnoreCase));
+
+            if (!isDesktopUser)
+                return Unauthorized(new { message = "Este usuário não possui acesso ao Desktop." });
+        }
 
         var roles = await _users.GetRolesAsync(user);
         var expires = DateTime.UtcNow.AddHours(8);
@@ -63,6 +82,36 @@ public sealed class AuthController : ControllerBase
             ExpiresAtUtc = expires,
             User = new UserDto { Id = user.Id, Email = user.Email ?? string.Empty, Roles = roles }
         });
+    }
+
+    [HttpPut("email")]
+    [Authorize]
+    public async Task<ActionResult<UserDto>> UpdateEmail(UpdateEmailDto dto)
+    {
+        var user = await _users.GetUserAsync(User);
+        if (user is null)
+            return Unauthorized(new { message = "Usuário não encontrado." });
+
+        var email = dto.Email.Trim();
+        if (string.IsNullOrWhiteSpace(email))
+            return BadRequest(new { message = "Informe o e-mail." });
+
+        var existing = await _users.FindByEmailAsync(email);
+        if (existing is not null && existing.Id != user.Id)
+            return Conflict(new { message = "Já existe um usuário com este e-mail." });
+
+        if (!string.Equals(user.Email, email, StringComparison.OrdinalIgnoreCase))
+        {
+            var emailResult = await _users.SetEmailAsync(user, email);
+            if (!emailResult.Succeeded)
+                return BadRequest(new { message = "Não foi possível alterar o e-mail.", errors = emailResult.Errors.Select(e => e.Description) });
+
+            var userNameResult = await _users.SetUserNameAsync(user, email);
+            if (!userNameResult.Succeeded)
+                return BadRequest(new { message = "Não foi possível atualizar o usuário.", errors = userNameResult.Errors.Select(e => e.Description) });
+        }
+
+        return Ok(await ToUserDto(user));
     }
 
     [HttpPut("profile")]
