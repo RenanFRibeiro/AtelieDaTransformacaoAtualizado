@@ -499,3 +499,166 @@ div.position-fixed.bottom-0 button {
     }
 }
 
+
+
+/* ============================================================================
+   HEADER - VERSAO 3 (ajuste fiel à prévia aprovada)
+   Ordem: Orçamento | Painel | Meus pedidos | Carrinho | Sair
+   ============================================================================ */
+.header-actions-v3 {
+    min-height: 48px;
+    gap: 0;
+    white-space: nowrap;
+}
+
+.header-actions-v3 > * {
+    display: flex;
+    align-items: center;
+}
+
+.header-menu-link-v3,
+.header-actions-v3 .header-logout-v3 {
+    appearance: none;
+    background: transparent !important;
+    border: 0;
+    color: rgba(255, 255, 255, 0.82) !important;
+    text-decoration: none !important;
+    font: inherit;
+    font-size: 0.91rem;
+    font-weight: 500;
+    line-height: 1;
+    padding: 0.45rem 0.82rem;
+    border-radius: 0.35rem;
+    box-shadow: none !important;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.header-menu-link-v3 i,
+.header-actions-v3 .header-logout-v3 i {
+    margin-right: 0.42rem;
+    font-size: 0.86rem;
+    opacity: 0.92;
+}
+
+.header-menu-link-v3:hover,
+.header-menu-link-v3:focus-visible,
+.header-actions-v3 .header-logout-v3:hover,
+.header-actions-v3 .header-logout-v3:focus-visible {
+    color: var(--artisan-gold) !important;
+    background: rgba(255, 255, 255, 0.035) !important;
+}
+
+.header-actions-v3 .quote-link-v3 {
+    color: var(--artisan-clay) !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    text-decoration: none !important;
+    border-radius: 0;
+    padding: 0.45rem 0.78rem;
+    font-size: 0.91rem;
+    font-weight: 600;
+    line-height: 1;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.header-actions-v3 .quote-link-v3::before,
+.header-actions-v3 .quote-link-v3::after {
+    content: "";
+    width: 1px;
+    height: 1.2rem;
+    background: rgba(243, 238, 230, 0.18);
+}
+
+.header-actions-v3 .quote-link-v3::before {
+    margin-right: 0.95rem;
+}
+
+.header-actions-v3 .quote-link-v3::after {
+    margin-left: 0.95rem;
+}
+
+.header-actions-v3 .quote-link-v3 i {
+    margin-right: 0.42rem;
+    font-size: 0.88rem;
+}
+
+.header-actions-v3 .quote-link-v3:hover,
+.header-actions-v3 .quote-link-v3:focus-visible {
+    color: var(--artisan-gold) !important;
+}
+
+.header-actions-v3 .header-logout-v3 {
+    cursor: pointer;
+}
+
+.header-actions-v3 #cartCountBadge {
+    min-width: 1.15rem;
+    padding: 0.15rem 0.35rem;
+    font-size: 0.68rem;
+    line-height: 1.1;
+    border-radius: 999px;
+}
+
+.navbar-artisan .navbar-collapse {
+    align-items: center;
+}
+
+.navbar-artisan .navbar-nav {
+    margin-left: auto !important;
+    margin-right: 0.85rem !important;
+    gap: 0.15rem;
+}
+
+.navbar-artisan .navbar-brand {
+    flex-shrink: 0;
+}
+
+@media (min-width: 1200px) {
+    .navbar-artisan .navbar-brand {
+        margin-right: 1.5rem;
+    }
+
+    .navbar-artisan .nav-link-artisan {
+        padding-left: 0.78rem !important;
+        padding-right: 0.78rem !important;
+    }
+}
+
+@media (max-width: 1199.98px) {
+    .header-actions-v3 .header-menu-link-v3,
+    .header-actions-v3 .header-logout-v3,
+    .header-actions-v3 .quote-link-v3 {
+        padding-left: 0.52rem;
+        padding-right: 0.52rem;
+        font-size: 0.84rem;
+    }
+
+    .header-actions-v3 .quote-link-v3::before,
+    .header-actions-v3 .quote-link-v3::after {
+        margin-left: 0.65rem;
+        margin-right: 0.65rem;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .header-actions-v3 {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        row-gap: 0.25rem;
+        padding-top: 0.4rem;
+        padding-bottom: 0.2rem;
+    }
+
+    .header-actions-v3 .quote-link-v3::before,
+    .header-actions-v3 .quote-link-v3::after {
+        display: none;
+    }
+
+    .navbar-artisan .navbar-nav {
+        margin: 0 !important;
+        width: 100%;
+        text-align: center;
+    }
+}
