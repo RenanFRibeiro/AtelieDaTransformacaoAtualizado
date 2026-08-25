@@ -1,0 +1,251 @@
+﻿@model IReadOnlyList<AtelieDaTransformacao.Application.DTOs.OrderListDto>
+
+@{
+    ViewData["Title"] = "Meus Pedidos";
+}
+
+<div class="container py-5">
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+
+        <div>
+            <span class="text-uppercase text-gold fw-bold small">
+                Acompanhamento
+            </span>
+
+            <h1 class="serif-title fw-bold mb-1">
+                Meus pedidos
+            </h1>
+
+            <p class="text-muted mb-0">
+                Acompanhe cada etapa do seu pedido sem sair do site.
+            </p>
+        </div>
+
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="btn btn-outline-dark rounded-pill px-4">
+
+            <i class="bi bi-arrow-left me-1"></i>
+            Voltar para a coleção
+
+        </a>
+
+    </div>
+
+
+    @if (TempData["SuccessMessage"] is string success)
+    {
+        <div class="alert alert-success">
+            @success
+        </div>
+    }
+
+
+    @if (TempData["ErrorMessage"] is string error)
+    {
+        <div class="alert alert-danger">
+            @error
+        </div>
+    }
+
+
+    @if (Model == null || Model.Count == 0)
+    {
+        <div class="card border-0 shadow-sm rounded-4 p-5 text-center">
+
+            <i class="bi bi-box-seam display-3 text-gold"></i>
+
+            <h2 class="serif-title fw-bold mt-3">
+                Você ainda não possui pedidos
+            </h2>
+
+            <p class="text-muted">
+                Adicione uma peça ao carrinho e escolha
+                "Comprar pelo site".
+            </p>
+
+            <a asp-controller="Home"
+               asp-action="Index"
+               class="btn btn-artisan rounded-pill px-4">
+
+                Ver coleção
+
+            </a>
+
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+
+            @foreach (var order in Model)
+            {
+                <div class="col-12">
+
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden"
+                         data-order-card="@order.Id">
+
+                        <div class="card-body p-4">
+
+                            <div class="row align-items-center g-3">
+
+                                <div class="col-lg-3">
+
+                                    <span class="small text-muted d-block">
+                                        Pedido
+                                    </span>
+
+                                    <strong class="fs-5">
+                                        @order.OrderNumber
+                                    </strong>
+
+                                    <small class="text-muted d-block mt-1">
+                                        @order.CreatedAt
+                                        .ToLocalTime()
+                                        .ToString("dd/MM/yyyy HH:mm")
+                                    </small>
+
+                                </div>
+
+
+                                <div class="col-lg-3">
+
+                                    <span class="small text-muted d-block">
+                                        Total
+                                    </span>
+
+                                    <strong class="fs-5">
+                                        R$ @order.Total.ToString("N2")
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="col-lg-3">
+
+                                    <span class="small text-muted d-block">
+                                        Status
+                                    </span>
+
+                                    <span class="badge rounded-pill px-3 py-2 bg-dark"
+                                          data-order-status="@order.Id">
+
+                                        @order.StatusName
+
+                                    </span>
+
+
+                                    @if (order.AutoAdvance)
+                                    {
+                                        <small class="text-success d-block mt-1">
+
+                                            <i class="bi bi-arrow-repeat"></i>
+
+                                            Atualização automática
+
+                                        </small>
+                                    }
+
+                                </div>
+
+
+                                <div class="col-lg-3 text-lg-end">
+
+                                    <a asp-action="Details"
+                                       asp-route-id="@order.Id"
+                                       class="btn btn-artisan rounded-pill px-4">
+
+                                        Acompanhar pedido
+
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+    }
+
+</div>
+
+
+@section Scripts {
+
+    <script>
+
+        async function refreshOrder(orderId) {
+
+            try {
+
+                const response =
+                    await fetch(
+                        `/Order/Status/${orderId}`,
+                        {
+                            cache: "no-store"
+                        });
+
+                if (!response.ok)
+                    return;
+
+                const data =
+                    await response.json();
+
+                const badge =
+                    document.querySelector(
+                        `[data-order-status='${orderId}']`
+                    );
+
+                if (badge) {
+                    badge.textContent =
+                        data.statusName;
+                }
+
+            }
+            catch {
+            }
+
+        }
+
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            () => {
+
+                document
+                    .querySelectorAll("[data-order-card]")
+                    .forEach(
+                        card =>
+                            refreshOrder(
+                                card.dataset.orderCard
+                            )
+                    );
+
+
+                setInterval(
+                    () => {
+                        document
+                            .querySelectorAll("[data-order-card]")
+                            .forEach(
+                                card =>
+                                    refreshOrder(
+                                        card.dataset.orderCard
+                                    )
+                            );
+                    },
+                    10000
+                );
+
+            }
+        );
+
+    </script>
+
+}

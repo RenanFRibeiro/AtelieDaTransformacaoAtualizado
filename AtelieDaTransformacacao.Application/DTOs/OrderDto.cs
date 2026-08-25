@@ -31,4 +31,15 @@ public class OrderListDto
 public class OrderDetailsDto : OrderListDto
 {
     public List<AtelieDaTransformacao.Domain.Entities.OrderItemSnapshot> Items { get; set; } = new();
+
+    // Propriedades adicionadas para a view Details.cshtml
+    public string CustomerName { get; set; } = string.Empty;
+
+    public string? CustomerPhone { get; set; }
+
+    public string ShippingAddress { get; set; } = string.Empty;
+
+    public string PaymentMethod { get; set; } = string.Empty;
+
+    public string? Notes { get; set; }
 }

@@ -1,7 +1,5 @@
-@model AtelieDaTransformacao.Application.ViewModels.OrderDetailsViewModel
+@model AtelieDaTransformacao.Application.DTOs.OrderDetailsDto
 
-@using AtelieDaTransformacao.Application.ViewModels
-@using AtelieDaTransformacao.Domain.Entities
 @using AtelieDaTransformacao.Domain.Enums
 
 @{
@@ -11,11 +9,14 @@
 
 <div class="container py-5">
 
+    <!-- CABEÇALHO -->
+
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
 
         <div>
+
             <span class="text-uppercase text-gold fw-bold small">
-                Acompanhamento em tempo real
+                Acompanhamento do pedido
             </span>
 
             <h1 class="serif-title fw-bold mb-1">
@@ -24,16 +25,17 @@
 
             <p class="text-muted mb-0">
                 Criado em
-                @Model.CreatedAt
-                .ToLocalTime()
-                .ToString("dd/MM/yyyy HH:mm")
+                @Model.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")
             </p>
+
         </div>
 
-        <a asp-action="MyOrders"
+        <a asp-controller="Order"
+           asp-action="Index"
            class="btn btn-outline-dark rounded-pill">
 
             <i class="bi bi-arrow-left me-1"></i>
+
             Meus pedidos
 
         </a>
@@ -53,7 +55,7 @@
     </div>
 
 
-    <!-- STATUS -->
+    <!-- STATUS DO PEDIDO -->
 
     <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
 
@@ -96,41 +98,58 @@
                     var isCurrentOrPast =
                         (int)status <= (int)Model.Status;
 
-                    <div class="timeline-step
-                        @(isCurrentOrPast ? "completed" : "")
-                        @(status == Model.Status ? "current" : "")"
-                         data-status-step="@((int)status)">
+                    <div class="timeline-step @(isCurrentOrPast ? "completed" : "") @(status == Model.Status ? "current" : "")" data-status-step="@((int)status)">
 
                         <div class="timeline-dot">
 
                             @switch (status)
                             {
                                 case OrderStatus.Criado:
+
                                     <i class="bi bi-plus-circle"></i>
+
                                     break;
 
                                 case OrderStatus.Pendente:
+
                                     <i class="bi bi-hourglass-split"></i>
+
                                     break;
 
                                 case OrderStatus.Aprovado:
+
                                     <i class="bi bi-check-circle"></i>
+
                                     break;
 
                                 case OrderStatus.Separacao:
+
                                     <i class="bi bi-box-seam"></i>
+
                                     break;
 
                                 case OrderStatus.Faturado:
+
                                     <i class="bi bi-receipt"></i>
+
                                     break;
 
                                 case OrderStatus.Enviado:
+
                                     <i class="bi bi-truck"></i>
+
                                     break;
 
                                 case OrderStatus.Entregue:
+
                                     <i class="bi bi-house-check"></i>
+
+                                    break;
+
+                                default:
+
+                                    <i class="bi bi-box"></i>
+
                                     break;
                             }
 
@@ -152,9 +171,11 @@
     </div>
 
 
-    <!-- PRODUTOS + INFORMAÇÕES -->
+    <!-- PRODUTOS E INFORMAÇÕES -->
 
     <div class="row g-4">
+
+        <!-- PRODUTOS -->
 
         <div class="col-lg-7">
 
@@ -163,38 +184,55 @@
                 <div class="card-body p-4">
 
                     <h4 class="serif-title fw-bold mb-4">
+
                         Itens do pedido
+
                     </h4>
 
 
-                    @foreach (var item in Model.Items)
+                    @if (Model.Items == null || Model.Items.Count == 0)
                     {
-                        <div class="d-flex gap-3 align-items-center border-bottom py-3">
+                        <div class="alert alert-warning rounded-3">
 
-                            <div class="flex-grow-1">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
 
-                                <strong>
-                                    @item.ProductTitle
-                                </strong>
-
-                                <div class="small text-muted">
-
-                                    @item.Quantity x
-                                    @item.UnitPrice.ToString("C")
-
-                                </div>
-
-                            </div>
-
-                            <strong>
-
-                                @item.Subtotal.ToString("C")
-
-                            </strong>
+                            Nenhum item foi encontrado neste pedido.
 
                         </div>
                     }
+                    else
+                    {
+                        @foreach (var item in Model.Items)
+                        {
+                            <div class="d-flex gap-3 align-items-center border-bottom py-3">
 
+                                <div class="flex-grow-1">
+
+                                    <strong>
+                                        @item.Title
+                                    </strong>
+
+                                    <div class="small text-muted">
+
+                                        @item.Quantity x
+                                        @item.UnitPrice.ToString("C")
+
+                                    </div>
+
+                                </div>
+
+                                <strong>
+
+                                    @item.Subtotal.ToString("C")
+
+                                </strong>
+
+                            </div>
+                        }
+                    }
+
+
+                    <!-- TOTAL -->
 
                     <div class="d-flex justify-content-between pt-4">
 
@@ -217,6 +255,8 @@
         </div>
 
 
+        <!-- INFORMAÇÕES -->
+
         <div class="col-lg-5">
 
 
@@ -227,19 +267,37 @@
                 <div class="card-body p-4">
 
                     <h4 class="serif-title fw-bold mb-4">
+
                         Entrega
+
                     </h4>
 
+
                     <p class="mb-1 fw-semibold">
+
                         @Model.CustomerName
+
                     </p>
 
-                    <p class="small text-muted mb-2">
-                        @Model.CustomerPhone
-                    </p>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.CustomerPhone))
+                    {
+                        <p class="small text-muted mb-2">
+
+                            <i class="bi bi-telephone me-1"></i>
+
+                            @Model.CustomerPhone
+
+                        </p>
+                    }
+
 
                     <p class="small text-muted mb-0">
+
+                        <i class="bi bi-geo-alt me-1"></i>
+
                         @Model.ShippingAddress
+
                     </p>
 
                 </div>
@@ -254,22 +312,33 @@
                 <div class="card-body p-4">
 
                     <h5 class="fw-bold">
+
                         Pagamento
+
                     </h5>
 
+
                     <p class="text-muted mb-3">
+
+                        <i class="bi bi-credit-card me-1"></i>
+
                         @Model.PaymentMethod
+
                     </p>
 
 
                     @if (!string.IsNullOrWhiteSpace(Model.Notes))
                     {
                         <h5 class="fw-bold">
+
                             Observações
+
                         </h5>
 
                         <p class="text-muted mb-0">
+
                             @Model.Notes
+
                         </p>
                     }
 
@@ -277,12 +346,15 @@
 
             </div>
 
+
         </div>
 
     </div>
 
 </div>
 
+
+<!-- ESTILOS DA TIMELINE -->
 
 <style>
 
@@ -339,24 +411,22 @@
 
 
     .timeline-step.completed {
-        color: var( --artisan-clay, #b85a3a );
+        color: var(--artisan-clay, #b85a3a);
     }
 
 
-        .timeline-step.completed
-        .timeline-dot {
-            background: rgba( 184, 90, 58, .12 );
+        .timeline-step.completed .timeline-dot {
+            background: rgba(184, 90, 58, .12);
         }
 
 
         .timeline-step.completed::before {
-            background: var( --artisan-clay, #b85a3a );
+            background: var(--artisan-clay, #b85a3a);
         }
 
 
-    .timeline-step.current
-    .timeline-dot {
-        box-shadow: 0 0 0 5px rgba( 223, 183, 108, .25 );
+    .timeline-step.current .timeline-dot {
+        box-shadow: 0 0 0 5px rgba(223, 183, 108, .25);
     }
 
 
@@ -450,6 +520,7 @@
 
                 default:
                     return "bi-box-seam";
+
             }
 
         }
@@ -482,64 +553,46 @@
 
                 default:
                     return "Desconhecido";
+
             }
 
         }
 
 
-        function applyStatus(
-            status,
-            label,
-            icon
-        ) {
+        function applyStatus(status, label, icon) {
 
             statusLabel.textContent =
-                label ||
-                getStatusName(status);
+                label || getStatusName(status);
 
             statusIcon.innerHTML =
-                `<i class="bi ${icon ||
-                getStatusIcon(status)
-                }"></i>`;
-
+                `<i class="bi ${icon || getStatusIcon(status)}"></i>`;
 
             document
-                .querySelectorAll(
-                    "[data-status-step]"
-                )
+                .querySelectorAll("[data-status-step]")
                 .forEach(step => {
 
                     const stepStatus =
-                        Number(
-                            step.dataset
-                                .statusStep
-                        );
+                        Number(step.dataset.statusStep);
 
                     step.classList.toggle(
                         "completed",
-                        stepStatus <= status
+                        stepStatus <= Number(status)
                     );
 
                     step.classList.toggle(
                         "current",
-                        stepStatus === status
+                        stepStatus === Number(status)
                     );
 
                 });
 
+            liveAlert.classList.remove("d-none");
 
-            liveAlert.classList.remove(
-                "d-none"
-            );
+            setTimeout(() => {
 
+                liveAlert.classList.add("d-none");
 
-            setTimeout(
-                () =>
-                    liveAlert.classList.add(
-                        "d-none"
-                    ),
-                4500
-            );
+            }, 4500);
 
         }
 
@@ -552,34 +605,30 @@
                     await fetch(
                         `/Order/Status?id=${orderId}`,
                         {
-                            cache:
-                                "no-store"
+                            cache: "no-store"
                         }
                     );
 
+                if (!response.ok) {
 
-                if (!response.ok)
                     return;
 
+                }
 
                 const data =
                     await response.json();
 
-
-                const current =
+                const currentStep =
                     document.querySelector(
                         ".timeline-step.current"
                     );
 
-
                 const currentStatus =
-                    current
+                    currentStep
                         ? Number(
-                            current.dataset
-                                .statusStep
+                            currentStep.dataset.statusStep
                         )
                         : -1;
-
 
                 if (
                     currentStatus !==
@@ -589,9 +638,7 @@
                     applyStatus(
                         data.status,
                         data.statusName,
-                        getStatusIcon(
-                            data.status
-                        )
+                        getStatusIcon(data.status)
                     );
 
                 }
@@ -600,7 +647,7 @@
             catch (error) {
 
                 console.error(
-                    "Erro ao atualizar pedido:",
+                    "Erro ao atualizar o pedido:",
                     error
                 );
 
@@ -613,9 +660,12 @@
             "DOMContentLoaded",
             async () => {
 
+                /*
+                 * SignalR
+                 */
+
                 if (
-                    typeof signalR !==
-                    "undefined"
+                    typeof signalR !== "undefined"
                 ) {
 
                     try {
@@ -623,12 +673,9 @@
                         const connection =
                             new signalR
                                 .HubConnectionBuilder()
-                                .withUrl(
-                                    "/hubs/orders"
-                                )
+                                .withUrl("/hubs/orders")
                                 .withAutomaticReconnect()
                                 .build();
-
 
                         connection.on(
                             "OrderStatusUpdated",
@@ -640,13 +687,13 @@
                             ) {
 
                                 if (
-                                    Number(
-                                        updatedOrderId
-                                    ) !== orderId
+                                    Number(updatedOrderId) !==
+                                    orderId
                                 ) {
-                                    return;
-                                }
 
+                                    return;
+
+                                }
 
                                 applyStatus(
                                     status,
@@ -656,7 +703,6 @@
 
                             }
                         );
-
 
                         await connection.start();
 
@@ -672,10 +718,9 @@
 
                 }
 
-
                 /*
                  * Fallback:
-                 * consulta o servidor
+                 * atualiza o status
                  * a cada 10 segundos.
                  */
 
