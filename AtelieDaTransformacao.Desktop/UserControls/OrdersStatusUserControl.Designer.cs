@@ -111,6 +111,7 @@ partial class OrdersStatusUserControl
         DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
         DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
         DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+        DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
@@ -137,10 +138,15 @@ partial class OrdersStatusUserControl
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges24 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges27 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges28 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
         _rootPanel = new Guna2Panel();
         _gridCard = new Guna2Panel();
         _grid = new Guna2DataGridView();
+        _numberColumn = new DataGridViewTextBoxColumn();
+        _dateColumn = new DataGridViewTextBoxColumn();
+        _customerColumn = new DataGridViewTextBoxColumn();
+        _totalColumn = new DataGridViewTextBoxColumn();
+        _statusColumn = new DataGridViewComboBoxColumn();
+        _actionsColumn = new DataGridViewButtonColumn();
         _bottomPanel = new Panel();
         _paginationPanel = new FlowLayoutPanel();
         _previousPageButton = new Guna2Button();
@@ -171,50 +177,44 @@ partial class OrdersStatusUserControl
         _stepsHost = new Panel();
         _stepsFlowPanel = new FlowLayoutPanel();
         _stepCreatedPanel = new Panel();
+        _stepCreatedDescription = new Label();
+        _stepCreatedName = new Label();
+        _stepCreatedIcon = new Label();
         _connector1 = new Label();
         _stepPendingPanel = new Panel();
+        _stepPendingDescription = new Label();
+        _stepPendingName = new Label();
+        _stepPendingIcon = new Label();
         _connector2 = new Label();
         _stepApprovedPanel = new Panel();
+        _stepApprovedDescription = new Label();
+        _stepApprovedName = new Label();
+        _stepApprovedIcon = new Label();
         _connector3 = new Label();
         _stepSeparationPanel = new Panel();
+        _stepSeparationDescription = new Label();
+        _stepSeparationName = new Label();
+        _stepSeparationIcon = new Label();
         _connector4 = new Label();
         _stepInvoicedPanel = new Panel();
+        _stepInvoicedDescription = new Label();
+        _stepInvoicedName = new Label();
+        _stepInvoicedIcon = new Label();
         _connector5 = new Label();
         _stepShippedPanel = new Panel();
+        _stepShippedDescription = new Label();
+        _stepShippedName = new Label();
+        _stepShippedIcon = new Label();
         _connector6 = new Label();
         _stepDeliveredPanel = new Panel();
+        _stepDeliveredDescription = new Label();
+        _stepDeliveredName = new Label();
+        _stepDeliveredIcon = new Label();
         _headingPanel = new Panel();
         _refreshButton = new Guna2Button();
         _subtitleLabel = new Label();
         _titleLabel = new Label();
-        _stepCreatedDescription = new Label();
-        _stepCreatedName = new Label();
-        _stepCreatedIcon = new Label();
-        _stepPendingDescription = new Label();
-        _stepPendingName = new Label();
-        _stepPendingIcon = new Label();
-        _stepApprovedDescription = new Label();
-        _stepApprovedName = new Label();
-        _stepApprovedIcon = new Label();
-        _stepSeparationDescription = new Label();
-        _stepSeparationName = new Label();
-        _stepSeparationIcon = new Label();
-        _stepInvoicedDescription = new Label();
-        _stepInvoicedName = new Label();
-        _stepInvoicedIcon = new Label();
-        _stepShippedDescription = new Label();
-        _stepShippedName = new Label();
-        _stepShippedIcon = new Label();
-        _stepDeliveredDescription = new Label();
-        _stepDeliveredName = new Label();
-        _stepDeliveredIcon = new Label();
-        _numberColumn = new DataGridViewTextBoxColumn();
-        _dateColumn = new DataGridViewTextBoxColumn();
-        _customerColumn = new DataGridViewTextBoxColumn();
-        _totalColumn = new DataGridViewTextBoxColumn();
-        _statusColumn = new DataGridViewComboBoxColumn();
         _lastUpdateColumn = new DataGridViewTextBoxColumn();
-        _actionsColumn = new DataGridViewButtonColumn();
         _rootPanel.SuspendLayout();
         _gridCard.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)_grid).BeginInit();
@@ -230,6 +230,13 @@ partial class OrdersStatusUserControl
         panel2.SuspendLayout();
         _stepsHost.SuspendLayout();
         _stepsFlowPanel.SuspendLayout();
+        _stepCreatedPanel.SuspendLayout();
+        _stepPendingPanel.SuspendLayout();
+        _stepApprovedPanel.SuspendLayout();
+        _stepSeparationPanel.SuspendLayout();
+        _stepInvoicedPanel.SuspendLayout();
+        _stepShippedPanel.SuspendLayout();
+        _stepDeliveredPanel.SuspendLayout();
         _headingPanel.SuspendLayout();
         SuspendLayout();
         // 
@@ -298,6 +305,7 @@ partial class OrdersStatusUserControl
         _grid.Location = new Point(10, 10);
         _grid.MultiSelect = false;
         _grid.Name = "_grid";
+        _grid.ReadOnly = true;
         _grid.RowHeadersVisible = false;
         _grid.RowTemplate.Height = 36;
         _grid.ScrollBars = ScrollBars.Vertical;
@@ -309,11 +317,97 @@ partial class OrdersStatusUserControl
         _grid.ThemeStyle.HeaderStyle.Font = new Font("Segoe UI Semibold", 8.5F);
         _grid.ThemeStyle.HeaderStyle.HeaightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
         _grid.ThemeStyle.HeaderStyle.Height = 38;
+        _grid.ThemeStyle.ReadOnly = true;
         _grid.ThemeStyle.RowsStyle.Font = new Font("Segoe UI", 8.5F);
         _grid.ThemeStyle.RowsStyle.ForeColor = Color.Black;
         _grid.ThemeStyle.RowsStyle.Height = 36;
         _grid.ThemeStyle.RowsStyle.SelectionBackColor = Color.LightGray;
         _grid.ThemeStyle.RowsStyle.SelectionForeColor = Color.Black;
+        // 
+        // _numberColumn
+        // 
+        _numberColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+        _numberColumn.FillWeight = 10F;
+        _numberColumn.Frozen = true;
+        _numberColumn.HeaderText = "Nº Pedido";
+        _numberColumn.MinimumWidth = 70;
+        _numberColumn.Name = "_numberColumn";
+        _numberColumn.ReadOnly = true;
+        _numberColumn.Resizable = DataGridViewTriState.True;
+        _numberColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
+        _numberColumn.Width = 152;
+        // 
+        // _dateColumn
+        // 
+        _dateColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+        _dateColumn.FillWeight = 13F;
+        _dateColumn.Frozen = true;
+        _dateColumn.HeaderText = "Data";
+        _dateColumn.MinimumWidth = 90;
+        _dateColumn.Name = "_dateColumn";
+        _dateColumn.ReadOnly = true;
+        _dateColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
+        _dateColumn.Width = 196;
+        // 
+        // _customerColumn
+        // 
+        _customerColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+        _customerColumn.FillWeight = 20F;
+        _customerColumn.Frozen = true;
+        _customerColumn.HeaderText = "Cliente";
+        _customerColumn.MinimumWidth = 105;
+        _customerColumn.Name = "_customerColumn";
+        _customerColumn.ReadOnly = true;
+        _customerColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
+        _customerColumn.Width = 303;
+        // 
+        // _totalColumn
+        // 
+        _totalColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+        _totalColumn.FillWeight = 12F;
+        _totalColumn.Frozen = true;
+        _totalColumn.HeaderText = "Valor Total";
+        _totalColumn.MinimumWidth = 82;
+        _totalColumn.Name = "_totalColumn";
+        _totalColumn.ReadOnly = true;
+        _totalColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
+        _totalColumn.Width = 182;
+        // 
+        // _statusColumn
+        // 
+        _statusColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+        _statusColumn.DisplayStyleForCurrentCellOnly = true;
+        _statusColumn.FillWeight = 12F;
+        _statusColumn.FlatStyle = FlatStyle.Flat;
+        _statusColumn.Frozen = true;
+        _statusColumn.HeaderText = "Status";
+        _statusColumn.Items.AddRange(new object[] { "Criado", "Pendente", "Aprovado", "Separação", "Faturado", "Enviado", "Entregue" });
+        _statusColumn.MinimumWidth = 96;
+        _statusColumn.Name = "_statusColumn";
+        _statusColumn.ReadOnly = true;
+        _statusColumn.Width = 182;
+        // 
+        // _actionsColumn
+        // 
+        _actionsColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+        dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+        dataGridViewCellStyle3.BackColor = Color.White;
+        dataGridViewCellStyle3.ForeColor = Color.Black;
+        dataGridViewCellStyle3.Padding = new Padding(8, 4, 8, 4);
+        dataGridViewCellStyle3.SelectionBackColor = Color.FromArgb(103, 70, 46);
+        dataGridViewCellStyle3.SelectionForeColor = Color.White;
+        _actionsColumn.DefaultCellStyle = dataGridViewCellStyle3;
+        _actionsColumn.FillWeight = 10F;
+        _actionsColumn.FlatStyle = FlatStyle.Flat;
+        _actionsColumn.Frozen = true;
+        _actionsColumn.HeaderText = "Ações";
+        _actionsColumn.MinimumWidth = 74;
+        _actionsColumn.Name = "_actionsColumn";
+        _actionsColumn.ReadOnly = true;
+        _actionsColumn.Resizable = DataGridViewTriState.False;
+        _actionsColumn.Text = "Detalhes";
+        _actionsColumn.UseColumnTextForButtonValue = true;
+        _actionsColumn.Width = 120;
         // 
         // _bottomPanel
         // 
@@ -732,11 +826,49 @@ partial class OrdersStatusUserControl
         // _stepCreatedPanel
         // 
         _stepCreatedPanel.BackColor = Color.Transparent;
+        _stepCreatedPanel.Controls.Add(_stepCreatedDescription);
+        _stepCreatedPanel.Controls.Add(_stepCreatedName);
+        _stepCreatedPanel.Controls.Add(_stepCreatedIcon);
         _stepCreatedPanel.Location = new Point(4, 4);
         _stepCreatedPanel.Margin = new Padding(0);
         _stepCreatedPanel.Name = "_stepCreatedPanel";
         _stepCreatedPanel.Size = new Size(82, 112);
         _stepCreatedPanel.TabIndex = 0;
+        // 
+        // _stepCreatedDescription
+        // 
+        _stepCreatedDescription.Font = new Font("Segoe UI", 6.5F);
+        _stepCreatedDescription.ForeColor = Color.FromArgb(204, 190, 177);
+        _stepCreatedDescription.Location = new Point(0, 68);
+        _stepCreatedDescription.Name = "_stepCreatedDescription";
+        _stepCreatedDescription.Size = new Size(82, 44);
+        _stepCreatedDescription.TabIndex = 0;
+        _stepCreatedDescription.Text = "Compra registrada\nno sistema.";
+        _stepCreatedDescription.TextAlign = ContentAlignment.TopCenter;
+        // 
+        // _stepCreatedName
+        // 
+        _stepCreatedName.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+        _stepCreatedName.ForeColor = Color.White;
+        _stepCreatedName.Location = new Point(0, 45);
+        _stepCreatedName.Name = "_stepCreatedName";
+        _stepCreatedName.Size = new Size(82, 20);
+        _stepCreatedName.TabIndex = 0;
+        _stepCreatedName.Text = "Criado";
+        _stepCreatedName.TextAlign = ContentAlignment.TopCenter;
+        // 
+        // _stepCreatedIcon
+        // 
+        _stepCreatedIcon.BackColor = Color.FromArgb(70, 43, 27);
+        _stepCreatedIcon.BorderStyle = BorderStyle.FixedSingle;
+        _stepCreatedIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
+        _stepCreatedIcon.ForeColor = Color.White;
+        _stepCreatedIcon.Location = new Point(21, 0);
+        _stepCreatedIcon.Name = "_stepCreatedIcon";
+        _stepCreatedIcon.Size = new Size(40, 40);
+        _stepCreatedIcon.TabIndex = 0;
+        _stepCreatedIcon.Text = "▣";
+        _stepCreatedIcon.TextAlign = ContentAlignment.MiddleCenter;
         // 
         // _connector1
         // 
@@ -753,11 +885,49 @@ partial class OrdersStatusUserControl
         // _stepPendingPanel
         // 
         _stepPendingPanel.BackColor = Color.Transparent;
+        _stepPendingPanel.Controls.Add(_stepPendingDescription);
+        _stepPendingPanel.Controls.Add(_stepPendingName);
+        _stepPendingPanel.Controls.Add(_stepPendingIcon);
         _stepPendingPanel.Location = new Point(94, 4);
         _stepPendingPanel.Margin = new Padding(0);
         _stepPendingPanel.Name = "_stepPendingPanel";
         _stepPendingPanel.Size = new Size(82, 112);
         _stepPendingPanel.TabIndex = 2;
+        // 
+        // _stepPendingDescription
+        // 
+        _stepPendingDescription.Font = new Font("Segoe UI", 6.5F);
+        _stepPendingDescription.ForeColor = Color.FromArgb(204, 190, 177);
+        _stepPendingDescription.Location = new Point(0, 68);
+        _stepPendingDescription.Name = "_stepPendingDescription";
+        _stepPendingDescription.Size = new Size(82, 44);
+        _stepPendingDescription.TabIndex = 0;
+        _stepPendingDescription.Text = "Aguardando a\naprovação do pagamento.";
+        _stepPendingDescription.TextAlign = ContentAlignment.TopCenter;
+        // 
+        // _stepPendingName
+        // 
+        _stepPendingName.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+        _stepPendingName.ForeColor = Color.White;
+        _stepPendingName.Location = new Point(0, 45);
+        _stepPendingName.Name = "_stepPendingName";
+        _stepPendingName.Size = new Size(82, 20);
+        _stepPendingName.TabIndex = 0;
+        _stepPendingName.Text = "Pendente";
+        _stepPendingName.TextAlign = ContentAlignment.TopCenter;
+        // 
+        // _stepPendingIcon
+        // 
+        _stepPendingIcon.BackColor = Color.FromArgb(70, 43, 27);
+        _stepPendingIcon.BorderStyle = BorderStyle.FixedSingle;
+        _stepPendingIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
+        _stepPendingIcon.ForeColor = Color.White;
+        _stepPendingIcon.Location = new Point(21, 0);
+        _stepPendingIcon.Name = "_stepPendingIcon";
+        _stepPendingIcon.Size = new Size(40, 40);
+        _stepPendingIcon.TabIndex = 0;
+        _stepPendingIcon.Text = "⌛";
+        _stepPendingIcon.TextAlign = ContentAlignment.MiddleCenter;
         // 
         // _connector2
         // 
@@ -774,11 +944,49 @@ partial class OrdersStatusUserControl
         // _stepApprovedPanel
         // 
         _stepApprovedPanel.BackColor = Color.Transparent;
+        _stepApprovedPanel.Controls.Add(_stepApprovedDescription);
+        _stepApprovedPanel.Controls.Add(_stepApprovedName);
+        _stepApprovedPanel.Controls.Add(_stepApprovedIcon);
         _stepApprovedPanel.Location = new Point(184, 4);
         _stepApprovedPanel.Margin = new Padding(0);
         _stepApprovedPanel.Name = "_stepApprovedPanel";
         _stepApprovedPanel.Size = new Size(82, 112);
         _stepApprovedPanel.TabIndex = 4;
+        // 
+        // _stepApprovedDescription
+        // 
+        _stepApprovedDescription.Font = new Font("Segoe UI", 6.5F);
+        _stepApprovedDescription.ForeColor = Color.FromArgb(204, 190, 177);
+        _stepApprovedDescription.Location = new Point(0, 68);
+        _stepApprovedDescription.Name = "_stepApprovedDescription";
+        _stepApprovedDescription.Size = new Size(82, 44);
+        _stepApprovedDescription.TabIndex = 0;
+        _stepApprovedDescription.Text = "Pagamento confirmado\ne pedido liberado.";
+        _stepApprovedDescription.TextAlign = ContentAlignment.TopCenter;
+        // 
+        // _stepApprovedName
+        // 
+        _stepApprovedName.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+        _stepApprovedName.ForeColor = Color.White;
+        _stepApprovedName.Location = new Point(0, 45);
+        _stepApprovedName.Name = "_stepApprovedName";
+        _stepApprovedName.Size = new Size(82, 20);
+        _stepApprovedName.TabIndex = 0;
+        _stepApprovedName.Text = "Aprovado";
+        _stepApprovedName.TextAlign = ContentAlignment.TopCenter;
+        // 
+        // _stepApprovedIcon
+        // 
+        _stepApprovedIcon.BackColor = Color.FromArgb(70, 43, 27);
+        _stepApprovedIcon.BorderStyle = BorderStyle.FixedSingle;
+        _stepApprovedIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
+        _stepApprovedIcon.ForeColor = Color.White;
+        _stepApprovedIcon.Location = new Point(21, 0);
+        _stepApprovedIcon.Name = "_stepApprovedIcon";
+        _stepApprovedIcon.Size = new Size(40, 40);
+        _stepApprovedIcon.TabIndex = 0;
+        _stepApprovedIcon.Text = "✓";
+        _stepApprovedIcon.TextAlign = ContentAlignment.MiddleCenter;
         // 
         // _connector3
         // 
@@ -795,11 +1003,49 @@ partial class OrdersStatusUserControl
         // _stepSeparationPanel
         // 
         _stepSeparationPanel.BackColor = Color.Transparent;
+        _stepSeparationPanel.Controls.Add(_stepSeparationDescription);
+        _stepSeparationPanel.Controls.Add(_stepSeparationName);
+        _stepSeparationPanel.Controls.Add(_stepSeparationIcon);
         _stepSeparationPanel.Location = new Point(274, 4);
         _stepSeparationPanel.Margin = new Padding(0);
         _stepSeparationPanel.Name = "_stepSeparationPanel";
         _stepSeparationPanel.Size = new Size(82, 112);
         _stepSeparationPanel.TabIndex = 6;
+        // 
+        // _stepSeparationDescription
+        // 
+        _stepSeparationDescription.Font = new Font("Segoe UI", 6.5F);
+        _stepSeparationDescription.ForeColor = Color.FromArgb(204, 190, 177);
+        _stepSeparationDescription.Location = new Point(0, 68);
+        _stepSeparationDescription.Name = "_stepSeparationDescription";
+        _stepSeparationDescription.Size = new Size(82, 44);
+        _stepSeparationDescription.TabIndex = 0;
+        _stepSeparationDescription.Text = "Produto localizado\ne embalado.";
+        _stepSeparationDescription.TextAlign = ContentAlignment.TopCenter;
+        // 
+        // _stepSeparationName
+        // 
+        _stepSeparationName.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+        _stepSeparationName.ForeColor = Color.White;
+        _stepSeparationName.Location = new Point(0, 45);
+        _stepSeparationName.Name = "_stepSeparationName";
+        _stepSeparationName.Size = new Size(82, 20);
+        _stepSeparationName.TabIndex = 0;
+        _stepSeparationName.Text = "Separação";
+        _stepSeparationName.TextAlign = ContentAlignment.TopCenter;
+        // 
+        // _stepSeparationIcon
+        // 
+        _stepSeparationIcon.BackColor = Color.FromArgb(70, 43, 27);
+        _stepSeparationIcon.BorderStyle = BorderStyle.FixedSingle;
+        _stepSeparationIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
+        _stepSeparationIcon.ForeColor = Color.White;
+        _stepSeparationIcon.Location = new Point(21, 0);
+        _stepSeparationIcon.Name = "_stepSeparationIcon";
+        _stepSeparationIcon.Size = new Size(40, 40);
+        _stepSeparationIcon.TabIndex = 0;
+        _stepSeparationIcon.Text = "□";
+        _stepSeparationIcon.TextAlign = ContentAlignment.MiddleCenter;
         // 
         // _connector4
         // 
@@ -816,11 +1062,49 @@ partial class OrdersStatusUserControl
         // _stepInvoicedPanel
         // 
         _stepInvoicedPanel.BackColor = Color.Transparent;
+        _stepInvoicedPanel.Controls.Add(_stepInvoicedDescription);
+        _stepInvoicedPanel.Controls.Add(_stepInvoicedName);
+        _stepInvoicedPanel.Controls.Add(_stepInvoicedIcon);
         _stepInvoicedPanel.Location = new Point(364, 4);
         _stepInvoicedPanel.Margin = new Padding(0);
         _stepInvoicedPanel.Name = "_stepInvoicedPanel";
         _stepInvoicedPanel.Size = new Size(82, 112);
         _stepInvoicedPanel.TabIndex = 8;
+        // 
+        // _stepInvoicedDescription
+        // 
+        _stepInvoicedDescription.Font = new Font("Segoe UI", 6.5F);
+        _stepInvoicedDescription.ForeColor = Color.FromArgb(204, 190, 177);
+        _stepInvoicedDescription.Location = new Point(0, 68);
+        _stepInvoicedDescription.Name = "_stepInvoicedDescription";
+        _stepInvoicedDescription.Size = new Size(82, 44);
+        _stepInvoicedDescription.TabIndex = 0;
+        _stepInvoicedDescription.Text = "Nota Fiscal\nemitida.";
+        _stepInvoicedDescription.TextAlign = ContentAlignment.TopCenter;
+        // 
+        // _stepInvoicedName
+        // 
+        _stepInvoicedName.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+        _stepInvoicedName.ForeColor = Color.White;
+        _stepInvoicedName.Location = new Point(0, 45);
+        _stepInvoicedName.Name = "_stepInvoicedName";
+        _stepInvoicedName.Size = new Size(82, 20);
+        _stepInvoicedName.TabIndex = 0;
+        _stepInvoicedName.Text = "Faturado";
+        _stepInvoicedName.TextAlign = ContentAlignment.TopCenter;
+        // 
+        // _stepInvoicedIcon
+        // 
+        _stepInvoicedIcon.BackColor = Color.FromArgb(70, 43, 27);
+        _stepInvoicedIcon.BorderStyle = BorderStyle.FixedSingle;
+        _stepInvoicedIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
+        _stepInvoicedIcon.ForeColor = Color.White;
+        _stepInvoicedIcon.Location = new Point(21, 0);
+        _stepInvoicedIcon.Name = "_stepInvoicedIcon";
+        _stepInvoicedIcon.Size = new Size(40, 40);
+        _stepInvoicedIcon.TabIndex = 0;
+        _stepInvoicedIcon.Text = "▤";
+        _stepInvoicedIcon.TextAlign = ContentAlignment.MiddleCenter;
         // 
         // _connector5
         // 
@@ -837,11 +1121,49 @@ partial class OrdersStatusUserControl
         // _stepShippedPanel
         // 
         _stepShippedPanel.BackColor = Color.Transparent;
+        _stepShippedPanel.Controls.Add(_stepShippedDescription);
+        _stepShippedPanel.Controls.Add(_stepShippedName);
+        _stepShippedPanel.Controls.Add(_stepShippedIcon);
         _stepShippedPanel.Location = new Point(454, 4);
         _stepShippedPanel.Margin = new Padding(0);
         _stepShippedPanel.Name = "_stepShippedPanel";
         _stepShippedPanel.Size = new Size(82, 112);
         _stepShippedPanel.TabIndex = 10;
+        // 
+        // _stepShippedDescription
+        // 
+        _stepShippedDescription.Font = new Font("Segoe UI", 6.5F);
+        _stepShippedDescription.ForeColor = Color.FromArgb(204, 190, 177);
+        _stepShippedDescription.Location = new Point(0, 68);
+        _stepShippedDescription.Name = "_stepShippedDescription";
+        _stepShippedDescription.Size = new Size(82, 44);
+        _stepShippedDescription.TabIndex = 0;
+        _stepShippedDescription.Text = "Pacote coletado\npela transportadora.";
+        _stepShippedDescription.TextAlign = ContentAlignment.TopCenter;
+        // 
+        // _stepShippedName
+        // 
+        _stepShippedName.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+        _stepShippedName.ForeColor = Color.White;
+        _stepShippedName.Location = new Point(0, 45);
+        _stepShippedName.Name = "_stepShippedName";
+        _stepShippedName.Size = new Size(82, 20);
+        _stepShippedName.TabIndex = 0;
+        _stepShippedName.Text = "Enviado";
+        _stepShippedName.TextAlign = ContentAlignment.TopCenter;
+        // 
+        // _stepShippedIcon
+        // 
+        _stepShippedIcon.BackColor = Color.FromArgb(70, 43, 27);
+        _stepShippedIcon.BorderStyle = BorderStyle.FixedSingle;
+        _stepShippedIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
+        _stepShippedIcon.ForeColor = Color.White;
+        _stepShippedIcon.Location = new Point(21, 0);
+        _stepShippedIcon.Name = "_stepShippedIcon";
+        _stepShippedIcon.Size = new Size(40, 40);
+        _stepShippedIcon.TabIndex = 0;
+        _stepShippedIcon.Text = "▰";
+        _stepShippedIcon.TextAlign = ContentAlignment.MiddleCenter;
         // 
         // _connector6
         // 
@@ -858,11 +1180,49 @@ partial class OrdersStatusUserControl
         // _stepDeliveredPanel
         // 
         _stepDeliveredPanel.BackColor = Color.Transparent;
+        _stepDeliveredPanel.Controls.Add(_stepDeliveredDescription);
+        _stepDeliveredPanel.Controls.Add(_stepDeliveredName);
+        _stepDeliveredPanel.Controls.Add(_stepDeliveredIcon);
         _stepDeliveredPanel.Location = new Point(544, 4);
         _stepDeliveredPanel.Margin = new Padding(0);
         _stepDeliveredPanel.Name = "_stepDeliveredPanel";
         _stepDeliveredPanel.Size = new Size(82, 112);
         _stepDeliveredPanel.TabIndex = 12;
+        // 
+        // _stepDeliveredDescription
+        // 
+        _stepDeliveredDescription.Font = new Font("Segoe UI", 6.5F);
+        _stepDeliveredDescription.ForeColor = Color.FromArgb(204, 190, 177);
+        _stepDeliveredDescription.Location = new Point(0, 68);
+        _stepDeliveredDescription.Name = "_stepDeliveredDescription";
+        _stepDeliveredDescription.Size = new Size(82, 44);
+        _stepDeliveredDescription.TabIndex = 0;
+        _stepDeliveredDescription.Text = "Produto entregue\nao destinatário.";
+        _stepDeliveredDescription.TextAlign = ContentAlignment.TopCenter;
+        // 
+        // _stepDeliveredName
+        // 
+        _stepDeliveredName.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+        _stepDeliveredName.ForeColor = Color.White;
+        _stepDeliveredName.Location = new Point(0, 45);
+        _stepDeliveredName.Name = "_stepDeliveredName";
+        _stepDeliveredName.Size = new Size(82, 20);
+        _stepDeliveredName.TabIndex = 0;
+        _stepDeliveredName.Text = "Entregue";
+        _stepDeliveredName.TextAlign = ContentAlignment.TopCenter;
+        // 
+        // _stepDeliveredIcon
+        // 
+        _stepDeliveredIcon.BackColor = Color.FromArgb(70, 43, 27);
+        _stepDeliveredIcon.BorderStyle = BorderStyle.FixedSingle;
+        _stepDeliveredIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
+        _stepDeliveredIcon.ForeColor = Color.White;
+        _stepDeliveredIcon.Location = new Point(21, 0);
+        _stepDeliveredIcon.Name = "_stepDeliveredIcon";
+        _stepDeliveredIcon.Size = new Size(40, 40);
+        _stepDeliveredIcon.TabIndex = 0;
+        _stepDeliveredIcon.Text = "✓";
+        _stepDeliveredIcon.TextAlign = ContentAlignment.MiddleCenter;
         // 
         // _headingPanel
         // 
@@ -914,366 +1274,9 @@ partial class OrdersStatusUserControl
         _titleLabel.TabIndex = 2;
         _titleLabel.Text = "Status de Pedidos";
         // 
-        // _stepCreatedDescription
+        // _lastUpdateColumn
         // 
-        _stepCreatedDescription.Font = new Font("Segoe UI", 6.5F);
-        _stepCreatedDescription.ForeColor = Color.FromArgb(204, 190, 177);
-        _stepCreatedDescription.Location = new Point(0, 68);
-        _stepCreatedDescription.Name = "_stepCreatedDescription";
-        _stepCreatedDescription.Size = new Size(82, 44);
-        _stepCreatedDescription.TabIndex = 0;
-        _stepCreatedDescription.Text = "Compra registrada\nno sistema.";
-        _stepCreatedDescription.TextAlign = ContentAlignment.TopCenter;
-        // 
-        // _stepCreatedName
-        // 
-        _stepCreatedName.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
-        _stepCreatedName.ForeColor = Color.White;
-        _stepCreatedName.Location = new Point(0, 45);
-        _stepCreatedName.Name = "_stepCreatedName";
-        _stepCreatedName.Size = new Size(82, 20);
-        _stepCreatedName.TabIndex = 0;
-        _stepCreatedName.Text = "Criado";
-        _stepCreatedName.TextAlign = ContentAlignment.TopCenter;
-        // 
-        // _stepCreatedIcon
-        // 
-        _stepCreatedIcon.BackColor = Color.FromArgb(70, 43, 27);
-        _stepCreatedIcon.BorderStyle = BorderStyle.FixedSingle;
-        _stepCreatedIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
-        _stepCreatedIcon.ForeColor = Color.White;
-        _stepCreatedIcon.Location = new Point(21, 0);
-        _stepCreatedIcon.Name = "_stepCreatedIcon";
-        _stepCreatedIcon.Size = new Size(40, 40);
-        _stepCreatedIcon.TabIndex = 0;
-        _stepCreatedIcon.Text = "▣";
-        _stepCreatedIcon.TextAlign = ContentAlignment.MiddleCenter;
-        // 
-        // _stepPendingDescription
-        // 
-        _stepPendingDescription.Font = new Font("Segoe UI", 6.5F);
-        _stepPendingDescription.ForeColor = Color.FromArgb(204, 190, 177);
-        _stepPendingDescription.Location = new Point(0, 68);
-        _stepPendingDescription.Name = "_stepPendingDescription";
-        _stepPendingDescription.Size = new Size(82, 44);
-        _stepPendingDescription.TabIndex = 0;
-        _stepPendingDescription.Text = "Aguardando a\naprovação do pagamento.";
-        _stepPendingDescription.TextAlign = ContentAlignment.TopCenter;
-        // 
-        // _stepPendingName
-        // 
-        _stepPendingName.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
-        _stepPendingName.ForeColor = Color.White;
-        _stepPendingName.Location = new Point(0, 45);
-        _stepPendingName.Name = "_stepPendingName";
-        _stepPendingName.Size = new Size(82, 20);
-        _stepPendingName.TabIndex = 0;
-        _stepPendingName.Text = "Pendente";
-        _stepPendingName.TextAlign = ContentAlignment.TopCenter;
-        // 
-        // _stepPendingIcon
-        // 
-        _stepPendingIcon.BackColor = Color.FromArgb(70, 43, 27);
-        _stepPendingIcon.BorderStyle = BorderStyle.FixedSingle;
-        _stepPendingIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
-        _stepPendingIcon.ForeColor = Color.White;
-        _stepPendingIcon.Location = new Point(21, 0);
-        _stepPendingIcon.Name = "_stepPendingIcon";
-        _stepPendingIcon.Size = new Size(40, 40);
-        _stepPendingIcon.TabIndex = 0;
-        _stepPendingIcon.Text = "⌛";
-        _stepPendingIcon.TextAlign = ContentAlignment.MiddleCenter;
-        // 
-        // _stepApprovedDescription
-        // 
-        _stepApprovedDescription.Font = new Font("Segoe UI", 6.5F);
-        _stepApprovedDescription.ForeColor = Color.FromArgb(204, 190, 177);
-        _stepApprovedDescription.Location = new Point(0, 68);
-        _stepApprovedDescription.Name = "_stepApprovedDescription";
-        _stepApprovedDescription.Size = new Size(82, 44);
-        _stepApprovedDescription.TabIndex = 0;
-        _stepApprovedDescription.Text = "Pagamento confirmado\ne pedido liberado.";
-        _stepApprovedDescription.TextAlign = ContentAlignment.TopCenter;
-        // 
-        // _stepApprovedName
-        // 
-        _stepApprovedName.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
-        _stepApprovedName.ForeColor = Color.White;
-        _stepApprovedName.Location = new Point(0, 45);
-        _stepApprovedName.Name = "_stepApprovedName";
-        _stepApprovedName.Size = new Size(82, 20);
-        _stepApprovedName.TabIndex = 0;
-        _stepApprovedName.Text = "Aprovado";
-        _stepApprovedName.TextAlign = ContentAlignment.TopCenter;
-        // 
-        // _stepApprovedIcon
-        // 
-        _stepApprovedIcon.BackColor = Color.FromArgb(70, 43, 27);
-        _stepApprovedIcon.BorderStyle = BorderStyle.FixedSingle;
-        _stepApprovedIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
-        _stepApprovedIcon.ForeColor = Color.White;
-        _stepApprovedIcon.Location = new Point(21, 0);
-        _stepApprovedIcon.Name = "_stepApprovedIcon";
-        _stepApprovedIcon.Size = new Size(40, 40);
-        _stepApprovedIcon.TabIndex = 0;
-        _stepApprovedIcon.Text = "✓";
-        _stepApprovedIcon.TextAlign = ContentAlignment.MiddleCenter;
-        // 
-        // _stepSeparationDescription
-        // 
-        _stepSeparationDescription.Font = new Font("Segoe UI", 6.5F);
-        _stepSeparationDescription.ForeColor = Color.FromArgb(204, 190, 177);
-        _stepSeparationDescription.Location = new Point(0, 68);
-        _stepSeparationDescription.Name = "_stepSeparationDescription";
-        _stepSeparationDescription.Size = new Size(82, 44);
-        _stepSeparationDescription.TabIndex = 0;
-        _stepSeparationDescription.Text = "Produto localizado\ne embalado.";
-        _stepSeparationDescription.TextAlign = ContentAlignment.TopCenter;
-        // 
-        // _stepSeparationName
-        // 
-        _stepSeparationName.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
-        _stepSeparationName.ForeColor = Color.White;
-        _stepSeparationName.Location = new Point(0, 45);
-        _stepSeparationName.Name = "_stepSeparationName";
-        _stepSeparationName.Size = new Size(82, 20);
-        _stepSeparationName.TabIndex = 0;
-        _stepSeparationName.Text = "Separação";
-        _stepSeparationName.TextAlign = ContentAlignment.TopCenter;
-        // 
-        // _stepSeparationIcon
-        // 
-        _stepSeparationIcon.BackColor = Color.FromArgb(70, 43, 27);
-        _stepSeparationIcon.BorderStyle = BorderStyle.FixedSingle;
-        _stepSeparationIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
-        _stepSeparationIcon.ForeColor = Color.White;
-        _stepSeparationIcon.Location = new Point(21, 0);
-        _stepSeparationIcon.Name = "_stepSeparationIcon";
-        _stepSeparationIcon.Size = new Size(40, 40);
-        _stepSeparationIcon.TabIndex = 0;
-        _stepSeparationIcon.Text = "□";
-        _stepSeparationIcon.TextAlign = ContentAlignment.MiddleCenter;
-        // 
-        // _stepInvoicedDescription
-        // 
-        _stepInvoicedDescription.Font = new Font("Segoe UI", 6.5F);
-        _stepInvoicedDescription.ForeColor = Color.FromArgb(204, 190, 177);
-        _stepInvoicedDescription.Location = new Point(0, 68);
-        _stepInvoicedDescription.Name = "_stepInvoicedDescription";
-        _stepInvoicedDescription.Size = new Size(82, 44);
-        _stepInvoicedDescription.TabIndex = 0;
-        _stepInvoicedDescription.Text = "Nota Fiscal\nemitida.";
-        _stepInvoicedDescription.TextAlign = ContentAlignment.TopCenter;
-        // 
-        // _stepInvoicedName
-        // 
-        _stepInvoicedName.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
-        _stepInvoicedName.ForeColor = Color.White;
-        _stepInvoicedName.Location = new Point(0, 45);
-        _stepInvoicedName.Name = "_stepInvoicedName";
-        _stepInvoicedName.Size = new Size(82, 20);
-        _stepInvoicedName.TabIndex = 0;
-        _stepInvoicedName.Text = "Faturado";
-        _stepInvoicedName.TextAlign = ContentAlignment.TopCenter;
-        // 
-        // _stepInvoicedIcon
-        // 
-        _stepInvoicedIcon.BackColor = Color.FromArgb(70, 43, 27);
-        _stepInvoicedIcon.BorderStyle = BorderStyle.FixedSingle;
-        _stepInvoicedIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
-        _stepInvoicedIcon.ForeColor = Color.White;
-        _stepInvoicedIcon.Location = new Point(21, 0);
-        _stepInvoicedIcon.Name = "_stepInvoicedIcon";
-        _stepInvoicedIcon.Size = new Size(40, 40);
-        _stepInvoicedIcon.TabIndex = 0;
-        _stepInvoicedIcon.Text = "▤";
-        _stepInvoicedIcon.TextAlign = ContentAlignment.MiddleCenter;
-        // 
-        // _stepShippedDescription
-        // 
-        _stepShippedDescription.Font = new Font("Segoe UI", 6.5F);
-        _stepShippedDescription.ForeColor = Color.FromArgb(204, 190, 177);
-        _stepShippedDescription.Location = new Point(0, 68);
-        _stepShippedDescription.Name = "_stepShippedDescription";
-        _stepShippedDescription.Size = new Size(82, 44);
-        _stepShippedDescription.TabIndex = 0;
-        _stepShippedDescription.Text = "Pacote coletado\npela transportadora.";
-        _stepShippedDescription.TextAlign = ContentAlignment.TopCenter;
-        // 
-        // _stepShippedName
-        // 
-        _stepShippedName.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
-        _stepShippedName.ForeColor = Color.White;
-        _stepShippedName.Location = new Point(0, 45);
-        _stepShippedName.Name = "_stepShippedName";
-        _stepShippedName.Size = new Size(82, 20);
-        _stepShippedName.TabIndex = 0;
-        _stepShippedName.Text = "Enviado";
-        _stepShippedName.TextAlign = ContentAlignment.TopCenter;
-        // 
-        // _stepShippedIcon
-        // 
-        _stepShippedIcon.BackColor = Color.FromArgb(70, 43, 27);
-        _stepShippedIcon.BorderStyle = BorderStyle.FixedSingle;
-        _stepShippedIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
-        _stepShippedIcon.ForeColor = Color.White;
-        _stepShippedIcon.Location = new Point(21, 0);
-        _stepShippedIcon.Name = "_stepShippedIcon";
-        _stepShippedIcon.Size = new Size(40, 40);
-        _stepShippedIcon.TabIndex = 0;
-        _stepShippedIcon.Text = "▰";
-        _stepShippedIcon.TextAlign = ContentAlignment.MiddleCenter;
-        // 
-        // _stepDeliveredDescription
-        // 
-        _stepDeliveredDescription.Font = new Font("Segoe UI", 6.5F);
-        _stepDeliveredDescription.ForeColor = Color.FromArgb(204, 190, 177);
-        _stepDeliveredDescription.Location = new Point(0, 68);
-        _stepDeliveredDescription.Name = "_stepDeliveredDescription";
-        _stepDeliveredDescription.Size = new Size(82, 44);
-        _stepDeliveredDescription.TabIndex = 0;
-        _stepDeliveredDescription.Text = "Produto entregue\nao destinatário.";
-        _stepDeliveredDescription.TextAlign = ContentAlignment.TopCenter;
-        // 
-        // _stepDeliveredName
-        // 
-        _stepDeliveredName.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
-        _stepDeliveredName.ForeColor = Color.White;
-        _stepDeliveredName.Location = new Point(0, 45);
-        _stepDeliveredName.Name = "_stepDeliveredName";
-        _stepDeliveredName.Size = new Size(82, 20);
-        _stepDeliveredName.TabIndex = 0;
-        _stepDeliveredName.Text = "Entregue";
-        _stepDeliveredName.TextAlign = ContentAlignment.TopCenter;
-        // 
-        // _stepDeliveredIcon
-        // 
-        _stepDeliveredIcon.BackColor = Color.FromArgb(70, 43, 27);
-        _stepDeliveredIcon.BorderStyle = BorderStyle.FixedSingle;
-        _stepDeliveredIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
-        _stepDeliveredIcon.ForeColor = Color.White;
-        _stepDeliveredIcon.Location = new Point(21, 0);
-        _stepDeliveredIcon.Name = "_stepDeliveredIcon";
-        _stepDeliveredIcon.Size = new Size(40, 40);
-        _stepDeliveredIcon.TabIndex = 0;
-        _stepDeliveredIcon.Text = "✓";
-        _stepDeliveredIcon.TextAlign = ContentAlignment.MiddleCenter;
-        // Adiciona novamente os elementos visuais de cada etapa ao respectivo painel.
-        _stepCreatedPanel.Controls.Add(_stepCreatedDescription);
-        _stepCreatedPanel.Controls.Add(_stepCreatedName);
-        _stepCreatedPanel.Controls.Add(_stepCreatedIcon);
-
-        _stepPendingPanel.Controls.Add(_stepPendingDescription);
-        _stepPendingPanel.Controls.Add(_stepPendingName);
-        _stepPendingPanel.Controls.Add(_stepPendingIcon);
-
-        _stepApprovedPanel.Controls.Add(_stepApprovedDescription);
-        _stepApprovedPanel.Controls.Add(_stepApprovedName);
-        _stepApprovedPanel.Controls.Add(_stepApprovedIcon);
-
-        _stepSeparationPanel.Controls.Add(_stepSeparationDescription);
-        _stepSeparationPanel.Controls.Add(_stepSeparationName);
-        _stepSeparationPanel.Controls.Add(_stepSeparationIcon);
-
-        _stepInvoicedPanel.Controls.Add(_stepInvoicedDescription);
-        _stepInvoicedPanel.Controls.Add(_stepInvoicedName);
-        _stepInvoicedPanel.Controls.Add(_stepInvoicedIcon);
-
-        _stepShippedPanel.Controls.Add(_stepShippedDescription);
-        _stepShippedPanel.Controls.Add(_stepShippedName);
-        _stepShippedPanel.Controls.Add(_stepShippedIcon);
-
-        _stepDeliveredPanel.Controls.Add(_stepDeliveredDescription);
-        _stepDeliveredPanel.Controls.Add(_stepDeliveredName);
-        _stepDeliveredPanel.Controls.Add(_stepDeliveredIcon);
-
-        // Garante o botão "Detalhes" na coluna Ações.
-        dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-        _actionsColumn.DefaultCellStyle = dataGridViewCellStyle3;
-        _actionsColumn.HeaderText = "Ações";
-        _actionsColumn.Text = "Detalhes";
-        _actionsColumn.UseColumnTextForButtonValue = true;
-
-        // 
-        // _numberColumn
-        // 
-        _numberColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-        _numberColumn.FillWeight = 10F;
-        _numberColumn.Frozen = true;
-        _numberColumn.HeaderText = "Nº Pedido";
-        _numberColumn.MinimumWidth = 70;
-        _numberColumn.Name = "_numberColumn";
-        _numberColumn.Resizable = DataGridViewTriState.True;
-        _numberColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
-        _numberColumn.Width = 152;
-        // 
-        // _dateColumn
-        // 
-        _dateColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-        _dateColumn.FillWeight = 13F;
-        _dateColumn.Frozen = true;
-        _dateColumn.HeaderText = "Data";
-        _dateColumn.MinimumWidth = 90;
-        _dateColumn.Name = "_dateColumn";
-        _dateColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
-        _dateColumn.Width = 196;
-        // 
-        // _customerColumn
-        // 
-        _customerColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-        _customerColumn.FillWeight = 20F;
-        _customerColumn.Frozen = true;
-        _customerColumn.HeaderText = "Cliente";
-        _customerColumn.MinimumWidth = 105;
-        _customerColumn.Name = "_customerColumn";
-        _customerColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
-        _customerColumn.Width = 303;
-        // 
-        // _totalColumn
-        // 
-        _totalColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-        _totalColumn.FillWeight = 12F;
-        _totalColumn.Frozen = true;
-        _totalColumn.HeaderText = "Valor Total";
-        _totalColumn.MinimumWidth = 82;
-        _totalColumn.Name = "_totalColumn";
-        _totalColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
-        _totalColumn.Width = 182;
-        // 
-        // _statusColumn
-        // 
-        _statusColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-        _statusColumn.DisplayStyleForCurrentCellOnly = true;
-        _statusColumn.FillWeight = 12F;
-        _statusColumn.FlatStyle = FlatStyle.Flat;
-        _statusColumn.Frozen = true;
-        _statusColumn.HeaderText = "Status";
-        _statusColumn.Items.AddRange(new object[] { "Criado", "Pendente", "Aprovado", "Separação", "Faturado", "Enviado", "Entregue" });
-        _statusColumn.MinimumWidth = 96;
-        _statusColumn.Name = "_statusColumn";
-        _statusColumn.Width = 182;
-        // 
-        // _actionsColumn
-        // 
-        _actionsColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
-        dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-        dataGridViewCellStyle3.BackColor = Color.White;
-        dataGridViewCellStyle3.ForeColor = Color.Black;
-        dataGridViewCellStyle3.Padding = new Padding(8, 4, 8, 4);
-        dataGridViewCellStyle3.SelectionBackColor = Color.FromArgb(103, 70, 46);
-        dataGridViewCellStyle3.SelectionForeColor = Color.White;
-        _actionsColumn.DefaultCellStyle = dataGridViewCellStyle3;
-        _actionsColumn.FillWeight = 10F;
-        _actionsColumn.FlatStyle = FlatStyle.Flat;
-        _actionsColumn.Frozen = true;
-        _actionsColumn.HeaderText = "Ações";
-        _actionsColumn.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-        _actionsColumn.MinimumWidth = 74;
-        _actionsColumn.Name = "_actionsColumn";
-        _actionsColumn.Resizable = DataGridViewTriState.False;
-        _actionsColumn.Text = "Detalhes";
-        _actionsColumn.UseColumnTextForButtonValue = true;
-        _actionsColumn.Width = 120;
+        _lastUpdateColumn.Name = "_lastUpdateColumn";
         // 
         // OrdersStatusUserControl
         // 
@@ -1302,6 +1305,13 @@ partial class OrdersStatusUserControl
         panel2.ResumeLayout(false);
         _stepsHost.ResumeLayout(false);
         _stepsFlowPanel.ResumeLayout(false);
+        _stepCreatedPanel.ResumeLayout(false);
+        _stepPendingPanel.ResumeLayout(false);
+        _stepApprovedPanel.ResumeLayout(false);
+        _stepSeparationPanel.ResumeLayout(false);
+        _stepInvoicedPanel.ResumeLayout(false);
+        _stepShippedPanel.ResumeLayout(false);
+        _stepDeliveredPanel.ResumeLayout(false);
         _headingPanel.ResumeLayout(false);
         _headingPanel.PerformLayout();
         ResumeLayout(false);
