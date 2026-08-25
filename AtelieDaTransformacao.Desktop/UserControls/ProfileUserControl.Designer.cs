@@ -3,7 +3,7 @@ using AtelieDaTransformacao.Desktop.Themes;
 namespace AtelieDaTransformacao.Desktop.UserControls;
 partial class ProfileUserControl
 {
-    private System.ComponentModel.IContainer? components=null;private Guna.UI2.WinForms.Guna2Panel _card=null!;private Label _titleLabel=null!;private Label _emailCaptionLabel=null!;private Label _emailValueLabel=null!;private Label _roleCaptionLabel=null!;private Label _roleValueLabel=null!;private Label _sessionCaptionLabel=null!;private Label _sessionValueLabel=null!;private Label _permissionsCaptionLabel=null!;private Label _permissionsValueLabel=null!;private Guna.UI2.WinForms.Guna2Button _editProfileButton=null!;    protected override void Dispose(bool disposing){if(disposing)components?.Dispose();base.Dispose(disposing);}
+    private System.ComponentModel.IContainer? components=null;private Guna.UI2.WinForms.Guna2Panel _card=null!;private Label _titleLabel=null!;private Label _emailCaptionLabel=null!;private Label _emailValueLabel=null!;private Label _roleCaptionLabel=null!;private Label _roleValueLabel=null!;private Label _sessionCaptionLabel=null!;private Label _sessionValueLabel=null!;private Label _permissionsCaptionLabel=null!;private Label _permissionsValueLabel=null!;private Guna.UI2.WinForms.Guna2Button _editProfileButton=null!; private Guna.UI2.WinForms.Guna2Button _changePasswordButton=null!;    protected override void Dispose(bool disposing){if(disposing)components?.Dispose();base.Dispose(disposing);}
     private void InitializeComponent()
     {
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
@@ -13,6 +13,7 @@ partial class ProfileUserControl
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         _card = new Guna.UI2.WinForms.Guna2Panel();
         _editProfileButton = new Guna.UI2.WinForms.Guna2Button();
+        _changePasswordButton = new Guna.UI2.WinForms.Guna2Button();
         lblAvatar = new Guna.UI2.WinForms.Guna2CircleButton();
         _permissionsValueLabel = new Label();
         _permissionsCaptionLabel = new Label();
@@ -31,6 +32,7 @@ partial class ProfileUserControl
         _card.BorderColor = Color.FromArgb(226, 229, 236);
         _card.BorderRadius = 12;
         _card.BorderThickness = 1;
+        _card.Controls.Add(_changePasswordButton);
         _card.Controls.Add(_editProfileButton);
         _card.Controls.Add(lblAvatar);
         _card.Controls.Add(_permissionsValueLabel);
@@ -58,12 +60,27 @@ partial class ProfileUserControl
         _editProfileButton.FillColor = Color.MidnightBlue;
         _editProfileButton.Font = new Font("Segoe UI Semibold", 9F);
         _editProfileButton.ForeColor = Color.White;
-        _editProfileButton.Location = new Point(340, 375);
+        _editProfileButton.Location = new Point(170, 375);
         _editProfileButton.Name = "_editProfileButton";
         _editProfileButton.ShadowDecoration.CustomizableEdges = customizableEdges2;
         _editProfileButton.Size = new Size(150, 38);
         _editProfileButton.TabIndex = 9;
-        _editProfileButton.Text = "✏️ Editar Perfil";
+        _editProfileButton.Text = "✏️ Alterar E-mail";
+        // 
+        // _changePasswordButton
+        // 
+        _changePasswordButton.BackColor = Color.Transparent;
+        _changePasswordButton.BorderRadius = 9;
+        _changePasswordButton.CustomizableEdges = customizableEdges1;
+        _changePasswordButton.FillColor = Color.FromArgb(88, 52, 27);
+        _changePasswordButton.Font = new Font("Segoe UI Semibold", 9F);
+        _changePasswordButton.ForeColor = Color.White;
+        _changePasswordButton.Location = new Point(330, 375);
+        _changePasswordButton.Name = "_changePasswordButton";
+        _changePasswordButton.ShadowDecoration.CustomizableEdges = customizableEdges2;
+        _changePasswordButton.Size = new Size(160, 38);
+        _changePasswordButton.TabIndex = 10;
+        _changePasswordButton.Text = "🔑 Alterar Senha";
         // 
         // lblAvatar
         // 

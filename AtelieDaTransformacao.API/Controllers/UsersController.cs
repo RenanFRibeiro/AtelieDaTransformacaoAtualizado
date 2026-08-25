@@ -17,6 +17,25 @@ public sealed class UsersController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<UserSummaryDto>>> GetAll() => Ok(await _service.GetAllAsync());
 
+    [HttpPost("create-desktop")]
+    public async Task<ActionResult<UserDto>> CreateDesktop(RegisterDto dto)
+    {
+        try
+        {
+            if (dto.Password != dto.ConfirmPassword)
+                return BadRequest(new { message = "As senhas não coincidem." });
+
+            var user = await _service.CreateDesktopUserAsync(dto);
+            return user is null
+                ? BadRequest(new { message = "Não foi possível criar o usuário." })
+                : Ok(user);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Conflict(new { message = ex.Message });
+        }
+    }
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id)
     {

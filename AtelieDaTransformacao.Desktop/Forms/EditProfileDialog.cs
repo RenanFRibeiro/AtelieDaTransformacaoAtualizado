@@ -11,41 +11,19 @@ public sealed partial class EditProfileDialog : Form
     public EditProfileDialog()
     {
         InitializeComponent();
-
         _emailTextBox.Text = SessionManager.Email ?? string.Empty;
         AcceptButton = _saveButton;
         CancelButton = _cancelButton;
-
-        _currentPasswordToggleButton.Click += CurrentPasswordToggleButton_Click;
-        _newPasswordToggleButton.Click += NewPasswordToggleButton_Click;
     }
 
     private async void SaveButton_Click(object? sender, EventArgs e)
     {
         var email = _emailTextBox.Text.Trim();
-        var newPassword = _newPasswordTextBox.Text;
 
         if (string.IsNullOrWhiteSpace(email))
         {
-            MessageBox.Show(this, "Informe o e-mail.", "Editar Perfil",
-                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(this, "Informe o e-mail.", "Editar Perfil", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             _emailTextBox.Focus();
-            return;
-        }
-
-        if (!string.IsNullOrWhiteSpace(newPassword) && newPassword.Length < 6)
-        {
-            MessageBox.Show(this, "A nova senha deve possuir pelo menos 6 caracteres.",
-                "Editar Perfil", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            _newPasswordTextBox.Focus();
-            return;
-        }
-
-        if (!string.IsNullOrWhiteSpace(newPassword) && string.IsNullOrWhiteSpace(_currentPasswordTextBox.Text))
-        {
-            MessageBox.Show(this, "Informe a senha atual para alterar a senha.",
-                "Editar Perfil", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            _currentPasswordTextBox.Focus();
             return;
         }
 
@@ -54,27 +32,16 @@ public sealed partial class EditProfileDialog : Form
 
         try
         {
-            var result = await _auth.UpdateProfileAsync(new UpdateProfileRequestDto
-            {
-                Email = email,
-                CurrentPassword = _currentPasswordTextBox.Text,
-                NewPassword = newPassword
-            });
-
-            if (result is null)
-                throw new InvalidOperationException("A API não retornou os dados atualizados.");
+            var result = await _auth.UpdateEmailAsync(new UpdateEmailRequestDto { Email = email });
+            if (result is null) throw new InvalidOperationException("A API não retornou os dados atualizados.");
 
             SessionManager.UpdateProfile(result.Email, result.Roles);
-
-            MessageBox.Show(this, "Perfil atualizado com sucesso.", "Editar Perfil",
-                MessageBoxButtons.OK, MessageBoxIcon.Information);
-
+            MessageBox.Show(this, "E-mail atualizado com sucesso.", "Editar Perfil", MessageBoxButtons.OK, MessageBoxIcon.Information);
             DialogResult = DialogResult.OK;
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, ex.Message, "Não foi possível atualizar o perfil",
-                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(this, ex.Message, "Não foi possível atualizar o perfil", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         finally
         {
@@ -83,39 +50,6 @@ public sealed partial class EditProfileDialog : Form
         }
     }
 
-    private void CurrentPasswordToggleButton_Click(object? sender, EventArgs e)
-    {
-        TogglePasswordVisibility(_currentPasswordTextBox, _currentPasswordToggleButton);
-    }
-
-    private void NewPasswordToggleButton_Click(object? sender, EventArgs e)
-    {
-        TogglePasswordVisibility(_newPasswordTextBox, _newPasswordToggleButton);
-    }
-
-    private static void TogglePasswordVisibility(
-        Guna.UI2.WinForms.Guna2TextBox textBox,
-        Guna.UI2.WinForms.Guna2Button toggleButton)
-    {
-        if (textBox.PasswordChar == '●')
-        {
-            textBox.PasswordChar = '\0';
-            toggleButton.Text = "🙈";
-        }
-        else
-        {
-            textBox.PasswordChar = '●';
-            toggleButton.Text = "👁️";
-        }
-    }
-
-    private void CancelButton_Click(object? sender, EventArgs e)
-    {
-        DialogResult = DialogResult.Cancel;
-    }
-
-    private void btnClose_Click(object sender, EventArgs e)
-    {
-        Close();
-    }
+    private void CancelButton_Click(object? sender, EventArgs e) => DialogResult = DialogResult.Cancel;
+    private void btnClose_Click(object? sender, EventArgs e) => Close();
 }

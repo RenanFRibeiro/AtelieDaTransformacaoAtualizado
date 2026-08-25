@@ -11,6 +11,7 @@ public partial class ProfileUserControl : UserControl
 
         Load += ProfileUserControl_Load;
         _editProfileButton.Click += EditProfileButton_Click;
+        _changePasswordButton.Click += ChangePasswordButton_Click;
     }
 
     private void ProfileUserControl_Load(object? sender, EventArgs e)
@@ -32,6 +33,14 @@ public partial class ProfileUserControl : UserControl
         using var dialog = new EditProfileDialog();
         if (dialog.ShowDialog(FindForm()) == DialogResult.OK)
             AtualizarAvatarEInformacoes();
+    }
+
+    private void ChangePasswordButton_Click(object? sender, EventArgs e)
+    {
+        if (DesignMode) return;
+
+        using var dialog = new ChangePasswordDialog();
+        dialog.ShowDialog(FindForm());
     }
 
     private void AtualizarAvatarEInformacoes()

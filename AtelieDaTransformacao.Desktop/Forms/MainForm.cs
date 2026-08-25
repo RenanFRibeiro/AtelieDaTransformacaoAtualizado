@@ -23,6 +23,8 @@ public partial class MainForm : Form
         _roleLabel.Text = SessionManager.IsAdmin ? "Administrador" : "Usuário";
         _roleBadge.Text = SessionManager.IsAdmin ? "ADMIN" : "USUÁRIO";
         _usersButton.Visible = SessionManager.IsAdmin;
+        // Usuários comuns não podem acessar o painel de Status de Pedidos.
+        _ordersStatusButton.Visible = SessionManager.IsAdmin;
         WireNavigationButtons();
         Shown += (_, _) => ShowPage("dashboard");
     }
@@ -64,6 +66,14 @@ public partial class MainForm : Form
 
     private void ShowPage(string key)
     {
+        // Segurança de navegação: mesmo que algum evento tente abrir a página
+        // manualmente, usuário comum não pode acessar o Status de Pedidos.
+        if (string.Equals(key, "orders-status", StringComparison.OrdinalIgnoreCase)
+            && !SessionManager.IsAdmin)
+        {
+            return;
+        }
+
         foreach (Control control in _navPanel.Controls)
         {
             if (control is Guna2Button button)

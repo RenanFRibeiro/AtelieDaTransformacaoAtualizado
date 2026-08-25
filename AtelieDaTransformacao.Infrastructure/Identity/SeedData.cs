@@ -28,6 +28,13 @@ public static class SeedData
         if (!await userManager.IsInRoleAsync(admin, "Admin"))
             await userManager.AddToRoleAsync(admin, "Admin");
 
+        // O administrador inicial também possui acesso ao Desktop.
+        var desktopClaim = new System.Security.Claims.Claim("created_by", "desktop");
+        var existingClaims = await userManager.GetClaimsAsync(admin);
+        if (!existingClaims.Any(c => c.Type == desktopClaim.Type &&
+                                     string.Equals(c.Value, desktopClaim.Value, StringComparison.OrdinalIgnoreCase)))
+            await userManager.AddClaimAsync(admin, desktopClaim);
+
         if (!await db.ProductCategories.AnyAsync())
         {
             db.ProductCategories.AddRange(

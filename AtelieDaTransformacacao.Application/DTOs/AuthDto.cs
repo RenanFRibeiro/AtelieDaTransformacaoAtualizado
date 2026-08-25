@@ -37,6 +37,12 @@ public sealed class LoginResponseDto
     public UserDto User { get; set; } = new();
 }
 
+public sealed class UpdateEmailDto
+{
+    [Required, EmailAddress]
+    public string Email { get; set; } = string.Empty;
+}
+
 public sealed class UpdateProfileDto
 {
     [Required, EmailAddress]
