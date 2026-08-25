@@ -23,7 +23,6 @@ partial class UsersUserControl
     private Label _inactiveDescriptionLabel = null!;
 
     private Guna.UI2.WinForms.Guna2Panel _tableCard = null!;
-    private Guna.UI2.WinForms.Guna2DataGridView _grid = null!;
     private Label _countLabel = null!;
 
     protected override void Dispose(bool disposing)
@@ -60,8 +59,8 @@ partial class UsersUserControl
         _refreshButton = new Guna.UI2.WinForms.Guna2Button();
         _newButton = new Guna.UI2.WinForms.Guna2Button();
         _tableCard = new Guna.UI2.WinForms.Guna2Panel();
-        _grid = new Guna.UI2.WinForms.Guna2DataGridView();
         _countLabel = new Label();
+        _grid = new Guna.UI2.WinForms.Guna2DataGridView();
         _toolbarCard.SuspendLayout();
         _inactiveCard.SuspendLayout();
         _activeCard.SuspendLayout();
@@ -270,8 +269,18 @@ partial class UsersUserControl
         _tableCard.Name = "_tableCard";
         _tableCard.Padding = new Padding(14);
         _tableCard.ShadowDecoration.CustomizableEdges = customizableEdges8;
-        _tableCard.Size = new Size(975, 512);
+        _tableCard.Size = new Size(936, 558);
         _tableCard.TabIndex = 6;
+        // 
+        // _countLabel
+        // 
+        _countLabel.Font = new Font("Segoe UI", 8.5F);
+        _countLabel.ForeColor = Color.FromArgb(113, 120, 135);
+        _countLabel.Location = new Point(14, 14);
+        _countLabel.Name = "_countLabel";
+        _countLabel.Size = new Size(250, 26);
+        _countLabel.TabIndex = 1;
+        _countLabel.TextAlign = ContentAlignment.MiddleLeft;
         // 
         // _grid
         // 
@@ -314,23 +323,13 @@ partial class UsersUserControl
         _grid.ThemeStyle.RowsStyle.SelectionBackColor = Color.FromArgb(225, 225, 225);
         _grid.ThemeStyle.RowsStyle.SelectionForeColor = Color.Black;
         // 
-        // _countLabel
-        // 
-        _countLabel.Font = new Font("Segoe UI", 8.5F);
-        _countLabel.ForeColor = Color.FromArgb(113, 120, 135);
-        _countLabel.Location = new Point(14, 14);
-        _countLabel.Name = "_countLabel";
-        _countLabel.Size = new Size(250, 26);
-        _countLabel.TabIndex = 1;
-        _countLabel.TextAlign = ContentAlignment.MiddleLeft;
-        // 
         // UsersUserControl
         // 
         BackColor = Color.Transparent;
         Controls.Add(_tableCard);
         Controls.Add(_toolbarCard);
         Name = "UsersUserControl";
-        Size = new Size(991, 436);
+        Size = new Size(795, 558);
         _toolbarCard.ResumeLayout(false);
         _inactiveCard.ResumeLayout(false);
         _activeCard.ResumeLayout(false);
@@ -338,4 +337,6 @@ partial class UsersUserControl
         ((System.ComponentModel.ISupportInitialize)_grid).EndInit();
         ResumeLayout(false);
     }
+
+    private Guna.UI2.WinForms.Guna2DataGridView _grid;
 }

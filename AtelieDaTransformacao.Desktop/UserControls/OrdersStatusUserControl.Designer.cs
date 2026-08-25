@@ -305,7 +305,6 @@ partial class OrdersStatusUserControl
         _grid.Location = new Point(10, 10);
         _grid.MultiSelect = false;
         _grid.Name = "_grid";
-        _grid.ReadOnly = true;
         _grid.RowHeadersVisible = false;
         _grid.RowTemplate.Height = 36;
         _grid.ScrollBars = ScrollBars.Vertical;
@@ -317,7 +316,6 @@ partial class OrdersStatusUserControl
         _grid.ThemeStyle.HeaderStyle.Font = new Font("Segoe UI Semibold", 8.5F);
         _grid.ThemeStyle.HeaderStyle.HeaightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
         _grid.ThemeStyle.HeaderStyle.Height = 38;
-        _grid.ThemeStyle.ReadOnly = true;
         _grid.ThemeStyle.RowsStyle.Font = new Font("Segoe UI", 8.5F);
         _grid.ThemeStyle.RowsStyle.ForeColor = Color.Black;
         _grid.ThemeStyle.RowsStyle.Height = 36;
@@ -332,7 +330,6 @@ partial class OrdersStatusUserControl
         _numberColumn.HeaderText = "Nº Pedido";
         _numberColumn.MinimumWidth = 70;
         _numberColumn.Name = "_numberColumn";
-        _numberColumn.ReadOnly = true;
         _numberColumn.Resizable = DataGridViewTriState.True;
         _numberColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
         _numberColumn.Width = 152;
@@ -345,7 +342,6 @@ partial class OrdersStatusUserControl
         _dateColumn.HeaderText = "Data";
         _dateColumn.MinimumWidth = 90;
         _dateColumn.Name = "_dateColumn";
-        _dateColumn.ReadOnly = true;
         _dateColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
         _dateColumn.Width = 196;
         // 
@@ -357,7 +353,6 @@ partial class OrdersStatusUserControl
         _customerColumn.HeaderText = "Cliente";
         _customerColumn.MinimumWidth = 105;
         _customerColumn.Name = "_customerColumn";
-        _customerColumn.ReadOnly = true;
         _customerColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
         _customerColumn.Width = 303;
         // 
@@ -369,7 +364,6 @@ partial class OrdersStatusUserControl
         _totalColumn.HeaderText = "Valor Total";
         _totalColumn.MinimumWidth = 82;
         _totalColumn.Name = "_totalColumn";
-        _totalColumn.ReadOnly = true;
         _totalColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
         _totalColumn.Width = 182;
         // 
@@ -384,7 +378,6 @@ partial class OrdersStatusUserControl
         _statusColumn.Items.AddRange(new object[] { "Criado", "Pendente", "Aprovado", "Separação", "Faturado", "Enviado", "Entregue" });
         _statusColumn.MinimumWidth = 96;
         _statusColumn.Name = "_statusColumn";
-        _statusColumn.ReadOnly = true;
         _statusColumn.Width = 182;
         // 
         // _actionsColumn
@@ -403,7 +396,6 @@ partial class OrdersStatusUserControl
         _actionsColumn.HeaderText = "Ações";
         _actionsColumn.MinimumWidth = 74;
         _actionsColumn.Name = "_actionsColumn";
-        _actionsColumn.ReadOnly = true;
         _actionsColumn.Resizable = DataGridViewTriState.False;
         _actionsColumn.Text = "Detalhes";
         _actionsColumn.UseColumnTextForButtonValue = true;
