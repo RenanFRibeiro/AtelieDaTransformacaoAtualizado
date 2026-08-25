@@ -623,8 +623,10 @@ div.position-fixed.bottom-0 button {
         padding-right: 1.25rem;
     }
 
+    /* O menu central deve ser posicionado em relação ao header inteiro,
+       e não em relação ao espaço restante do navbar-collapse. */
     .navbar-artisan .navbar-collapse {
-        position: relative;
+        position: static;
         min-width: 0;
     }
 
@@ -636,6 +638,7 @@ div.position-fixed.bottom-0 button {
         margin: 0 !important;
         width: max-content;
         gap: 0.15rem;
+        z-index: 2;
     }
 
     .navbar-artisan .navbar-brand {
