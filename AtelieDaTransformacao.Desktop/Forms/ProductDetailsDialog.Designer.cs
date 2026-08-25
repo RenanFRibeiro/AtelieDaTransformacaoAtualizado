@@ -31,10 +31,10 @@ partial class ProductDetailsDialog
 
     private void InitializeComponent()
     {
-        Guna.UI2.WinForms.Suite.CustomizableEdges e1 = new();
-        Guna.UI2.WinForms.Suite.CustomizableEdges e2 = new();
-        Guna.UI2.WinForms.Suite.CustomizableEdges e3 = new();
-        Guna.UI2.WinForms.Suite.CustomizableEdges e4 = new();
+        Guna.UI2.WinForms.Suite.CustomizableEdges e1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges e2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges e3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges e4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         _rootPanel = new Guna.UI2.WinForms.Guna2Panel();
         _pictureBox = new PictureBox();
         _titleCaption = new Label(); _titleLabel = new Label();

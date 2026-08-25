@@ -36,16 +36,16 @@ partial class MainForm
     private void InitializeComponent()
     {
         components = new System.ComponentModel.Container();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges23 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges24 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges17 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges18 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges27 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges28 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges21 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges22 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges11 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
@@ -54,15 +54,21 @@ partial class MainForm
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges14 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges15 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges16 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges17 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges18 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges19 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges20 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges21 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
-        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges22 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges23 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges24 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges25 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges26 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges customizableEdges2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         _borderlessForm = new Guna.UI2.WinForms.Guna2BorderlessForm(components);
         _dragControl = new Guna.UI2.WinForms.Guna2DragControl(components);
         _topBar = new Guna.UI2.WinForms.Guna2Panel();
+        btnMinimize = new Guna.UI2.WinForms.Guna2ControlBox();
+        btnClose = new Guna.UI2.WinForms.Guna2ControlBox();
         panel1 = new Panel();
         _roleBadge = new Label();
         _pageSubtitle = new Label();
@@ -107,21 +113,50 @@ partial class MainForm
         _topBar.BackColor = Color.FromArgb(43, 26, 18);
         _topBar.BorderColor = Color.FromArgb(217, 168, 91);
         _topBar.BorderRadius = 15;
+        _topBar.Controls.Add(btnMinimize);
+        _topBar.Controls.Add(btnClose);
         _topBar.Controls.Add(panel1);
         _topBar.Controls.Add(_roleBadge);
         _topBar.Controls.Add(_pageSubtitle);
         _topBar.Controls.Add(_pageTitle);
-        customizableEdges3.BottomLeft = false;
-        customizableEdges3.BottomRight = false;
-        _topBar.CustomizableEdges = customizableEdges3;
+        customizableEdges7.BottomLeft = false;
+        customizableEdges7.BottomRight = false;
+        _topBar.CustomizableEdges = customizableEdges7;
         _topBar.Dock = DockStyle.Top;
         _topBar.FillColor = Color.Transparent;
         _topBar.Location = new Point(255, 0);
         _topBar.Name = "_topBar";
         _topBar.Padding = new Padding(28, 15, 28, 10);
-        _topBar.ShadowDecoration.CustomizableEdges = customizableEdges4;
+        _topBar.ShadowDecoration.CustomizableEdges = customizableEdges8;
         _topBar.Size = new Size(1245, 92);
         _topBar.TabIndex = 1;
+        // 
+        // btnMinimize
+        // 
+        btnMinimize.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+        btnMinimize.ControlBoxType = Guna.UI2.WinForms.Enums.ControlBoxType.MinimizeBox;
+        btnMinimize.CustomizableEdges = customizableEdges3;
+        btnMinimize.FillColor = Color.Transparent;
+        btnMinimize.IconColor = Color.White;
+        btnMinimize.Location = new Point(1160, 10);
+        btnMinimize.Name = "btnMinimize";
+        btnMinimize.ShadowDecoration.CustomizableEdges = customizableEdges4;
+        btnMinimize.Size = new Size(35, 30);
+        btnMinimize.TabIndex = 13;
+        btnMinimize.Click += btnMinimize_Click;
+        // 
+        // btnClose
+        // 
+        btnClose.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+        btnClose.CustomizableEdges = customizableEdges5;
+        btnClose.FillColor = Color.Transparent;
+        btnClose.IconColor = Color.White;
+        btnClose.Location = new Point(1198, 10);
+        btnClose.Name = "btnClose";
+        btnClose.ShadowDecoration.CustomizableEdges = customizableEdges6;
+        btnClose.Size = new Size(35, 30);
+        btnClose.TabIndex = 12;
+        btnClose.Click += btnClose_Click;
         // 
         // panel1
         // 
@@ -176,12 +211,12 @@ partial class MainForm
         _sidebar.Controls.Add(_navPanel);
         _sidebar.Controls.Add(_logoutButton);
         _sidebar.Controls.Add(_brandPanel);
-        _sidebar.CustomizableEdges = customizableEdges23;
+        _sidebar.CustomizableEdges = customizableEdges27;
         _sidebar.Dock = DockStyle.Left;
         _sidebar.Location = new Point(0, 0);
         _sidebar.Name = "_sidebar";
         _sidebar.Padding = new Padding(14);
-        _sidebar.ShadowDecoration.CustomizableEdges = customizableEdges24;
+        _sidebar.ShadowDecoration.CustomizableEdges = customizableEdges28;
         _sidebar.Size = new Size(255, 900);
         _sidebar.TabIndex = 2;
         // 
@@ -194,26 +229,26 @@ partial class MainForm
         _navPanel.Controls.Add(_categoriesButton);
         _navPanel.Controls.Add(_productsButton);
         _navPanel.Controls.Add(_dashboardButton);
-        _navPanel.CustomizableEdges = customizableEdges17;
+        _navPanel.CustomizableEdges = customizableEdges21;
         _navPanel.Dock = DockStyle.Top;
         _navPanel.FillColor = Color.Transparent;
         _navPanel.Location = new Point(14, 114);
         _navPanel.Name = "_navPanel";
         _navPanel.Padding = new Padding(0, 8, 0, 0);
-        _navPanel.ShadowDecoration.CustomizableEdges = customizableEdges18;
+        _navPanel.ShadowDecoration.CustomizableEdges = customizableEdges22;
         _navPanel.Size = new Size(227, 417);
         _navPanel.TabIndex = 0;
         // 
         // _profileButton
         // 
         _profileButton.BorderRadius = 10;
-        _profileButton.CustomizableEdges = customizableEdges5;
+        _profileButton.CustomizableEdges = customizableEdges9;
         _profileButton.FillColor = Color.FromArgb(164, 104, 45);
         _profileButton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
         _profileButton.ForeColor = Color.DimGray;
         _profileButton.Location = new Point(0, 332);
         _profileButton.Name = "_profileButton";
-        _profileButton.ShadowDecoration.CustomizableEdges = customizableEdges6;
+        _profileButton.ShadowDecoration.CustomizableEdges = customizableEdges10;
         _profileButton.Size = new Size(227, 52);
         _profileButton.TabIndex = 0;
         _profileButton.Text = "\U0001f935🏿 Perfil";
@@ -221,13 +256,13 @@ partial class MainForm
         // _ordersStatusButton
         // 
         _ordersStatusButton.BorderRadius = 10;
-        _ordersStatusButton.CustomizableEdges = customizableEdges7;
+        _ordersStatusButton.CustomizableEdges = customizableEdges11;
         _ordersStatusButton.FillColor = Color.FromArgb(164, 104, 45);
         _ordersStatusButton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
         _ordersStatusButton.ForeColor = Color.DimGray;
         _ordersStatusButton.Location = new Point(0, 278);
         _ordersStatusButton.Name = "_ordersStatusButton";
-        _ordersStatusButton.ShadowDecoration.CustomizableEdges = customizableEdges8;
+        _ordersStatusButton.ShadowDecoration.CustomizableEdges = customizableEdges12;
         _ordersStatusButton.Size = new Size(227, 52);
         _ordersStatusButton.TabIndex = 5;
         _ordersStatusButton.Text = "🚚 Status de Pedidos";
@@ -235,13 +270,13 @@ partial class MainForm
         // _usersButton
         // 
         _usersButton.BorderRadius = 10;
-        _usersButton.CustomizableEdges = customizableEdges9;
+        _usersButton.CustomizableEdges = customizableEdges13;
         _usersButton.FillColor = Color.FromArgb(164, 104, 45);
         _usersButton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
         _usersButton.ForeColor = Color.DimGray;
         _usersButton.Location = new Point(0, 224);
         _usersButton.Name = "_usersButton";
-        _usersButton.ShadowDecoration.CustomizableEdges = customizableEdges10;
+        _usersButton.ShadowDecoration.CustomizableEdges = customizableEdges14;
         _usersButton.Size = new Size(227, 52);
         _usersButton.TabIndex = 1;
         _usersButton.Text = "\U0001f9d1‍\U0001f91d‍\U0001f9d1Usuários";
@@ -249,13 +284,13 @@ partial class MainForm
         // _categoriesButton
         // 
         _categoriesButton.BorderRadius = 10;
-        _categoriesButton.CustomizableEdges = customizableEdges11;
+        _categoriesButton.CustomizableEdges = customizableEdges15;
         _categoriesButton.FillColor = Color.FromArgb(164, 104, 45);
         _categoriesButton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
         _categoriesButton.ForeColor = Color.DimGray;
         _categoriesButton.Location = new Point(0, 170);
         _categoriesButton.Name = "_categoriesButton";
-        _categoriesButton.ShadowDecoration.CustomizableEdges = customizableEdges12;
+        _categoriesButton.ShadowDecoration.CustomizableEdges = customizableEdges16;
         _categoriesButton.Size = new Size(227, 52);
         _categoriesButton.TabIndex = 2;
         _categoriesButton.Text = "🏷️ Categorias";
@@ -263,13 +298,13 @@ partial class MainForm
         // _productsButton
         // 
         _productsButton.BorderRadius = 10;
-        _productsButton.CustomizableEdges = customizableEdges13;
+        _productsButton.CustomizableEdges = customizableEdges17;
         _productsButton.FillColor = Color.FromArgb(164, 104, 45);
         _productsButton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
         _productsButton.ForeColor = Color.DimGray;
         _productsButton.Location = new Point(0, 116);
         _productsButton.Name = "_productsButton";
-        _productsButton.ShadowDecoration.CustomizableEdges = customizableEdges14;
+        _productsButton.ShadowDecoration.CustomizableEdges = customizableEdges18;
         _productsButton.Size = new Size(227, 52);
         _productsButton.TabIndex = 3;
         _productsButton.Text = "🛍️ Produtos";
@@ -277,13 +312,13 @@ partial class MainForm
         // _dashboardButton
         // 
         _dashboardButton.BorderRadius = 10;
-        _dashboardButton.CustomizableEdges = customizableEdges15;
+        _dashboardButton.CustomizableEdges = customizableEdges19;
         _dashboardButton.FillColor = Color.FromArgb(164, 104, 45);
         _dashboardButton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
         _dashboardButton.ForeColor = Color.DimGray;
         _dashboardButton.Location = new Point(0, 62);
         _dashboardButton.Name = "_dashboardButton";
-        _dashboardButton.ShadowDecoration.CustomizableEdges = customizableEdges16;
+        _dashboardButton.ShadowDecoration.CustomizableEdges = customizableEdges20;
         _dashboardButton.Size = new Size(227, 52);
         _dashboardButton.TabIndex = 4;
         _dashboardButton.Text = "🏠 Dashboard";
@@ -291,15 +326,15 @@ partial class MainForm
         // _logoutButton
         // 
         _logoutButton.BorderRadius = 9;
-        _logoutButton.CustomizableEdges = customizableEdges19;
+        _logoutButton.CustomizableEdges = customizableEdges23;
         _logoutButton.FillColor = Color.FromArgb(192, 0, 0);
         _logoutButton.Font = new Font("Segoe UI", 9F);
         _logoutButton.ForeColor = Color.White;
         _logoutButton.HoverState.FillColor = Color.FromArgb(55, 60, 72);
-        _logoutButton.Location = new Point(14, 544);
+        _logoutButton.Location = new Point(17, 836);
         _logoutButton.Margin = new Padding(5, 10, 5, 8);
         _logoutButton.Name = "_logoutButton";
-        _logoutButton.ShadowDecoration.CustomizableEdges = customizableEdges20;
+        _logoutButton.ShadowDecoration.CustomizableEdges = customizableEdges24;
         _logoutButton.Size = new Size(227, 42);
         _logoutButton.TabIndex = 1;
         _logoutButton.Text = "↪ Sair da conta";
@@ -314,12 +349,12 @@ partial class MainForm
         _brandPanel.Controls.Add(_brandLabel);
         _brandPanel.Controls.Add(_roleLabel);
         _brandPanel.Controls.Add(_userEmailLabel);
-        _brandPanel.CustomizableEdges = customizableEdges21;
+        _brandPanel.CustomizableEdges = customizableEdges25;
         _brandPanel.Dock = DockStyle.Top;
         _brandPanel.FillColor = Color.Transparent;
         _brandPanel.Location = new Point(14, 14);
         _brandPanel.Name = "_brandPanel";
-        _brandPanel.ShadowDecoration.CustomizableEdges = customizableEdges22;
+        _brandPanel.ShadowDecoration.CustomizableEdges = customizableEdges26;
         _brandPanel.Size = new Size(227, 100);
         _brandPanel.TabIndex = 4;
         // 
@@ -417,4 +452,6 @@ partial class MainForm
 
     private Panel pnSeparador2;
     private Panel panel1;
+    private Guna.UI2.WinForms.Guna2ControlBox btnMinimize;
+    private Guna.UI2.WinForms.Guna2ControlBox btnClose;
 }

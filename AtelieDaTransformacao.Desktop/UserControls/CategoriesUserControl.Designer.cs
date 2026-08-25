@@ -76,7 +76,7 @@ partial class CategoriesUserControl
         _categoryCard.Controls.Add(_categoryCardTitle);
         _categoryCard.Controls.Add(_categoryAccent);
         _categoryCard.CustomizableEdges = customizableEdges3;
-        _categoryCard.FillColor = Color.White;
+        _categoryCard.FillColor = Color.Transparent;
         _categoryCard.Location = new Point(612, 17);
         _categoryCard.Name = "_categoryCard";
         _categoryCard.ShadowDecoration.CustomizableEdges = customizableEdges4;
@@ -111,7 +111,7 @@ partial class CategoriesUserControl
         _categoryCardTitle.AutoSize = true;
         _categoryCardTitle.BackColor = Color.Transparent;
         _categoryCardTitle.Font = new Font("Century Gothic", 11F, FontStyle.Bold);
-        _categoryCardTitle.ForeColor = Color.FromArgb(248, 148, 27);
+        _categoryCardTitle.ForeColor = Color.Black;
         _categoryCardTitle.Location = new Point(12, 15);
         _categoryCardTitle.Name = "_categoryCardTitle";
         _categoryCardTitle.Size = new Size(112, 18);
@@ -125,7 +125,7 @@ partial class CategoriesUserControl
         _categoryAccent.Location = new Point(0, 0);
         _categoryAccent.Name = "_categoryAccent";
         _categoryAccent.ShadowDecoration.CustomizableEdges = customizableEdges2;
-        _categoryAccent.Size = new Size(180, 10);
+        _categoryAccent.Size = new Size(180, 6);
         _categoryAccent.TabIndex = 0;
         // 
         // _refreshButton

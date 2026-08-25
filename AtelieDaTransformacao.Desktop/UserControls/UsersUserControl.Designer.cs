@@ -144,7 +144,7 @@ partial class UsersUserControl
         // _inactiveCountLabel
         // 
         _inactiveCountLabel.BackColor = Color.Transparent;
-        _inactiveCountLabel.Font = new Font("Segoe UI Semibold", 20F, FontStyle.Bold);
+        _inactiveCountLabel.Font = new Font("Yu Gothic", 20.25F, FontStyle.Bold);
         _inactiveCountLabel.ForeColor = Color.Black;
         _inactiveCountLabel.Location = new Point(14, 34);
         _inactiveCountLabel.Name = "_inactiveCountLabel";
@@ -156,7 +156,7 @@ partial class UsersUserControl
         // _inactiveTitleLabel
         // 
         _inactiveTitleLabel.BackColor = Color.Transparent;
-        _inactiveTitleLabel.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+        _inactiveTitleLabel.Font = new Font("Yu Gothic", 12F, FontStyle.Bold);
         _inactiveTitleLabel.ForeColor = Color.Red;
         _inactiveTitleLabel.Location = new Point(14, 13);
         _inactiveTitleLabel.Name = "_inactiveTitleLabel";
@@ -223,7 +223,7 @@ partial class UsersUserControl
         // _activeCountLabel
         // 
         _activeCountLabel.BackColor = Color.Transparent;
-        _activeCountLabel.Font = new Font("Segoe UI Semibold", 20F, FontStyle.Bold);
+        _activeCountLabel.Font = new Font("Yu Gothic", 20.25F, FontStyle.Bold);
         _activeCountLabel.ForeColor = Color.Black;
         _activeCountLabel.Location = new Point(14, 34);
         _activeCountLabel.Name = "_activeCountLabel";
@@ -235,7 +235,7 @@ partial class UsersUserControl
         // _activeTitleLabel
         // 
         _activeTitleLabel.BackColor = Color.Transparent;
-        _activeTitleLabel.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+        _activeTitleLabel.Font = new Font("Yu Gothic", 12F, FontStyle.Bold);
         _activeTitleLabel.ForeColor = Color.Green;
         _activeTitleLabel.Location = new Point(14, 13);
         _activeTitleLabel.Name = "_activeTitleLabel";

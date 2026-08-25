@@ -84,4 +84,9 @@ public sealed partial class EditProfileDialog : Form
     {
         DialogResult = DialogResult.Cancel;
     }
+
+    private void btnClose_Click(object sender, EventArgs e)
+    {
+        Close();
+    }
 }

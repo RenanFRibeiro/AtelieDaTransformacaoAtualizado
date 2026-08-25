@@ -32,25 +32,25 @@ partial class ProductsUserControl
 
     private void InitializeComponent()
     {
-        Guna.UI2.WinForms.Suite.CustomizableEdges e1 = new();
-        Guna.UI2.WinForms.Suite.CustomizableEdges e2 = new();
-        Guna.UI2.WinForms.Suite.CustomizableEdges e3 = new();
-        Guna.UI2.WinForms.Suite.CustomizableEdges e4 = new();
-        Guna.UI2.WinForms.Suite.CustomizableEdges e5 = new();
-        Guna.UI2.WinForms.Suite.CustomizableEdges e6 = new();
-        Guna.UI2.WinForms.Suite.CustomizableEdges e7 = new();
-        Guna.UI2.WinForms.Suite.CustomizableEdges e8 = new();
-        Guna.UI2.WinForms.Suite.CustomizableEdges e9 = new();
-        Guna.UI2.WinForms.Suite.CustomizableEdges e10 = new();
-        Guna.UI2.WinForms.Suite.CustomizableEdges e11 = new();
-        Guna.UI2.WinForms.Suite.CustomizableEdges e12 = new();
-        Guna.UI2.WinForms.Suite.CustomizableEdges e13 = new();
-        Guna.UI2.WinForms.Suite.CustomizableEdges e14 = new();
-        Guna.UI2.WinForms.Suite.CustomizableEdges e15 = new();
-        Guna.UI2.WinForms.Suite.CustomizableEdges e16 = new();
-        DataGridViewCellStyle headerStyle = new();
-        DataGridViewCellStyle bodyStyle = new();
-        DataGridViewCellStyle actionStyle = new();
+        Guna.UI2.WinForms.Suite.CustomizableEdges e1 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges e2 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges e3 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges e4 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges e5 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges e6 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges e7 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges e8 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges e9 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges e10 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges e11 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges e12 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges e13 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges e14 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges e15 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        Guna.UI2.WinForms.Suite.CustomizableEdges e16 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+        DataGridViewCellStyle headerStyle = new DataGridViewCellStyle();
+        DataGridViewCellStyle bodyStyle = new DataGridViewCellStyle();
+        DataGridViewCellStyle actionStyle = new DataGridViewCellStyle();
 
         _toolbarCard = new Guna.UI2.WinForms.Guna2Panel();
         _deleteButton = new Guna.UI2.WinForms.Guna2Button();

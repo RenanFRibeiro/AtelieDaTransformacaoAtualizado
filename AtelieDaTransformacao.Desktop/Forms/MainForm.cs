@@ -153,4 +153,14 @@ public partial class MainForm : Form
         // Fecha a janela principal
         Close();
     }
+
+    private void btnClose_Click(object sender, EventArgs e)
+    {
+        System.Windows.Forms.Application.Exit();
+    }
+
+    private void btnMinimize_Click(object sender, EventArgs e)
+    {
+
+    }
 }
