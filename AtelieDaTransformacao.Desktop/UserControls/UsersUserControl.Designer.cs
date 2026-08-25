@@ -84,10 +84,11 @@ partial class UsersUserControl
         customizableEdges7.TopRight = false;
         _toolbarCard.CustomizableEdges = customizableEdges7;
         _toolbarCard.FillColor = Color.LightGray;
-        _toolbarCard.Location = new Point(8, 8);
+        _toolbarCard.Dock = DockStyle.Top;
+        _toolbarCard.Location = new Point(0, 0);
         _toolbarCard.Name = "_toolbarCard";
         _toolbarCard.ShadowDecoration.CustomizableEdges = customizableEdges7;
-        _toolbarCard.Size = new Size(975, 120);
+        _toolbarCard.Size = new Size(795, 120);
         _toolbarCard.TabIndex = 0;
         // 
         // _deleteButton
@@ -116,7 +117,8 @@ partial class UsersUserControl
         _inactiveCard.Controls.Add(_inactiveTitleLabel);
         _inactiveCard.CustomizableEdges = customizableEdges2;
         _inactiveCard.FillColor = Color.White;
-        _inactiveCard.Location = new Point(742, 17);
+        _inactiveCard.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+        _inactiveCard.Location = new Point(562, 17);
         _inactiveCard.Name = "_inactiveCard";
         _inactiveCard.ShadowDecoration.CustomizableEdges = customizableEdges2;
         _inactiveCard.Size = new Size(218, 84);
@@ -184,7 +186,8 @@ partial class UsersUserControl
         _activeCard.Controls.Add(_activeTitleLabel);
         _activeCard.CustomizableEdges = customizableEdges4;
         _activeCard.FillColor = Color.White;
-        _activeCard.Location = new Point(513, 17);
+        _activeCard.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+        _activeCard.Location = new Point(333, 17);
         _activeCard.Name = "_activeCard";
         _activeCard.ShadowDecoration.CustomizableEdges = customizableEdges4;
         _activeCard.Size = new Size(218, 84);
@@ -265,20 +268,23 @@ partial class UsersUserControl
         _tableCard.Controls.Add(_countLabel);
         _tableCard.CustomizableEdges = customizableEdges8;
         _tableCard.FillColor = Color.White;
-        _tableCard.Location = new Point(8, 126);
+        _tableCard.Dock = DockStyle.Fill;
+        _tableCard.Location = new Point(0, 120);
         _tableCard.Name = "_tableCard";
-        _tableCard.Padding = new Padding(14);
+        _tableCard.Padding = new Padding(14, 14, 14, 40);
         _tableCard.ShadowDecoration.CustomizableEdges = customizableEdges8;
-        _tableCard.Size = new Size(936, 558);
+        _tableCard.Size = new Size(795, 438);
         _tableCard.TabIndex = 6;
         // 
         // _countLabel
         // 
+        _countLabel.BackColor = Color.Gainsboro;
         _countLabel.Font = new Font("Segoe UI", 8.5F);
-        _countLabel.ForeColor = Color.FromArgb(113, 120, 135);
-        _countLabel.Location = new Point(14, 14);
+        _countLabel.ForeColor = Color.Gray;
+        _countLabel.Dock = DockStyle.Bottom;
+        _countLabel.Location = new Point(14, 396);
         _countLabel.Name = "_countLabel";
-        _countLabel.Size = new Size(250, 26);
+        _countLabel.Size = new Size(767, 28);
         _countLabel.TabIndex = 1;
         _countLabel.TextAlign = ContentAlignment.MiddleLeft;
         // 
@@ -302,13 +308,14 @@ partial class UsersUserControl
         dataGridViewCellStyle2.WrapMode = DataGridViewTriState.False;
         _grid.DefaultCellStyle = dataGridViewCellStyle2;
         _grid.GridColor = Color.Black;
-        _grid.Location = new Point(14, 48);
+        _grid.Dock = DockStyle.Fill;
+        _grid.Location = new Point(14, 14);
         _grid.MultiSelect = false;
         _grid.Name = "_grid";
         _grid.ReadOnly = true;
         _grid.RowHeadersVisible = false;
         _grid.RowTemplate.Height = 40;
-        _grid.Size = new Size(947, 423);
+        _grid.Size = new Size(767, 382);
         _grid.TabIndex = 0;
         _grid.ThemeStyle.GridColor = Color.Black;
         _grid.ThemeStyle.HeaderStyle.BackColor = Color.FromArgb(245, 246, 248);
