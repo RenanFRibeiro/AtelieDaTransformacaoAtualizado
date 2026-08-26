@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using AtelieDaTransformacao.Application.DTOs;
+using AtelieDaTransformacao.UI.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -157,6 +158,161 @@ public class AccountController : Controller
             $"Bem-vindo(a), {model.FirstName}! Sua conta foi criada com sucesso.";
 
         return RedirectToAction("Index", "Home");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Profile()
+    {
+        if (!(User.Identity?.IsAuthenticated ?? false))
+            return RedirectToAction(nameof(Login), new { returnUrl = Url.Action(nameof(Profile), "Account") });
+
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+            return RedirectToAction(nameof(Login));
+
+        var claims = await _userManager.GetClaimsAsync(user);
+        var model = new ProfileViewModel
+        {
+            FirstName = claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value ?? string.Empty,
+            LastName = claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value ?? string.Empty,
+            Phone = user.PhoneNumber ?? string.Empty,
+            Address = claims.FirstOrDefault(c => c.Type == ClaimTypes.StreetAddress)?.Value ?? string.Empty,
+            AddressNumber = claims.FirstOrDefault(c => c.Type == "Atelie:AddressNumber")?.Value ?? string.Empty,
+            Complement = claims.FirstOrDefault(c => c.Type == "Atelie:Complement")?.Value ?? string.Empty,
+            District = claims.FirstOrDefault(c => c.Type == "Atelie:District")?.Value ?? string.Empty,
+            City = claims.FirstOrDefault(c => c.Type == ClaimTypes.Locality)?.Value ?? string.Empty,
+            State = claims.FirstOrDefault(c => c.Type == ClaimTypes.StateOrProvince)?.Value ?? string.Empty,
+            PostalCode = claims.FirstOrDefault(c => c.Type == ClaimTypes.PostalCode)?.Value ?? string.Empty,
+            Email = user.Email ?? string.Empty
+        };
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Profile(ProfileViewModel model)
+    {
+        if (!(User.Identity?.IsAuthenticated ?? false))
+            return RedirectToAction(nameof(Login));
+
+        if (!ModelState.IsValid)
+            return View(model);
+
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+            return RedirectToAction(nameof(Login));
+
+        model.FirstName = model.FirstName.Trim();
+        model.LastName = model.LastName.Trim();
+        model.Phone = model.Phone.Trim();
+        model.Address = model.Address.Trim();
+        model.AddressNumber = model.AddressNumber.Trim();
+        model.Complement = model.Complement.Trim();
+        model.District = model.District.Trim();
+        model.City = model.City.Trim();
+        model.State = model.State.Trim().ToUpperInvariant();
+        model.PostalCode = model.PostalCode.Trim();
+        model.Email = model.Email.Trim().ToLowerInvariant();
+
+        var currentEmail = user.Email ?? string.Empty;
+        if (!string.Equals(currentEmail, model.Email, StringComparison.OrdinalIgnoreCase))
+        {
+            var existing = await _userManager.FindByEmailAsync(model.Email);
+            if (existing != null && existing.Id != user.Id)
+            {
+                ModelState.AddModelError(nameof(model.Email), "Já existe uma conta com este e-mail.");
+                return View(model);
+            }
+
+            var emailResult = await _userManager.SetEmailAsync(user, model.Email);
+            if (!emailResult.Succeeded)
+            {
+                foreach (var error in emailResult.Errors)
+                    ModelState.AddModelError(nameof(model.Email), FriendlyIdentityError(error));
+                return View(model);
+            }
+
+            var usernameResult = await _userManager.SetUserNameAsync(user, model.Email);
+            if (!usernameResult.Succeeded)
+            {
+                foreach (var error in usernameResult.Errors)
+                    ModelState.AddModelError(nameof(model.Email), FriendlyIdentityError(error));
+                return View(model);
+            }
+        }
+
+        user.PhoneNumber = model.Phone;
+        var updateResult = await _userManager.UpdateAsync(user);
+        if (!updateResult.Succeeded)
+        {
+            foreach (var error in updateResult.Errors)
+                ModelState.AddModelError(string.Empty, FriendlyIdentityError(error));
+            return View(model);
+        }
+
+        var oldClaims = await _userManager.GetClaimsAsync(user);
+        var profileClaimTypes = new[]
+        {
+            ClaimTypes.GivenName, ClaimTypes.Surname, ClaimTypes.MobilePhone,
+            ClaimTypes.StreetAddress, "Atelie:AddressNumber", "Atelie:Complement",
+            "Atelie:District", ClaimTypes.Locality, ClaimTypes.StateOrProvince,
+            ClaimTypes.PostalCode
+        };
+        var claimsToRemove = oldClaims.Where(c => profileClaimTypes.Contains(c.Type)).ToList();
+        if (claimsToRemove.Count > 0)
+            await _userManager.RemoveClaimsAsync(user, claimsToRemove);
+
+        var newClaims = new[]
+        {
+            new Claim(ClaimTypes.GivenName, model.FirstName),
+            new Claim(ClaimTypes.Surname, model.LastName),
+            new Claim(ClaimTypes.MobilePhone, model.Phone),
+            new Claim(ClaimTypes.StreetAddress, model.Address),
+            new Claim("Atelie:AddressNumber", model.AddressNumber),
+            new Claim("Atelie:Complement", model.Complement),
+            new Claim("Atelie:District", model.District),
+            new Claim(ClaimTypes.Locality, model.City),
+            new Claim(ClaimTypes.StateOrProvince, model.State),
+            new Claim(ClaimTypes.PostalCode, model.PostalCode)
+        };
+        await _userManager.AddClaimsAsync(user, newClaims);
+
+        await _signInManager.RefreshSignInAsync(user);
+        TempData["SuccessMessage"] = "Seus dados foram atualizados com sucesso.";
+        return RedirectToAction(nameof(Profile));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+    {
+        if (!(User.Identity?.IsAuthenticated ?? false))
+            return RedirectToAction(nameof(Login));
+
+        if (!ModelState.IsValid)
+        {
+            TempData["PasswordError"] = string.Join(" ", ModelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => e.ErrorMessage)
+                .Where(e => !string.IsNullOrWhiteSpace(e)));
+            return RedirectToAction(nameof(Profile));
+        }
+
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+            return RedirectToAction(nameof(Login));
+
+        var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+        if (!result.Succeeded)
+        {
+            TempData["PasswordError"] = string.Join(" ", result.Errors.Select(FriendlyIdentityError));
+            return RedirectToAction(nameof(Profile));
+        }
+
+        await _signInManager.RefreshSignInAsync(user);
+        TempData["PasswordSuccess"] = "Sua senha foi alterada com sucesso.";
+        return RedirectToAction(nameof(Profile));
     }
 
     [HttpPost]
