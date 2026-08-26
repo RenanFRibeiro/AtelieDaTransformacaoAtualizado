@@ -1,53 +1,100 @@
 using System.Data;
 using System.Security.Claims;
 using System.Text.Json;
+
 using AtelieDaTransformacao.Application.Interfaces;
 using AtelieDaTransformacao.Application.ViewModels;
 using AtelieDaTransformacao.Domain.Entities;
 using AtelieDaTransformacao.Domain.Enums;
+using AtelieDaTransformacao.Domain.Interfaces;
 using AtelieDaTransformacao.Infrastructure.Context;
-using AtelieDaTransformacao.UI.Hubs;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace AtelieDaTransformacao.UI.Controllers;
 
+using System.Security.Claims;
+using AtelieDaTransformacao.Application.Interfaces;
+using AtelieDaTransformacao.Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
 [Authorize]
 public sealed class OrderController : Controller
 {
-    private const string CartSessionKey = "AtelieDaTransformacao.Cart";
+    private const string CartSessionKey =
+        "AtelieDaTransformacao.Cart";
+
     private readonly AtelieDaTransformacaoDbContext _context;
+    private readonly IOrderRepository _orderRepository;
     private readonly IOrderService _orderService;
 
     public OrderController(
-        AtelieDaTransformacaoDbContext context,
-        IOrderService orderService)
+    AtelieDaTransformacaoDbContext context,
+    IOrderService orderService,
+    IOrderRepository orderRepository)
     {
         _context = context;
         _orderService = orderService;
+        _orderRepository = orderRepository;
     }
+
+    // =========================================================
+    // MEUS PEDIDOS
+    // GET: /Order
+    // =========================================================
 
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var orders = await _orderService.GetByUserIdAsync(CurrentUserId());
+        var userId = CurrentUserId();
+
+        var orders =
+            await _orderService.GetByUserIdAsync(userId);
+
         return View(orders);
     }
+
+    // =========================================================
+    // DETALHES DO PEDIDO
+    // GET: /Order/Details/5
+    // =========================================================
 
     [HttpGet]
     public async Task<IActionResult> Details(int id)
     {
-        var order = await _orderService.GetByIdForUserAsync(id, CurrentUserId());
-        return order is null ? NotFound() : View(order);
+        var userId = CurrentUserId();
+
+        var order =
+            await _orderService.GetByIdForUserAsync(
+                id,
+                userId);
+
+        if (order is null)
+            return NotFound();
+
+        return View(order);
     }
+
+    // =========================================================
+    // STATUS DO PEDIDO
+    // GET: /Order/Status/5
+    // =========================================================
 
     [HttpGet]
     public async Task<IActionResult> Status(int id)
     {
-        var order = await _orderService.GetByIdForUserAsync(id, CurrentUserId());
-        if (order is null) return NotFound();
+        var userId = CurrentUserId();
+
+        var order =
+            await _orderService.GetByIdForUserAsync(
+                id,
+                userId);
+
+        if (order is null)
+            return NotFound();
 
         return Json(new
         {
@@ -60,224 +107,327 @@ public sealed class OrderController : Controller
         });
     }
 
-    // Exibe a tela de checkout com os dados do usuário já preenchidos.
+    // =========================================================
+    // CHECKOUT - EXIBE DADOS, ENTREGA E PAGAMENTO
+    // GET: /Order/Checkout
+    // =========================================================
+
     [HttpGet]
-    public async Task<IActionResult> Checkout(int? productId, int quantity = 1)
+    public async Task<IActionResult> Checkout(int? directProductId = null, int quantity = 1)
     {
-        quantity = Math.Max(1, quantity);
-
-        var model = new CheckoutViewModel
+        var cart = await GetCheckoutCartAsync(directProductId, quantity);
+        if (cart.Count == 0)
         {
-            DirectProductId = productId,
-            DirectQuantity = quantity,
-            CustomerName = BuildCustomerName(),
-            CustomerEmail = User.FindFirstValue(ClaimTypes.Email) ?? User.Identity?.Name ?? string.Empty,
-            CustomerPhone = User.FindFirstValue(ClaimTypes.MobilePhone) ?? string.Empty,
-            PostalCode = User.FindFirstValue(ClaimTypes.PostalCode) ?? string.Empty,
-            ShippingAddress = User.FindFirstValue(ClaimTypes.StreetAddress) ?? string.Empty,
-            AddressNumber = User.FindFirstValue("Atelie:AddressNumber") ?? string.Empty,
-            Complement = User.FindFirstValue("Atelie:Complement") ?? string.Empty,
-            District = User.FindFirstValue("Atelie:District") ?? string.Empty,
-            City = User.FindFirstValue(ClaimTypes.Locality) ?? string.Empty,
-            State = User.FindFirstValue(ClaimTypes.StateOrProvince) ?? string.Empty,
-            DeliveryMethod = "Entrega",
-            PaymentMethod = "Pix"
-        };
-
-        var items = await ResolveCheckoutItemsAsync(productId, quantity);
-        if (items is null || items.Count == 0)
-        {
-            TempData["ErrorMessage"] = "Não há itens disponíveis para finalizar a compra.";
+            TempData["ErrorMessage"] = "Seu carrinho está vazio ou o produto não está disponível.";
             return RedirectToAction("Index", "Cart");
         }
 
-        model.Items = items;
+        var model = BuildCheckoutViewModel(cart, directProductId, quantity);
         return View(model);
     }
+
+    // =========================================================
+    // CONFIRMA A COMPRA APÓS DADOS E PAGAMENTO
+    // POST: /Order/Checkout
+    // =========================================================
 
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Checkout(CheckoutViewModel model)
     {
-        var items = await ResolveCheckoutItemsAsync(model.DirectProductId, model.DirectQuantity);
-        model.Items = items ?? new();
+        NormalizePickupAddress(model);
 
-        if (model.Items.Count == 0)
+        var cart = await GetCheckoutCartAsync(model.DirectProductId, model.DirectQuantity);
+        if (cart.Count == 0)
         {
-            TempData["ErrorMessage"] = "Seu pedido não possui itens disponíveis.";
+            TempData["ErrorMessage"] = "Seu carrinho está vazio ou o produto não está mais disponível.";
             return RedirectToAction("Index", "Cart");
         }
 
-        NormalizeCheckout(model);
-
-        var pickup = model.DeliveryMethod.Equals("Retirada no ateliê", StringComparison.OrdinalIgnoreCase);
-
-        if (pickup)
-        {
-            ModelState.Remove(nameof(model.PostalCode));
-            ModelState.Remove(nameof(model.ShippingAddress));
-            ModelState.Remove(nameof(model.AddressNumber));
-            ModelState.Remove(nameof(model.District));
-            ModelState.Remove(nameof(model.City));
-            ModelState.Remove(nameof(model.State));
-        }
-        else if (string.IsNullOrWhiteSpace(model.ShippingAddress) ||
-                 string.IsNullOrWhiteSpace(model.AddressNumber) ||
-                 string.IsNullOrWhiteSpace(model.District) ||
-                 string.IsNullOrWhiteSpace(model.City) ||
-                 string.IsNullOrWhiteSpace(model.State) ||
-                 string.IsNullOrWhiteSpace(model.PostalCode))
-        {
-            ModelState.AddModelError(string.Empty, "Preencha o endereço completo para entrega.");
-        }
+        model.Items = ToCheckoutItems(cart);
 
         if (!ModelState.IsValid)
             return View(model);
 
-        var order = await CreateOrderAsync(model);
+        var order = await CreateOrderAsync(cart, model);
         if (order is null)
             return View(model);
 
-        if (model.DirectProductId is null)
+        if (!model.DirectProductId.HasValue)
             ClearCart();
 
         TempData["SuccessMessage"] = $"Pedido {order.OrderNumber} criado com sucesso.";
         return RedirectToAction(nameof(Details), new { id = order.Id });
     }
 
-    // Compatibilidade com links antigos: agora leva ao checkout.
+    // =========================================================
+    // COMPRAR AGORA - VAI PARA O CHECKOUT, NÃO CRIA O PEDIDO
+    // POST: /Order/BuyNow
+    // =========================================================
+
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult BuyNow(int id, int quantity = 1)
+    public async Task<IActionResult> BuyNow(int id, int quantity = 1)
     {
-        return RedirectToAction(nameof(Checkout), new { productId = id, quantity = Math.Max(1, quantity) });
-    }
+        quantity = Math.Max(1, quantity);
 
-    private async Task<List<CheckoutItemViewModel>?> ResolveCheckoutItemsAsync(int? productId, int quantity)
-    {
-        if (productId.HasValue)
+        var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == id);
+        if (product is null)
+            return NotFound();
+
+        if (!product.IsAvailable || product.StockQuantity < quantity)
         {
-            var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == productId.Value);
-            if (product is null || !product.IsAvailable || product.StockQuantity <= 0) return null;
-
-            var requested = Math.Min(Math.Max(quantity, 1), product.StockQuantity);
-            return new List<CheckoutItemViewModel>
-            {
-                new()
-                {
-                    ProductId = product.Id,
-                    Title = product.Title,
-                    Image = product.Image,
-                    UnitPrice = product.Price,
-                    Quantity = requested
-                }
-            };
+            TempData["ErrorMessage"] = "A quantidade solicitada não está disponível em estoque.";
+            return RedirectToAction("ProductDetails", "Home", new { id });
         }
 
-        var cart = GetCart();
-        if (cart.Count == 0) return new List<CheckoutItemViewModel>();
-
-        var productIds = cart.Select(x => x.ProductId).Distinct().ToList();
-        var products = await _context.Products
-            .Where(x => productIds.Contains(x.Id))
-            .ToDictionaryAsync(x => x.Id);
-
-        var items = new List<CheckoutItemViewModel>();
-        foreach (var item in cart)
+        // Importante: a compra só é criada depois que o cliente informar
+        // os dados, a entrega e a forma de pagamento na tela de checkout.
+        return RedirectToAction(nameof(Checkout), new
         {
-            if (!products.TryGetValue(item.ProductId, out var product)) continue;
-            if (!product.IsAvailable || product.StockQuantity <= 0) continue;
-
-            items.Add(new CheckoutItemViewModel
-            {
-                ProductId = product.Id,
-                Title = product.Title,
-                Image = product.Image,
-                UnitPrice = product.Price,
-                Quantity = Math.Min(Math.Max(item.Quantity, 1), product.StockQuantity)
-            });
-        }
-
-        return items;
+            directProductId = id,
+            quantity
+        });
     }
 
-    private async Task<Order?> CreateOrderAsync(CheckoutViewModel model)
-    {
-        var userId = CurrentUserId();
-        var utcNow = DateTime.UtcNow;
+    // =========================================================
+    // CANCELAR PEDIDO
+    //
+    // POST: /Order/Cancel
+    // =========================================================
 
-        await using var transaction = await _context.Database.BeginTransactionAsync(IsolationLevel.Serializable);
+    [Authorize]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Cancel(int id)
+    {
+        var userId =
+            User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (string.IsNullOrWhiteSpace(userId))
+            return Challenge();
+
+        var order =
+            await _orderService.GetByIdForUserAsync(
+                id,
+                userId);
+
+        if (order == null)
+            return NotFound();
+
+        if (!order.Status.CanCancel())
+        {
+            TempData["ErrorMessage"] =
+                "Este pedido não pode mais ser cancelado.";
+
+            return RedirectToAction(
+                nameof(Details),
+                new { id });
+        }
+
+        var cancelled =
+            await _orderService.CancelAsync(
+                id,
+                userId);
+
+        if (!cancelled)
+        {
+            TempData["ErrorMessage"] =
+                "Não foi possível cancelar o pedido.";
+
+            return RedirectToAction(
+                nameof(Details),
+                new { id });
+        }
+
+        TempData["SuccessMessage"] =
+            $"Pedido {order.OrderNumber} cancelado com sucesso.";
+
+        return RedirectToAction(
+            nameof(Details),
+            new { id });
+    }
+
+    // =========================================================
+    // CRIAÇÃO DO PEDIDO
+    // =========================================================
+
+    private async Task<Order?> CreateOrderAsync(
+        List<CartItemViewModel> cart,
+        CheckoutViewModel checkout)
+    {
+        if (cart is null ||
+            cart.Count == 0)
+        {
+            TempData["ErrorMessage"] =
+                "Seu carrinho está vazio.";
+
+            return null;
+        }
+
+        var userId =
+            CurrentUserId();
+
+        var email = checkout.CustomerEmail.Trim();
+        var customerName = checkout.CustomerName.Trim();
+        var customerPhone = checkout.CustomerPhone.Trim();
+
+        var utcNow =
+            DateTime.UtcNow;
+
+        await using var transaction =
+            await _context.Database
+                .BeginTransactionAsync(
+                    IsolationLevel.Serializable);
 
         try
         {
-            var productIds = model.Items.Select(x => x.ProductId).Distinct().ToList();
-            var products = await _context.Products
-                .Where(x => productIds.Contains(x.Id))
-                .ToDictionaryAsync(x => x.Id);
+            var productIds =
+                cart
+                    .Select(x => x.ProductId)
+                    .Distinct()
+                    .ToList();
 
-            var snapshots = new List<OrderItemSnapshot>();
+            var products =
+                await _context.Products
+                    .Where(
+                        x => productIds.Contains(x.Id))
+                    .ToDictionaryAsync(
+                        x => x.Id);
 
-            foreach (var item in model.Items)
+            var snapshots =
+                new List<OrderItemSnapshot>();
+
+            foreach (var item in cart)
             {
-                if (!products.TryGetValue(item.ProductId, out var product))
+                if (!products.TryGetValue(
+                        item.ProductId,
+                        out var product))
                 {
-                    TempData["ErrorMessage"] = "Um dos produtos não existe mais.";
+                    TempData["ErrorMessage"] =
+                        "Um dos produtos do carrinho não existe mais.";
+
                     await transaction.RollbackAsync();
+
                     return null;
                 }
 
-                if (!product.IsAvailable || product.StockQuantity < item.Quantity)
+                if (item.Quantity <= 0)
                 {
-                    TempData["ErrorMessage"] = $"O estoque de '{product.Title}' não é suficiente para finalizar o pedido.";
+                    TempData["ErrorMessage"] =
+                        "A quantidade de um dos produtos é inválida.";
+
                     await transaction.RollbackAsync();
+
                     return null;
                 }
 
-                product.StockQuantity -= item.Quantity;
-
-                snapshots.Add(new OrderItemSnapshot
+                if (product.StockQuantity < item.Quantity)
                 {
-                    ProductId = product.Id,
-                    Title = product.Title,
-                    UnitPrice = product.Price,
-                    Quantity = item.Quantity
-                });
+                    TempData["ErrorMessage"] =
+                        $"O estoque de '{product.Title}' não é suficiente.";
+
+                    await transaction.RollbackAsync();
+
+                    return null;
+                }
+
+                product.StockQuantity -=
+                    item.Quantity;
+
+                snapshots.Add(
+                    new OrderItemSnapshot
+                    {
+                        ProductId =
+                            product.Id,
+
+                        Title =
+                            product.Title,
+
+                        UnitPrice =
+                            product.Price,
+
+                        Quantity =
+                            item.Quantity
+                    });
             }
 
-            var checkoutSnapshot = new OrderCheckoutSnapshot
-            {
-                CustomerName = model.CustomerName,
-                CustomerEmail = model.CustomerEmail,
-                CustomerPhone = model.CustomerPhone,
-                PostalCode = model.PostalCode,
-                ShippingAddress = model.ShippingAddress,
-                AddressNumber = model.AddressNumber,
-                Complement = model.Complement,
-                District = model.District,
-                City = model.City,
-                State = model.State,
-                DeliveryMethod = model.DeliveryMethod,
-                PaymentMethod = model.PaymentMethod,
-                Notes = model.Notes
-            };
+            var order =
+                new Order
+                {
+                    OrderNumber =
+                        GenerateOrderNumber(),
 
-            var order = new Order
-            {
-                OrderNumber = GenerateOrderNumber(),
-                UserId = userId,
-                UserEmail = model.CustomerEmail,
-                ItemsJson = JsonSerializer.Serialize(snapshots),
-                CheckoutJson = JsonSerializer.Serialize(checkoutSnapshot),
-                Total = snapshots.Sum(x => x.Subtotal),
-                Status = OrderStatus.Criado,
-                AutoAdvance = false,
-                CreatedAt = utcNow,
-                UpdatedAt = utcNow,
-                StatusChangedAt = utcNow
-            };
+                    UserId =
+                        userId,
+
+                    UserEmail =
+                        email,
+
+                    CustomerName =
+                        customerName,
+
+                    CustomerEmail =
+                        email,
+
+                    CustomerPhone =
+                        customerPhone,
+
+                    ShippingAddress =
+                        FormatShippingAddress(checkout),
+
+                    PaymentMethod =
+                        checkout.PaymentMethod.Trim(),
+
+                    Notes =
+                        checkout.Notes?.Trim() ?? string.Empty,
+
+                    CheckoutJson =
+                        JsonSerializer.Serialize(new OrderCheckoutSnapshot
+                        {
+                            CustomerName = customerName,
+                            CustomerEmail = email,
+                            CustomerPhone = customerPhone,
+                            PostalCode = checkout.PostalCode,
+                            ShippingAddress = checkout.ShippingAddress,
+                            AddressNumber = checkout.AddressNumber,
+                            Complement = checkout.Complement,
+                            District = checkout.District,
+                            City = checkout.City,
+                            State = checkout.State,
+                            DeliveryMethod = checkout.DeliveryMethod,
+                            PaymentMethod = checkout.PaymentMethod,
+                            Notes = checkout.Notes
+                        }),
+
+                    ItemsJson =
+                        JsonSerializer.Serialize(
+                            snapshots),
+
+                    Total =
+                        snapshots.Sum(
+                            x => x.Subtotal),
+
+                    Status =
+                        OrderStatus.Criado,
+
+                    AutoAdvance =
+                        false,
+
+                    CreatedAt =
+                        utcNow,
+
+                    UpdatedAt =
+                        utcNow,
+
+                    StatusChangedAt =
+                        utcNow
+                };
 
             _context.Orders.Add(order);
+
             await _context.SaveChangesAsync();
+
             await transaction.CommitAsync();
 
             return order;
@@ -285,49 +435,158 @@ public sealed class OrderController : Controller
         catch (Exception ex)
         {
             await transaction.RollbackAsync();
-            TempData["ErrorMessage"] = $"Não foi possível criar o pedido: {ex.Message}";
+
+            TempData["ErrorMessage"] =
+                $"Não foi possível criar o pedido: {ex.Message}";
+
             return null;
         }
     }
 
-    private void NormalizeCheckout(CheckoutViewModel model)
+    private async Task<List<CartItemViewModel>> GetCheckoutCartAsync(int? directProductId, int quantity)
     {
-        model.CustomerName = model.CustomerName.Trim();
-        model.CustomerEmail = model.CustomerEmail.Trim().ToLowerInvariant();
-        model.CustomerPhone = model.CustomerPhone.Trim();
-        model.PostalCode = model.PostalCode.Trim();
-        model.ShippingAddress = model.ShippingAddress.Trim();
-        model.AddressNumber = model.AddressNumber.Trim();
-        model.Complement = model.Complement.Trim();
-        model.District = model.District.Trim();
-        model.City = model.City.Trim();
-        model.State = model.State.Trim().ToUpperInvariant();
-        model.DeliveryMethod = model.DeliveryMethod.Trim();
-        model.PaymentMethod = model.PaymentMethod.Trim();
-        model.Notes = model.Notes.Trim();
+        if (!directProductId.HasValue)
+            return GetCart();
+
+        quantity = Math.Max(1, quantity);
+        var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == directProductId.Value);
+        if (product is null || !product.IsAvailable || product.StockQuantity < quantity)
+            return new List<CartItemViewModel>();
+
+        return new List<CartItemViewModel>
+        {
+            new()
+            {
+                ProductId = product.Id,
+                Title = product.Title,
+                Image = product.Image,
+                Price = product.Price,
+                Quantity = quantity
+            }
+        };
     }
 
-    private string BuildCustomerName()
+    private CheckoutViewModel BuildCheckoutViewModel(
+        List<CartItemViewModel> cart,
+        int? directProductId,
+        int quantity)
     {
-        var first = User.FindFirstValue(ClaimTypes.GivenName);
-        var last = User.FindFirstValue(ClaimTypes.Surname);
-        return string.Join(" ", new[] { first, last }.Where(x => !string.IsNullOrWhiteSpace(x)));
+        var firstName = User.FindFirstValue(ClaimTypes.GivenName) ?? string.Empty;
+        var lastName = User.FindFirstValue(ClaimTypes.Surname) ?? string.Empty;
+        var fullName = string.Join(" ", new[] { firstName, lastName }.Where(x => !string.IsNullOrWhiteSpace(x)));
+        var email = User.FindFirstValue(ClaimTypes.Email) ?? User.Identity?.Name ?? string.Empty;
+
+        return new CheckoutViewModel
+        {
+            DirectProductId = directProductId,
+            DirectQuantity = Math.Max(1, quantity),
+            Items = ToCheckoutItems(cart),
+            CustomerName = fullName,
+            CustomerEmail = email,
+            CustomerPhone = User.FindFirstValue(ClaimTypes.MobilePhone) ?? string.Empty,
+            PostalCode = User.FindFirstValue(ClaimTypes.PostalCode) ?? string.Empty,
+            ShippingAddress = User.FindFirstValue(ClaimTypes.StreetAddress) ?? string.Empty,
+            AddressNumber = User.FindFirstValue("Atelie:AddressNumber") ?? string.Empty,
+            Complement = User.FindFirstValue("Atelie:Complement") ?? string.Empty,
+            District = User.FindFirstValue("Atelie:District") ?? string.Empty,
+            City = User.FindFirstValue(ClaimTypes.Locality) ?? string.Empty,
+            State = User.FindFirstValue(ClaimTypes.StateOrProvince) ?? string.Empty
+        };
     }
+
+    private static List<CheckoutItemViewModel> ToCheckoutItems(List<CartItemViewModel> cart) =>
+        cart.Select(x => new CheckoutItemViewModel
+        {
+            ProductId = x.ProductId,
+            Title = x.Title,
+            Image = x.Image,
+            UnitPrice = x.Price,
+            Quantity = x.Quantity
+        }).ToList();
+
+    private void NormalizePickupAddress(CheckoutViewModel model)
+    {
+        if (!string.Equals(model.DeliveryMethod, "Retirada no ateliê", StringComparison.OrdinalIgnoreCase))
+            return;
+
+        var fields = new[] { "PostalCode", "ShippingAddress", "AddressNumber", "District", "City", "State" };
+        foreach (var field in fields)
+            ModelState.Remove(field);
+
+        model.PostalCode = string.Empty;
+        model.ShippingAddress = "Retirada no ateliê";
+        model.AddressNumber = string.Empty;
+        model.District = string.Empty;
+        model.City = string.Empty;
+        model.State = string.Empty;
+    }
+
+    private static string FormatShippingAddress(CheckoutViewModel checkout)
+    {
+        if (string.Equals(checkout.DeliveryMethod, "Retirada no ateliê", StringComparison.OrdinalIgnoreCase))
+            return "Retirada no ateliê";
+
+        var parts = new[]
+        {
+            checkout.ShippingAddress,
+            checkout.AddressNumber,
+            checkout.Complement,
+            checkout.District,
+            checkout.City,
+            checkout.State,
+            checkout.PostalCode
+        }.Where(x => !string.IsNullOrWhiteSpace(x));
+
+        return string.Join(", ", parts);
+    }
+
+    // =========================================================
+    // USUÁRIO LOGADO
+    // =========================================================
 
     private string CurrentUserId()
-        => User.FindFirstValue(ClaimTypes.NameIdentifier)
-            ?? throw new InvalidOperationException("Usuário autenticado sem identificador.");
+    {
+        var userId =
+            User.FindFirstValue(
+                ClaimTypes.NameIdentifier);
+
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            throw new InvalidOperationException(
+                "Usuário autenticado sem identificador.");
+        }
+
+        return userId;
+    }
+
+    // =========================================================
+    // NÚMERO DO PEDIDO
+    // =========================================================
 
     private static string GenerateOrderNumber()
-        => $"AT-{DateTime.Now:yyyyMMddHHmmss}-{Random.Shared.Next(10000, 99999)}";
+    {
+        return
+            $"AT-{DateTime.Now:yyyyMMddHHmmss}-{Random.Shared.Next(10000, 99999)}";
+    }
+
+    // =========================================================
+    // RECUPERAR CARRINHO DA SESSION
+    // =========================================================
 
     private List<CartItemViewModel> GetCart()
     {
-        var json = HttpContext.Session.GetString(CartSessionKey);
-        if (string.IsNullOrWhiteSpace(json)) return new();
+        var json =
+            HttpContext.Session.GetString(
+                CartSessionKey);
+
+        if (string.IsNullOrWhiteSpace(json))
+            return new();
+
         try
         {
-            return JsonSerializer.Deserialize<List<CartItemViewModel>>(json) ?? new();
+            return JsonSerializer.Deserialize<
+                       List<CartItemViewModel>>(json)
+                   ?? new();
         }
         catch (JsonException)
         {
@@ -335,5 +594,13 @@ public sealed class OrderController : Controller
         }
     }
 
-    private void ClearCart() => HttpContext.Session.Remove(CartSessionKey);
+    // =========================================================
+    // LIMPAR CARRINHO
+    // =========================================================
+
+    private void ClearCart()
+    {
+        HttpContext.Session.Remove(
+            CartSessionKey);
+    }
 }

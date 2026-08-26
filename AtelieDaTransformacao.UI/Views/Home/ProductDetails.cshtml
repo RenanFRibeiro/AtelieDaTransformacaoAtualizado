@@ -68,24 +68,15 @@
                             </div>
                         </form>
 
-                        <a asp-controller="Order"
-                           asp-action="Checkout"
-                           asp-route-productId="@Model.Id"
-                           asp-route-quantity="1"
-                           class="btn btn-artisan w-100 py-3 rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-2 mb-2"
-                           id="buyOnSiteLink">
-                            <i class="bi bi-credit-card-2-front"></i> Comprar pelo site
-                        </a>
-
-                        <script>
-                            document.getElementById('quantity')?.addEventListener('change', function () {
-                                const link = document.getElementById('buyOnSiteLink');
-                                if (!link) return;
-                                const url = new URL(link.href, window.location.origin);
-                                url.searchParams.set('quantity', this.value || '1');
-                                link.href = url.toString();
-                            });
-                        </script>
+                        <form asp-controller="Order" asp-action="BuyNow" method="post" class="mb-2">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <input type="hidden" name="quantity" value="1" id="buyNowQuantity" />
+                            <button type="submit"
+                                    class="btn btn-artisan w-100 py-3 rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-2">
+                                <i class="bi bi-credit-card-2-front"></i> Comprar pelo site
+                            </button>
+                        </form>
 
                         <a asp-controller="Home" asp-action="ContactSeller" asp-route-id="@Model.Id" class="btn btn-success w-100 py-3 rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-2">
                             <i class="bi bi-whatsapp"></i> Comprar somente esta peça pelo WhatsApp

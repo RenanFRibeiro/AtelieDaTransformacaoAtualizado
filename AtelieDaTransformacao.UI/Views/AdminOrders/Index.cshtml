@@ -90,6 +90,78 @@
                                 <a asp-controller="Order" asp-action="Details" asp-route-id="@order.Id" target="_blank" class="btn btn-sm btn-outline-dark rounded-pill">Abrir</a>
                             </div>
                         </td>
+
+                        <td class="text-end pe-4">
+
+                            <div class="d-inline-flex flex-wrap gap-2">
+
+                                @if (order.Status != OrderStatus.Entregue &&
+                                     order.Status != OrderStatus.Cancelado)
+                                {
+                                    <form asp-action="Advance"
+                                          method="post">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="id"
+                                               value="@order.Id" />
+
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-primary rounded-pill">
+
+                                            Avançar
+
+                                        </button>
+
+                                    </form>
+                                }
+
+                                @if (order.Status.CanCancel())
+                                {
+                                    <form asp-action="Cancel"
+                                          method="post"
+                                          onsubmit="return confirm('Cancelar este pedido e devolver o estoque?');">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="id"
+                                               value="@order.Id" />
+
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-danger rounded-pill">
+
+                                            <i class="bi bi-x-circle me-1"></i>
+
+                                            Cancelar
+
+                                        </button>
+
+                                    </form>
+                                }
+                                else if (order.Status == OrderStatus.Cancelado)
+                                {
+                                    <span class="badge bg-danger rounded-pill px-3 py-2">
+
+                                        Cancelado
+
+                                    </span>
+                                }
+
+                                <a asp-controller="AdminOrders"
+                                   asp-action="Details"
+                                   asp-route-id="@order.Id"
+                                   target="_blank"
+                                   class="btn btn-sm btn-outline-dark rounded-pill">
+
+                                    Abrir
+
+                                </a>
+
+                            </div>
+
+                        </td>
                     </tr>
                 }
             </tbody>

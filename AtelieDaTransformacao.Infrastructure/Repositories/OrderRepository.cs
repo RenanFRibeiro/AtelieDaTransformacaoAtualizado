@@ -1,7 +1,10 @@
+using System.Text.Json;
+
 using AtelieDaTransformacao.Domain.Entities;
 using AtelieDaTransformacao.Domain.Enums;
 using AtelieDaTransformacao.Domain.Interfaces;
 using AtelieDaTransformacao.Infrastructure.Context;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace AtelieDaTransformacao.Infrastructure.Repositories;
@@ -10,33 +13,61 @@ public sealed class OrderRepository : IOrderRepository
 {
     private readonly AtelieDaTransformacaoDbContext _context;
 
-    public OrderRepository(AtelieDaTransformacaoDbContext context)
+    public OrderRepository(
+        AtelieDaTransformacaoDbContext context)
     {
         _context = context;
     }
 
     public Task<Order?> GetByIdAsync(int id)
-        => _context.Orders.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+    {
+        return _context.Orders
+            .FirstOrDefaultAsync(x => x.Id == id);
+    }
 
-    public Task<Order?> GetByIdForUserAsync(int id, string userId)
-        => _context.Orders.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId);
+    public Task<Order?> GetByIdForUserAsync(
+        int id,
+        string userId)
+    {
+        return _context.Orders
+            .FirstOrDefaultAsync(
+                x =>
+                    x.Id == id &&
+                    x.UserId == userId);
+    }
 
-    public async Task<IReadOnlyList<Order>> GetByUserIdAsync(string userId)
-        => await _context.Orders.AsNoTracking()
+    public async Task<IReadOnlyList<Order>>
+        GetByUserIdAsync(
+            string userId)
+    {
+        return await _context.Orders
+            .AsNoTracking()
             .Where(x => x.UserId == userId)
             .OrderByDescending(x => x.CreatedAt)
             .ToListAsync();
+    }
 
-    public async Task<IReadOnlyList<Order>> GetAllAsync()
-        => await _context.Orders.AsNoTracking()
+    public async Task<IReadOnlyList<Order>>
+        GetAllAsync()
+    {
+        return await _context.Orders
+            .AsNoTracking()
             .OrderByDescending(x => x.CreatedAt)
             .ToListAsync();
+    }
 
-    public async Task<IReadOnlyList<Order>> GetForAutomationAsync()
-        => await _context.Orders
-            .Where(x => x.AutoAdvance && x.Status != OrderStatus.Entregue)
+    public async Task<IReadOnlyList<Order>>
+        GetForAutomationAsync()
+    {
+        return await _context.Orders
+            .Where(
+                x =>
+                    x.AutoAdvance &&
+                    x.Status != OrderStatus.Entregue &&
+                    x.Status != OrderStatus.Cancelado)
             .OrderBy(x => x.StatusChangedAt)
             .ToListAsync();
+    }
 
     public async Task AddAsync(Order order)
     {
@@ -44,29 +75,158 @@ public sealed class OrderRepository : IOrderRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task<bool> UpdateStatusAsync(int id, OrderStatus status, bool? autoAdvance = null)
+    public async Task<bool> UpdateStatusAsync(
+        int id,
+        OrderStatus status,
+        bool? autoAdvance = null)
     {
-        var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id == id);
-        if (order is null) return false;
+        var order =
+            await _context.Orders
+                .FirstOrDefaultAsync(
+                    x => x.Id == id);
+
+        if (order == null)
+            return false;
+
+        if (order.Status == OrderStatus.Cancelado)
+            return false;
 
         order.Status = status;
-        order.UpdatedAt = DateTime.UtcNow;
-        order.StatusChangedAt = DateTime.UtcNow;
+
+        order.UpdatedAt =
+            DateTime.UtcNow;
+
+        order.StatusChangedAt =
+            DateTime.UtcNow;
+
         if (autoAdvance.HasValue)
-            order.AutoAdvance = autoAdvance.Value;
+        {
+            order.AutoAdvance =
+                autoAdvance.Value;
+        }
 
         await _context.SaveChangesAsync();
+
         return true;
     }
 
-    public async Task<bool> SetAutoAdvanceAsync(int id, bool enabled)
+    public async Task<bool> SetAutoAdvanceAsync(
+        int id,
+        bool enabled)
     {
-        var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id == id);
-        if (order is null) return false;
+        var order =
+            await _context.Orders
+                .FirstOrDefaultAsync(
+                    x => x.Id == id);
+
+        if (order == null)
+            return false;
+
+        if (order.Status == OrderStatus.Cancelado)
+            return false;
 
         order.AutoAdvance = enabled;
-        order.UpdatedAt = DateTime.UtcNow;
+
+        order.UpdatedAt =
+            DateTime.UtcNow;
+
         await _context.SaveChangesAsync();
+
         return true;
+    }
+
+    public async Task<bool> CancelAsync(int id)
+    {
+        await using var transaction =
+            await _context.Database.BeginTransactionAsync(
+                System.Data.IsolationLevel.Serializable);
+
+        try
+        {
+            var order =
+                await _context.Orders
+                    .FirstOrDefaultAsync(
+                        x => x.Id == id);
+
+            if (order == null)
+                return false;
+
+            if (!order.Status.CanCancel())
+                return false;
+
+            var items =
+                DeserializeItems(
+                    order.ItemsJson);
+
+            if (items.Count > 0)
+            {
+                var productIds =
+                    items
+                        .Select(x => x.ProductId)
+                        .Distinct()
+                        .ToList();
+
+                var products =
+                    await _context.Products
+                        .Where(x =>
+                            productIds.Contains(x.Id))
+                        .ToDictionaryAsync(
+                            x => x.Id);
+
+                foreach (var item in items)
+                {
+                    if (products.TryGetValue(
+                            item.ProductId,
+                            out var product))
+                    {
+                        product.StockQuantity +=
+                            item.Quantity;
+                    }
+                }
+            }
+
+            order.Status =
+                OrderStatus.Cancelado;
+
+            order.AutoAdvance =
+                false;
+
+            order.UpdatedAt =
+                DateTime.UtcNow;
+
+            order.StatusChangedAt =
+                DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+
+            await transaction.CommitAsync();
+
+            return true;
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            return false;
+        }
+    }
+
+    private static List<OrderItemSnapshot>
+        DeserializeItems(
+            string json)
+    {
+        if (string.IsNullOrWhiteSpace(json))
+            return new List<OrderItemSnapshot>();
+
+        try
+        {
+            return JsonSerializer.Deserialize<
+                       List<OrderItemSnapshot>
+                   >(json)
+                   ?? new List<OrderItemSnapshot>();
+        }
+        catch
+        {
+            return new List<OrderItemSnapshot>();
+        }
     }
 }

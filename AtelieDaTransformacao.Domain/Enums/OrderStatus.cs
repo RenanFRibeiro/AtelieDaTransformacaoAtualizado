@@ -8,12 +8,14 @@ public enum OrderStatus
     Separacao = 3,
     Faturado = 4,
     Enviado = 5,
-    Entregue = 6
+    Entregue = 6,
+    Cancelado = 7
 }
 
 public static class OrderStatusExtensions
 {
-    public static string ToDisplayName(this OrderStatus status)
+    public static string ToDisplayName(
+        this OrderStatus status)
     {
         return status switch
         {
@@ -24,11 +26,13 @@ public static class OrderStatusExtensions
             OrderStatus.Faturado => "Faturado",
             OrderStatus.Enviado => "Enviado",
             OrderStatus.Entregue => "Entregue",
+            OrderStatus.Cancelado => "Cancelado",
             _ => status.ToString()
         };
     }
 
-    public static OrderStatus? GetNext(this OrderStatus status)
+    public static OrderStatus? GetNext(
+        this OrderStatus status)
     {
         return status switch
         {
@@ -39,6 +43,23 @@ public static class OrderStatusExtensions
             OrderStatus.Faturado => OrderStatus.Enviado,
             OrderStatus.Enviado => OrderStatus.Entregue,
             _ => null
+        };
+    }
+
+    public static bool CanCancel(
+        this OrderStatus status)
+    {
+        return status switch
+        {
+            OrderStatus.Criado => true,
+            OrderStatus.Pendente => true,
+            OrderStatus.Aprovado => true,
+            OrderStatus.Separacao => true,
+            OrderStatus.Faturado => true,
+            OrderStatus.Enviado => false,
+            OrderStatus.Entregue => false,
+            OrderStatus.Cancelado => false,
+            _ => false
         };
     }
 }

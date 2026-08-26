@@ -12,6 +12,20 @@ public sealed class Order
 
     public string UserEmail { get; set; } = string.Empty;
 
+    // Compatibilidade com bancos existentes que ainda possuem os campos
+    // obrigatórios do checkout como colunas da tabela Orders.
+    public string CustomerName { get; set; } = string.Empty;
+
+    public string CustomerEmail { get; set; } = string.Empty;
+
+    public string CustomerPhone { get; set; } = string.Empty;
+
+    public string ShippingAddress { get; set; } = string.Empty;
+
+    public string PaymentMethod { get; set; } = string.Empty;
+
+    public string Notes { get; set; } = string.Empty;
+
     public string ItemsJson { get; set; } = "[]";
 
     // Snapshot dos dados informados no checkout. Mantém histórico sem depender

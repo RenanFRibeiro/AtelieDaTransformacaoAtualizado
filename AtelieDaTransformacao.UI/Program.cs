@@ -2,6 +2,7 @@ using AtelieDaTransformacao.Application.Interfaces;
 using AtelieDaTransformacao.Application.Services;
 using AtelieDaTransformacao.Domain.Interfaces;
 using AtelieDaTransformacao.Infrastructure.Context;
+using AtelieDaTransformacao.Infrastructure.Schema;
 using AtelieDaTransformacao.Infrastructure.Repositories;
 using AtelieDaTransformacao.UI.Hubs;
 
@@ -108,8 +109,12 @@ public static class Program
         // =========================================================
 
         builder.Services.AddScoped<
-            IOrderRepository,
-            OrderRepository>();
+    IOrderRepository,
+    OrderRepository>();
+
+        builder.Services.AddScoped<
+            IOrderService,
+            OrderService>();
 
 
         // =========================================================
@@ -199,6 +204,7 @@ public static class Program
                         AtelieDaTransformacaoDbContext>();
 
             await db.Database.MigrateAsync();
+            await OrderSchemaInitializer.EnsureAsync(db);
         }
 
 

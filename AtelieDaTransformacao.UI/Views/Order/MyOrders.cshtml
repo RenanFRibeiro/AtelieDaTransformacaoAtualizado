@@ -1,11 +1,14 @@
 @model IReadOnlyList<AtelieDaTransformacao.Application.DTOs.OrderListDto>
 
+@using AtelieDaTransformacao.Domain.Enums
+
 @{
     ViewData["Title"] = "Meus Pedidos";
 }
 
 <div class="container py-5">
 
+    <!-- CABEÇALHO -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
 
         <div>
@@ -27,26 +30,33 @@
            class="btn btn-outline-dark rounded-pill px-4">
 
             <i class="bi bi-arrow-left me-1"></i>
+
             Voltar para a coleção
 
         </a>
 
     </div>
 
+
+    <!-- MENSAGENS -->
     @if (TempData["SuccessMessage"] is string success)
     {
-        <div class="alert alert-success">
+        <div class="alert alert-success rounded-3">
+            <i class="bi bi-check-circle me-2"></i>
             @success
         </div>
     }
 
     @if (TempData["ErrorMessage"] is string error)
     {
-        <div class="alert alert-danger">
+        <div class="alert alert-danger rounded-3">
+            <i class="bi bi-exclamation-circle me-2"></i>
             @error
         </div>
     }
 
+
+    <!-- NENHUM PEDIDO -->
     @if (Model == null || Model.Count == 0)
     {
         <div class="card border-0 shadow-sm rounded-4 p-5 text-center">
@@ -65,6 +75,8 @@
                asp-action="Index"
                class="btn btn-artisan rounded-pill px-4">
 
+                <i class="bi bi-bag me-1"></i>
+
                 Ver coleção
 
             </a>
@@ -73,35 +85,51 @@
     }
     else
     {
+        <!-- LISTA DE PEDIDOS -->
         <div class="row g-4">
 
             @foreach (var order in Model)
             {
+                var canCancel =
+                    order.Status.CanCancel();
+
+                var isCancelled =
+                    order.Status == OrderStatus.Cancelado;
+
                 <div class="col-12">
 
-                    <div class="card border-0 shadow-sm rounded-4">
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
 
                         <div class="card-body p-4">
 
-                            <div class="row align-items-center g-3">
+                            <div class="row align-items-center g-4">
 
+                                <!-- PEDIDO -->
                                 <div class="col-lg-3">
 
                                     <span class="small text-muted d-block">
                                         Pedido
                                     </span>
 
-                                    <strong class="fs-5">
+                                    <strong class="fs-5 d-block">
                                         @order.OrderNumber
                                     </strong>
 
                                     <small class="text-muted d-block mt-1">
-                                        @order.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")
+
+                                        <i class="bi bi-calendar3 me-1"></i>
+
+                                        @order.CreatedAt
+                                        .ToLocalTime()
+                                        .ToString("dd/MM/yyyy HH:mm")
+
                                     </small>
 
                                 </div>
 
-                                <div class="col-lg-3">
+
+                                <!-- TOTAL -->
+                                <div class="col-lg-2">
 
                                     <span class="small text-muted d-block">
                                         Total
@@ -113,28 +141,114 @@
 
                                 </div>
 
-                                <div class="col-lg-3">
+
+                                <!-- STATUS -->
+                                <div class="col-lg-2">
 
                                     <span class="small text-muted d-block">
                                         Status
                                     </span>
 
-                                    <span class="badge rounded-pill px-3 py-2 bg-dark">
-                                        @order.StatusName
-                                    </span>
+                                    @if (isCancelled)
+                                    {
+                                        <span class="badge rounded-pill px-3 py-2 bg-danger">
+
+                                            <i class="bi bi-x-circle me-1"></i>
+
+                                            @order.StatusName
+
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge rounded-pill px-3 py-2 bg-dark">
+
+                                            @order.StatusName
+
+                                        </span>
+                                    }
+
+                                    @if (order.AutoAdvance &&
+                                         !isCancelled)
+                                    {
+                                        <small class="text-success d-block mt-2">
+
+                                            <i class="bi bi-arrow-repeat me-1"></i>
+
+                                            Atualização automática
+
+                                        </small>
+                                    }
 
                                 </div>
 
-                                <div class="col-lg-3 text-lg-end">
 
-                                    <a asp-controller="Order"
-                                       asp-action="Details"
-                                       asp-route-id="@order.Id"
-                                       class="btn btn-artisan rounded-pill px-4">
+                                <!-- AÇÕES -->
+                                <div class="col-lg-5">
 
-                                        Acompanhar pedido
+                                    <div class="d-flex flex-wrap justify-content-lg-end gap-2">
 
-                                    </a>
+                                        <!-- ACOMPANHAR -->
+                                        <a asp-controller="Order"
+                                           asp-action="Details"
+                                           asp-route-id="@order.Id"
+                                           class="btn btn-artisan rounded-pill px-4">
+
+                                            <i class="bi bi-eye me-1"></i>
+
+                                            Acompanhar pedido
+
+                                        </a>
+
+
+                                        <!-- CANCELAR -->
+                                        @if (canCancel)
+                                        {
+                                            <form asp-controller="Order"
+                                                  asp-action="Cancel"
+                                                  method="post"
+                                                  class="d-inline"
+                                                  onsubmit="return confirm('Tem certeza que deseja cancelar este pedido? O estoque será devolvido.');">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden"
+                                                       name="id"
+                                                       value="@order.Id" />
+
+                                                <button type="submit"
+                                                        class="btn btn-outline-danger rounded-pill px-3">
+
+                                                    <i class="bi bi-x-circle me-1"></i>
+
+                                                    Cancelar pedido
+
+                                                </button>
+
+                                            </form>
+                                        }
+                                        else if (isCancelled)
+                                        {
+                                            <span class="badge bg-danger rounded-pill px-3 py-2 d-flex align-items-center">
+
+                                                <i class="bi bi-x-circle me-1"></i>
+
+                                                Pedido cancelado
+
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-light text-muted border rounded-pill px-3 py-2 d-flex align-items-center">
+
+                                                <i class="bi bi-lock me-1"></i>
+
+                                                Cancelamento indisponível
+
+                                            </span>
+                                        }
+
+                                    </div>
 
                                 </div>
 
@@ -151,3 +265,74 @@
     }
 
 </div>
+
+
+@section Scripts
+{
+    <script>
+
+        async function refreshOrder(orderId) {
+            try {
+                const response =
+                    await fetch(
+                        `/Order/Status/${orderId}`,
+                        {
+                            cache: "no-store"
+                        });
+
+                if (!response.ok)
+                    return;
+
+                const data =
+                    await response.json();
+
+                const card =
+                    document.querySelector(
+                        `[data-order-card="${orderId}"]`);
+
+                const badge =
+                    document.querySelector(
+                        `[data-order-status="${orderId}"]`);
+
+                if (badge) {
+                    badge.textContent =
+                        data.statusName;
+                }
+            }
+            catch {
+                // Evita quebrar a página caso a atualização falhe.
+            }
+        }
+
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            () => {
+                document
+                    .querySelectorAll(
+                        "[data-order-card]")
+                    .forEach(card => {
+                        const id =
+                            card.dataset.orderCard;
+
+                        refreshOrder(id);
+                    });
+
+
+                setInterval(
+                    () => {
+                        document
+                            .querySelectorAll(
+                                "[data-order-card]")
+                            .forEach(card => {
+                                const id =
+                                    card.dataset.orderCard;
+
+                                refreshOrder(id);
+                            });
+                    },
+                    10000);
+            });
+
+    </script>
+}

@@ -1,120 +1,115 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
-
-using AtelieDaTransformacao.Application.DTOs;
-using AtelieDaTransformacao.Application.Interfaces;
-using AtelieDaTransformacao.Domain.Entities;
 using AtelieDaTransformacao.Domain.Enums;
 using AtelieDaTransformacao.Domain.Interfaces;
+using AtelieDaTransformacao.UI.Hubs;
 
-namespace AtelieDaTransformacao.Application.Services;
+using Microsoft.AspNetCore.SignalR;
 
-public sealed class OrderService : IOrderService
+namespace AtelieDaTransformacao.UI.Services;
+
+public sealed class OrderAutomationWorker
+    : BackgroundService
 {
-    private readonly IOrderRepository _repository;
+    private readonly IServiceProvider _serviceProvider;
+    private readonly ILogger<OrderAutomationWorker> _logger;
 
-    public OrderService(IOrderRepository repository)
+    public OrderAutomationWorker(
+        IServiceProvider serviceProvider,
+        ILogger<OrderAutomationWorker> logger)
     {
-        _repository = repository;
+        _serviceProvider = serviceProvider;
+        _logger = logger;
     }
 
-    public async Task<IReadOnlyList<OrderListDto>> GetByUserIdAsync(string userId)
+    protected override async Task ExecuteAsync(
+        CancellationToken stoppingToken)
     {
-        var orders = await _repository.GetByUserIdAsync(userId);
+        using var timer =
+            new PeriodicTimer(
+                TimeSpan.FromSeconds(30));
 
-        return orders
-            .Select(ToListDto)
-            .ToList();
-    }
-
-    public async Task<IReadOnlyList<OrderListDto>> GetAllAsync()
-    {
-        var orders = await _repository.GetAllAsync();
-
-        return orders
-            .Select(ToListDto)
-            .ToList();
-    }
-
-    public async Task<OrderDetailsDto?> GetByIdForUserAsync(
-        int id,
-        string userId)
-    {
-        var order = await _repository.GetByIdForUserAsync(id, userId);
-
-        if (order == null)
-            return null;
-
-        return ToDetailsDto(order);
-    }
-
-    public async Task<OrderDetailsDto?> GetByIdAsync(int id)
-    {
-        var order = await _repository.GetByIdAsync(id);
-
-        if (order == null)
-            return null;
-
-        return ToDetailsDto(order);
-    }
-
-    private static OrderListDto ToListDto(Order order)
-    {
-        return new OrderListDto
+        while (
+            await timer.WaitForNextTickAsync(
+                stoppingToken))
         {
-            Id = order.Id,
-            OrderNumber = order.OrderNumber,
-            UserId = order.UserId,
-            UserEmail = order.UserEmail,
-            Total = order.Total,
-            Status = order.Status,
-            StatusName = order.Status.ToDisplayName(),
-            AutoAdvance = order.AutoAdvance,
-            CreatedAt = order.CreatedAt,
-            UpdatedAt = order.UpdatedAt,
-            StatusChangedAt = order.StatusChangedAt
-        };
-    }
+            try
+            {
+                using var scope =
+                    _serviceProvider.CreateScope();
 
-    private static OrderDetailsDto ToDetailsDto(Order order)
-    {
-        return new OrderDetailsDto
-        {
-            Id = order.Id,
-            OrderNumber = order.OrderNumber,
-            UserId = order.UserId,
-            UserEmail = order.UserEmail,
-            Total = order.Total,
-            Status = order.Status,
-            StatusName = order.Status.ToDisplayName(),
-            AutoAdvance = order.AutoAdvance,
-            CreatedAt = order.CreatedAt,
-            UpdatedAt = order.UpdatedAt,
-            StatusChangedAt = order.StatusChangedAt,
-            Items = DeserializeItems(order.ItemsJson)
-        };
-    }
+                var repository =
+                    scope.ServiceProvider
+                        .GetRequiredService<
+                            IOrderRepository>();
 
-    private static List<AtelieDaTransformacao.Domain.Entities.OrderItemSnapshot>
-        DeserializeItems(string json)
-    {
-        if (string.IsNullOrWhiteSpace(json))
-        {
-            return new List<AtelieDaTransformacao.Domain.Entities.OrderItemSnapshot>();
-        }
+                var hub =
+                    scope.ServiceProvider
+                        .GetRequiredService<
+                            IHubContext<OrderStatusHub>>();
 
-        try
-        {
-            return JsonSerializer.Deserialize<
-                List<AtelieDaTransformacao.Domain.Entities.OrderItemSnapshot>
-            >(json)
-            ?? new List<AtelieDaTransformacao.Domain.Entities.OrderItemSnapshot>();
-        }
-        catch (JsonException)
-        {
-            return new List<AtelieDaTransformacao.Domain.Entities.OrderItemSnapshot>();
+                var orders =
+                    await repository
+                        .GetForAutomationAsync();
+
+                foreach (var order in orders)
+                {
+                    if (
+                        order.Status ==
+                        OrderStatus.Cancelado)
+                    {
+                        continue;
+                    }
+
+                    var next =
+                        order.Status.GetNext();
+
+                    if (!next.HasValue)
+                        continue;
+
+                    var changed =
+                        await repository
+                            .UpdateStatusAsync(
+                                order.Id,
+                                next.Value);
+
+                    if (!changed)
+                        continue;
+
+                    await hub.Clients
+                        .Group(
+                            OrderStatusHub.GroupName(
+                                order.UserId))
+                        .SendAsync(
+                            "StatusUpdated",
+                            new
+                            {
+                                orderId = order.Id,
+                                orderNumber =
+                                    order.OrderNumber,
+                                status =
+                                    (int)next.Value,
+                                statusName =
+                                    next.Value
+                                        .ToDisplayName(),
+                                autoAdvance = true,
+                                updatedAt =
+                                    DateTime.UtcNow
+                                        .ToString("O")
+                            },
+                            stoppingToken);
+                }
+            }
+            catch (
+                OperationCanceledException)
+                when (stoppingToken.IsCancellationRequested)
+            {
+                break;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(
+                    ex,
+                    "Erro na automação dos pedidos.");
+            }
         }
     }
 }

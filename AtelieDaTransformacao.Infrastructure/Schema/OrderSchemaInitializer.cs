@@ -1,6 +1,5 @@
 using System.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using AtelieDaTransformacao.Infrastructure.Context;
 
 namespace AtelieDaTransformacao.Infrastructure.Schema;
@@ -24,6 +23,7 @@ BEGIN
         [UserId] NVARCHAR(450) NOT NULL,
         [UserEmail] NVARCHAR(256) NOT NULL,
         [ItemsJson] NVARCHAR(MAX) NOT NULL,
+        [CheckoutJson] NVARCHAR(MAX) NOT NULL CONSTRAINT [DF_Orders_CheckoutJson] DEFAULT ('{}'),
         [Total] DECIMAL(18,2) NOT NULL,
         [Status] INT NOT NULL,
         [AutoAdvance] BIT NOT NULL CONSTRAINT [DF_Orders_AutoAdvance] DEFAULT (0),
@@ -35,6 +35,13 @@ BEGIN
     CREATE UNIQUE INDEX [IX_Orders_OrderNumber] ON [dbo].[Orders]([OrderNumber]);
     CREATE INDEX [IX_Orders_UserId] ON [dbo].[Orders]([UserId]);
     CREATE INDEX [IX_Orders_Status] ON [dbo].[Orders]([Status]);
+END
+
+IF COL_LENGTH('Orders', 'CheckoutJson') IS NULL
+BEGIN
+    ALTER TABLE [Orders]
+    ADD [CheckoutJson] NVARCHAR(MAX) NOT NULL
+    CONSTRAINT [DF_Orders_CheckoutJson] DEFAULT ('{}');
 END";
 
         await command.ExecuteNonQueryAsync();

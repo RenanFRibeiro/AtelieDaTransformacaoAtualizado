@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-
 using AtelieDaTransformacao.Application.DTOs;
 using AtelieDaTransformacao.Application.Interfaces;
 using AtelieDaTransformacao.Domain.Entities;
@@ -128,5 +127,23 @@ public sealed class OrderService : IOrderService
         if (!string.IsNullOrWhiteSpace(snapshot.PostalCode)) lines.Add($"CEP {snapshot.PostalCode}");
 
         return string.Join(" | ", lines);
+    }
+
+    public async Task<bool> CancelAsync(
+    int id,
+    string userId)
+    {
+        var order =
+            await _repository.GetByIdForUserAsync(
+                id,
+                userId);
+
+        if (order == null)
+            return false;
+
+        if (!order.Status.CanCancel())
+            return false;
+
+        return await _repository.CancelAsync(id);
     }
 }
