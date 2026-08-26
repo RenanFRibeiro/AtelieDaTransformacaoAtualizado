@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using AtelieDaTransformacao.Domain.Entities;
 using AtelieDaTransformacao.Domain.Enums;
 using AtelieDaTransformacao.Infrastructure.Context;
@@ -24,8 +25,22 @@ public sealed class OrdersController : ControllerBase
     public async Task<ActionResult<IReadOnlyList<OrderListItemResponse>>> GetAll(
         CancellationToken ct)
     {
-        var orders = await _db.Orders
-            .AsNoTracking()
+        var query = _db.Orders.AsNoTracking();
+
+        // Administradores podem acompanhar todos os pedidos.
+        // Usuários comuns devem receber somente os pedidos pertencentes
+        // à própria conta autenticada. A filtragem acontece na API.
+        if (!User.IsInRole("Admin"))
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrWhiteSpace(userId))
+                return Unauthorized(new { message = "Usuário autenticado sem identificador." });
+
+            query = query.Where(x => x.UserId == userId);
+        }
+
+        var orders = await query
             .OrderByDescending(x => x.CreatedAt)
             .Select(x => new OrderListItemResponse
             {

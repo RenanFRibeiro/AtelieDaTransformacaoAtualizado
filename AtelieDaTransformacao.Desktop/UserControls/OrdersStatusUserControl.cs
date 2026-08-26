@@ -274,9 +274,11 @@ public sealed partial class OrdersStatusUserControl : UserControl
             _startDatePicker.Value.Date;
 
         var end =
-            _endDatePicker.Value.Date
-                .AddDays(1)
-                .AddTicks(-1);
+            _endDatePicker.Value.Date;
+
+        // A API grava CreatedAt em UTC. O Desktop deve filtrar usando
+        // a data local do usuário, para que pedidos criados perto da
+        // meia-noite não desapareçam do filtro de "Hoje".
 
         var selectedStatus =
             _statusComboBox.SelectedItem?.ToString()
@@ -287,8 +289,10 @@ public sealed partial class OrdersStatusUserControl : UserControl
 
         _filteredItems = _items
             .Where(x =>
-                x.Date >= start &&
-                x.Date <= end)
+            {
+                var localDate = x.Date.ToLocalTime().Date;
+                return localDate >= start && localDate <= end;
+            })
 
             .Where(x =>
                 selectedStatus == "Todos" ||
