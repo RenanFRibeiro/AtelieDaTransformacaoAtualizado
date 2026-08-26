@@ -5,15 +5,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace AtelieDaTransformacao.Infrastructure.Migrations
 {
     [DbContext(typeof(AtelieDaTransformacaoDbContext))]
-    partial class AtelieDaTransformacaoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260826000000_AdicionarDadosCheckoutPedido")]
+    partial class AdicionarDadosCheckoutPedido
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

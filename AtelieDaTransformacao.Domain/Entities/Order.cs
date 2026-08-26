@@ -12,6 +12,13 @@ public sealed class Order
 
     public string UserEmail { get; set; } = string.Empty;
 
+    // Dados informados no checkout
+    public string? CustomerName { get; set; }
+    public string? CustomerPhone { get; set; }
+    public string? ShippingAddress { get; set; }
+    public string? PaymentMethod { get; set; }
+    public string? Notes { get; set; }
+
     public string ItemsJson { get; set; } = "[]";
 
     public decimal Total { get; set; }

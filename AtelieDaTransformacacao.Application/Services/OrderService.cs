@@ -141,6 +141,12 @@ public sealed class OrderService : IOrderService
 
             StatusChangedAt = order.StatusChangedAt,
 
+            CustomerName = order.CustomerName ?? string.Empty,
+            CustomerPhone = order.CustomerPhone,
+            ShippingAddress = order.ShippingAddress ?? string.Empty,
+            PaymentMethod = order.PaymentMethod ?? string.Empty,
+            Notes = order.Notes,
+
             Items = DeserializeItems(order.ItemsJson)
         };
     }

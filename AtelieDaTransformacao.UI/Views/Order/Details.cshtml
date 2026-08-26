@@ -171,6 +171,39 @@
     </div>
 
 
+    <!-- DADOS INFORMADOS NO CHECKOUT -->
+
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body p-4">
+            <h4 class="serif-title fw-bold mb-4">Dados da compra</h4>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="small text-muted">Cliente</div>
+                    <div class="fw-semibold">@(!string.IsNullOrWhiteSpace(Model.CustomerName) ? Model.CustomerName : "Não informado")</div>
+                    <div class="small text-muted mt-2">E-mail</div>
+                    <div>@Model.UserEmail</div>
+                </div>
+                <div class="col-md-6">
+                    <div class="small text-muted">Telefone</div>
+                    <div class="fw-semibold">@(!string.IsNullOrWhiteSpace(Model.CustomerPhone) ? Model.CustomerPhone : "Não informado")</div>
+                    <div class="small text-muted mt-2">Pagamento</div>
+                    <div class="fw-semibold">@(!string.IsNullOrWhiteSpace(Model.PaymentMethod) ? Model.PaymentMethod : "Não informado")</div>
+                </div>
+                <div class="col-12">
+                    <div class="small text-muted">Endereço de entrega</div>
+                    <div class="fw-semibold" style="white-space:pre-line">@(!string.IsNullOrWhiteSpace(Model.ShippingAddress) ? Model.ShippingAddress : "Não informado")</div>
+                </div>
+                @if (!string.IsNullOrWhiteSpace(Model.Notes))
+                {
+                    <div class="col-12">
+                        <div class="small text-muted">Observações</div>
+                        <div style="white-space:pre-line">@Model.Notes</div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
     <!-- PRODUTOS E INFORMAÇÕES -->
 
     <div class="row g-4">
