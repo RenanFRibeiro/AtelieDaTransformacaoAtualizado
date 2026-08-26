@@ -64,7 +64,7 @@ public partial class UsersUserControl : UserControl
 
         try
         {
-            await _service.CreateDesktopAsync(new RegisterRequestDto
+            await _service.CreateDesktopAsync(new CreateDesktopUserRequestDto
             {
                 Email = dialog.Email,
                 Password = dialog.Password,

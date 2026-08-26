@@ -39,7 +39,7 @@ public sealed class UserManagementService : IUserManagementService
         return result;
     }
 
-    public async Task<UserDto?> CreateDesktopUserAsync(RegisterDto dto)
+    public async Task<UserDto?> CreateDesktopUserAsync(DesktopCreateUserDto dto)
     {
         if (dto.Password != dto.ConfirmPassword)
             return null;

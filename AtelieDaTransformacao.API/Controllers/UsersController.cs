@@ -18,7 +18,7 @@ public sealed class UsersController : ControllerBase
     public async Task<ActionResult<IReadOnlyList<UserSummaryDto>>> GetAll() => Ok(await _service.GetAllAsync());
 
     [HttpPost("create-desktop")]
-    public async Task<ActionResult<UserDto>> CreateDesktop(RegisterDto dto)
+    public async Task<ActionResult<UserDto>> CreateDesktop(DesktopCreateUserDto dto)
     {
         try
         {

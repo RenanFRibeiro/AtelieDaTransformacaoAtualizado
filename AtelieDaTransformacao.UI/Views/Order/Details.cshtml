@@ -177,21 +177,25 @@
         <div class="card-body p-4">
             <h4 class="serif-title fw-bold mb-4">Dados da compra</h4>
             <div class="row g-4">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="small text-muted">Cliente</div>
                     <div class="fw-semibold">@(!string.IsNullOrWhiteSpace(Model.CustomerName) ? Model.CustomerName : "Não informado")</div>
-                    <div class="small text-muted mt-2">E-mail</div>
-                    <div>@Model.UserEmail</div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
+                    <div class="small text-muted">E-mail</div>
+                    <div class="fw-semibold">@(!string.IsNullOrWhiteSpace(Model.UserEmail) ? Model.UserEmail : "Não informado")</div>
+                </div>
+                <div class="col-md-4">
                     <div class="small text-muted">Telefone</div>
                     <div class="fw-semibold">@(!string.IsNullOrWhiteSpace(Model.CustomerPhone) ? Model.CustomerPhone : "Não informado")</div>
-                    <div class="small text-muted mt-2">Pagamento</div>
-                    <div class="fw-semibold">@(!string.IsNullOrWhiteSpace(Model.PaymentMethod) ? Model.PaymentMethod : "Não informado")</div>
                 </div>
-                <div class="col-12">
+                <div class="col-md-6">
                     <div class="small text-muted">Endereço de entrega</div>
                     <div class="fw-semibold" style="white-space:pre-line">@(!string.IsNullOrWhiteSpace(Model.ShippingAddress) ? Model.ShippingAddress : "Não informado")</div>
+                </div>
+                <div class="col-md-6">
+                    <div class="small text-muted">Forma de pagamento</div>
+                    <div class="fw-semibold">@(!string.IsNullOrWhiteSpace(Model.PaymentMethod) ? Model.PaymentMethod : "Não informado")</div>
                 </div>
                 @if (!string.IsNullOrWhiteSpace(Model.Notes))
                 {
@@ -299,39 +303,51 @@
 
                 <div class="card-body p-4">
 
-                    <h4 class="serif-title fw-bold mb-4">
+                    <h4 class="serif-title fw-bold mb-3">
+
+                        <i class="bi bi-geo-alt me-2 text-gold"></i>
 
                         Entrega
 
                     </h4>
 
+                    <div class="small text-muted mb-1">
+                        Endereço de entrega
+                    </div>
 
-                    <p class="mb-1 fw-semibold">
+                    @if (!string.IsNullOrWhiteSpace(Model.ShippingAddress))
+                    {
+                        <div class="fw-semibold" style="white-space:pre-line">
+                            @Model.ShippingAddress
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-muted">
+                            Endereço não informado
+                        </div>
+                    }
 
-                        @Model.CustomerName
-
-                    </p>
-
+                    @if (!string.IsNullOrWhiteSpace(Model.CustomerName))
+                    {
+                        <div class="small text-muted mt-3 mb-1">
+                            Recebedor
+                        </div>
+                        <div class="fw-semibold">
+                            @Model.CustomerName
+                        </div>
+                    }
 
                     @if (!string.IsNullOrWhiteSpace(Model.CustomerPhone))
                     {
-                        <p class="small text-muted mb-2">
-
+                        <div class="small text-muted mt-3 mb-1">
+                            Telefone
+                        </div>
+                        <div class="fw-semibold">
                             <i class="bi bi-telephone me-1"></i>
-
                             @Model.CustomerPhone
-
-                        </p>
+                        </div>
                     }
-
-
-                    <p class="small text-muted mb-0">
-
-                        <i class="bi bi-geo-alt me-1"></i>
-
-                        @Model.ShippingAddress
-
-                    </p>
 
                 </div>
 
@@ -344,35 +360,40 @@
 
                 <div class="card-body p-4">
 
-                    <h5 class="fw-bold">
+                    <h4 class="serif-title fw-bold mb-3">
+
+                        <i class="bi bi-credit-card me-2 text-gold"></i>
 
                         Pagamento
 
-                    </h5>
+                    </h4>
 
+                    <div class="small text-muted mb-1">
+                        Método escolhido
+                    </div>
 
-                    <p class="text-muted mb-3">
-
-                        <i class="bi bi-credit-card me-1"></i>
-
-                        @Model.PaymentMethod
-
-                    </p>
-
+                    @if (!string.IsNullOrWhiteSpace(Model.PaymentMethod))
+                    {
+                        <div class="fw-bold fs-5">
+                            @Model.PaymentMethod
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-muted">
+                            Forma de pagamento não informada
+                        </div>
+                    }
 
                     @if (!string.IsNullOrWhiteSpace(Model.Notes))
                     {
-                        <h5 class="fw-bold">
-
+                        <div class="small text-muted mt-3 mb-1">
                             Observações
+                        </div>
 
-                        </h5>
-
-                        <p class="text-muted mb-0">
-
+                        <div style="white-space:pre-line">
                             @Model.Notes
-
-                        </p>
+                        </div>
                     }
 
                 </div>

@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace AtelieDaTransformacao.Application.DTOs;
 
@@ -81,6 +81,18 @@ public sealed class RegisterDto
     [Required(ErrorMessage = "Confirme sua senha.")]
     [Compare(nameof(Password), ErrorMessage = "As senhas não coincidem.")]
     [Display(Name = "Confirmar senha")]
+    public string ConfirmPassword { get; set; } = string.Empty;
+}
+
+public sealed class DesktopCreateUserDto
+{
+    [Required, EmailAddress]
+    public string Email { get; set; } = string.Empty;
+
+    [Required, MinLength(6)]
+    public string Password { get; set; } = string.Empty;
+
+    [Required, Compare(nameof(Password))]
     public string ConfirmPassword { get; set; } = string.Empty;
 }
 
