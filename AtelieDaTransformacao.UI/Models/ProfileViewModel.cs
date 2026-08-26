@@ -55,12 +55,6 @@ public sealed class ProfileViewModel
     [RegularExpression("^\\d{5}-?\\d{3}$", ErrorMessage = "Informe um CEP válido.")]
     [Display(Name = "CEP")]
     public string PostalCode { get; set; } = string.Empty;
-
-    [Required(ErrorMessage = "Informe seu e-mail.")]
-    [EmailAddress(ErrorMessage = "Informe um e-mail válido.")]
-    [StringLength(180)]
-    [Display(Name = "E-mail")]
-    public string Email { get; set; } = string.Empty;
 }
 
 

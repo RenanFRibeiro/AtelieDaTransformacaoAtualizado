@@ -183,7 +183,6 @@ public class AccountController : Controller
             City = claims.FirstOrDefault(c => c.Type == ClaimTypes.Locality)?.Value ?? string.Empty,
             State = claims.FirstOrDefault(c => c.Type == ClaimTypes.StateOrProvince)?.Value ?? string.Empty,
             PostalCode = claims.FirstOrDefault(c => c.Type == ClaimTypes.PostalCode)?.Value ?? string.Empty,
-            Email = user.Email ?? string.Empty
         };
 
         return View(model);
@@ -213,34 +212,6 @@ public class AccountController : Controller
         model.City = model.City.Trim();
         model.State = model.State.Trim().ToUpperInvariant();
         model.PostalCode = model.PostalCode.Trim();
-        model.Email = model.Email.Trim().ToLowerInvariant();
-
-        var currentEmail = user.Email ?? string.Empty;
-        if (!string.Equals(currentEmail, model.Email, StringComparison.OrdinalIgnoreCase))
-        {
-            var existing = await _userManager.FindByEmailAsync(model.Email);
-            if (existing != null && existing.Id != user.Id)
-            {
-                ModelState.AddModelError(nameof(model.Email), "Já existe uma conta com este e-mail.");
-                return View(model);
-            }
-
-            var emailResult = await _userManager.SetEmailAsync(user, model.Email);
-            if (!emailResult.Succeeded)
-            {
-                foreach (var error in emailResult.Errors)
-                    ModelState.AddModelError(nameof(model.Email), FriendlyIdentityError(error));
-                return View(model);
-            }
-
-            var usernameResult = await _userManager.SetUserNameAsync(user, model.Email);
-            if (!usernameResult.Succeeded)
-            {
-                foreach (var error in usernameResult.Errors)
-                    ModelState.AddModelError(nameof(model.Email), FriendlyIdentityError(error));
-                return View(model);
-            }
-        }
 
         user.PhoneNumber = model.Phone;
         var updateResult = await _userManager.UpdateAsync(user);
