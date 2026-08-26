@@ -9,7 +9,7 @@ namespace AtelieDaTransformacao.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Roles = "Admin")]
+[Authorize]
 public sealed class OrdersController : ControllerBase
 {
     private readonly AtelieDaTransformacaoDbContext _db;
@@ -51,6 +51,7 @@ public sealed class OrdersController : ControllerBase
     }
 
     [HttpPut("{id:int}/status")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<OrderListItemResponse>> UpdateStatus(
         int id,
         UpdateOrderStatusRequest request,

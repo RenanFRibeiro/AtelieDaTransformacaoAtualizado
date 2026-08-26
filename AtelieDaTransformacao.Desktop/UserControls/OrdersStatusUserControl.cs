@@ -4,6 +4,7 @@ using System.Text;
 using AtelieDaTransformacao.Desktop.DTOs;
 using AtelieDaTransformacao.Desktop.Forms;
 using AtelieDaTransformacao.Desktop.Services;
+using AtelieDaTransformacao.Desktop.Helpers;
 
 namespace AtelieDaTransformacao.Desktop.UserControls;
 
@@ -36,6 +37,13 @@ public sealed partial class OrdersStatusUserControl : UserControl
 
         ConfigureEvents();
         ConfigureFilters();
+
+        // Usuários comuns podem consultar os pedidos, mas somente administradores
+        // podem alterar o status.
+        _statusColumn.ReadOnly = !SessionManager.IsAdmin;
+        _statusColumn.DefaultCellStyle.BackColor = !SessionManager.IsAdmin
+            ? Color.FromArgb(235, 235, 235)
+            : Color.White;
 
         Load += OrdersStatusUserControl_Load;
     }
