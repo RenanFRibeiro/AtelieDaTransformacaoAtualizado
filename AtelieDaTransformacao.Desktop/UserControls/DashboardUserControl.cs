@@ -1,5 +1,6 @@
 using System.Globalization;
 using AtelieDaTransformacao.Desktop.DTOs;
+using AtelieDaTransformacao.Desktop.Helpers;
 using AtelieDaTransformacao.Desktop.Services;
 
 namespace AtelieDaTransformacao.Desktop.UserControls;
@@ -27,9 +28,26 @@ public partial class DashboardUserControl : UserControl
         {
             _statusLabel.Text = "Atualizando dados...";
 
-            var products = await _products.GetAllAsync() ?? new List<ProductDto>();
-            var categories = await _categories.GetAllAsync() ?? new List<CategoryDto>();
-            var users = await _users.GetAllAsync() ?? new List<UserSummaryDto>();
+            // Produtos e categorias podem ser consultados por qualquer usuário
+            // autenticado no Desktop. O token da sessão é enviado automaticamente
+            // pelo HttpClientHelper.
+            var productsTask = _products.GetAllAsync();
+            var categoriesTask = _categories.GetAllAsync();
+
+            await Task.WhenAll(productsTask, categoriesTask);
+
+            var products = await productsTask ?? new List<ProductDto>();
+            var categories = await categoriesTask ?? new List<CategoryDto>();
+
+            // O endpoint de usuários é restrito a administradores.
+            // Portanto, um usuário comum não pode fazer essa chamada, pois um 403
+            // interromperia o carregamento inteiro do Dashboard.
+            var activeUsersCount = 0;
+            if (SessionManager.IsAdmin)
+            {
+                var users = await _users.GetAllAsync() ?? new List<UserSummaryDto>();
+                activeUsersCount = users.Count(x => x.IsActive);
+            }
 
             // Produtos = quantidade de produtos cadastrados.
             // Estoque = soma das unidades disponíveis em todos os produtos.
@@ -37,7 +55,6 @@ public partial class DashboardUserControl : UserControl
             var productsCount = products.Count;
             var stockCount = products.Sum(x => x.StockQuantity);
             var categoriesCount = categories.Count;
-            var activeUsersCount = users.Count(x => x.IsActive);
 
             cardGamesLblNumero.Text = productsCount.ToString("N0");
             label2.Text = stockCount.ToString("N0");
@@ -70,8 +87,7 @@ public partial class DashboardUserControl : UserControl
         }
     }
 
-
-private void CardsPanel_Resize(object? sender, EventArgs e)
+    private void CardsPanel_Resize(object? sender, EventArgs e)
     {
         CenterSummaryCards();
     }
