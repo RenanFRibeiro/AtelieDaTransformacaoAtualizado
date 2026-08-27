@@ -10,27 +10,27 @@ public sealed class Order
 
     public string UserId { get; set; } = string.Empty;
 
-    public string UserEmail { get; set; } = string.Empty;
+    public string? UserEmail { get; set; }
 
     // Compatibilidade com bancos existentes que ainda possuem os campos
     // obrigatórios do checkout como colunas da tabela Orders.
-    public string CustomerName { get; set; } = string.Empty;
+    public string? CustomerName { get; set; }
 
-    public string CustomerEmail { get; set; } = string.Empty;
+    public string? CustomerEmail { get; set; }
 
-    public string CustomerPhone { get; set; } = string.Empty;
+    public string? CustomerPhone { get; set; }
 
-    public string ShippingAddress { get; set; } = string.Empty;
+    public string? ShippingAddress { get; set; }
 
-    public string PaymentMethod { get; set; } = string.Empty;
+    public string? PaymentMethod { get; set; }
 
-    public string Notes { get; set; } = string.Empty;
+    public string? Notes { get; set; }
 
-    public string ItemsJson { get; set; } = "[]";
+    public string? ItemsJson { get; set; } = "[]";
 
     // Snapshot dos dados informados no checkout. Mantém histórico sem depender
     // das informações que o cliente possa alterar futuramente no Identity.
-    public string CheckoutJson { get; set; } = "{}";
+    public string? CheckoutJson { get; set; } = "{}";
 
     public decimal Total { get; set; }
 

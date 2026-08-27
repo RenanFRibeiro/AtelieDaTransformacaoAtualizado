@@ -29,27 +29,27 @@ public sealed class OrderConfiguration
         // Mapeia as colunas de checkout mantidas em bancos já existentes.
         builder.Property(x => x.CustomerName)
             .HasMaxLength(150)
-            .IsRequired();
+            .IsRequired(false);
 
         builder.Property(x => x.CustomerEmail)
             .HasMaxLength(256)
-            .IsRequired();
+            .IsRequired(false);
 
         builder.Property(x => x.CustomerPhone)
             .HasMaxLength(30)
-            .IsRequired();
+            .IsRequired(false);
 
         builder.Property(x => x.ShippingAddress)
             .HasMaxLength(500)
-            .IsRequired();
+            .IsRequired(false);
 
         builder.Property(x => x.PaymentMethod)
             .HasMaxLength(100)
-            .IsRequired();
+            .IsRequired(false);
 
         builder.Property(x => x.Notes)
             .HasMaxLength(1000)
-            .IsRequired();
+            .IsRequired(false);
 
         builder.Property(x => x.ItemsJson)
             .HasColumnType("nvarchar(max)")
