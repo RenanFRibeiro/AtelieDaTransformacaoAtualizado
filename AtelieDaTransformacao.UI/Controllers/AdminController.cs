@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using AtelieDaTransformacao.Application.DTOs;
 using AtelieDaTransformacao.Application.Interfaces;
@@ -14,20 +17,22 @@ public class AdminController : Controller
 {
     private readonly IProductService _productService;
     private readonly IProductCategoryService _categoryService;
+    private readonly IWebHostEnvironment _webHostEnvironment;
 
     public AdminController(
         IProductService productService,
-        IProductCategoryService categoryService)
+        IProductCategoryService categoryService,
+        IWebHostEnvironment webHostEnvironment)
     {
         _productService = productService;
         _categoryService = categoryService;
+        _webHostEnvironment = webHostEnvironment; // Injetado para pegar o caminho do wwwroot
     }
 
     [HttpGet]
     public async Task<IActionResult> Index()
     {
         var products = await _productService.GetAllAsync();
-
         return View(products);
     }
 
@@ -49,53 +54,64 @@ public class AdminController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> CreateProduct(
-    ProductFormViewModel model)
+    public async Task<IActionResult> CreateProduct(ProductFormViewModel model, IFormFile? uploadImage)
     {
         if (!ModelState.IsValid)
         {
-            model.Categories =
-                await _categoryService.GetAllAsync();
-
+            model.Categories = await _categoryService.GetAllAsync();
             return View(model);
         }
 
         try
         {
+            // Pega a URL de cobertura se foi preenchida
+            string finalImage = string.IsNullOrWhiteSpace(model.Image)
+                ? model.CoverImageUrl
+                : model.Image;
+
+            // Se o usuário também anexou um arquivo, salvamos e sobreescrevemos o caminho
+            if (uploadImage != null && uploadImage.Length > 0)
+            {
+                var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads");
+
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                // Cria um nome único usando Guid para evitar duplicidades
+                var uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(uploadImage.FileName);
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await uploadImage.CopyToAsync(fileStream);
+                }
+
+                // Define que o caminho persistido no banco será a rota interna da imagem
+                finalImage = "/uploads/" + uniqueFileName;
+            }
+
             var product = new CreateProductDto
             {
                 Title = model.Title,
                 Description = model.Description,
                 Price = model.Price,
-
-                Image = string.IsNullOrWhiteSpace(model.Image)
-                    ? model.CoverImageUrl
-                    : model.Image,
-
+                Image = finalImage, // Salva URL ou a imagem importada
                 CategoryId = model.CategoryId,
                 IsFeatured = model.IsFeatured,
-
-                StockQuantity = model.IsAvailable
-                    ? model.StockQuantity
-                    : 0
+                StockQuantity = model.IsAvailable ? model.StockQuantity : 0
             };
 
             await _productService.AddAsync(product);
 
-            TempData["SuccessMessage"] =
-                "Peça cadastrada com sucesso!";
-
+            TempData["SuccessMessage"] = "Peça cadastrada com sucesso!";
             return RedirectToAction(nameof(Index));
         }
         catch (Exception ex)
         {
-            ModelState.AddModelError(
-                string.Empty,
-                ex.Message);
-
-            model.Categories =
-                await _categoryService.GetAllAsync();
-
+            ModelState.AddModelError(string.Empty, ex.Message);
+            model.Categories = await _categoryService.GetAllAsync();
             return View(model);
         }
     }
@@ -103,14 +119,12 @@ public class AdminController : Controller
     [HttpGet]
     public async Task<IActionResult> EditProduct(int id)
     {
-        var product =
-            await _productService.GetByIdAsync(id);
+        var product = await _productService.GetByIdAsync(id);
 
         if (product == null)
             return NotFound();
 
-        var categories =
-            await _categoryService.GetAllAsync();
+        var categories = await _categoryService.GetAllAsync();
 
         var viewModel = new ProductFormViewModel
         {
@@ -124,48 +138,10 @@ public class AdminController : Controller
             IsFeatured = product.IsFeatured,
             IsAvailable = product.IsAvailable,
             StockQuantity = product.StockQuantity,
-            Categories =
-                categories ??
-                new List<ProductCategoryDto>()
+            Categories = categories ?? new List<ProductCategoryDto>()
         };
 
         return View(viewModel);
-    }
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> EditProducts(ProductFormViewModel model)
-    {
-        if (!ModelState.IsValid)
-        {
-            model.Categories = await _categoryService.GetAllAsync();
-            return View(model);
-        }
-
-        try
-        {
-            var dto = new UpdateProductDto
-            {
-                Title = model.Title,
-                Description = model.Description,
-                Price = model.Price,
-                Image = string.IsNullOrWhiteSpace(model.Image) ? model.CoverImageUrl : model.Image,
-                CategoryId = model.CategoryId,
-                IsFeatured = model.IsFeatured,
-                StockQuantity = model.IsAvailable ? model.StockQuantity : 0
-            };
-
-            await _productService.UpdateAsync(model.Id, dto);
-
-            TempData["SuccessMessage"] = "Peça atualizada com sucesso!";
-            return RedirectToAction(nameof(Index));
-        }
-        catch (Exception ex)
-        {
-            ModelState.AddModelError(string.Empty, ex.Message);
-            model.Categories = await _categoryService.GetAllAsync();
-            return View(model);
-        }
     }
 
     [HttpPost]
@@ -204,17 +180,17 @@ public class AdminController : Controller
         }
     }
 
+    // Nota: Removi o "EditProducts" que estava duplicado na versão anterior, deixando apenas "EditProduct" que é o correto!
+
     [HttpGet]
     public IActionResult CreateCategory()
     {
-        return View(
-            new CreateProductCategoryDto());
+        return View(new CreateProductCategoryDto());
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> CreateCategory(
-        CreateProductCategoryDto model)
+    public async Task<IActionResult> CreateCategory(CreateProductCategoryDto model)
     {
         if (!ModelState.IsValid)
             return View(model);
@@ -223,18 +199,12 @@ public class AdminController : Controller
         {
             await _categoryService.AddAsync(model);
 
-            TempData["SuccessMessage"] =
-                "Categoria criada com sucesso!";
-
-            return RedirectToAction(
-                nameof(Categories));
+            TempData["SuccessMessage"] = "Categoria criada com sucesso!";
+            return RedirectToAction(nameof(Categories));
         }
         catch (Exception ex)
         {
-            ModelState.AddModelError(
-                string.Empty,
-                ex.Message);
-
+            ModelState.AddModelError(string.Empty, ex.Message);
             return View(model);
         }
     }
@@ -242,41 +212,33 @@ public class AdminController : Controller
     [HttpGet]
     public async Task<IActionResult> Categories()
     {
-        var categories =
-            await _categoryService.GetAllAsync();
-
+        var categories = await _categoryService.GetAllAsync();
         return View(categories);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteCategory(
-        int id)
+    public async Task<IActionResult> DeleteCategory(int id)
     {
         try
         {
-            var deleted =
-                await _categoryService.DeleteAsync(id);
+            var deleted = await _categoryService.DeleteAsync(id);
 
             if (!deleted)
             {
-                TempData["ErrorMessage"] =
-                    "Categoria não encontrada.";
+                TempData["ErrorMessage"] = "Categoria não encontrada.";
             }
             else
             {
-                TempData["SuccessMessage"] =
-                    "Categoria removida com sucesso!";
+                TempData["SuccessMessage"] = "Categoria removida com sucesso!";
             }
         }
         catch
         {
-            TempData["ErrorMessage"] =
-                "Não é possível apagar esta categoria porque existem produtos associados a ela.";
+            TempData["ErrorMessage"] = "Não é possível apagar esta categoria porque existem produtos associados a ela.";
         }
 
-        return RedirectToAction(
-            nameof(Categories));
+        return RedirectToAction(nameof(Categories));
     }
 
     [HttpPost]
@@ -289,23 +251,18 @@ public class AdminController : Controller
 
             if (!deleted)
             {
-                TempData["ErrorMessage"] =
-                    "Peça não encontrada.";
+                TempData["ErrorMessage"] = "Peça não encontrada.";
             }
             else
             {
-                TempData["SuccessMessage"] =
-                    "Peça removida com sucesso!";
+                TempData["SuccessMessage"] = "Peça removida com sucesso!";
             }
         }
         catch (Exception)
         {
-            TempData["ErrorMessage"] =
-                "Não foi possível remover esta peça.";
+            TempData["ErrorMessage"] = "Não foi possível remover esta peça.";
         }
 
         return RedirectToAction(nameof(Index));
     }
-
-
 }

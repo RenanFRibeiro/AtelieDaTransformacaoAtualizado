@@ -9,9 +9,18 @@
         <div class="mb-4">
             <h3 class="fw-bold text-dark mb-1">Atualizar Especificações</h3>
             <p class="text-muted small">Modifique as propriedades estruturais ou o valor comercial da obra.</p>
+
+            @if (!string.IsNullOrEmpty(Model.CoverImageUrl))
+            {
+                <div class="mt-3">
+                    <p class="small text-muted mb-1 text-uppercase fw-semibold">Imagem Atual:</p>
+                    <img src="@Model.CoverImageUrl" alt="Imagem atual do produto" class="img-thumbnail" style="max-height: 120px;" />
+                </div>
+            }
         </div>
 
-        <form asp-action="EditProduct" method="post">
+        <!-- Adicionado enctype="multipart/form-data" -->
+        <form asp-action="EditProduct" method="post" enctype="multipart/form-data">
             @Html.AntiForgeryToken()
             <input type="hidden" asp-for="Id" />
             <div asp-validation-summary="ModelOnly" class="text-danger small mb-4"></div>
@@ -36,10 +45,19 @@
                 </div>
             </div>
 
-            <div class="mb-4">
-                <label asp-for="CoverImageUrl" class="form-label fw-semibold text-secondary small text-uppercase">URL da Imagem</label>
-                <input asp-for="CoverImageUrl" class="form-control rounded-3" required />
-                <span asp-validation-for="CoverImageUrl" class="text-danger small"></span>
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <label asp-for="UploadImage" class="form-label fw-semibold text-secondary small text-uppercase">Substituir Imagem (Upload)</label>
+                    <input asp-for="UploadImage" type="file" class="form-control rounded-3" accept="image/*" />
+                    <span asp-validation-for="UploadImage" class="text-danger small"></span>
+                    <small class="text-muted d-block mt-1">Gere um novo upload ou modifique o link ao lado.</small>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="CoverImageUrl" class="form-label fw-semibold text-secondary small text-uppercase">URL da Imagem</label>
+                    <!-- Removermos o required para permitir apenas o Upload -->
+                    <input asp-for="CoverImageUrl" class="form-control rounded-3" />
+                    <span asp-validation-for="CoverImageUrl" class="text-danger small"></span>
+                </div>
             </div>
 
             <div class="mb-4">

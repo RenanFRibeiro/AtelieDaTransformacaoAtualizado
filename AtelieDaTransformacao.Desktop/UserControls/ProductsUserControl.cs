@@ -853,13 +853,14 @@ public partial class ProductsUserControl : UserControl
     // ================================================================
 
     private async Task EditAsync(
-        ProductDto? item)
+    ProductDto? item)
     {
-        if (!SessionManager.IsAdmin)
+        // Alterado de !SessionManager.IsAdmin para PodeGerenciarProdutos
+        if (!SessionManager.PodeGerenciarProdutos)
         {
             MessageBox.Show(
                 this,
-                "Somente administradores podem alterar produtos.",
+                "Você não tem permissão para alterar ou criar produtos.",
                 "Permissão",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information);

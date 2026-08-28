@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AtelieDaTransformacao.Application.DTOs;
+using Microsoft.AspNetCore.Http;
 
 namespace AtelieDaTransformacao.Application.ViewModels
 {
@@ -35,16 +36,18 @@ namespace AtelieDaTransformacao.Application.ViewModels
         public int ReleaseYear { get; set; }
 
         // 🛠️ RESTAURADO: Mantido para corrigir os erros de imagem no formulário
-        public string CoverImageUrl { get; set; } = string.Empty;
+        public string? CoverImageUrl { get; set; } = string.Empty;
 
         // 🛠️ ADICIONADO: Campo necessário para o mapeamento da imagem real do produto
-        public string Image { get; set; } = string.Empty;
+        public string? Image { get; set; } = string.Empty;
 
         public int CategoryId { get; set; }
 
         public bool IsFeatured { get; set; }
 
         public bool IsAvailable { get; set; }
+
+        public IFormFile? UploadImage { get; set; }
 
         // 🛠️ RESTAURADO: Controla a quantidade física no painel
         public int StockQuantity { get; set; }
