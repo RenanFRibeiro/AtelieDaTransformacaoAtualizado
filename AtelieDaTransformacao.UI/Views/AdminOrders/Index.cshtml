@@ -33,7 +33,7 @@
                     <th>Total</th>
                     <th>Status</th>
                     <th>Automação</th>
-                    <th class="text-end pe-4">Ações</th>
+                    <th class="text-center">Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -77,20 +77,6 @@
                                 </button>
                             </form>
                         </td>
-                        <td class="text-end pe-4">
-                            <div class="d-inline-flex gap-2">
-                                @if (order.Status != OrderStatus.Entregue)
-                                {
-                                    <form asp-action="Advance" method="post">
-                                        @Html.AntiForgeryToken()
-                                        <input type="hidden" name="id" value="@order.Id" />
-                                        <button class="btn btn-sm btn-outline-primary rounded-pill">Avançar</button>
-                                    </form>
-                                }
-                                <a asp-controller="Order" asp-action="Details" asp-route-id="@order.Id" target="_blank" class="btn btn-sm btn-outline-dark rounded-pill">Abrir</a>
-                            </div>
-                        </td>
-
                         <td class="text-end pe-4">
 
                             <div class="d-inline-flex flex-wrap gap-2">

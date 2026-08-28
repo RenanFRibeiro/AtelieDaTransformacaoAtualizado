@@ -91,38 +91,6 @@
 
     </div>
 }
-else if (Model.Status.CanCancel())
-{
-    <form asp-action="Cancel"
-          method="post"
-          class="mb-4"
-          onsubmit="return confirm('Tem certeza que deseja cancelar este pedido? O estoque será devolvido.');">
-
-        @Html.AntiForgeryToken()
-
-        <input type="hidden"
-               name="id"
-               value="@Model.Id" />
-
-        <button type="submit"
-                class="btn btn-outline-danger rounded-pill">
-
-            <i class="bi bi-x-circle me-1"></i>
-
-            Cancelar pedido
-
-        </button>
-
-        <div class="small text-muted mt-2">
-
-            O cancelamento está disponível enquanto
-            o pedido não tiver sido enviado ou entregue.
-
-        </div>
-
-    </form>
-}
-
 
                 <div id="statusIcon"
                      class="rounded-circle bg-light p-3 fs-3 text-gold">
@@ -405,7 +373,7 @@ else if (Model.Status.CanCancel())
 
     .order-timeline {
         display: grid;
-        grid-template-columns: repeat(7, 1fr);
+        grid-template-columns: repeat(8, 1fr);
         gap: 4px;
         position: relative;
     }

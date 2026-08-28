@@ -201,14 +201,25 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             // 1. Marcar link ativo na navegação baseado na URL atual
-            const currentUrl = window.location.pathname.toLowerCase();
+            const currentPath = window.location.pathname.toLowerCase().replace(/\/$/, '');
             const navLinks = document.querySelectorAll('.nav-link');
 
             navLinks.forEach(link => {
                 const href = link.getAttribute('href');
-                if (href && currentUrl.includes(href.toLowerCase()) && href !== "/") {
-                    link.classList.add('active');
-                }
+                if (!href || href === "/") return;
+
+                const linkPath = new URL(href, window.location.origin).pathname
+                    .toLowerCase()
+                    .replace(/\/$/, '');
+
+                // Cada item fica ativo somente quando pertence à rota atual.
+                // Evita, por exemplo, que /adminorders também marque /admin (Dashboard).
+                const isActive =
+                    (linkPath === '/admin' && currentPath === '/admin') ||
+                    (linkPath === '/adminorders' && currentPath.startsWith('/adminorders')) ||
+                    (linkPath !== '/admin' && linkPath !== '/adminorders' && currentPath === linkPath);
+
+                link.classList.toggle('active', isActive);
             });
 
             // 2. Feedback visual nos inputs de formulário (.form-active)
