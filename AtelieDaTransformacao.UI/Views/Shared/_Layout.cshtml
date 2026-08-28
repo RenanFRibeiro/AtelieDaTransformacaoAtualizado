@@ -109,10 +109,6 @@
 
     @if (ViewContext.RouteData.Values["controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["action"]?.ToString() == "Index")
     {
-        <!-- Na home inteira, talvez não precise do Spacer comum,
-             pois o Carousel pode encaixar logo abaixo, ou ajuste a margem via classe personalizada -->
-        <div class="navbar-fixed-spacer" aria-hidden="true" style="min-height: 76px;"></div>
-
         @await Component.InvokeAsync("Carousel")
         <div id="galeria-ancora"></div>
     }
