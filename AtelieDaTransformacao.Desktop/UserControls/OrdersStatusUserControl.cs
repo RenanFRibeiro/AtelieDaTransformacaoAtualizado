@@ -140,7 +140,8 @@ public sealed partial class OrdersStatusUserControl : UserControl
                 "Separação",
                 "Faturado",
                 "Enviado",
-                "Entregue"
+                "Entregue",
+                "Cancelado"
             });
 
         _statusComboBox.SelectedIndex = 0;
@@ -990,6 +991,9 @@ public sealed partial class OrdersStatusUserControl : UserControl
             "Entregue" =>
                 OrderStatus.Delivered,
 
+            "Cancelado" =>
+                OrderStatus.Cancelado,
+
             _ =>
                 OrderStatus.Created
         };
@@ -1001,7 +1005,8 @@ public sealed partial class OrdersStatusUserControl : UserControl
             "Separação" or
             "Faturado" or
             "Enviado" or
-            "Entregue";
+            "Entregue" or
+            "Cancelado";
     }
 
     private static string GetStatusText(
@@ -1029,6 +1034,9 @@ public sealed partial class OrdersStatusUserControl : UserControl
 
             OrderStatus.Delivered =>
                 "Entregue",
+
+            OrderStatus.Cancelado =>
+                "Cancelado",
 
             _ =>
                 status.ToString()

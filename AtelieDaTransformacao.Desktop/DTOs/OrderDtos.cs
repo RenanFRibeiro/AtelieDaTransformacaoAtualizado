@@ -3,7 +3,7 @@ namespace AtelieDaTransformacao.Desktop.DTOs;
 /// <summary>
 /// Status usados pela interface desktop para representar o mesmo fluxo
 /// existente no domínio: Criado -> Pendente -> Aprovado -> Separação ->
-/// Faturado -> Enviado -> Entregue.
+/// Faturado -> Enviado -> Entregue -> Cancelado.
 /// </summary>
 public enum OrderStatus
 {
@@ -13,7 +13,8 @@ public enum OrderStatus
     Separation = 3,
     Invoiced = 4,
     Shipped = 5,
-    Delivered = 6
+    Delivered = 6,
+    Cancelado = 7
 }
 
 /// <summary>

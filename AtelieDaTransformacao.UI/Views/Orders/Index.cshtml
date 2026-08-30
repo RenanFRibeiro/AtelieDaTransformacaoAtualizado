@@ -101,9 +101,7 @@
                                     </strong>
 
                                     <small class="text-muted d-block mt-1">
-                                        @order.CreatedAt
-                                        .ToLocalTime()
-                                        .ToString("dd/MM/yyyy HH:mm")
+                                        @order.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")
                                     </small>
 
                                 </div>

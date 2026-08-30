@@ -22,6 +22,7 @@ partial class OrdersStatusUserControl
     private Panel _stepInvoicedPanel = null!;
     private Panel _stepShippedPanel = null!;
     private Panel _stepDeliveredPanel = null!;
+    private Panel _stepCanceledPanel = null!;
 
     private Label _stepCreatedIcon = null!;
     private Label _stepPendingIcon = null!;
@@ -30,6 +31,7 @@ partial class OrdersStatusUserControl
     private Label _stepInvoicedIcon = null!;
     private Label _stepShippedIcon = null!;
     private Label _stepDeliveredIcon = null!;
+    private Label _stepCanceledIcon = null!;
 
     private Label _stepCreatedName = null!;
     private Label _stepPendingName = null!;
@@ -38,6 +40,7 @@ partial class OrdersStatusUserControl
     private Label _stepInvoicedName = null!;
     private Label _stepShippedName = null!;
     private Label _stepDeliveredName = null!;
+    private Label _stepCanceledName = null!;
 
     private Label _stepCreatedDescription = null!;
     private Label _stepPendingDescription = null!;
@@ -46,6 +49,7 @@ partial class OrdersStatusUserControl
     private Label _stepInvoicedDescription = null!;
     private Label _stepShippedDescription = null!;
     private Label _stepDeliveredDescription = null!;
+    private Label _stepCanceledDescription = null!;
 
     private Label _connector1 = null!;
     private Label _connector2 = null!;
@@ -53,6 +57,7 @@ partial class OrdersStatusUserControl
     private Label _connector4 = null!;
     private Label _connector5 = null!;
     private Label _connector6 = null!;
+    private Label _connector7 = null!;
 
     private Guna2Panel _filterCard = null!;
     private FlowLayoutPanel _filterFlowPanel = null!;
@@ -210,6 +215,11 @@ partial class OrdersStatusUserControl
         _stepDeliveredDescription = new Label();
         _stepDeliveredName = new Label();
         _stepDeliveredIcon = new Label();
+        _connector7 = new Label();
+        _stepCanceledPanel = new Panel();
+        _stepCanceledDescription = new Label();
+        _stepCanceledName = new Label();
+        _stepCanceledIcon = new Label();
         _headingPanel = new Panel();
         _refreshButton = new Guna2Button();
         _subtitleLabel = new Label();
@@ -237,6 +247,7 @@ partial class OrdersStatusUserControl
         _stepInvoicedPanel.SuspendLayout();
         _stepShippedPanel.SuspendLayout();
         _stepDeliveredPanel.SuspendLayout();
+        _stepCanceledPanel.SuspendLayout();
         _headingPanel.SuspendLayout();
         SuspendLayout();
         // 
@@ -375,7 +386,7 @@ partial class OrdersStatusUserControl
         _statusColumn.FlatStyle = FlatStyle.Flat;
         _statusColumn.Frozen = true;
         _statusColumn.HeaderText = "Status";
-        _statusColumn.Items.AddRange(new object[] { "Criado", "Pendente", "Aprovado", "Separação", "Faturado", "Enviado", "Entregue" });
+        _statusColumn.Items.AddRange(new object[] { "Criado", "Pendente", "Aprovado", "Separação", "Faturado", "Enviado", "Entregue", "Cancelado" });
         _statusColumn.MinimumWidth = 96;
         _statusColumn.Name = "_statusColumn";
         _statusColumn.Width = 182;
@@ -656,7 +667,7 @@ partial class OrdersStatusUserControl
         _statusFilterPanel.Location = new Point(244, 0);
         _statusFilterPanel.Margin = new Padding(0, 0, 4, 0);
         _statusFilterPanel.Name = "_statusFilterPanel";
-        _statusFilterPanel.Size = new Size(119, 62);
+        _statusFilterPanel.Size = new Size(133, 62);
         _statusFilterPanel.TabIndex = 2;
         // 
         // _statusComboBox
@@ -673,7 +684,7 @@ partial class OrdersStatusUserControl
         _statusComboBox.ForeColor = Color.White;
         _statusComboBox.ItemHeight = 30;
         _statusComboBox.Items.AddRange(new object[] { "Todos", "Criado", "Pendente", "Aprovado", "Separação", "Faturado", "Enviado", "Entregue" });
-        _statusComboBox.Location = new Point(0, 18);
+        _statusComboBox.Location = new Point(4, 18);
         _statusComboBox.Name = "_statusComboBox";
         _statusComboBox.ShadowDecoration.CustomizableEdges = customizableEdges18;
         _statusComboBox.Size = new Size(116, 36);
@@ -695,10 +706,10 @@ partial class OrdersStatusUserControl
         _searchFilterPanel.BackColor = Color.Transparent;
         _searchFilterPanel.Controls.Add(_searchCaption);
         _searchFilterPanel.Controls.Add(_searchTextBox);
-        _searchFilterPanel.Location = new Point(367, 0);
+        _searchFilterPanel.Location = new Point(381, 0);
         _searchFilterPanel.Margin = new Padding(0, 0, 4, 0);
         _searchFilterPanel.Name = "_searchFilterPanel";
-        _searchFilterPanel.Size = new Size(170, 62);
+        _searchFilterPanel.Size = new Size(175, 62);
         _searchFilterPanel.TabIndex = 3;
         // 
         // _searchCaption
@@ -721,7 +732,7 @@ partial class OrdersStatusUserControl
         _searchTextBox.FillColor = Color.FromArgb(55, 33, 23);
         _searchTextBox.Font = new Font("Segoe UI", 8.5F);
         _searchTextBox.ForeColor = Color.White;
-        _searchTextBox.Location = new Point(-1, 20);
+        _searchTextBox.Location = new Point(3, 20);
         _searchTextBox.Name = "_searchTextBox";
         _searchTextBox.PlaceholderForeColor = Color.FromArgb(170, 155, 143);
         _searchTextBox.PlaceholderText = "Digite nº pedido, cliente...";
@@ -734,7 +745,7 @@ partial class OrdersStatusUserControl
         // 
         panel1.BackColor = Color.Transparent;
         panel1.Controls.Add(_exportButton);
-        panel1.Location = new Point(541, 0);
+        panel1.Location = new Point(560, 0);
         panel1.Margin = new Padding(0, 0, 4, 0);
         panel1.Name = "panel1";
         panel1.Size = new Size(101, 62);
@@ -759,7 +770,7 @@ partial class OrdersStatusUserControl
         // 
         panel2.BackColor = Color.Transparent;
         panel2.Controls.Add(_clearButton);
-        panel2.Location = new Point(646, 0);
+        panel2.Location = new Point(665, 0);
         panel2.Margin = new Padding(0, 0, 4, 0);
         panel2.Name = "panel2";
         panel2.Size = new Size(101, 62);
@@ -806,6 +817,8 @@ partial class OrdersStatusUserControl
         _stepsFlowPanel.Controls.Add(_stepShippedPanel);
         _stepsFlowPanel.Controls.Add(_connector6);
         _stepsFlowPanel.Controls.Add(_stepDeliveredPanel);
+        _stepsFlowPanel.Controls.Add(_connector7);
+        _stepsFlowPanel.Controls.Add(_stepCanceledPanel);
         _stepsFlowPanel.Dock = DockStyle.Top;
         _stepsFlowPanel.Location = new Point(0, 0);
         _stepsFlowPanel.Margin = new Padding(0);
@@ -1216,6 +1229,65 @@ partial class OrdersStatusUserControl
         _stepDeliveredIcon.Text = "✓";
         _stepDeliveredIcon.TextAlign = ContentAlignment.MiddleCenter;
         // 
+        // _connector7
+        // 
+        _connector7.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+        _connector7.ForeColor = Color.FromArgb(151, 101, 52);
+        _connector7.Location = new Point(626, 4);
+        _connector7.Margin = new Padding(0);
+        _connector7.Name = "_connector7";
+        _connector7.Size = new Size(8, 40);
+        _connector7.TabIndex = 13;
+        _connector7.Text = "────";
+        _connector7.TextAlign = ContentAlignment.MiddleCenter;
+        // 
+        // _stepCanceledPanel
+        // 
+        _stepCanceledPanel.BackColor = Color.Transparent;
+        _stepCanceledPanel.Controls.Add(_stepCanceledDescription);
+        _stepCanceledPanel.Controls.Add(_stepCanceledName);
+        _stepCanceledPanel.Controls.Add(_stepCanceledIcon);
+        _stepCanceledPanel.Location = new Point(634, 4);
+        _stepCanceledPanel.Margin = new Padding(0);
+        _stepCanceledPanel.Name = "_stepCanceledPanel";
+        _stepCanceledPanel.Size = new Size(82, 112);
+        _stepCanceledPanel.TabIndex = 14;
+        // 
+        // _stepCanceledDescription
+        // 
+        _stepCanceledDescription.Font = new Font("Segoe UI", 6.5F);
+        _stepCanceledDescription.ForeColor = Color.FromArgb(204, 190, 177);
+        _stepCanceledDescription.Location = new Point(0, 68);
+        _stepCanceledDescription.Name = "_stepCanceledDescription";
+        _stepCanceledDescription.Size = new Size(82, 44);
+        _stepCanceledDescription.TabIndex = 0;
+        _stepCanceledDescription.Text = "Pedido cancelado.";
+        _stepCanceledDescription.TextAlign = ContentAlignment.TopCenter;
+        // 
+        // _stepCanceledName
+        // 
+        _stepCanceledName.Font = new Font("Segoe UI", 8F, FontStyle.Bold);
+        _stepCanceledName.ForeColor = Color.White;
+        _stepCanceledName.Location = new Point(0, 45);
+        _stepCanceledName.Name = "_stepCanceledName";
+        _stepCanceledName.Size = new Size(82, 20);
+        _stepCanceledName.TabIndex = 0;
+        _stepCanceledName.Text = "Cancelado";
+        _stepCanceledName.TextAlign = ContentAlignment.TopCenter;
+        // 
+        // _stepCanceledIcon
+        // 
+        _stepCanceledIcon.BackColor = Color.FromArgb(70, 43, 27);
+        _stepCanceledIcon.BorderStyle = BorderStyle.FixedSingle;
+        _stepCanceledIcon.Font = new Font("Segoe UI Symbol", 15F, FontStyle.Bold);
+        _stepCanceledIcon.ForeColor = Color.White;
+        _stepCanceledIcon.Location = new Point(21, 0);
+        _stepCanceledIcon.Name = "_stepCanceledIcon";
+        _stepCanceledIcon.Size = new Size(40, 40);
+        _stepCanceledIcon.TabIndex = 0;
+        _stepCanceledIcon.Text = "×";
+        _stepCanceledIcon.TextAlign = ContentAlignment.MiddleCenter;
+        // 
         // _headingPanel
         // 
         _headingPanel.BackColor = Color.Transparent;
@@ -1304,6 +1376,7 @@ partial class OrdersStatusUserControl
         _stepInvoicedPanel.ResumeLayout(false);
         _stepShippedPanel.ResumeLayout(false);
         _stepDeliveredPanel.ResumeLayout(false);
+        _stepCanceledPanel.ResumeLayout(false);
         _headingPanel.ResumeLayout(false);
         _headingPanel.PerformLayout();
         ResumeLayout(false);

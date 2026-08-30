@@ -117,9 +117,7 @@
 
                                         <i class="bi bi-calendar3 me-1"></i>
 
-                                        @order.CreatedAt
-                                        .ToLocalTime()
-                                        .ToString("dd/MM/yyyy HH:mm")
+                                        @order.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")
 
                                     </small>
 
