@@ -24,7 +24,7 @@ public sealed class ProductsController : ControllerBase
     public async Task<ActionResult<int>> Count() => Ok(await _service.CountAsync());
 
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public async Task<ActionResult<ProductDto>> Create(CreateProductDto dto)
     {
         var result = await _service.AddAsync(dto);
@@ -32,12 +32,12 @@ public sealed class ProductsController : ControllerBase
     }
 
     [HttpPut("{id:int}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public async Task<ActionResult<ProductDto>> Update(int id, UpdateProductDto dto)
         => (await _service.UpdateAsync(id, dto)) is { } p ? Ok(p) : NotFound(new { message = "Produto não encontrado." });
 
     [HttpDelete("{id:int}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public async Task<IActionResult> Delete(int id)
         => await _service.DeleteAsync(id) ? NoContent() : NotFound(new { message = "Produto não encontrado." });
 }

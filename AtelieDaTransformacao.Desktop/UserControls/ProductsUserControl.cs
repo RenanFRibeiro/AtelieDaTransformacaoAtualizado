@@ -161,14 +161,15 @@ public partial class ProductsUserControl : UserControl
         // BOTÕES
         // ============================================================
 
+        // Qualquer usuário autenticado pode criar, editar e excluir produtos.
         _newButton.Visible =
-            SessionManager.IsAdmin;
+            !string.IsNullOrWhiteSpace(SessionManager.Token);
 
         _editButton.Visible =
-            SessionManager.IsAdmin;
+            !string.IsNullOrWhiteSpace(SessionManager.Token);
 
         _deleteButton.Visible =
-            SessionManager.IsAdmin;
+            !string.IsNullOrWhiteSpace(SessionManager.Token);
 
         // ============================================================
         // EVENTOS
@@ -855,12 +856,14 @@ public partial class ProductsUserControl : UserControl
     private async Task EditAsync(
     ProductDto? item)
     {
-        // Alterado de !SessionManager.IsAdmin para PodeGerenciarProdutos
-        if (!SessionManager.PodeGerenciarProdutos)
+        // Criar e editar produto: qualquer usuário autenticado.
+        var podeSalvar = !string.IsNullOrWhiteSpace(SessionManager.Token);
+
+        if (!podeSalvar)
         {
             MessageBox.Show(
                 this,
-                "Você não tem permissão para alterar ou criar produtos.",
+                "Você não tem permissão para realizar esta operação.",
                 "Permissão",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information);

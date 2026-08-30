@@ -164,9 +164,10 @@ public partial class CategoriesUserControl : UserControl
         // NÃO ALTERADO
         // ============================================================
 
-        _newButton.Visible = SessionManager.IsAdmin;
-        _editButton.Visible = SessionManager.IsAdmin;
-        _deleteButton.Visible = SessionManager.IsAdmin;
+        // Qualquer usuário autenticado pode criar, editar e excluir categorias.
+        _newButton.Visible = !string.IsNullOrWhiteSpace(SessionManager.Token);
+        _editButton.Visible = !string.IsNullOrWhiteSpace(SessionManager.Token);
+        _deleteButton.Visible = !string.IsNullOrWhiteSpace(SessionManager.Token);
 
         _refreshButton.Click += async (_, _) =>
             await LoadAsync();
@@ -331,7 +332,10 @@ public partial class CategoriesUserControl : UserControl
 
     private async Task EditAsync(CategoryDto? item)
     {
-        if (!SessionManager.IsAdmin)
+        // Criar e editar categoria: qualquer usuário autenticado.
+        var podeSalvar = !string.IsNullOrWhiteSpace(SessionManager.Token);
+
+        if (!podeSalvar)
             return;
 
         using var dialog = new CategoryDialog(item);
