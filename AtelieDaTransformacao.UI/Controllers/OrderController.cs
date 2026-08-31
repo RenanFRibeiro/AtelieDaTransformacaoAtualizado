@@ -135,6 +135,11 @@ public sealed class OrderController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Checkout(CheckoutViewModel model)
     {
+        // O e-mail exibido no checkout corresponde sempre à conta autenticada.
+        model.CustomerEmail = User.FindFirstValue(ClaimTypes.Email)
+            ?? User.Identity?.Name
+            ?? string.Empty;
+
         NormalizePickupAddress(model);
 
         var cart = await GetCheckoutCartAsync(model.DirectProductId, model.DirectQuantity);

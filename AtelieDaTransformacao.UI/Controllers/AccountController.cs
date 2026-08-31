@@ -173,6 +173,7 @@ public class AccountController : Controller
         var claims = await _userManager.GetClaimsAsync(user);
         var model = new ProfileViewModel
         {
+            Email = user.Email ?? string.Empty,
             FirstName = claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value ?? string.Empty,
             LastName = claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value ?? string.Empty,
             Phone = user.PhoneNumber ?? string.Empty,

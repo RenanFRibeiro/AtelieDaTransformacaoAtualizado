@@ -4,6 +4,9 @@ namespace AtelieDaTransformacao.UI.Models;
 
 public sealed class ProfileViewModel
 {
+    [Display(Name = "E-mail")]
+    public string Email { get; set; } = string.Empty;
+
     [Required(ErrorMessage = "Informe seu nome.")]
     [StringLength(80, MinimumLength = 2)]
     [Display(Name = "Nome")]

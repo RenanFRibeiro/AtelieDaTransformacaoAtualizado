@@ -28,6 +28,10 @@
                     <div class="col-md-6"><label asp-for="FirstName" class="form-label"></label><input asp-for="FirstName" value="@Model.FirstName" class="form-control form-control-lg" autocomplete="given-name" /><span asp-validation-for="FirstName" class="text-danger small"></span></div>
                     <div class="col-md-6"><label asp-for="LastName" class="form-label"></label><input asp-for="LastName" value="@Model.LastName" class="form-control form-control-lg" autocomplete="family-name" /><span asp-validation-for="LastName" class="text-danger small"></span></div>
                     <div class="col-md-6"><label asp-for="Phone" class="form-label"></label><input asp-for="Phone" value="@Model.Phone" class="form-control form-control-lg" autocomplete="tel" /><span asp-validation-for="Phone" class="text-danger small"></span></div>
+                    <div class="col-md-6">
+                        <label asp-for="Email" class="form-label"></label>
+                        <div class="fs-5 pt-2">@Model.Email</div>
+                    </div>
                 </div>
 
                 <div class="auth-section-title mt-4"><span>2</span><div><strong>Endereço</strong><small>Usado para suas compras e entregas</small></div></div>

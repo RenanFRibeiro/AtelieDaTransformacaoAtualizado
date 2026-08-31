@@ -38,13 +38,13 @@
                                 <span asp-validation-for="CustomerName" class="text-danger small"></span>
                             </div>
                             <div class="col-md-6">
-                                <label asp-for="CustomerEmail" class="form-label fw-semibold"></label>
-                                <input asp-for="CustomerEmail" class="form-control form-control-lg rounded-3" autocomplete="email" />
-                                <span asp-validation-for="CustomerEmail" class="text-danger small"></span>
+                                <label class="form-label fw-semibold">E-mail</label>
+                                <div class="checkout-email-display">@Model.CustomerEmail</div>
+                                <input type="hidden" asp-for="CustomerEmail" />
                             </div>
                             <div class="col-md-6">
                                 <label asp-for="CustomerPhone" class="form-label fw-semibold"></label>
-                                <input asp-for="CustomerPhone" class="form-control form-control-lg rounded-3" autocomplete="tel" />
+                                <input asp-for="CustomerPhone" class="form-control form-control-lg rounded-3" autocomplete="tel" inputmode="tel" maxlength="15" placeholder="(11) 99999-9999" />
                                 <span asp-validation-for="CustomerPhone" class="text-danger small"></span>
                             </div>
                         </div>
@@ -207,6 +207,16 @@
 </div>
 
 <style>
+    .checkout-email-display {
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+        color: #1f1f1f;
+        font-size: 1.1rem;
+        line-height: 1.5;
+        word-break: break-word;
+    }
+
     .payment-option { cursor: pointer; transition: .2s ease; background: #fff; }
     .payment-option:hover { transform: translateY(-1px); box-shadow: 0 .35rem 1rem rgba(0,0,0,.06); }
     .payment-option:has(input:checked) { border-color: var(--artisan-clay,#b85a3a) !important; box-shadow: 0 0 0 2px rgba(184,90,58,.12); }
@@ -221,6 +231,30 @@
             button.disabled = true;
             button.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Criando pedido...';
         });
+
+        const phoneInput = document.querySelector('input[name="CustomerPhone"]');
+
+        function formatPhone(value) {
+            const digits = value.replace(/\D/g, '').slice(0, 11);
+
+            if (digits.length <= 10) {
+                return digits
+                    .replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3')
+                    .replace(/-$/, '');
+            }
+
+            return digits
+                .replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3')
+                .replace(/-$/, '');
+        }
+
+        phoneInput?.addEventListener('input', function () {
+            this.value = formatPhone(this.value);
+        });
+
+        if (phoneInput?.value) {
+            phoneInput.value = formatPhone(phoneInput.value);
+        }
 
         const delivery = document.getElementById('deliveryMethod');
         const addressFields = ['PostalCode','ShippingAddress','AddressNumber','District','City','State'];
