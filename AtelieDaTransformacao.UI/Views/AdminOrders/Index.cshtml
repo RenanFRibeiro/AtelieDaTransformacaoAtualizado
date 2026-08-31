@@ -6,19 +6,19 @@
     var statuses = Enum.GetValues<OrderStatus>();
 }
 
-<div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+<div class="admin-page-head">
     <div>
-        <h2 class="fw-bold text-dark m-0">Pedidos</h2>
-        <p class="text-muted small m-0">Altere manualmente ou ative a progressão automática de cada pedido.</p>
+        <h1>Pedidos</h1>
+        <p>Acompanhe o fluxo dos pedidos e altere o status manualmente ou pela automação.</p>
     </div>
-    <div class="d-flex gap-2">
+    <div class="admin-page-actions">
         <button type="button" 
-                class="btn btn-success rounded-pill" 
+                class="btn btn-success rounded-pill px-4" 
                 id="btnAdvanceAutomatic"
                 onclick="advanceAllAutomatic()">
             <i class="bi bi-arrow-repeat me-1"></i>Avançar Automáticos
         </button>
-        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-dark rounded-pill">Ver loja</a>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-dark rounded-pill px-4"><i class="bi bi-shop me-2"></i>Ver loja</a>
     </div>
 </div>
 
@@ -33,8 +33,16 @@
 
 <div id="autoAdvanceAlert"></div>
 
-<div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
-    <div class="table-responsive">
+<div class="card mb-4">
+    <div class="admin-section-head">
+        <div>
+            <h2 class="admin-section-title">Fluxo de pedidos</h2>
+            <p class="admin-section-subtitle">Atualize o status, controle a automação e abra os detalhes de cada pedido.</p>
+        </div>
+        <span class="admin-badge featured"><i class="bi bi-arrow-repeat"></i>Automação disponível</span>
+    </div>
+
+<div class="table-responsive">
         <table class="table align-middle mb-0">
             <thead class="table-light">
                 <tr class="small text-uppercase text-muted">
@@ -61,7 +69,7 @@
                                 @Html.AntiForgeryToken()
                                 <input type="hidden" name="id" value="@order.Id" />
                                 <input type="hidden" name="autoAdvance" value="@order.AutoAdvance.ToString().ToLowerInvariant()" />
-                                <select name="status" class="form-select form-select-sm" style="min-width: 150px;">
+                                <select name="status" class="form-select form-select-sm" style="min-width: 155px;">
                                     @foreach (var status in statuses)
                                     {
                                         if (status == order.Status)
@@ -145,6 +153,8 @@
             </tbody>
         </table>
     </div>
+</div>
+
 </div>
 
 <script>

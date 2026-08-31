@@ -5,97 +5,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Ateliê da Transformação</title>
     <meta name="description" content="Peças artesanais, móveis e projetos personalizados em madeira. Conheça o Ateliê da Transformação." />
-    
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-
-
+    <link rel="stylesheet" href="~/css/home-modern.css" asp-append-version="true" />
 </head>
-<body class="d-flex flex-column min-vh-100" style="--artisan-gold: #dfb76c; --artisan-clay: #b85a3a; --artisan-wood: #1a1512;">
+<body class="d-flex flex-column min-vh-100" style="--artisan-gold: #c58a58; --artisan-clay: #a85c3d; --artisan-wood: #241812;">
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-artisan-dark navbar-artisan py-2 shadow-sm fixed-top">
-             <div class="container">
-                <!-- Marca (esquerda) -->
-                <a class="navbar-brand d-flex align-items-center fw-bold fs-2" asp-controller="Home" asp-action="Index">
-                    <i class="bi bi-tree-fill text-gold me-2 fs-3" aria-hidden="true"></i>
-                    <span class="serif-title">Ateliê da <span class="text-gold ms-2">Transformação</span></span>
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-artisan fixed-top">
+            <div class="container-fluid navbar-inner">
+                <a class="navbar-brand artisan-brand" asp-controller="Home" asp-action="Index" aria-label="Ateliê da Transformação - início">
+                    <span class="brand-mark"><i class="bi bi-tree-fill" aria-hidden="true"></i></span>
+                    <span class="serif-title brand-name">Ateliê da <strong>Transformação</strong></span>
                 </a>
 
-                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Alternar menu">
+                <button class="navbar-toggler artisan-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Abrir menu">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="collapse navbar-collapse" id="mainNavbar">
-                    <!-- Menu central -->
-                    <ul class="navbar-nav mx-auto mb-2 mb-lg-0 align-items-lg-center">
-                        <li class="nav-item"><a class="nav-link nav-link-artisan px-3" asp-controller="Home" asp-action="Index">Coleção</a></li>
-                        <li class="nav-item"><a class="nav-link nav-link-artisan px-3" asp-controller="Home" asp-action="Gallery">Projetos</a></li>
-                        <li class="nav-item"><a class="nav-link nav-link-artisan px-3" asp-controller="Home" asp-action="About">Sobre</a></li>
+                    <ul class="navbar-nav artisan-main-nav mx-auto">
+                        <li class="nav-item"><a class="nav-link nav-link-artisan" asp-controller="Home" asp-action="Index">Coleção</a></li>
+                        <li class="nav-item"><a class="nav-link nav-link-artisan" asp-controller="Home" asp-action="Gallery">Projetos</a></li>
+                        <li class="nav-item"><a class="nav-link nav-link-artisan" asp-controller="Home" asp-action="About">Sobre</a></li>
                     </ul>
 
-                    <!-- Ações (direita) -->
-                    <div class="d-flex align-items-center ms-auto header-actions-v3">
+                    <div class="d-flex align-items-center header-actions-v3">
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
-                            // Apenas quem NÃO É Admin vê as funcionalidades focadas em loja
                             if (!User.IsInRole("Admin"))
                             {
-                                <a class="quote-link-v3 d-inline-flex align-items-center" asp-controller="Quote" asp-action="Index" title="Solicitar orçamento">
-                                    <i class="bi bi-pencil-square" aria-hidden="true"></i>
-                                    <span>Orçamento</span>
+                                <a class="header-menu-link-v3 header-quote-link" asp-controller="Quote" asp-action="Index" title="Solicitar orçamento">
+                                    <i class="bi bi-pencil-square" aria-hidden="true"></i><span>Orçamento</span>
                                 </a>
                             }
 
                             if (User.IsInRole("Admin") || User.IsInRole("Funcionario") || User.IsInRole("Employee"))
                             {
-                                <a class="header-menu-link-v3 d-inline-flex align-items-center" asp-controller="Admin" asp-action="Index" title="Painel do Artesão">
-                                    <i class="bi bi-sliders" aria-hidden="true"></i>
-                                    <span>Painel</span>
+                                <a class="header-menu-link-v3" asp-controller="Admin" asp-action="Index" title="Painel do Artesão">
+                                    <i class="bi bi-sliders" aria-hidden="true"></i><span>Painel</span>
                                 </a>
                             }
 
-                            // Oculta área do Cliente para o Admin
                             if (!User.IsInRole("Admin"))
                             {
-                                <a class="header-menu-link-v3 d-inline-flex align-items-center" asp-controller="Account" asp-action="Profile" title="Meu perfil">
-                                    <i class="bi bi-person-circle" aria-hidden="true"></i>
-                                    <span>Meu Perfil</span>
+                                <a class="header-menu-link-v3" asp-controller="Account" asp-action="Profile" title="Meu perfil">
+                                    <i class="bi bi-person-circle" aria-hidden="true"></i><span>Meu perfil</span>
                                 </a>
-
-                                <a class="header-menu-link-v3 d-inline-flex align-items-center" asp-controller="Order" asp-action="Index" title="Meus pedidos">
-                                    <i class="bi bi-box-seam" aria-hidden="true"></i>
-                                    <span>Meus pedidos</span>
+                                <a class="header-menu-link-v3" asp-controller="Order" asp-action="Index" title="Meus pedidos">
+                                    <i class="bi bi-box-seam" aria-hidden="true"></i><span>Meus pedidos</span>
                                 </a>
-
-                                <a class="header-menu-link-v3 d-inline-flex align-items-center position-relative" asp-controller="Cart" asp-action="Index" title="Ver carrinho">
-                                    <i class="bi bi-cart3" aria-hidden="true"></i>
-                                    <span>Carrinho</span>
-                                    <span class="badge bg-danger ms-2" id="cartCountBadge" style="display:none;">0</span>
+                                <a class="header-menu-link-v3 position-relative" asp-controller="Cart" asp-action="Index" title="Ver carrinho">
+                                    <i class="bi bi-bag" aria-hidden="true"></i><span>Carrinho</span>
+                                    <span class="badge cart-badge" id="cartCountBadge" style="display:none;">0</span>
                                 </a>
                             }
 
                             <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
-                                <button type="submit" class="header-menu-link-v3 header-logout-v3 d-inline-flex align-items-center" title="Sair">
-                                    <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
-                                    <span>Sair</span>
+                                <button type="submit" class="header-menu-link-v3 header-logout-v3" title="Sair">
+                                    <i class="bi bi-box-arrow-right" aria-hidden="true"></i><span>Sair</span>
                                 </button>
                             </form>
                         }
                         else
                         {
-                            <a class="header-menu-link-v3 d-inline-flex align-items-center" asp-controller="Account" asp-action="Login">
-                                <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i>
-                                <span>Entrar</span>
+                            <a class="header-menu-link-v3" asp-controller="Account" asp-action="Login">
+                                <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i><span>Entrar</span>
                             </a>
-                            <a class="header-menu-link-v3 d-inline-flex align-items-center" asp-controller="Account" asp-action="Register">
-                                <i class="bi bi-person-plus" aria-hidden="true"></i>
-                                <span>Criar Conta</span>
+                            <a class="header-register-link" asp-controller="Account" asp-action="Register">
+                                Criar conta <i class="bi bi-arrow-up-right ms-1"></i>
                             </a>
                         }
                     </div>
@@ -104,152 +87,86 @@
         </nav>
     </header>
 
-    <!-- Spacer para compensar a navbar fixed-top -->
     <div class="navbar-fixed-spacer" aria-hidden="true"></div>
 
     @if (ViewContext.RouteData.Values["controller"]?.ToString() == "Home" && ViewContext.RouteData.Values["action"]?.ToString() == "Index")
     {
         @await Component.InvokeAsync("Carousel")
-        <div id="galeria-ancora"></div>
-    }
-    else
-    {
-        <!-- Spacer para compensar a navbar fixed-top nas páginas comuns (ex: Sobre, Pedidos, Detalhes) -->
-        <div class="navbar-fixed-spacer" aria-hidden="true"></div>
     }
 
-    <main role="main" class="flex-grow-1 container my-2">
+    <main role="main" class="flex-grow-1 site-main">
         @RenderBody()
     </main>
 
-    <section class="py-5 bg-white border-top border-bottom border-light shadow-sm">
-        <div class="container">
-            <div class="row g-4 text-center">
-                <div class="col-md-4">
-                    <div class="p-3">
-                        <i class="bi bi-shield-check text-gold fs-1 mb-3 d-block"></i>
-                        <h5 class="fw-bold text-dark">Garantia Origem</h5>
-                        <p class="text-muted small mb-0">Madeiras nobres certificadas, rastreáveis e extraídas em total conformidade socioambient.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="p-3">
-                        <i class="bi bi-droplet-half text-gold fs-1 mb-3 d-block"></i>
-                        <h5 class="fw-bold text-dark">Acabamento Artesanal</h5>
-                        <p class="text-muted small mb-0">Proteção UV total que evita o amarelecimento, oferecendo acabamento vitrificado cristalino.</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="p-3">
-                        <i class="bi bi-whatsapp text-gold fs-1 mb-3 d-block"></i>
-                        <h5 class="fw-bold text-dark">Atendimento Direto</h5>
-                        <p class="text-muted small mb-0">Sem intermediários. Negocie diretamente com o mestre artesão responsável pela sua obra.</p>
-                    </div>
-                </div>
+    <section class="benefits-section">
+        <div class="home-container benefits-grid">
+            <div class="benefit-item">
+                <div class="benefit-icon"><i class="bi bi-shield-check"></i></div>
+                <div><h2>Garantia de origem</h2><p>Materiais selecionados e processos pensados para valorizar cada criação.</p></div>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-icon"><i class="bi bi-droplet-half"></i></div>
+                <div><h2>Acabamento artesanal</h2><p>Cuidado em cada etapa para entregar textura, proteção e presença.</p></div>
+            </div>
+            <div class="benefit-item">
+                <div class="benefit-icon"><i class="bi bi-chat-heart"></i></div>
+                <div><h2>Atendimento direto</h2><p>Converse com quem entende do processo e transforme sua ideia em projeto.</p></div>
             </div>
         </div>
     </section>
 
-    <footer class="bg-artisan-dark text-white-50 py-5">
-        <div class="container text-center">
-            <h4 class="text-white mb-2">Ateliê da Transformação</h4>
-            <p class="small opacity-50 mb-4 mx-auto" style="max-width: 500px;">
-                Mobiliário Orgânico de Luxo, Arte Rústica Funcional e Design Customizado sob Medida.
-            </p>
-            <div class="border-top border-secondary border-opacity-10 pt-4 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
-                <small class="small opacity-75">&copy; @System.DateTime.Now.Year T1B-3 Digital Studio. Todos os direitos reservados. | Desenvolvido com 💙 pela T1B-3.</small>
-                <div class="d-flex gap-3 small">
-                    <a href="#" class="text-white-50 text-decoration-none opacity-75">Termos de Uso</a>
-                    <span class="text-secondary opacity-25">|</span>
-                    <a href="#" class="text-white-50 text-decoration-none opacity-75">Política de Privacidade</a>
+    <footer class="artisan-footer">
+        <div class="home-container">
+            <div class="footer-grid">
+                <div class="footer-brand-block">
+                    <a asp-controller="Home" asp-action="Index" class="footer-brand serif-title">Ateliê da <strong>Transformação</strong></a>
+                    <p>Peças artesanais, mobiliário e projetos personalizados com identidade, cuidado e acabamento.</p>
                 </div>
+
+                <div>
+                    <span class="footer-heading">Navegação</span>
+                    <a asp-controller="Home" asp-action="Index">Coleção</a>
+                    <a asp-controller="Home" asp-action="Gallery">Projetos</a>
+                    <a asp-controller="Home" asp-action="About">Sobre</a>
+                </div>
+
+                <div>
+                    <span class="footer-heading">Atendimento</span>
+                    <a asp-controller="Quote" asp-action="Index">Solicitar orçamento</a>
+                    <a href="https://www.google.com/maps/search/?api=1&query=R.+Camomila%2C+99+-+Antigo+375+-+Jardim+Helena%2C+S%C3%A3o+Paulo+-+SP%2C+08090-530" target="_blank" rel="noopener noreferrer">Localização</a>
+                    <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <small>&copy; @System.DateTime.Now.Year Ateliê da Transformação. Todos os direitos reservados.</small>
+                <div><a href="#">Termos de Uso</a><a href="#">Política de Privacidade</a></div>
             </div>
         </div>
     </footer>
 
-    <a href="https://wa.me/5511999999999?text=Ol%C3%A1%21%20Visitei%20o%20site%20do%20Ateli%C3%AA%20da%20Transforma%C3%A7%C3%A3o%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." class="whatsapp-float" target="_blank" title="Falar Conosco no WhatsApp">
+    <a href="https://wa.me/5511999999999?text=Ol%C3%A1%21%20Visitei%20o%20site%20do%20Ateli%C3%AA%20da%20Transforma%C3%A7%C3%A3o%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="Falar conosco no WhatsApp" aria-label="Falar conosco no WhatsApp">
         <i class="bi bi-whatsapp"></i>
     </a>
 
-    <!-- usar bundle local para evitar bloqueios de CDN/CORB em dev -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     <script>
-        // Inicializa o carousel explicitamente e garante que os botões prev/next funcionem
         document.addEventListener('DOMContentLoaded', function () {
-            try {
-                var el = document.getElementById('artisanHeroCarousel');
-                if (el && window.bootstrap && typeof window.bootstrap.Carousel === 'function') {
-                    // cria/obtém a instância do carousel com opções
-                    var carousel = bootstrap.Carousel.getOrCreateInstance(el, { interval: 5000, ride: 'carousel', pause: 'hover', keyboard: true, wrap: true });
-                    // log para depuração: quantos slides e quais URLs estão definidos (background-image)
-                    try {
-                        var items = el.querySelectorAll('.carousel-item');
-                        console.log('Carousel items count:', items.length);
-                        items.forEach(function(it, idx) {
-                            var bg = window.getComputedStyle(it.querySelector('.position-relative') || it).backgroundImage || '';
-                            console.log(' slide', idx, bg ? bg : '(no background-image)');
-                        });
-                    } catch (e) { console.warn('Não foi possível listar slides:', e); }
+            const el = document.getElementById('artisanHeroCarousel');
+            if (!el || !window.bootstrap || !bootstrap.Carousel) return;
 
-                    // garante que o carousel esteja em ciclo (autoplay)
-                    try { carousel.cycle(); } catch (e) { /* ignore */ }
+            const carousel = bootstrap.Carousel.getOrCreateInstance(el, {
+                interval: 6000,
+                ride: 'carousel',
+                pause: 'hover',
+                keyboard: true,
+                wrap: true
+            });
 
-                    // se por algum motivo o carousel não fizer wrap corretamente, forçamos retorno ao primeiro slide após o último
-                    try {
-                        // quando chegamos ao último slide, espera 5s antes de voltar ao início
-                        el.addEventListener('slid.bs.carousel', function (ev) {
-                            try {
-                                var items = el.querySelectorAll('.carousel-item');
-                                var lastIndex = items.length - 1;
-                                if (typeof ev.to !== 'undefined' && ev.to === lastIndex) {
-                                    // limpa qualquer timeout anterior
-                                    if (el.dataset.startTo0Timeout) { clearTimeout(parseInt(el.dataset.startTo0Timeout)); delete el.dataset.startTo0Timeout; }
-                                    // pausa o carousel e aguarda 5000ms antes de ir ao primeiro slide
-                                    try { carousel.pause(); } catch (e) { }
-                                    var t = setTimeout(function () {
-                                        try { carousel.to(0); } catch (e) { }
-                                        try { carousel.cycle(); } catch (e) { }
-                                        // limpa fallback interval se existir
-                                        if (el.dataset.fallbackId) { clearInterval(parseInt(el.dataset.fallbackId)); delete el.dataset.fallbackId; }
-                                    }, 5000);
-                                    el.dataset.startTo0Timeout = t;
-                                }
-                            } catch (e) { /* ignore */ }
-                        });
-                    } catch (e) { /* ignore */ }
-                    // garante que os botões prev/next chamem os métodos da instância
-                    var prev = el.querySelector('[data-bs-slide="prev"]');
-                    var next = el.querySelector('[data-bs-slide="next"]');
-                    if (prev) prev.addEventListener('click', function (e) { e.preventDefault(); carousel.prev(); });
-                    if (next) next.addEventListener('click', function (e) { e.preventDefault(); carousel.next(); });
-
-                    // fallback: se o bootstrap não criar um intervalo interno, usamos setInterval para avançar
-                    try {
-                        if (!carousel._interval) {
-                            var fallbackId = setInterval(function () { try { carousel.next(); } catch (e) { /* ignore */ } }, 5000);
-                            el.dataset.fallbackId = fallbackId;
-                        }
-
-                        // pause/resume no hover para o fallback
-                        el.addEventListener('mouseenter', function () {
-                            try { carousel.pause(); } catch (e) { }
-                            if (el.dataset.fallbackId) { clearInterval(parseInt(el.dataset.fallbackId)); delete el.dataset.fallbackId; }
-                        });
-                        el.addEventListener('mouseleave', function () {
-                            try { carousel.cycle(); } catch (e) { }
-                            if (!el.dataset.fallbackId && (!carousel._interval)) {
-                                var id = setInterval(function () { try { carousel.next(); } catch (e) { } }, 5000);
-                                el.dataset.fallbackId = id;
-                            }
-                        });
-                    } catch (e) { /* ignore fallback errors */ }
-                }
-            } catch (ex) {
-                console && console.error && console.error('Erro ao inicializar carousel:', ex);
-            }
+            carousel.cycle();
         });
     </script>
 

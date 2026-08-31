@@ -1,113 +1,180 @@
 ﻿@model IEnumerable<AtelieDaTransformacao.Application.DTOs.ProductDto>
 @{
     Layout = "_AdminLayout";
-    ViewData["Title"] = "Painel de Controle";
+    ViewData["Title"] = "Dashboard";
+    var products = Model?.ToList() ?? new List<AtelieDaTransformacao.Application.DTOs.ProductDto>();
+    var available = products.Count(p => p.IsAvailable);
+    var featured = products.Count(p => p.IsFeatured);
+    var stock = products.Sum(p => p.StockQuantity);
 }
 
-<div class="d-flex justify-content-between align-items-center mb-5">
+<div class="admin-page-head">
     <div>
-        <h2 class="fw-bold text-dark m-0">Painel de Gestão</h2>
-        <p class="text-muted small m-0">Controle o inventário de peças e destaques da vitrina.</p>
+        <h1>Visão geral do ateliê</h1>
+        <p>Acompanhe suas peças, estoque e destaques em um único lugar.</p>
     </div>
-    <div class="d-flex gap-2">
-        <a href="@Url.Action("Categories", "Admin")" class="btn btn-outline-dark rounded-pill px-4 py-2 fw-medium shadow-sm">
-            <i class="bi bi-tags me-2"></i>Categorias
+    <div class="admin-page-actions">
+        <a asp-controller="Admin" asp-action="Categories" class="btn btn-outline-dark rounded-pill px-4">
+            <i class="bi bi-collection me-2"></i>Categorias
         </a>
-        <a href="@Url.Action("CreateProduct", "Admin")" class="btn btn-dark rounded-pill px-4 py-2 fw-medium shadow-sm">
-            <i class="bi bi-plus-lg me-2"></i>Nova Peça
+        <a asp-controller="Admin" asp-action="CreateProduct" class="btn btn-dark rounded-pill px-4">
+            <i class="bi bi-plus-lg me-2"></i>Nova peça
         </a>
     </div>
 </div>
 
-<div class="row g-4 mb-5">
-    <div class="col-12 col-sm-6 col-xl-4">
-        <div class="card border-0 shadow-sm p-4 rounded-4 bg-white border-start border-4 border-dark">
-            <div class="d-flex align-items-center justify-content-between">
-                <div>
-                    <span class="text-muted text-uppercase fw-bold small tracking-wider">Total de Peças</span>
-                    <h3 class="fw-bold text-dark m-0 mt-1">@Model.Count()</h3>
-                </div>
-                <div class="bg-light p-3 rounded-circle text-dark"><i class="bi bi-box-seam fs-4"></i></div>
+@if (TempData["SuccessMessage"] is string success)
+{
+    <div class="alert alert-success shadow-sm mb-4"><i class="bi bi-check-circle me-2"></i>@success</div>
+}
+@if (TempData["ErrorMessage"] is string error)
+{
+    <div class="alert alert-danger shadow-sm mb-4"><i class="bi bi-exclamation-circle me-2"></i>@error</div>
+}
+
+<div class="row g-3 g-xl-4 mb-4">
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card admin-stat-card">
+            <div class="admin-stat-top">
+                <div><span class="admin-stat-label">Total de peças</span><div class="admin-stat-value">@products.Count</div></div>
+                <span class="admin-stat-icon"><i class="bi bi-box-seam"></i></span>
             </div>
         </div>
     </div>
-    <div class="col-12 col-sm-6 col-xl-4">
-        <div class="card border-0 shadow-sm p-4 rounded-4 bg-white border-start border-4 border-success">
-            <div class="d-flex align-items-center justify-content-between">
-                <div>
-                    <span class="text-muted text-uppercase fw-bold small tracking-wider">Disponíveis</span>
-                    <h3 class="fw-bold text-success m-0 mt-1">@Model.Count(p => p.IsAvailable)</h3>
-                </div>
-                <div class="bg-success bg-opacity-10 p-3 rounded-circle text-success"><i class="bi bi-check-circle fs-4"></i></div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card admin-stat-card">
+            <div class="admin-stat-top ">
+                <div><span class="admin-stat-label">Disponíveis</span><div class="admin-stat-value">@available</div></div>
+                <span class="admin-stat-icon"><i class="bi bi-check2-circle"></i></span>
             </div>
         </div>
     </div>
-    <div class="col-12 col-sm-6 col-xl-4">
-        <div class="card border-0 shadow-sm p-4 rounded-4 bg-white border-start border-4 border-warning">
-            <div class="d-flex align-items-center justify-content-between">
-                <div>
-                    <span class="text-muted text-uppercase fw-bold small tracking-wider">Em Destaque</span>
-                    <h3 class="fw-bold text-warning m-0 mt-1">@Model.Count(p => p.IsFeatured)</h3>
-                </div>
-                <div class="bg-warning bg-opacity-10 p-3 rounded-circle text-warning"><i class="bi bi-star fs-4"></i></div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card admin-stat-card">
+            <div class="admin-stat-top">
+                <div><span class="admin-stat-label">Em destaque</span><div class="admin-stat-value">@featured</div></div>
+                <span class="admin-stat-icon"><i class="bi bi-stars"></i></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card admin-stat-card">
+            <div class="admin-stat-top">
+                <div><span class="admin-stat-label">Unidades em estoque</span><div class="admin-stat-value">@stock</div></div>
+                <span class="admin-stat-icon"><i class="bi bi-layers"></i></span>
             </div>
         </div>
     </div>
 </div>
 
-<div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
-    <div class="card-header bg-white border-0 py-3 px-4">
-        <h5 class="fw-bold m-0 text-dark">Inventário do Ateliê</h5>
+<div class="card overflow-hidden">
+    <div class="admin-section-head">
+        <div>
+            <h2 class="admin-section-title">Inventário do ateliê</h2>
+            <p class="admin-section-subtitle">Gerencie disponibilidade, destaque, preço e informações das peças.</p>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <div class="input-group" style="max-width: 280px;">
+                <span class="input-group-text bg-transparent border-end-0" style="border-color: var(--admin-line); border-radius: 12px 0 0 12px;"><i class="bi bi-search"></i></span>
+                <input id="adminProductSearch" class="form-control border-start-0" style="border-radius: 0 12px 12px 0;" placeholder="Buscar peça..." autocomplete="off" />
+            </div>
+        </div>
     </div>
-    <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
-            <thead class="table-light border-bottom border-light">
-                <tr class="small text-muted text-uppercase tracking-wider">
-                    <th class="ps-4">Item</th>
-                    <th>Título</th>
-                    <th>Categoria</th>
-                    <th>Preço</th>
-                    <th>Status</th>
-                    <th class="text-end pe-4">Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var prod in Model)
-                {
+
+    @if (products.Count == 0)
+    {
+        <div class="text-center px-4 py-5">
+            <div class="admin-stat-icon mx-auto mb-3"><i class="bi bi-box"></i></div>
+            <h3 class="h5 mb-2">Nenhuma peça cadastrada</h3>
+            <p class="text-muted small mb-4">Comece adicionando a primeira peça à coleção.</p>
+            <a asp-controller="Admin" asp-action="CreateProduct" class="btn btn-dark rounded-pill px-4"><i class="bi bi-plus-lg me-2"></i>Cadastrar peça</a>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0" id="adminProductsTable">
+                <thead>
                     <tr>
-                        <td class="ps-4">
-                            <img src="@(string.IsNullOrEmpty(prod.Image) ? "/images/placeholder.jpg" : prod.Image)"
-                                 class="rounded-3 border object-fit-cover" style="width: 50px; height: 50px;" alt="" />
-                        </td>
-                        <td>
-                            <span class="fw-bold text-dark d-block">@prod.Title</span>
-                            @if (prod.IsFeatured)
-                            {
-                                <span class="badge bg-warning text-dark rounded-pill" style="font-size: 0.65rem;">Destaque</span>
-                            }
-                        </td>
-                        <td>
-                            <span class="text-secondary small">
-                                @(string.IsNullOrEmpty(prod.CategoryName) ? "Mobiliário" : prod.CategoryName)
-                            </span>
-                        </td>
-                        <td class="fw-semibold text-dark">@prod.Price.ToString("C")</td>
-                        <td>
-                            <span class="badge rounded-pill px-3 py-1 @(prod.IsAvailable ? "bg-success bg-opacity-10 text-success" : "bg-secondary bg-opacity-10 text-secondary")">
-                                @(prod.IsAvailable ? "Disponível" : "Esgotado")
-                            </span>
-                        </td>
-                        <td class="text-end pe-4">
-                            <div class="d-inline-flex gap-2">
-                                <a href="@Url.Action("EditProduct", "Admin", new { id = prod.Id })" class="btn btn-sm btn-outline-dark rounded-pill px-3">Editar</a>
-                                <form asp-action="DeleteProduct" asp-route-id="@prod.Id" method="post" onsubmit="return confirm('Excluir permanentemente esta peça?');">
-                                    <button type="submit" class="btn btn-sm btn-link text-danger text-decoration-none small">Remover</button>
-                                </form>
-                            </div>
-                        </td>
+                        <th class="ps-4">Peça</th>
+                        <th>Categoria</th>
+                        <th>Preço</th>
+                        <th>Estoque</th>
+                        <th>Status</th>
+                        <th class="text-end pe-4">Ações</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    @foreach (var prod in products)
+                    {
+                        var imageUrl = string.IsNullOrWhiteSpace(prod.Image) ? "/images/placeholder.jpg" : prod.Image;
+                        <tr data-product-row data-search="@($"{prod.Title} {prod.CategoryName}")">
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center gap-3">
+                                    <img src="@imageUrl" class="admin-product-thumb" alt="@prod.Title" loading="lazy" />
+                                    <div class="min-w-0">
+                                        <div class="admin-product-name text-truncate" style="max-width: 280px;">@prod.Title</div>
+                                        @if (prod.IsFeatured)
+                                        {
+                                            <span class="admin-badge featured mt-1"><i class="bi bi-stars"></i>Destaque</span>
+                                        }
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="admin-product-meta">@(string.IsNullOrWhiteSpace(prod.CategoryName) ? "Sem categoria" : prod.CategoryName)</span></td>
+                            <td class="fw-bold">@prod.Price.ToString("C")</td>
+                            <td><span class="admin-product-meta">@prod.StockQuantity un.</span></td>
+                            <td>
+                                <span class="admin-badge @(prod.IsAvailable ? "available" : "empty")">
+                                    <i class="bi @(prod.IsAvailable ? "bi-check-circle" : "bi-dash-circle")"></i>
+                                    @(prod.IsAvailable ? "Disponível" : "Esgotado")
+                                </span>
+                            </td>
+                            <td class="text-end pe-4">
+                                <div class="d-inline-flex gap-2">
+                                    <a asp-controller="Admin" asp-action="EditProduct" asp-route-id="@prod.Id" class="btn btn-sm btn-outline-dark rounded-pill px-3" title="Editar peça">
+                                        <i class="bi bi-pencil me-1"></i>Editar
+                                    </a>
+                                    <form asp-controller="Admin" asp-action="DeleteProduct" asp-route-id="@prod.Id" method="post" class="m-0" onsubmit="return confirm('Excluir permanentemente esta peça?');">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3" title="Remover peça">
+                                            <i class="bi bi-trash3"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    <tr id="adminNoResults" style="display:none;">
+                        <td colspan="6" class="text-center py-5 text-muted small">Nenhuma peça corresponde à busca.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
 </div>
+
+@section Scripts {
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const input = document.getElementById('adminProductSearch');
+        if (!input) return;
+
+        const rows = Array.from(document.querySelectorAll('[data-product-row]'));
+        const empty = document.getElementById('adminNoResults');
+
+        input.addEventListener('input', function () {
+            const term = this.value.trim().toLowerCase();
+            let visible = 0;
+
+            rows.forEach(row => {
+                const matches = (row.dataset.search || '').toLowerCase().includes(term);
+                row.style.display = matches ? '' : 'none';
+                if (matches) visible++;
+            });
+
+            if (empty) empty.style.display = visible === 0 ? '' : 'none';
+        });
+    });
+</script>
+}

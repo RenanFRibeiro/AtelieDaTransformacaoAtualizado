@@ -1,265 +1,200 @@
-﻿<!DOCTYPE html>
-<html lang="pt-PT">
+@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? string.Empty;
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? string.Empty;
+    var pageTitle = ViewData["Title"]?.ToString() ?? "Painel de Controle";
+}
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Painel - Ateliê da Transformação</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+    <meta name="theme-color" content="#21150f" />
+    <title>@pageTitle - Ateliê da Transformação</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-
-    <style>
-        /* =============================================================================
-           ATELIÊ DA TRANSFORMAÇÃO - DESIGN SYSTEM (VARIÁVEIS GLOBAIS)
-           ============================================================================= */
-        :root {
-            --artisan-clay: #b85d43; /* Terracota / Argila */
-            --artisan-wood: #3d2b1f; /* Castanho Madeira Nobre */
-            --artisan-gold: #cf9e53; /* Latão / Ouro Envelhecido */
-            --artisan-sand: #f8f9fa; /* Background Global Light */
-            --text-main: #2a2421; /* Antracite Orgânico */
-        }
-
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: var(--artisan-sand); 
-            color: var(--text-main);
-            -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
-        }
-        
-        /* Sidebar Desktop Totalmente Branca */
-        .sidebar { 
-            background-color: #ffffff; 
-            min-height: 100vh; 
-            color: var(--text-main); 
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            z-index: 100;
-            padding: 20px;
-            border-right: 1px solid #e5e7eb;
-        }
-        
-        .sidebar .nav-link { 
-            color: #666; 
-            border-radius: 8px; 
-            margin-bottom: 6px; 
-            padding: 12px 15px; 
-            text-decoration: none; 
-            display: flex;
-            align-items: center;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
-        
-        .sidebar .nav-link:hover { 
-            background-color: #f3f4f6; 
-            color: var(--text-main); 
-        }
-
-        /* Destaque do link ativo combinado com a identidade visual */
-        .sidebar .nav-link.active {
-            background-color: rgba(184, 93, 67, 0.1);
-            color: var(--artisan-clay);
-            font-weight: 600;
-        }
-        
-        /* Ajuste do conteúdo principal */
-        .main-content {
-            margin-left: 16.666667%; /* Equivalente a col-md-2 */
-        }
-
-        /* Inputs de Formulários Administrativos e Autenticação */
-        .form-floating > .form-control:focus, .form-control:focus, .form-select:focus {
-            border-color: var(--artisan-clay) !important;
-            box-shadow: 0 0 0 0.25rem rgba(184, 93, 67, 0.25) !important;
-        }
-        .form-control.form-active, .form-select.form-active {
-            border-color: var(--artisan-gold) !important;
-            box-shadow: 0 4px 12px rgba(207, 158, 83, 0.2) !important;
-            transition: all 0.2s ease-in-out;
-        }
-
-        /* 🛠️ Ajuste de Responsividade para Celulares e Tablets */
-        @@media (max-width: 767.98px) {
-            .sidebar {
-                position: static !important;
-                min-height: auto !important;
-                width: 100% !important;
-                box-shadow: none;
-            }
-
-            .main-content {
-                margin-left: 0 !important;
-                padding-top: 20px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="~/css/home-modern.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin-modern.css" asp-append-version="true" />
 </head>
-<body>
+<body class="admin-body">
+    <div class="admin-shell">
+        <!-- Header mobile -->
+        <header class="admin-mobile-header">
+            <a asp-controller="Admin" asp-action="Index" class="admin-mobile-brand">
+                Ateliê da <strong>Transformação</strong>
+            </a>
+            <button class="admin-mobile-menu-button" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebarMobile" aria-controls="adminSidebarMobile" aria-label="Abrir menu administrativo">
+                <i class="bi bi-list fs-5"></i>
+            </button>
+        </header>
 
-    <header class="navbar navbar-light sticky-top bg-white p-3 shadow-sm border-bottom d-md-none">
-        <span class="navbar-brand mb-0 h1 fs-6 fw-bold text-dark">
-            <i class="bi bi-shield-lock-fill text-warning me-2"></i>Ateliê Admin
-        </span>
-        <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebarMobile" aria-controls="adminSidebarMobile" aria-label="Abrir Menu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </header>
+        <!-- Sidebar desktop -->
+        <aside class="admin-sidebar" id="adminSidebar">
+            <a asp-controller="Admin" asp-action="Index" class="admin-brand" aria-label="Voltar ao dashboard">
+                <span class="admin-brand-mark"><i class="bi bi-tree-fill"></i></span>
+                <span class="admin-brand-copy">
+                    <span class="admin-brand-title">Ateliê da <strong>Transformação</strong></span>
+                    <span class="admin-brand-caption">Painel do Ateliê</span>
+                </span>
+            </a>
 
-    <div class="container-fluid">
-        <div class="row">
-            
-            <nav id="adminSidebar" class="col-md-3 col-lg-2 d-none d-md-flex sidebar flex-column justify-content-between">
-                <div>
-                    <div class="d-flex align-items-center mb-4 px-2 pt-2">
-                        <span class="fs-5 fw-bold text-dark">
-                            <i class="bi bi-shield-lock-fill text-warning me-2"></i>Ateliê Admin
+            <nav class="admin-nav" aria-label="Navegação administrativa">
+                <span class="admin-nav-label">Gestão</span>
+
+                <a class="nav-link @(currentController == "Admin" && currentAction == "Index" ? "active" : "")"
+                   asp-controller="Admin" asp-action="Index" title="Dashboard">
+                    <i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span>
+                </a>
+
+                <a class="nav-link @(currentController == "Admin" && (currentAction == "CreateProduct" || currentAction == "EditProduct") ? "active" : "")"
+                   asp-controller="Admin" asp-action="CreateProduct" title="Nova peça">
+                    <i class="bi bi-plus-square-fill"></i><span>Nova peça</span>
+                </a>
+
+                <a class="nav-link @(currentController == "Admin" && (currentAction == "Categories" || currentAction == "CreateCategory") ? "active" : "")"
+                   asp-controller="Admin" asp-action="Categories" title="Categorias">
+                    <i class="bi bi-collection-fill"></i><span>Categorias</span>
+                </a>
+
+                <a class="nav-link @(currentController == "AdminOrders" ? "active" : "")"
+                   asp-controller="AdminOrders" asp-action="Index" title="Pedidos">
+                    <i class="bi bi-receipt-cutoff"></i><span>Pedidos</span>
+                </a>
+
+                <span class="admin-nav-label mt-4">Atalhos</span>
+
+                <a class="nav-link external" asp-controller="Home" asp-action="Index" title="Ver loja">
+                    <i class="bi bi-shop"></i><span>Ver loja</span>
+                </a>
+            </nav>
+
+            <div class="admin-sidebar-bottom">
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    var name = User.Identity.Name ?? "Administrador";
+                    var initials = string.Concat(name.Split(' ', StringSplitOptions.RemoveEmptyEntries).Take(2).Select(x => char.ToUpperInvariant(x[0])));
+                    <div class="admin-user-card">
+                        <span class="admin-user-avatar">@initials</span>
+                        <span class="admin-user-copy">
+                            <strong>@name</strong>
+                            <span>Administrador</span>
                         </span>
                     </div>
-                    <hr class="text-muted">
-                    
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Admin" asp-action="Index"><i class="bi bi-grid-1x2-fill me-2"></i>Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Admin" asp-action="CreateProduct"><i class="bi bi-plus-circle-fill me-2"></i>Nova Peça</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="Admin" asp-action="CreateCategory"><i class="bi bi-folder-plus me-2"></i>Nova Categoria</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-controller="AdminOrders" asp-action="Index"><i class="bi bi-receipt me-2"></i>Pedidos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-info" asp-controller="Home" asp-action="Index""><i class="bi bi-eye-fill me-2"></i>Ver Loja</a>
-                        </li>
-                    </ul>
-                </div>
+                }
 
-                <div class="mb-3">
-                    <hr class="text-muted mb-3">
+                <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="admin-logout">
+                        <i class="bi bi-box-arrow-left me-2"></i><span>Sair do painel</span>
+                    </button>
+                </form>
+            </div>
+        </aside>
+
+        <!-- Menu mobile -->
+        <div class="offcanvas offcanvas-start admin-offcanvas" tabindex="-1" id="adminSidebarMobile" aria-labelledby="adminSidebarMobileLabel">
+            <div class="offcanvas-header border-bottom border-light border-opacity-10">
+                <div>
+                    <span class="admin-brand-title d-block" id="adminSidebarMobileLabel">Ateliê da <strong>Transformação</strong></span>
+                    <small class="text-white-50">Painel administrativo</small>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
+            </div>
+            <div class="offcanvas-body d-flex flex-column">
+                <nav class="admin-nav p-0" aria-label="Navegação administrativa mobile">
+                    <span class="admin-nav-label">Gestão</span>
+                    <a class="nav-link @(currentController == "Admin" && currentAction == "Index" ? "active" : "")" data-bs-dismiss="offcanvas" asp-controller="Admin" asp-action="Index">
+                        <i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span>
+                    </a>
+                    <a class="nav-link @(currentController == "Admin" && (currentAction == "CreateProduct" || currentAction == "EditProduct") ? "active" : "")" data-bs-dismiss="offcanvas" asp-controller="Admin" asp-action="CreateProduct">
+                        <i class="bi bi-plus-square-fill"></i><span>Nova peça</span>
+                    </a>
+                    <a class="nav-link @(currentController == "Admin" && (currentAction == "Categories" || currentAction == "CreateCategory") ? "active" : "")" data-bs-dismiss="offcanvas" asp-controller="Admin" asp-action="Categories">
+                        <i class="bi bi-collection-fill"></i><span>Categorias</span>
+                    </a>
+                    <a class="nav-link @(currentController == "AdminOrders" ? "active" : "")" data-bs-dismiss="offcanvas" asp-controller="AdminOrders" asp-action="Index">
+                        <i class="bi bi-receipt-cutoff"></i><span>Pedidos</span>
+                    </a>
+                    <span class="admin-nav-label mt-4">Atalhos</span>
+                    <a class="nav-link external" data-bs-dismiss="offcanvas" asp-controller="Home" asp-action="Index">
+                        <i class="bi bi-shop"></i><span>Ver loja</span>
+                    </a>
+                </nav>
+
+                <div class="mt-auto pt-4">
                     <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
-                        <button type="submit" class="btn btn-outline-danger w-100 fw-bold rounded-pill text-start px-3 py-2 d-flex align-items-center">
-                            <i class="bi bi-box-arrow-left me-2"></i>Sair
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="admin-logout">
+                            <i class="bi bi-box-arrow-left me-2"></i><span>Sair do painel</span>
                         </button>
                     </form>
                 </div>
-            </nav>
-
-            <div class="offcanvas offcanvas-start bg-white text-dark d-md-none" tabindex="-1" id="adminSidebarMobile" aria-labelledby="adminSidebarMobileLabel">
-                <div class="offcanvas-header border-bottom">
-                    <h5 class="offcanvas-title fw-bold" id="adminSidebarMobileLabel">
-                        <i class="bi bi-shield-lock-fill text-warning me-2"></i>Ateliê Admin
-                    </h5>
-                    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body d-flex flex-column justify-content-between" style="background-color: #ffffff; padding: 20px;">
-                    <div>
-                        <ul class="nav flex-column">
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Admin" asp-action="Index"><i class="bi bi-grid-1x2-fill me-2"></i>Dashboard</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Admin" asp-action="CreateProduct"><i class="bi bi-plus-circle-fill me-2"></i>Nova Peça</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Admin" asp-action="CreateCategory"><i class="bi bi-folder-plus me-2"></i>Nova Categoria</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="AdminOrders" asp-action="Index"><i class="bi bi-receipt me-2"></i>Pedidos</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-info" asp-controller="Home" asp-action="Index""><i class="bi bi-eye-fill me-2"></i>Ver Loja</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="mb-3">
-                        <hr class="text-muted mb-3">
-                        <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
-                            <button type="submit" class="btn btn-outline-danger w-100 fw-bold rounded-pill text-start px-3 py-2 d-flex align-items-center">
-                                <i class="bi bi-box-arrow-left me-2"></i>Sair
-                            </button>
-                        </form>
-                    </div>
-                </div>
             </div>
+        </div>
 
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4 main-content">
+        <div class="admin-main-wrap">
+            <header class="admin-topbar">
+                <button type="button" class="admin-icon-button admin-mobile-toggle" id="adminSidebarToggle" aria-label="Recolher ou expandir menu" title="Recolher menu">
+                    <i class="bi bi-layout-sidebar-inset"></i>
+                </button>
+
+                <div class="admin-topbar-title">
+                    <small>Painel administrativo</small>
+                    <strong>@pageTitle</strong>
+                </div>
+
+                <div class="admin-topbar-actions">
+                    <a asp-controller="Home" asp-action="Index" class="admin-top-action" title="Abrir loja">
+                        <i class="bi bi-shop"></i><span>Ver loja</span>
+                    </a>
+                    <a asp-controller="Admin" asp-action="CreateProduct" class="admin-top-action primary" title="Cadastrar nova peça">
+                        <i class="bi bi-plus-lg"></i><span>Nova peça</span>
+                    </a>
+                </div>
+            </header>
+
+            <main class="admin-content" role="main">
                 @RenderBody()
             </main>
-
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bundle.min.js"></script>
-    
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // 1. Marcar link ativo na navegação baseado na URL atual
-            const currentPath = window.location.pathname.toLowerCase().replace(/\/$/, '');
-            const navLinks = document.querySelectorAll('.nav-link');
+        document.addEventListener('DOMContentLoaded', function () {
+            const body = document.body;
+            const toggle = document.getElementById('adminSidebarToggle');
+            const storageKey = 'atelie-admin-sidebar-collapsed';
 
-            navLinks.forEach(link => {
-                const href = link.getAttribute('href');
-                if (!href || href === "/") return;
+            // Mantém a preferência de largura do menu no desktop.
+            if (window.innerWidth >= 992 && localStorage.getItem(storageKey) === 'true') {
+                body.classList.add('admin-collapsed');
+            }
 
-                const linkPath = new URL(href, window.location.origin).pathname
-                    .toLowerCase()
-                    .replace(/\/$/, '');
-
-                // Cada item fica ativo somente quando pertence à rota atual.
-                // Evita, por exemplo, que /adminorders também marque /admin (Dashboard).
-                const isActive =
-                    (linkPath === '/admin' && currentPath === '/admin') ||
-                    (linkPath === '/adminorders' && currentPath.startsWith('/adminorders')) ||
-                    (linkPath !== '/admin' && linkPath !== '/adminorders' && currentPath === linkPath);
-
-                link.classList.toggle('active', isActive);
-            });
-
-            // 2. Feedback visual nos inputs de formulário (.form-active)
-            const inputs = document.querySelectorAll(".form-control, .form-select");
-            inputs.forEach(input => {
-                input.addEventListener("focus", () => input.classList.add("form-active"));
-                input.addEventListener("blur", () => input.classList.remove("form-active"));
-            });
-
-            // 3. Gerenciamento interativo inteligente do Hamburguer/Offcanvas
-            const toggler = document.querySelector('.navbar-toggler[data-bs-target="#adminSidebarMobile"]');
-            const offcanvasEl = document.getElementById('adminSidebarMobile');
-
-            if (toggler && offcanvasEl) {
-                toggler.addEventListener('click', function () {
-                    if (window.bootstrap && typeof window.bootstrap.Offcanvas === 'function') {
-                        const instance = bootstrap.Offcanvas.getOrCreateInstance(offcanvasEl);
-                        instance.toggle();
-                    } else {
-                        offcanvasEl.classList.toggle('show');
-                    }
+            if (toggle) {
+                toggle.addEventListener('click', function () {
+                    body.classList.toggle('admin-collapsed');
+                    localStorage.setItem(storageKey, body.classList.contains('admin-collapsed'));
                 });
             }
 
-            // --- Adicionado: garantir que o botão 'X' feche o offcanvas sem remover nada ---
-            if (offcanvasEl) {
-                const closeBtn = offcanvasEl.querySelector('[data-bs-dismiss="offcanvas"]');
-                if (closeBtn) {
-                    closeBtn.addEventListener('click', function (e) {
-                        // Usa API do Bootstrap se disponível, senão fallback que remove a classe 'show'
-                        if (window.bootstrap && typeof window.bootstrap.Offcanvas === 'function') {
-                            const instance = bootstrap.Offcanvas.getOrCreateInstance(offcanvasEl);
-                            instance.hide();
-                        } else {
-                            offcanvasEl.classList.remove('show');
-                        }
-                    });
-                }
-            }
-            // --- fim da adição ---
+            // Ao mudar para mobile, remove o estado colapsado para evitar layout inconsistente.
+            window.addEventListener('resize', function () {
+                if (window.innerWidth < 992) body.classList.remove('admin-collapsed');
+            });
+
+            // Feedback visual padronizado para os formulários administrativos.
+            document.querySelectorAll('.form-control, .form-select').forEach(function (input) {
+                input.addEventListener('focus', function () { this.classList.add('form-active'); });
+                input.addEventListener('blur', function () { this.classList.remove('form-active'); });
+            });
         });
     </script>
 

@@ -4,11 +4,19 @@
     ViewData["Title"] = "Editar Peça";
 }
 
-<div class="container-fluid px-0" style="max-width: 850px;">
+<div class="admin-page-head">
+    <div>
+        <h1>Editar peça</h1>
+        <p>Atualize as informações da criação sem perder os dados do catálogo.</p>
+    </div>
+</div>
+
+<div class="container-fluid px-0" style="max-width: 920px;">
     <div class="card border-0 shadow-sm p-4 p-md-5 rounded-4 bg-white">
         <div class="mb-4">
-            <h3 class="fw-bold text-dark mb-1">Atualizar Especificações</h3>
-            <p class="text-muted small">Modifique as propriedades estruturais ou o valor comercial da obra.</p>
+            <span class="admin-badge featured mb-2"><i class="bi bi-pencil-square"></i>Catálogo</span>
+            <h3 class="fw-bold text-dark mb-1">Informações da peça</h3>
+            <p class="text-muted small">Modifique as propriedades, o valor comercial ou a imagem da criação.</p>
 
             @if (!string.IsNullOrEmpty(Model.CoverImageUrl))
             {

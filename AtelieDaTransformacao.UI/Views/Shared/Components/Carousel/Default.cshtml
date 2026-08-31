@@ -1,36 +1,56 @@
 @model List<string>
 
-<div id="artisanHeroCarousel" class="carousel slide carousel-fade shadow-sm mb-5" data-bs-ride="carousel" data-bs-interval="5000" data-bs-pause="hover" data-bs-keyboard="true">
-	<div class="carousel-indicators">
-		@for (int i = 0; i < Model.Count; i++)
-		{
-			<button type="button" data-bs-target="#artisanHeroCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")" aria-current="@(i==0?"true":null)" aria-label="Slide @(i+1)"></button>
-		}
-	</div>
+<section id="artisanHeroCarousel" class="artisan-hero carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="6000" data-bs-pause="hover" data-bs-keyboard="true" aria-label="Destaques do Ateliê">
+    <div class="carousel-indicators">
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <button type="button" data-bs-target="#artisanHeroCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : null)" aria-label="Destaque @(i + 1)"></button>
+        }
+    </div>
 
-	<div class="carousel-inner" style="max-height: 550px; background-color: var(--artisan-wood);">
-		@for (int i = 0; i < Model.Count; i++)
-		{
-			var url = Model[i];
-			<div class="carousel-item @(i==0?"active":"")" data-bs-interval="6000">
-				<div class="position-relative w-100" style="height: 550px; background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.75)), url('@url') center/cover no-repeat;">
-					<div class="carousel-caption h-100 d-flex flex-column justify-content-center align-items-start text-start px-md-5" style="max-width: 750px; bottom: 0;">
-						@* Empty caption area - owner will customize per image if desired *@
-					</div>
-				</div>
-			</div>
-		}
-	</div>
+    <div class="carousel-inner">
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            var url = Model[i];
+            var eyebrow = i switch
+            {
+                0 => "ARTESANATO EM MADEIRA",
+                1 => "FEITO NO ATELIÊ",
+                _ => "DETALHES QUE TRANSFORMAM"
+            };
+            var title = i switch
+            {
+                0 => "O feito à mão encontra o seu espaço.",
+                1 => "Peças pensadas para durar e marcar presença.",
+                _ => "Do material bruto a uma peça única."
+            };
+            var text = i switch
+            {
+                0 => "Materiais, técnica e cuidado em criações que trazem personalidade para cada ambiente.",
+                1 => "Criamos móveis e objetos com atenção ao desenho, ao acabamento e à história de cada projeto.",
+                _ => "Transformamos madeira e ideias em peças artesanais feitas para você."
+            };
 
-	<button class="carousel-control-prev" type="button" data-bs-target="#artisanHeroCarousel" data-bs-slide="prev">
-		<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-		<span class="visually-hidden">Anterior</span>
-	</button>
-	<button class="carousel-control-next" type="button" data-bs-target="#artisanHeroCarousel" data-bs-slide="next">
-		<span class="carousel-control-next-icon" aria-hidden="true"></span>
-		<span class="visually-hidden">Seguinte</span>
-	</button>
-</div>
+            <div class="carousel-item @(i == 0 ? "active" : "")">
+                <div class="artisan-hero-slide" style="background-image: linear-gradient(90deg, rgba(31, 20, 14, .88) 0%, rgba(31, 20, 14, .62) 42%, rgba(31, 20, 14, .18) 100%), url('@url');">
+                    <div class="home-container artisan-hero-content">
+                        <span class="hero-eyebrow">@eyebrow</span>
+                        <h1 class="serif-title">@title</h1>
+                        <p>@text</p>
+                        <div class="hero-actions">
+                            <a asp-controller="Home" asp-action="Index" class="btn btn-artisan rounded-pill px-4">Explorar coleção</a>
+                            <a asp-controller="Quote" asp-action="Index" class="hero-text-link">Criar um projeto <i class="bi bi-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 
-@* Instructions: coloque as imagens em wwwroot/images/carousel (jpg/png/webp/gif). O componente usará todas as imagens da pasta.
-   Mantive captions vazias para que você escolha como deseja exibir textos por imagem. *@
+    <button class="carousel-control-prev" type="button" data-bs-target="#artisanHeroCarousel" data-bs-slide="prev" aria-label="Anterior">
+        <span class="hero-control-icon"><i class="bi bi-arrow-left"></i></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#artisanHeroCarousel" data-bs-slide="next" aria-label="Próximo">
+        <span class="hero-control-icon"><i class="bi bi-arrow-right"></i></span>
+    </button>
+</section>

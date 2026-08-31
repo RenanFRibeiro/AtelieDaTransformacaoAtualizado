@@ -749,3 +749,8 @@ div.position-fixed.bottom-0 button {
         border-radius: .9rem;
     }
 }
+
+/* Compatibilidade com a identidade visual moderna da Home. */
+.bg-artisan-dark { background-color: #241812 !important; border-bottom-color: #a85c3d !important; }
+.navbar-fixed-spacer { height: 76px; }
+@media (max-width: 991.98px) { .navbar-fixed-spacer { height: 70px; } }

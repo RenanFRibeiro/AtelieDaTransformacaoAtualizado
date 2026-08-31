@@ -1,125 +1,232 @@
-@model AtelieDaTransformacao.Application.ViewModels.HomeViewModel
+﻿@model AtelieDaTransformacao.Application.ViewModels.HomeViewModel
 
 @{
     ViewData["Title"] = "Peças Exclusivas";
 }
 
-<section class="business-intro text-center py-5 mb-4">
-    <div class="container">
-        <span class="eyebrow">COLEÇÃO ARTESANAL</span>
-        <h1 class="display-5 serif-title fw-bold mt-2">Peças que transformam ambientes.</h1>
-        <p class="text-muted lead mx-auto" style="max-width: 720px;">Descubra criações exclusivas ou conte sua ideia para desenvolvermos um projeto personalizado.</p>
-        <div class="d-flex justify-content-center gap-2 flex-wrap mt-3">
-            <a asp-controller="Quote" asp-action="Index" class="btn btn-artisan rounded-pill px-4 py-2"><i class="bi bi-rulers me-2"></i>Solicitar orçamento</a>
-            <a asp-action="Gallery" class="btn btn-outline-dark rounded-pill px-4 py-2">Ver projetos</a>
-        </div>
-    </div>
-</section>
+<div class="home-page">
+    <section class="home-collection-section" aria-labelledby="collection-title">
+        <div class="home-container">
+            <div class="collection-heading">
+                <div>
+                    <span class="eyebrow">COLEÇÃO ARTESANAL</span>
+                    <h1 id="collection-title" class="serif-title collection-title">Peças que transformam ambientes.</h1>
+                    <p class="collection-subtitle">Descubra criações exclusivas ou conte sua ideia para desenvolvermos um projeto personalizado.</p>
+                </div>
 
-<div class="container mb-5">
-    <form method="get" class="product-search mb-4 mx-auto" style="max-width: 720px;">
-        @if (Model.SelectedCategoryId.HasValue) { <input type="hidden" name="categoryId" value="@Model.SelectedCategoryId" /> }
-        <div class="input-group input-group-lg shadow-sm">
-            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
-            <input name="search" value="@ViewBag.Search" class="form-control border-start-0" placeholder="Busque por mesas, madeira..." />
-            <button class="btn btn-artisan px-4" type="submit">Buscar</button>
-        </div>
-    </form>
-    <div class="d-flex justify-content-center flex-wrap gap-2 mb-5">
-        <a href="@Url.Action("Index", "Home")"
-               class="px-4 py-2 text-decoration-none rounded-pill fw-semibold small filter-pill @(Model.SelectedCategoryId == null ? "active" : "")">
-            Ver Toda a Coleção
-        </a>
-        @foreach (var cat in Model.Categories)
-        {
-            <a href="@Url.Action("Index", "Home", new { categoryId = cat.Id })"
-                   class="px-4 py-2 text-decoration-none rounded-pill fw-semibold small filter-pill @(Model.SelectedCategoryId == cat.Id ? "active" : "")">
-                @cat.Name
-            </a>
-        }
-    </div>
-
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        @foreach (var prod in Model.Products)
-        {
-            <div class="col">
-                <div class="card h-100 card-wood position-relative overflow-hidden">
-                    @if (prod.IsFeatured)
-                    {
-                        <span class="position-absolute top-0 start-0 m-3 badge px-3 py-2 rounded-pill fw-bold shadow-sm" style="z-index: 2; background-color: var(--artisan-gold); color: var(--artisan-wood);">
-                            <i class="bi bi-stars me-1"></i> Destaque
-                        </span>
-                    }
-                    
-                    <div class="image-container" style="height: 280px;">
-                        <img src="@(string.IsNullOrEmpty(prod.Image) ? "/images/placeholder.jpg" : prod.Image)"
-                             class="w-100 h-100 object-fit-cover transition-transform" alt="@prod.Title" />
-                    </div>
-                    
-                    <div class="card-body p-4 d-flex flex-column">
-                        <span class="text-uppercase text-gold fw-bold tracking-wider mb-2" style="font-size: 0.75rem;">@prod.CategoryName</span>
-                        <h4 class="card-title fw-bold text-dark mb-2 serif-title">@prod.Title</h4>
-                        <p class="text-muted small mb-4 flex-grow-1">@prod.Description</p>
-                        
-                        <div class="d-flex justify-content-between align-items-center mt-auto pt-3 border-top border-light">
-                            <div>
-                                <span class="text-muted d-block small" style="font-size: 0.7rem;">Valor Unitário</span>
-                                <span class="fs-4 fw-bold text-dark">@prod.Price.ToString("C")</span>
-                            </div>
-                            
-                            <div class="d-flex gap-2">
-                                <a href="@Url.Action("ProductDetails", "Home", new { id = prod.Id })" class="btn btn-light rounded-circle px-3 py-2 border" title="Ver Detalhes">
-                                    <i class="bi bi-eye"></i>
-                                </a>
-                                @if (User.Identity?.IsAuthenticated == true)
-                                {
-                                    @if (prod.IsAvailable)
-                                    {
-                                        <form asp-controller="Cart" asp-action="Add" method="post" class="m-0">
-                                            @Html.AntiForgeryToken()
-                                            <input type="hidden" name="id" value="@prod.Id" />
-                                            <input type="hidden" name="quantity" value="1" />
-                                            <button type="submit" class="btn btn-artisan rounded-pill px-3 fw-medium d-inline-flex align-items-center gap-2 small shadow-sm">
-                                                <i class="bi bi-cart-plus"></i> Carrinho
-                                            </button>
-                                        </form>
-                                    }
-                                    else
-                                    {
-                                        <button class="btn btn-outline-secondary rounded-pill px-3 small border-0" disabled>Indisponível</button>
-                                    }
-                                }
-                            </div>
-                        </div>
-                    </div>
+                <div class="collection-actions">
+                    <a asp-controller="Quote" asp-action="Index" class="btn btn-artisan btn-lg rounded-pill px-4">
+                        <i class="bi bi-rulers me-2"></i>Solicitar orçamento
+                    </a>
+                    <a asp-action="Gallery" class="btn btn-outline-artisan-dark btn-lg rounded-pill px-4">
+                        Ver projetos <i class="bi bi-arrow-up-right ms-1"></i>
+                    </a>
                 </div>
             </div>
-        }
-    </div>
-    @if (!Model.Products.Any())
-    {
-        <div class="text-center py-5"><i class="bi bi-search fs-1 text-gold"></i><h3 class="serif-title mt-3">Nenhuma peça encontrada.</h3><p class="text-muted">Tente outro termo ou veja toda a coleção.</p><a asp-action="Index" class="btn btn-outline-dark rounded-pill">Limpar busca</a></div>
-    }
+
+            <div class="collection-tools">
+                <form method="get" class="product-search-modern" role="search">
+                    @if (Model.SelectedCategoryId.HasValue)
+                    {
+                        <input type="hidden" name="categoryId" value="@Model.SelectedCategoryId" />
+                    }
+                    <label class="visually-hidden" for="homeProductSearch">Buscar na coleção</label>
+                    <div class="search-box">
+                        <i class="bi bi-search" aria-hidden="true"></i>
+                        <input id="homeProductSearch" name="search" value="@ViewBag.Search" placeholder="Busque por peças, madeira, decoração..." autocomplete="off" />
+                        <button type="submit">Buscar</button>
+                    </div>
+                </form>
+
+                <div class="category-pills" aria-label="Categorias">
+                    <a href="@Url.Action("Index", "Home")"
+                       class="filter-pill-modern @(Model.SelectedCategoryId == null ? "active" : "")">
+                        Todas as peças
+                    </a>
+                    @foreach (var cat in Model.Categories)
+                    {
+                        <a href="@Url.Action("Index", "Home", new { categoryId = cat.Id })"
+                           class="filter-pill-modern @(Model.SelectedCategoryId == cat.Id ? "active" : "")">
+                            @cat.Name
+                        </a>
+                    }
+                </div>
+            </div>
+
+            @if (Model.Products.Any())
+            {
+                <div class="collection-meta">
+                    <span><strong>@Model.Products.Count()</strong> @(Model.Products.Count() == 1 ? "peça disponível" : "peças disponíveis")</span>
+                    <span class="collection-meta-line"></span>
+                    <span>Feitas para transformar espaços.</span>
+                </div>
+
+                <div class="products-grid-modern @(Model.Products.Count() == 1 ? "single-product-layout" : "")">
+                    @if (Model.Products.Count() == 1)
+                    {
+                        <div class="single-product-intro">
+                            <span class="eyebrow">PEÇA EM DESTAQUE</span>
+                            <h2 class="serif-title">Uma criação para chamar atenção aos detalhes.</h2>
+                            <p>Conheça esta peça da coleção e descubra todos os detalhes, materiais e possibilidades de uso.</p>
+                            <a asp-action="Gallery" class="btn btn-outline-artisan-dark rounded-pill px-4">Conhecer projetos <i class="bi bi-arrow-up-right ms-1"></i></a>
+                        </div>
+                    }
+
+                    @foreach (var prod in Model.Products)
+                    {
+                        var imageUrl = string.IsNullOrWhiteSpace(prod.Image) ? "/images/placeholder.jpg" : prod.Image;
+
+                        <article class="product-card-modern">
+                            <a asp-action="ProductDetails" asp-route-id="@prod.Id" class="product-image-link" aria-label="Ver detalhes de @prod.Title">
+                                @if (prod.IsFeatured)
+                                {
+                                    <span class="product-badge"><i class="bi bi-stars me-1"></i>Destaque</span>
+                                }
+                                <div class="product-image-modern">
+                                    <img src="@imageUrl" alt="@prod.Title" loading="lazy" />
+                                    <span class="product-view-chip"><i class="bi bi-arrow-up-right"></i></span>
+                                </div>
+                            </a>
+
+                            <div class="product-content-modern">
+                                <span class="product-category-modern">@prod.CategoryName</span>
+                                <h2 class="product-title-modern">@prod.Title</h2>
+                                @if (!string.IsNullOrWhiteSpace(prod.Description))
+                                {
+                                    <p class="product-description-modern">@prod.Description</p>
+                                }
+
+                                <div class="product-footer-modern">
+                                    <div>
+                                        <span class="product-price-label">Valor unitário</span>
+                                        <strong class="product-price">@prod.Price.ToString("C")</strong>
+                                    </div>
+
+                                    <div class="product-actions-modern">
+                                        <a asp-action="ProductDetails" asp-route-id="@prod.Id" class="product-detail-button" title="Ver detalhes">
+                                            <i class="bi bi-eye"></i>
+                                            <span class="visually-hidden">Ver detalhes</span>
+                                        </a>
+
+                                        @if (User.Identity?.IsAuthenticated == true)
+                                        {
+                                            @if (prod.IsAvailable)
+                                            {
+                                                <form asp-controller="Cart" asp-action="Add" method="post" class="m-0">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="id" value="@prod.Id" />
+                                                    <input type="hidden" name="quantity" value="1" />
+                                                    <button type="submit" class="add-cart-button">
+                                                        <i class="bi bi-bag-plus"></i>
+                                                        <span>Adicionar</span>
+                                                    </button>
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                <span class="unavailable-button">Indisponível</span>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="empty-collection">
+                    <div class="empty-collection-icon"><i class="bi bi-search"></i></div>
+                    <span class="eyebrow">COLEÇÃO</span>
+                    <h2 class="serif-title">Nenhuma peça encontrada.</h2>
+                    <p>Tente outro termo de busca ou veja novamente toda a coleção.</p>
+                    <a asp-action="Index" class="btn btn-artisan rounded-pill px-4">Ver todas as peças</a>
+                </div>
+            }
+        </div>
+    </section>
+
+    <section class="process-section" aria-labelledby="process-title">
+        <div class="home-container">
+            <div class="process-intro">
+                <span class="eyebrow">COMO FUNCIONA</span>
+                <h2 id="process-title" class="serif-title">Sua ideia pode virar uma peça única.</h2>
+                <p>Do primeiro contato ao acabamento, construímos cada detalhe junto com você.</p>
+            </div>
+
+            <div class="process-steps">
+                <div class="process-step">
+                    <span class="process-number">01</span>
+                    <div class="process-icon"><i class="bi bi-chat-heart"></i></div>
+                    <h3>Conte sua ideia</h3>
+                    <p>Fale sobre o ambiente, as medidas e o que você imagina para a peça.</p>
+                </div>
+                <div class="process-step">
+                    <span class="process-number">02</span>
+                    <div class="process-icon"><i class="bi bi-pencil-ruler"></i></div>
+                    <h3>Definimos o projeto</h3>
+                    <p>Alinhamos materiais, proporções, acabamento e todos os detalhes.</p>
+                </div>
+                <div class="process-step">
+                    <span class="process-number">03</span>
+                    <div class="process-icon"><i class="bi bi-hammer"></i></div>
+                    <h3>Criamos</h3>
+                    <p>Acompanhamos a produção até entregar uma peça feita para o seu espaço.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="craft-section" aria-labelledby="craft-title">
+        <div class="home-container craft-grid">
+            <div class="craft-copy">
+                <span class="eyebrow eyebrow-light">O VALOR ESTÁ NOS DETALHES</span>
+                <h2 id="craft-title" class="serif-title">Matéria-prima, técnica e cuidado artesanal.</h2>
+                <p>Cada criação nasce da combinação entre materiais naturais, experiência e atenção aos pequenos detalhes que fazem uma peça se destacar.</p>
+                <a asp-controller="Home" asp-action="About" class="craft-link">Conheça o Ateliê <i class="bi bi-arrow-right"></i></a>
+            </div>
+            <div class="craft-image-wrap">
+                <img src="~/images/carousel/slide02.jpg.jpg" alt="Processo artesanal de trabalho em madeira" loading="lazy" />
+                <div class="craft-image-caption">
+                    <span>Feito no ateliê</span>
+                    <strong>Cada peça tem seu próprio processo.</strong>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="location-section" aria-labelledby="location-map-title">
+        <div class="home-container">
+            <div class="location-card-modern">
+                <div class="location-copy">
+                    <span class="eyebrow">NOSSA LOCALIZAÇÃO</span>
+                    <h2 id="location-map-title" class="serif-title">Onde estamos.</h2>
+                    <p>Encontre o Ateliê da Transformação e, se quiser, venha conversar sobre sua próxima peça.</p>
+
+                    <div class="location-address">
+                        <span class="location-icon"><i class="bi bi-geo-alt"></i></span>
+                        <div>
+                            <strong>Ateliê da Transformação</strong>
+                            <span>R. Camomila, 99 - Antigo 375 - Jardim Helena<br />São Paulo - SP, 08090-530</span>
+                        </div>
+                    </div>
+
+                    <a class="btn btn-artisan rounded-pill px-4" target="_blank" rel="noopener noreferrer"
+                       href="https://www.google.com/maps/search/?api=1&query=R.+Camomila%2C+99+-+Antigo+375+-+Jardim+Helena%2C+S%C3%A3o+Paulo+-+SP%2C+08090-530">
+                        <i class="bi bi-map me-2"></i>Como chegar
+                    </a>
+                </div>
+
+                <div class="location-map-frame-modern">
+                    <iframe
+                        src="https://www.google.com/maps?q=R.+Camomila%2C+99+-+Antigo+375+-+Jardim+Helena%2C+S%C3%A3o+Paulo+-+SP%2C+08090-530&output=embed"
+                        title="Mapa com a localização do Ateliê da Transformação"
+                        loading="lazy"
+                        allowfullscreen
+                        referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
-
-<section class="business-steps py-5 mt-5 rounded-4">
-    <div class="row align-items-center g-4"><div class="col-lg-4"><span class="eyebrow">COMO FUNCIONA</span><h2 class="serif-title fw-bold">Sua ideia pode virar uma peça única.</h2></div><div class="col-md-4 col-lg"><div class="step-item"><span>01</span><h5>Conte sua ideia</h5><p>Fale sobre o ambiente e o que você imagina.</p></div></div><div class="col-md-4 col-lg"><div class="step-item"><span>02</span><h5>Definimos o projeto</h5><p>Alinhamos medidas, materiais e acabamento.</p></div></div><div class="col-md-4 col-lg"><div class="step-item"><span>03</span><h5>Criamos</h5><p>Acompanhamento próximo até a transformação.</p></div></div></div>
-</section>
-
-<section class="location-map-section mt-4 mb-5" aria-labelledby="location-map-title">
-    <div class="location-map-card">
-        <div class="location-map-heading text-center">
-            <span class="eyebrow">NOSSA LOCALIZAÇÃO</span>
-            <h2 id="location-map-title" class="serif-title fw-bold mt-2 mb-2">Onde estamos</h2>
-            <p class="text-muted mb-4">Encontre o Ateliê da Transformação no mapa.</p>
-        </div>
-        <div class="location-map-frame">
-            <iframe
-                src="https://www.google.com/maps?q=R.+Camomila%2C+99+-+Antigo+375+-+Jardim+Helena%2C+S%C3%A3o+Paulo+-+SP%2C+08090-530&output=embed"
-                title="Mapa com a localização do Ateliê da Transformação"
-                loading="lazy"
-                allowfullscreen
-                referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-    </div>
-</section>

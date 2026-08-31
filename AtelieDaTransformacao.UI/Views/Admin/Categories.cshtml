@@ -1,17 +1,17 @@
-﻿@model IEnumerable<AtelieDaTransformacao.Application.DTOs.ProductCategoryDto>
+@model IEnumerable<AtelieDaTransformacao.Application.DTOs.ProductCategoryDto>
 @{
     Layout = "_AdminLayout";
     ViewData["Title"] = "Gestão de Categorias";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-5">
+<div class="admin-page-head">
     <div>
-        <h2 class="fw-bold text-dark m-0">Categorias do Ateliê</h2>
-        <p class="text-muted small m-0">Gerencie os segmentos da sua loja (Ex: Tábuas, Mesas, Aparadores).</p>
+        <h1>Categorias do ateliê</h1>
+        <p>Organize os segmentos da loja e mantenha sua coleção fácil de navegar.</p>
     </div>
-    <div class="d-flex gap-2">
+    <div class="admin-page-actions">
         <a href="@Url.Action("Index", "Admin")" class="btn btn-outline-dark rounded-pill px-4">
-            Voltar para Peças
+            <i class="bi bi-arrow-left me-2"></i>Voltar para peças
         </a>
         <a href="@Url.Action("CreateCategory", "Admin")" class="btn btn-dark rounded-pill px-4">
             <i class="bi bi-plus-lg me-2"></i>Nova Categoria
