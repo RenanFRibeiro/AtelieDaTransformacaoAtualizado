@@ -34,7 +34,7 @@
 
 <div class="row g-3 g-xl-4 mb-4">
     <div class="col-12 col-sm-6 col-xl-3">
-        <div class="card admin-stat-card">
+        <div class="card admin-stat-card total-pieces">
             <div class="admin-stat-top">
                 <div><span class="admin-stat-label">Total de peças</span><div class="admin-stat-value">@products.Count</div></div>
                 <span class="admin-stat-icon"><i class="bi bi-box-seam"></i></span>
@@ -42,15 +42,15 @@
         </div>
     </div>
     <div class="col-12 col-sm-6 col-xl-3">
-        <div class="card admin-stat-card">
-            <div class="admin-stat-top ">
+        <div class="card admin-stat-card available">
+            <div class="admin-stat-top">
                 <div><span class="admin-stat-label">Disponíveis</span><div class="admin-stat-value">@available</div></div>
                 <span class="admin-stat-icon"><i class="bi bi-check2-circle"></i></span>
             </div>
         </div>
     </div>
     <div class="col-12 col-sm-6 col-xl-3">
-        <div class="card admin-stat-card">
+        <div class="card admin-stat-card featured">
             <div class="admin-stat-top">
                 <div><span class="admin-stat-label">Em destaque</span><div class="admin-stat-value">@featured</div></div>
                 <span class="admin-stat-icon"><i class="bi bi-stars"></i></span>
@@ -58,7 +58,7 @@
         </div>
     </div>
     <div class="col-12 col-sm-6 col-xl-3">
-        <div class="card admin-stat-card">
+        <div class="card admin-stat-card stock">
             <div class="admin-stat-top">
                 <div><span class="admin-stat-label">Unidades em estoque</span><div class="admin-stat-value">@stock</div></div>
                 <span class="admin-stat-icon"><i class="bi bi-layers"></i></span>

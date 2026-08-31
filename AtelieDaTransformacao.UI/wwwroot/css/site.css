@@ -754,3 +754,27 @@ div.position-fixed.bottom-0 button {
 .bg-artisan-dark { background-color: #241812 !important; border-bottom-color: #a85c3d !important; }
 .navbar-fixed-spacer { height: 76px; }
 @media (max-width: 991.98px) { .navbar-fixed-spacer { height: 70px; } }
+
+/* Botões da Coleção - Sobrescrita de Bootstrap */
+.btn-artisan, 
+.btn-outline-artisan-dark {
+    transition: all 0.2s ease;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.btn-artisan:not(:disabled):not(.disabled):active,
+.btn-artisan:not(:disabled):not(.disabled).active,
+.btn-artisan:focus-visible,
+.btn-outline-artisan-dark:focus-visible {
+    outline: 2px solid var(--artisan-gold);
+    outline-offset: 2px;
+}
+
+/* Garante que Links pareçam botões */
+.btn-artisan[class*="btn"],
+.btn-outline-artisan-dark[class*="btn"] {
+    line-height: 1.5;
+}

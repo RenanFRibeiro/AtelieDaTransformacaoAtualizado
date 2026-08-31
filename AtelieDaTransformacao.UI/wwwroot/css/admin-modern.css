@@ -339,6 +339,52 @@ body.admin-body {
 .admin-stat-label { color: var(--admin-muted); font-size: .64rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
 .admin-stat-value { color: var(--admin-brown-950); font-family: 'Playfair Display', serif; font-size: 2rem; line-height: 1; margin-top: 7px; }
 .admin-stat-icon { width: 42px; height: 42px; border-radius: 13px; display: grid; place-items: center; background: var(--admin-beige); color: var(--admin-terracotta); }
+
+/* Cores dos cards de estatísticas */
+.admin-stat-card.total-pieces {
+    --stat-bg-color: rgba(108, 117, 125, 0.08);
+    --stat-icon-bg: rgba(108, 117, 125, 0.15);
+    --stat-icon-color: #6c757d;
+}
+
+.admin-stat-card.total-pieces .admin-stat-icon {
+    background: var(--stat-icon-bg);
+    color: var(--stat-icon-color);
+}
+
+.admin-stat-card.available {
+    --stat-bg-color: rgba(25, 135, 84, 0.08);
+    --stat-icon-bg: rgba(25, 135, 84, 0.15);
+    --stat-icon-color: #198754;
+}
+
+.admin-stat-card.available .admin-stat-icon {
+    background: var(--stat-icon-bg);
+    color: var(--stat-icon-color);
+}
+
+.admin-stat-card.featured {
+    --stat-bg-color: rgba(255, 193, 7, 0.08);
+    --stat-icon-bg: rgba(255, 193, 7, 0.15);
+    --stat-icon-color: #FFC107;
+}
+
+.admin-stat-card.featured .admin-stat-icon {
+    background: var(--stat-icon-bg);
+    color: var(--admin-stat-icon-color);
+}
+
+.admin-stat-card.stock {
+    --stat-bg-color: rgba(220, 53, 69, 0.08);
+    --stat-icon-bg: rgba(220, 53, 69, 0.15);
+    --stat-icon-color: #dc3545;
+}
+
+.admin-stat-card.stock .admin-stat-icon {
+    background: var(--stat-icon-bg);
+    color: var(--stat-icon-color);
+}
+
 .admin-section-head { display: flex; align-items: center; justify-content: space-between; gap: 15px; padding: 20px 22px; border-bottom: 1px solid var(--admin-line); }
 .admin-section-title { margin: 0; color: var(--admin-brown-950); font-family: 'Playfair Display', serif; font-size: 1.2rem; }
 .admin-section-subtitle { margin: 3px 0 0; color: var(--admin-muted); font-size: .7rem; }

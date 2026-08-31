@@ -15,11 +15,11 @@
                 </div>
 
                 <div class="collection-actions">
-                    <a asp-controller="Quote" asp-action="Index" class="btn btn-artisan btn-lg rounded-pill px-4">
-                        <i class="bi bi-rulers me-2"></i>Solicitar orçamento
+                    <a asp-controller="Quote" asp-action="Index" class="btn btn-artisan btn-lg rounded-pill px-4" role="button" aria-label="Solicitar orçamento para personalização">
+                        <i class="bi bi-rulers me-2"></i><span>Solicitar orçamento</span>
                     </a>
-                    <a asp-action="Gallery" class="btn btn-outline-artisan-dark btn-lg rounded-pill px-4">
-                        Ver projetos <i class="bi bi-arrow-up-right ms-1"></i>
+                    <a asp-action="Gallery" class="btn btn-outline-artisan-dark btn-lg rounded-pill px-4" role="button" aria-label="Ver projetos anteriores">
+                        <span>Ver projetos</span> <i class="bi bi-arrow-up-right ms-1"></i>
                     </a>
                 </div>
             </div>
@@ -61,17 +61,106 @@
                     <span>Feitas para transformar espaços.</span>
                 </div>
 
-                <div class="products-grid-modern @(Model.Products.Count() == 1 ? "single-product-layout" : "")">
-                    @if (Model.Products.Count() == 1)
-                    {
-                        <div class="single-product-intro">
-                            <span class="eyebrow">PEÇA EM DESTAQUE</span>
-                            <h2 class="serif-title">Uma criação para chamar atenção aos detalhes.</h2>
-                            <p>Conheça esta peça da coleção e descubra todos os detalhes, materiais e possibilidades de uso.</p>
-                            <a asp-action="Gallery" class="btn btn-outline-artisan-dark rounded-pill px-4">Conhecer projetos <i class="bi bi-arrow-up-right ms-1"></i></a>
-                        </div>
-                    }
+                @if (Model.Products.Count() == 1)
+                {
+                    var prod = Model.Products.First();
+                    var imageUrl = string.IsNullOrWhiteSpace(prod.Image) ? "/images/placeholder.jpg" : prod.Image;
 
+                    <div class="featured-product-stage">
+                        <div class="featured-product-copy">
+                            <div class="featured-copy-top">
+                                <span class="eyebrow">PEÇA EM DESTAQUE</span>
+                                <span class="featured-index">01 / 01</span>
+                            </div>
+                            <h2 class="serif-title">Uma criação feita para transformar o ambiente.</h2>
+                            <p>Conheça esta peça em destaque e descubra seus detalhes, materiais e possibilidades de uso.</p>
+
+                            <div class="featured-product-info">
+                                <div>
+                                    <span>Peça selecionada</span>
+                                    <strong>@prod.Title</strong>
+                                </div>
+                                <div>
+                                    <span>Categoria</span>
+                                    <strong>@prod.CategoryName</strong>
+                                </div>
+                            </div>
+
+                            <div class="featured-product-actions">
+                                <a asp-action="ProductDetails" asp-route-id="@prod.Id" class="btn btn-artisan rounded-pill px-4">
+                                    Ver peça <i class="bi bi-arrow-up-right ms-1"></i>
+                                </a>
+                                <a asp-action="Gallery" class="featured-text-link">
+                                    Ver projetos <i class="bi bi-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <article class="product-card-modern featured-product-card">
+                            <a asp-action="ProductDetails" asp-route-id="@prod.Id" class="product-image-link" aria-label="Ver detalhes de @prod.Title">
+                                @if (prod.IsFeatured)
+                                {
+                                    <span class="product-badge"><i class="bi bi-stars me-1"></i>Destaque</span>
+                                }
+                                <div class="product-image-modern">
+                                    <img src="@imageUrl" alt="@prod.Title" loading="lazy" />
+                                    <span class="product-view-chip visible"><i class="bi bi-arrow-up-right"></i></span>
+                                </div>
+                            </a>
+
+                            <div class="product-content-modern">
+                                <div class="featured-card-heading">
+                                    <div>
+                                        <span class="product-category-modern">@prod.CategoryName</span>
+                                        <h2 class="product-title-modern">@prod.Title</h2>
+                                    </div>
+                                    <span class="featured-card-dot" aria-hidden="true"></span>
+                                </div>
+                                @if (!string.IsNullOrWhiteSpace(prod.Description))
+                                {
+                                    <p class="product-description-modern">@prod.Description</p>
+                                }
+
+                                <div class="product-footer-modern">
+                                    <div>
+                                        <span class="product-price-label">Valor unitário</span>
+                                        <strong class="product-price">@prod.Price.ToString("C")</strong>
+                                    </div>
+
+                                    <div class="product-actions-modern">
+                                        <a asp-action="ProductDetails" asp-route-id="@prod.Id" class="product-detail-button" title="Ver detalhes">
+                                            <i class="bi bi-eye"></i>
+                                            <span class="visually-hidden">Ver detalhes</span>
+                                        </a>
+
+                                        @if (User.Identity?.IsAuthenticated == true)
+                                        {
+                                            @if (prod.IsAvailable)
+                                            {
+                                                <form asp-controller="Cart" asp-action="Add" method="post" class="m-0">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="id" value="@prod.Id" />
+                                                    <input type="hidden" name="quantity" value="1" />
+                                                    <button type="submit" class="add-cart-button">
+                                                        <i class="bi bi-bag-plus"></i>
+                                                        <span>Adicionar</span>
+                                                    </button>
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                <span class="unavailable-button">Indisponível</span>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                }
+                else
+                {
+                    <div class="products-grid-modern">
                     @foreach (var prod in Model.Products)
                     {
                         var imageUrl = string.IsNullOrWhiteSpace(prod.Image) ? "/images/placeholder.jpg" : prod.Image;
@@ -132,7 +221,8 @@
                             </div>
                         </article>
                     }
-                </div>
+                    </div>
+                }
             }
             else
             {
