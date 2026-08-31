@@ -2,110 +2,1631 @@
 
 @{
     ViewData["Title"] = Model.Title;
+
+    var imageUrl = string.IsNullOrWhiteSpace(Model.Image)
+        ? "/images/placeholder.jpg"
+        : Model.Image;
 }
 
-<div class="container py-5 mt-2">
-    <div class="row g-5">
-        <div class="col-12 col-lg-6">
-            <div class="rounded-4 bg-white border p-2 shadow-sm overflow-hidden">
-                <img src="@(string.IsNullOrEmpty(Model.Image) ? "/images/placeholder.jpg" : Model.Image)"
-                     class="img-fluid rounded-3 w-100 object-fit-cover" style="max-height: 500px;" alt="@Model.Title" />
-            </div>
-        </div>
+<div class="product-page">
 
-        <div class="col-12 col-lg-6 d-flex flex-column justify-content-center">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb mb-2">
-                    <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none text-muted small">Coleção</a></li>
-                    <li class="breadcrumb-item active text-gold small fw-bold" aria-current="page">@Model.CategoryName</li>
-                </ol>
-            </nav>
-            
-            <h1 class="display-5 serif-title fw-bold text-dark mb-3">@Model.Title</h1>
-            
-            <div class="p-4 bg-white rounded-4 border border-light-subtle shadow-sm mb-4">
-                <span class="text-muted small d-block mb-1">Preço avaliado de aquisição</span>
-                <h2 class="text-dark fw-bold serif-title m-0">@Model.Price.ToString("C")</h2>
-            </div>
+    <!-- =========================================================
+         HERO / PRODUTO
+         ========================================================= -->
 
-            <h6 class="fw-bold text-uppercase tracking-wider text-secondary mb-2" style="font-size: 0.8rem;">Detalhes da peça</h6>
-            <p class="text-secondary lh-lg fs-6 mb-4">@Model.Description</p>
-            <div class="row row-cols-2 g-2 mb-4 small"><div class="col"><div class="border rounded-3 p-3 bg-white"><strong>Produção</strong><br/><span class="text-muted">Artesanal</span></div></div><div class="col"><div class="border rounded-3 p-3 bg-white"><strong>Categoria</strong><br/><span class="text-muted">@Model.CategoryName</span></div></div><div class="col"><div class="border rounded-3 p-3 bg-white"><strong>Disponibilidade</strong><br/><span class="text-muted">@(Model.IsAvailable ? "Consulte disponibilidade" : "Sob consulta")</span></div></div><div class="col"><div class="border rounded-3 p-3 bg-white"><strong>Personalização</strong><br/><a asp-controller="Quote" asp-action="Index" class="text-decoration-none">Solicitar orçamento</a></div></div></div>
+    <section class="product-hero">
 
-            <div class="p-4 bg-light rounded-4 border">
-                <div class="d-flex gap-3 align-items-start mb-4">
-                    <i class="bi bi-patch-check-fill text-gold fs-4"></i>
-                    <div>
-                        <h6 class="fw-bold mb-1">Certificado de Autenticidade Manual</h6>
-                        <p class="small text-muted m-0">Por se tratar de um trabalho puramente orgânico, os veios e nós apresentados na fotografia são exclusivos deste lote. O envio é estruturado sob medida.</p>
-                    </div>
-                </div>
-                
-                @if (Model.IsAvailable && Model.StockQuantity > 0)
-                {
-                    @if (User.Identity?.IsAuthenticated == true)
-                    {
-                        <form asp-controller="Cart" asp-action="Add" method="post">
-                            @Html.AntiForgeryToken()
-                            <input type="hidden" name="id" value="@Model.Id" />
+        <div class="container">
 
-                            <div class="row g-2 mb-3">
-                                <div class="col-4">
-                                    <label for="quantity" class="form-label small fw-semibold">Quantidade</label>
-                                    <input id="quantity" name="quantity" type="number" min="1" max="@Model.StockQuantity" value="1" class="form-control form-control-lg" />
-                                    <script>
-                                        document.getElementById('quantity')?.addEventListener('input', function () {
-                                            const target = document.getElementById('buyNowQuantity');
-                                            if (target) target.value = this.value;
-                                        });
-                                    </script>
-                                </div>
-                                <div class="col-8 d-flex align-items-end">
-                                    <button type="submit" class="btn btn-artisan btn-lg w-100 py-3 rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-2">
-                                        <i class="bi bi-cart-plus"></i> Adicionar ao carrinho
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+            <!-- BREADCRUMB -->
 
-                        <form asp-controller="Order" asp-action="BuyNow" method="post" class="mb-2">
-                            @Html.AntiForgeryToken()
-                            <input type="hidden" name="id" value="@Model.Id" />
-                            <input type="hidden" name="quantity" value="1" id="buyNowQuantity" />
-                            <button type="submit"
-                                    class="btn btn-artisan w-100 py-3 rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-2">
-                                <i class="bi bi-credit-card-2-front"></i> Comprar pelo site
-                            </button>
-                        </form>
+            <nav aria-label="breadcrumb"
+                 class="product-breadcrumb mb-4">
 
-                        <a asp-controller="Home" asp-action="ContactSeller" asp-route-id="@Model.Id" class="btn btn-success w-100 py-3 rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-2">
-                            <i class="bi bi-whatsapp"></i> Comprar somente esta peça pelo WhatsApp
+                <ol class="breadcrumb mb-0">
+
+                    <li class="breadcrumb-item">
+
+                        <a asp-action="Index">
+                            Coleção
                         </a>
-                    }
-                    else
-                    {
-                        <div class="alert alert-light border rounded-3 mb-3">
-                            <div class="d-flex gap-2 align-items-start">
-                                <i class="bi bi-person-lock text-gold fs-5"></i>
-                                <div>
-                                    <strong>Cadastro necessário para entrar em contato</strong>
-                                    <p class="small text-muted mb-0 mt-1">Crie sua conta para falar com o vendedor e iniciar a compra desta peça.</p>
-                                </div>
-                            </div>
+
+                    </li>
+
+                    <li class="breadcrumb-item">
+
+                        <span>/</span>
+
+                    </li>
+
+                    <li class="breadcrumb-item active"
+                        aria-current="page">
+
+                        @Model.CategoryName
+
+                    </li>
+
+                </ol>
+
+            </nav>
+
+
+            <div class="row g-5 align-items-start">
+
+                <!-- =================================================
+                     IMAGEM
+                     ================================================= -->
+
+                <div class="col-12 col-lg-6">
+
+                    <div class="product-gallery">
+
+                        <div class="product-image-card">
+
+                            <span class="product-artisan-badge">
+
+                                <i class="bi bi-patch-check-fill"></i>
+
+                                Peça única
+
+                            </span>
+
+                            <img src="@imageUrl"
+                                 alt="@Model.Title"
+                                 class="product-main-image" />
+
                         </div>
 
-                        <a asp-controller="Home" asp-action="ContactSeller" asp-route-id="@Model.Id" class="btn btn-success w-100 py-3 rounded-3 shadow-sm d-flex align-items-center justify-content-center gap-2">
-                            <i class="bi bi-whatsapp"></i> Criar conta e falar com o vendedor
-                        </a>
-                    }
-                }
-                else
-                {
-                    <button class="btn btn-secondary btn-lg w-100 py-3 rounded-3" disabled>
-                        <i class="bi bi-slash-circle me-2"></i> Peça Indisponível
-                    </button>
-                }
+
+                        <div class="product-image-caption">
+
+                            <span>
+                                <i class="bi bi-camera me-1"></i>
+                                Imagem original da peça
+                            </span>
+
+                            <span>
+                                <i class="bi bi-patch-check me-1"></i>
+                                Acabamento artesanal
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     INFORMAÇÕES
+                     ================================================= -->
+
+                <div class="col-12 col-lg-6">
+
+                    <div class="product-content">
+
+                        <!-- CATEGORIA -->
+
+                        <div class="product-category">
+
+                            <span>
+                                Coleção
+                            </span>
+
+                            <i class="bi bi-chevron-right"></i>
+
+                            <strong>
+                                @Model.CategoryName
+                            </strong>
+
+                        </div>
+
+
+                        <!-- TÍTULO -->
+
+                        <h1 class="product-title">
+                            @Model.Title
+                        </h1>
+
+
+                        <!-- DESCRIÇÃO -->
+
+                        <div class="product-description">
+
+                            <span class="product-eyebrow">
+                                DETALHES DA PEÇA
+                            </span>
+
+                            @if (!string.IsNullOrWhiteSpace(Model.Description))
+                            {
+                                <p>
+                                    @Model.Description
+                                </p>
+                            }
+                            else
+                            {
+                                <p class="text-muted">
+                                    Peça artesanal produzida cuidadosamente
+                                    pelo Ateliê da Transformação.
+                                </p>
+                            }
+
+                        </div>
+
+
+                        <!-- =================================================
+                             PREÇO
+                             ================================================= -->
+
+                        <div class="product-price-card">
+
+                            <div>
+
+                                <span class="product-price-label">
+                                    Valor da peça
+                                </span>
+
+                                <div class="product-price">
+                                    @Model.Price.ToString("C")
+                                </div>
+
+                            </div>
+
+
+                            <div class="secure-purchase">
+
+                                <div class="secure-icon">
+
+                                    <i class="bi bi-shield-check"></i>
+
+                                </div>
+
+                                <div>
+
+                                    <strong>
+                                        Compra segura
+                                    </strong>
+
+                                    <span>
+                                        Ambiente protegido
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =================================================
+                             INFORMAÇÕES DA PEÇA
+                             ================================================= -->
+
+                        <div class="product-info-section">
+
+                            <span class="product-eyebrow">
+                                INFORMAÇÕES
+                            </span>
+
+
+                            <div class="product-info-grid">
+
+                                <!-- PRODUÇÃO -->
+
+                                <div class="product-info-card">
+
+                                    <div class="info-icon">
+
+                                        <i class="bi bi-flower1"></i>
+
+                                    </div>
+
+                                    <div>
+
+                                        <strong>
+                                            Produção
+                                        </strong>
+
+                                        <span>
+                                            Artesanal
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- CATEGORIA -->
+
+                                <div class="product-info-card">
+
+                                    <div class="info-icon">
+
+                                        <i class="bi bi-collection"></i>
+
+                                    </div>
+
+                                    <div>
+
+                                        <strong>
+                                            Categoria
+                                        </strong>
+
+                                        <span>
+                                            @Model.CategoryName
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- DISPONIBILIDADE -->
+
+                                <div class="product-info-card">
+
+                                    <div class="info-icon">
+
+                                        <i class="bi bi-box-seam"></i>
+
+                                    </div>
+
+                                    <div>
+
+                                        <strong>
+                                            Disponibilidade
+                                        </strong>
+
+                                        <span>
+                                            @(Model.IsAvailable
+                                                ? "Disponível"
+                                                : "Sob consulta")
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+
+                                <!-- PERSONALIZAÇÃO -->
+
+                                <div class="product-info-card">
+
+                                    <div class="info-icon">
+
+                                        <i class="bi bi-stars"></i>
+
+                                    </div>
+
+                                    <div>
+
+                                        <strong>
+                                            Personalização
+                                        </strong>
+
+                                        <a asp-controller="Quote"
+                                           asp-action="Index">
+
+                                            Solicitar orçamento
+
+                                        </a>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =================================================
+                             AUTENTICIDADE
+                             ================================================= -->
+
+                        <div class="authenticity-card">
+
+                            <div class="authenticity-icon">
+
+                                <i class="bi bi-patch-check-fill"></i>
+
+                            </div>
+
+
+                            <div>
+
+                                <h3>
+                                    Certificado de Autenticidade Manual
+                                </h3>
+
+                                <p>
+                                    Cada peça possui características próprias
+                                    e únicas. Veios, nós e detalhes naturais
+                                    fazem parte da identidade do trabalho
+                                    artesanal.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- =================================================
+                             ÁREA DE COMPRA
+                             ================================================= -->
+
+                        <div class="purchase-card">
+
+                            @if (Model.IsAvailable &&
+                                 Model.StockQuantity > 0)
+                            {
+                                <!-- =================================================
+                                     USUÁRIO LOGADO
+                                     ================================================= -->
+                                @if (User.Identity?.IsAuthenticated == true)
+                                {
+                                    <!-- CARRINHO -->
+
+                                    <form asp-controller="Cart"
+                                          asp-action="Add"
+                                          method="post">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="id"
+                                               value="@Model.Id" />
+
+
+                                        <div class="purchase-row">
+
+                                            <!-- QUANTIDADE -->
+
+                                            <div class="quantity-group">
+
+                                                <label for="quantity">
+                                                    Quantidade
+                                                </label>
+
+
+                                                <div class="quantity-input">
+
+                                                    <button type="button"
+                                                            class="quantity-btn"
+                                                            id="decreaseQuantity"
+                                                            aria-label="Diminuir quantidade">
+
+                                                        <i class="bi bi-dash"></i>
+
+                                                    </button>
+
+
+                                                    <input id="quantity"
+                                                           name="quantity"
+                                                           type="number"
+                                                           min="1"
+                                                           max="@Model.StockQuantity"
+                                                           value="1"
+                                                           class="quantity-field" />
+
+
+                                                    <button type="button"
+                                                            class="quantity-btn"
+                                                            id="increaseQuantity"
+                                                            aria-label="Aumentar quantidade">
+
+                                                        <i class="bi bi-plus"></i>
+
+                                                    </button>
+
+                                                </div>
+
+
+                                                <small>
+                                                    @Model.StockQuantity disponível(is)
+                                                </small>
+
+                                            </div>
+
+
+                                            <!-- ADICIONAR -->
+
+                                            <div class="purchase-main-action">
+
+                                                <button type="submit"
+                                                        class="btn btn-artisan product-main-btn">
+
+                                                    <i class="bi bi-cart-plus"></i>
+
+                                                    Adicionar ao carrinho
+
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+
+                                    </form>
+
+
+                                    <!-- =================================================
+                                         COMPRAR PELO SITE
+                                         ================================================= -->
+
+                                    <form asp-controller="Order"
+                                          asp-action="BuyNow"
+                                          method="post"
+                                          class="purchase-form">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="id"
+                                               value="@Model.Id" />
+
+                                        <input type="hidden"
+                                               name="quantity"
+                                               value="1"
+                                               id="buyNowQuantity" />
+
+                                        <button type="submit"
+                                                class="btn product-site-btn">
+
+                                            <i class="bi bi-credit-card-2-front"></i>
+
+                                            Comprar pelo site
+
+                                        </button>
+
+                                    </form>
+
+
+                                    <!-- =================================================
+                                         WHATSAPP
+                                         ================================================= -->
+
+                                    <a asp-controller="Home"
+                                       asp-action="ContactSeller"
+                                       asp-route-id="@Model.Id"
+                                       class="btn product-whatsapp-btn">
+
+                                        <i class="bi bi-whatsapp"></i>
+
+                                        Comprar pelo WhatsApp
+
+                                    </a>
+
+
+                                    <div class="purchase-note">
+
+                                        <i class="bi bi-info-circle"></i>
+
+                                        Você pode finalizar pelo site
+                                        ou conversar diretamente
+                                        com o vendedor pelo WhatsApp.
+
+                                    </div>
+                                }
+
+                                else
+                                {
+                                    <div class="login-required">
+
+                                        <div class="login-required-icon">
+
+                                            <i class="bi bi-person-lock"></i>
+
+                                        </div>
+
+
+                                        <div>
+
+                                            <strong>
+                                                Crie sua conta para continuar
+                                            </strong>
+
+                                            <p>
+                                                O cadastro é necessário para
+                                                entrar em contato com o vendedor
+                                                e iniciar sua compra.
+                                            </p>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <a asp-controller="Home"
+                                       asp-action="ContactSeller"
+                                       asp-route-id="@Model.Id"
+                                       class="btn product-whatsapp-btn">
+
+                                        <i class="bi bi-whatsapp"></i>
+
+                                        Criar conta e falar com o vendedor
+
+                                    </a>
+                                }
+                            }
+                            else
+                            {
+                                <!-- =================================================
+                                     INDISPONÍVEL
+                                     ================================================= -->
+
+                                <div class="unavailable-product">
+
+                                    <div class="unavailable-icon">
+
+                                        <i class="bi bi-slash-circle"></i>
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <strong>
+                                            Peça indisponível
+                                        </strong>
+
+                                        <span>
+                                            Entre em contato para consultar
+                                            disponibilidade ou solicitar uma
+                                            peça semelhante.
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+
+                                <a asp-controller="Quote"
+                                   asp-action="Index"
+                                   class="btn btn-outline-artisan-light w-100 mt-3">
+
+                                    Solicitar orçamento
+
+                                </a>
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
             </div>
+
         </div>
-    </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         BENEFÍCIOS
+         ========================================================= -->
+
+    <section class="product-benefits">
+
+        <div class="container">
+
+            <div class="row g-3">
+
+                <!-- SEGURANÇA -->
+
+                <div class="col-12 col-md-4">
+
+                    <div class="benefit-item">
+
+                        <div class="benefit-icon">
+
+                            <i class="bi bi-shield-check"></i>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Compra segura
+                            </strong>
+
+                            <span>
+                                Processo protegido e transparente.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ARTESANAL -->
+
+                <div class="col-12 col-md-4">
+
+                    <div class="benefit-item">
+
+                        <div class="benefit-icon">
+
+                            <i class="bi bi-brush"></i>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Acabamento artesanal
+                            </strong>
+
+                            <span>
+                                Cada detalhe é tratado manualmente.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ATENDIMENTO -->
+
+                <div class="col-12 col-md-4">
+
+                    <div class="benefit-item">
+
+                        <div class="benefit-icon">
+
+                            <i class="bi bi-whatsapp"></i>
+
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Atendimento direto
+                            </strong>
+
+                            <span>
+                                Fale diretamente com o vendedor.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
 </div>
+
+
+<style>
+
+    /* ==============================================================
+       PÁGINA DO PRODUTO
+       ============================================================== */
+
+    .product-page {
+        background: var(--artisan-sand);
+        color: var(--text-main);
+    }
+
+
+    /* ==============================================================
+       HERO
+       ============================================================== */
+
+    .product-hero {
+        padding: 2.5rem 0 4.5rem;
+    }
+
+
+    /* ==============================================================
+       BREADCRUMB
+       ============================================================== */
+
+    .product-breadcrumb .breadcrumb-item {
+        font-size: .82rem;
+        font-weight: 600;
+    }
+
+    .product-breadcrumb a {
+        color: #81756d;
+        text-decoration: none;
+        transition: color .2s ease;
+    }
+
+        .product-breadcrumb a:hover {
+            color: var(--artisan-clay);
+        }
+
+    .product-breadcrumb .breadcrumb-item.active {
+        color: var(--artisan-gold);
+    }
+
+    .product-breadcrumb .breadcrumb-item + .breadcrumb-item::before {
+        content: "";
+        padding: 0;
+    }
+
+    .product-breadcrumb span {
+        color: #c5bdb6;
+        margin: 0 .7rem;
+    }
+
+
+    /* ==============================================================
+       GALERIA
+       ============================================================== */
+
+    .product-gallery {
+        position: sticky;
+        top: 100px;
+    }
+
+    .product-image-card {
+        position: relative;
+        overflow: hidden;
+        border-radius: 1.4rem;
+        background: #fff;
+        padding: .55rem;
+        border: 1px solid rgba(61,43,31,.09);
+        box-shadow: 0 16px 45px rgba(61,43,31,.08);
+    }
+
+    .product-main-image {
+        display: block;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        border-radius: 1rem;
+        transition: transform .55s cubic-bezier(.16,1,.3,1);
+    }
+
+    .product-image-card:hover .product-main-image {
+        transform: scale(1.025);
+    }
+
+    .product-artisan-badge {
+        position: absolute;
+        z-index: 3;
+        top: 1.2rem;
+        left: 1.2rem;
+        display: inline-flex;
+        align-items: center;
+        gap: .4rem;
+        padding: .55rem .85rem;
+        border-radius: 999px;
+        background: rgba(42,36,33,.94);
+        color: #fff;
+        font-size: .74rem;
+        font-weight: 700;
+        box-shadow: 0 8px 20px rgba(0,0,0,.15);
+    }
+
+        .product-artisan-badge i {
+            color: var(--artisan-gold);
+        }
+
+    .product-image-caption {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: .9rem .25rem 0;
+        color: #827870;
+        font-size: .72rem;
+        font-weight: 600;
+    }
+
+        .product-image-caption i {
+            color: var(--artisan-gold);
+        }
+
+
+    /* ==============================================================
+       CONTEÚDO
+       ============================================================== */
+
+    .product-content {
+        max-width: 690px;
+    }
+
+    .product-category {
+        display: flex;
+        align-items: center;
+        gap: .55rem;
+        margin-bottom: .7rem;
+        font-size: .82rem;
+        color: #897d75;
+    }
+
+        .product-category i {
+            color: #c7bcb4;
+            font-size: .7rem;
+        }
+
+        .product-category strong {
+            color: var(--artisan-gold);
+            font-weight: 700;
+        }
+
+    .product-title {
+        margin: 0;
+        color: var(--text-main);
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(2.4rem, 4vw, 4rem);
+        line-height: 1.02;
+        letter-spacing: -.035em;
+    }
+
+
+    /* ==============================================================
+       DESCRIÇÃO
+       ============================================================== */
+
+    .product-description {
+        margin-top: 1.8rem;
+    }
+
+    .product-eyebrow {
+        display: block;
+        margin-bottom: .65rem;
+        color: var(--artisan-clay);
+        font-size: .71rem;
+        font-weight: 800;
+        letter-spacing: .16em;
+    }
+
+    .product-description p {
+        max-width: 620px;
+        margin: 0;
+        color: #6d645e;
+        font-size: .98rem;
+        line-height: 1.8;
+    }
+
+
+    /* ==============================================================
+       PREÇO
+       ============================================================== */
+
+    .product-price-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-top: 1.7rem;
+        padding: 1.25rem 1.4rem;
+        border-radius: 1rem;
+        border: 1px solid rgba(61,43,31,.09);
+        background: #fff;
+        box-shadow: 0 10px 28px rgba(61,43,31,.055);
+    }
+
+    .product-price-label {
+        display: block;
+        margin-bottom: .15rem;
+        color: #847970;
+        font-size: .72rem;
+        font-weight: 600;
+    }
+
+    .product-price {
+        color: var(--artisan-wood);
+        font-family: 'Playfair Display', serif;
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+
+    /* ==============================================================
+       COMPRA SEGURA
+       ============================================================== */
+
+    .secure-purchase {
+        display: flex;
+        align-items: center;
+        gap: .65rem;
+        padding-left: 1rem;
+        border-left: 1px solid #ece7e2;
+    }
+
+    .secure-icon {
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: var(--artisan-linen);
+        color: var(--artisan-gold);
+    }
+
+    .secure-purchase strong,
+    .secure-purchase span {
+        display: block;
+    }
+
+    .secure-purchase strong {
+        color: var(--text-main);
+        font-size: .78rem;
+    }
+
+    .secure-purchase span {
+        margin-top: .1rem;
+        color: #90857d;
+        font-size: .68rem;
+    }
+
+
+    /* ==============================================================
+       INFORMAÇÕES
+       ============================================================== */
+
+    .product-info-section {
+        margin-top: 1.8rem;
+    }
+
+    .product-info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: .7rem;
+    }
+
+    .product-info-card {
+        display: flex;
+        align-items: center;
+        gap: .8rem;
+        min-height: 76px;
+        padding: .9rem 1rem;
+        border: 1px solid rgba(61,43,31,.09);
+        border-radius: .9rem;
+        background: rgba(255,255,255,.72);
+        transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+        .product-info-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(61,43,31,.06);
+        }
+
+    .info-icon {
+        flex: 0 0 36px;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        background: var(--artisan-linen);
+        color: var(--artisan-gold);
+    }
+
+    .product-info-card strong,
+    .product-info-card span,
+    .product-info-card a {
+        display: block;
+    }
+
+    .product-info-card strong {
+        color: var(--text-main);
+        font-size: .76rem;
+    }
+
+    .product-info-card span,
+    .product-info-card a {
+        margin-top: .15rem;
+        color: #847971;
+        font-size: .75rem;
+    }
+
+    .product-info-card a {
+        color: var(--artisan-clay);
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+        .product-info-card a:hover {
+            text-decoration: underline;
+        }
+
+
+    /* ==============================================================
+       AUTENTICIDADE
+       ============================================================== */
+
+    .authenticity-card {
+        display: flex;
+        gap: .9rem;
+        margin-top: 1rem;
+        padding: 1rem 1.1rem;
+        border: 1px solid rgba(61,43,31,.08);
+        border-radius: 1rem;
+        background: var(--artisan-linen);
+    }
+
+    .authenticity-icon {
+        flex: 0 0 38px;
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 11px;
+        background: #fff;
+        color: var(--artisan-gold);
+    }
+
+    .authenticity-card h3 {
+        margin: 0 0 .25rem;
+        color: var(--artisan-wood);
+        font-family: 'Playfair Display', serif;
+        font-size: 1rem;
+    }
+
+    .authenticity-card p {
+        margin: 0;
+        color: #776c65;
+        font-size: .76rem;
+        line-height: 1.65;
+    }
+
+
+    /* ==============================================================
+       ÁREA DE COMPRA
+       ============================================================== */
+
+    .purchase-card {
+        margin-top: 1rem;
+        padding: 1.15rem;
+        border: 1px solid rgba(61,43,31,.1);
+        border-radius: 1.1rem;
+        background: #fff;
+        box-shadow: 0 14px 35px rgba(61,43,31,.07);
+    }
+
+    .purchase-row {
+        display: grid;
+        grid-template-columns: 135px 1fr;
+        gap: .8rem;
+    }
+
+    .quantity-group label {
+        display: block;
+        margin-bottom: .45rem;
+        color: var(--text-main);
+        font-size: .73rem;
+        font-weight: 700;
+    }
+
+    .quantity-input {
+        display: flex;
+        align-items: center;
+        height: 52px;
+        overflow: hidden;
+        border: 1px solid rgba(61,43,31,.14);
+        border-radius: .8rem;
+        background: #fff;
+    }
+
+    .quantity-btn {
+        width: 38px;
+        height: 100%;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: var(--artisan-wood);
+        font-size: .9rem;
+        transition: background .2s ease;
+    }
+
+        .quantity-btn:hover {
+            background: var(--artisan-linen);
+        }
+
+    .quantity-field {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        text-align: center;
+        color: var(--text-main);
+        font-weight: 700;
+    }
+
+    .quantity-group small {
+        display: block;
+        margin-top: .35rem;
+        color: #948a83;
+        font-size: .66rem;
+    }
+
+    .purchase-main-action {
+        display: flex;
+        align-items: end;
+    }
+
+    .product-main-btn,
+    .product-site-btn,
+    .product-whatsapp-btn {
+        width: 100%;
+        min-height: 52px;
+        border-radius: .8rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .5rem;
+    }
+
+    .product-main-btn {
+        margin-top: 1.5rem;
+    }
+
+    .purchase-form {
+        margin-top: .65rem;
+    }
+
+
+    /* COMPRAR PELO SITE */
+
+    .product-site-btn {
+        border: 1px solid var(--artisan-wood);
+        background: var(--artisan-wood);
+        color: #fff;
+        transition: all .2s ease;
+    }
+
+        .product-site-btn:hover {
+            background: #2d2017;
+            border-color: #2d2017;
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+
+    /* WHATSAPP */
+
+    .product-whatsapp-btn {
+        margin-top: .65rem;
+        border: 1px solid #25d366;
+        background: #25d366;
+        color: #fff !important;
+        text-decoration: none;
+        transition: all .2s ease;
+    }
+
+        .product-whatsapp-btn:hover {
+            background: #1fb85a;
+            border-color: #1fb85a;
+            color: #fff !important;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(37,211,102,.2);
+        }
+
+    .purchase-note {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: .35rem;
+        margin-top: .7rem;
+        color: #847a73;
+        text-align: center;
+        font-size: .68rem;
+        line-height: 1.5;
+    }
+
+        .purchase-note i {
+            color: var(--artisan-gold);
+        }
+
+
+    /* ==============================================================
+       LOGIN NECESSÁRIO
+       ============================================================== */
+
+    .login-required {
+        display: flex;
+        align-items: flex-start;
+        gap: .8rem;
+        margin-bottom: .8rem;
+        padding: .95rem;
+        border-radius: .85rem;
+        border: 1px solid rgba(61,43,31,.08);
+        background: var(--artisan-linen);
+    }
+
+    .login-required-icon {
+        flex: 0 0 38px;
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 11px;
+        background: #fff;
+        color: var(--artisan-clay);
+    }
+
+    .login-required strong,
+    .login-required p {
+        display: block;
+    }
+
+    .login-required strong {
+        color: var(--text-main);
+        font-size: .78rem;
+    }
+
+    .login-required p {
+        margin: .2rem 0 0;
+        color: #81766e;
+        font-size: .71rem;
+        line-height: 1.55;
+    }
+
+
+    /* ==============================================================
+       INDISPONÍVEL
+       ============================================================== */
+
+    .unavailable-product {
+        display: flex;
+        align-items: flex-start;
+        gap: .8rem;
+        padding: 1rem;
+        border-radius: .85rem;
+        background: #f4f1ee;
+    }
+
+    .unavailable-icon {
+        flex: 0 0 38px;
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 11px;
+        background: #fff;
+        color: #887a70;
+    }
+
+    .unavailable-product strong,
+    .unavailable-product span {
+        display: block;
+    }
+
+    .unavailable-product strong {
+        color: var(--text-main);
+        font-size: .8rem;
+    }
+
+    .unavailable-product span {
+        margin-top: .2rem;
+        color: #80756d;
+        font-size: .72rem;
+        line-height: 1.5;
+    }
+
+
+    /* ==============================================================
+       BENEFÍCIOS
+       ============================================================== */
+
+    .product-benefits {
+        padding: 1.4rem 0;
+        background: #fff;
+        border-top: 1px solid rgba(61,43,31,.06);
+    }
+
+    .benefit-item {
+        display: flex;
+        align-items: center;
+        gap: .8rem;
+        min-height: 82px;
+        padding: .9rem 1rem;
+        border-radius: .9rem;
+        background: var(--artisan-sand);
+    }
+
+    .benefit-icon {
+        flex: 0 0 40px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        background: var(--artisan-linen);
+        color: var(--artisan-gold);
+    }
+
+    .benefit-item strong,
+    .benefit-item span {
+        display: block;
+    }
+
+    .benefit-item strong {
+        color: var(--artisan-wood);
+        font-family: 'Playfair Display', serif;
+        font-size: .95rem;
+    }
+
+    .benefit-item span {
+        margin-top: .15rem;
+        color: #7f746d;
+        font-size: .7rem;
+        line-height: 1.45;
+    }
+
+
+    /* ==============================================================
+       RESPONSIVIDADE
+       ==============================================================
+       IMPORTANTE:
+       Em .cshtml usamos @@media.
+       ============================================================== */
+
+    @@media (max-width: 991.98px) {
+
+        .product-hero {
+            padding-top: 1.5rem;
+        }
+
+        .product-gallery {
+            position: static;
+        }
+
+        .product-content {
+            max-width: none;
+        }
+
+        .product-title {
+            font-size: clamp( 2.25rem, 8vw, 3.2rem );
+        }
+    }
+
+
+    @@media (max-width: 767.98px) {
+
+        .product-hero {
+            padding-bottom: 2.5rem;
+        }
+
+        .product-image-caption {
+            flex-direction: column;
+            gap: .3rem;
+        }
+
+        .product-price-card {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .secure-purchase {
+            width: 100%;
+            padding-left: 0;
+            padding-top: .8rem;
+            border-left: 0;
+            border-top: 1px solid #ece7e2;
+        }
+
+        .product-info-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .purchase-row {
+            grid-template-columns: 1fr;
+        }
+
+        .purchase-main-action {
+            display: block;
+        }
+
+        .product-main-btn {
+            margin-top: 0;
+        }
+
+        .benefit-item {
+            min-height: auto;
+        }
+    }
+
+
+    @@media (max-width: 480px) {
+
+        .product-image-card {
+            padding: .35rem;
+            border-radius: 1rem;
+        }
+
+        .product-main-image {
+            border-radius: .75rem;
+        }
+
+        .product-artisan-badge {
+            top: .8rem;
+            left: .8rem;
+            font-size: .67rem;
+        }
+
+        .product-title {
+            font-size: 2.15rem;
+        }
+
+        .product-price {
+            font-size: 1.75rem;
+        }
+
+        .purchase-card {
+            padding: .85rem;
+        }
+    }
+
+</style>
+
+
+@section Scripts {
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const quantityInput =
+                    document.getElementById(
+                        "quantity"
+                    );
+
+                const buyNowQuantity =
+                    document.getElementById(
+                        "buyNowQuantity"
+                    );
+
+                const decreaseButton =
+                    document.getElementById(
+                        "decreaseQuantity"
+                    );
+
+                const increaseButton =
+                    document.getElementById(
+                        "increaseQuantity"
+                    );
+
+
+                function syncQuantity() {
+
+                    if (!quantityInput)
+                        return;
+
+
+                    let value =
+                        parseInt(
+                            quantityInput.value || "1"
+                        );
+
+
+                    const min =
+                        parseInt(
+                            quantityInput.min || "1"
+                        );
+
+
+                    const max =
+                        parseInt(
+                            quantityInput.max || "999999"
+                        );
+
+
+                    if (value < min)
+                        value = min;
+
+
+                    if (value > max)
+                        value = max;
+
+
+                    quantityInput.value =
+                        value;
+
+
+                    if (buyNowQuantity) {
+
+                        buyNowQuantity.value =
+                            value;
+
+                    }
+
+                }
+
+
+                quantityInput?.addEventListener(
+                    "input",
+                    syncQuantity
+                );
+
+
+                decreaseButton?.addEventListener(
+                    "click",
+                    function () {
+
+                        if (!quantityInput)
+                            return;
+
+
+                        const current =
+                            parseInt(
+                                quantityInput.value || "1"
+                            );
+
+
+                        const min =
+                            parseInt(
+                                quantityInput.min || "1"
+                            );
+
+
+                        quantityInput.value =
+                            Math.max(
+                                min,
+                                current - 1
+                            );
+
+
+                        syncQuantity();
+
+                    }
+                );
+
+
+                increaseButton?.addEventListener(
+                    "click",
+                    function () {
+
+                        if (!quantityInput)
+                            return;
+
+
+                        const current =
+                            parseInt(
+                                quantityInput.value || "1"
+                            );
+
+
+                        const max =
+                            parseInt(
+                                quantityInput.max || "999999"
+                            );
+
+
+                        quantityInput.value =
+                            Math.min(
+                                max,
+                                current + 1
+                            );
+
+
+                        syncQuantity();
+
+                    }
+                );
+
+
+                syncQuantity();
+
+            }
+        );
+
+    </script>
+
+}
