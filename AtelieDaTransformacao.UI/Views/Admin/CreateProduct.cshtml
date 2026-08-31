@@ -1,4 +1,4 @@
-﻿@model AtelieDaTransformacao.Application.ViewModels.ProductFormViewModel
+@model AtelieDaTransformacao.Application.ViewModels.ProductFormViewModel
 @{
     Layout = "_AdminLayout";
     ViewData["Title"] = "Nova Peça";
@@ -56,7 +56,7 @@
 
             <div class="mb-4">
                 <label asp-for="Description" class="form-label fw-semibold text-secondary small text-uppercase">Descrição e Detalhes Técnicos</label>
-                <textarea asp-for="Description" class="form-control rounded-3" rows="4" placeholder="Detalhes sobre veios da madeira, acabamento em óleo mineral, resina..."></textarea>
+                <textarea asp-for="Description" class="form-control rounded-3" rows="4" placeholder="Detalhes sobre veios da madeira, acabamento e características da peça..."></textarea>
                 <span asp-validation-for="Description" class="text-danger small"></span>
             </div>
 

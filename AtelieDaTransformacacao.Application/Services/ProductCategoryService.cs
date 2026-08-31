@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AtelieDaTransformacao.Application.DTOs;
@@ -26,6 +26,12 @@ namespace AtelieDaTransformacao.Application.Services
 
             foreach (var item in categories)
             {
+                if (string.IsNullOrWhiteSpace(item.Name) ||
+                    item.Name.Contains("resina", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
                 dtos.Add(new ProductCategoryDto
                 {
                     Id = item.Id,

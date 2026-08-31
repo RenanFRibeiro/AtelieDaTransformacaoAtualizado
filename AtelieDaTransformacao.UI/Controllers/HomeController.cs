@@ -32,9 +32,20 @@ public class HomeController : Controller
     [HttpGet]
     public async Task<IActionResult> Index(int? categoryId, string? search)
     {
+        var allCategories = await _categoryService.GetAllAsync();
+        var categories = allCategories
+            .Where(c => !IsResinCategory(c.Name))
+            .ToList();
+
+        // Categorias relacionadas a resina não fazem mais parte da vitrine.
+        if (categoryId.HasValue && categories.All(c => c.Id != categoryId.Value))
+        {
+            categoryId = null;
+        }
+
         var viewModel = new HomeViewModel
         {
-            Categories = await _categoryService.GetAllAsync(),
+            Categories = categories,
             SelectedCategoryId = categoryId
         };
 
@@ -49,6 +60,10 @@ public class HomeController : Controller
                 await _productService.GetAllAsync();
         }
 
+        // Também evita que produtos pertencentes a categorias removidas apareçam na vitrine.
+        viewModel.Products = viewModel.Products
+            .Where(p => !IsResinCategory(p.CategoryName));
+
         if (!string.IsNullOrWhiteSpace(search))
         {
             var term = search.Trim();
@@ -61,6 +76,10 @@ public class HomeController : Controller
 
         return View(viewModel);
     }
+
+    private static bool IsResinCategory(string? categoryName) =>
+        !string.IsNullOrWhiteSpace(categoryName) &&
+        categoryName.Contains("resina", StringComparison.OrdinalIgnoreCase);
 
     [HttpGet]
     public async Task<IActionResult> ContactSeller(int id)

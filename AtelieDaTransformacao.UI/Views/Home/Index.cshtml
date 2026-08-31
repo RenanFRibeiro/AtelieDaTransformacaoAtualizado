@@ -21,7 +21,7 @@
         @if (Model.SelectedCategoryId.HasValue) { <input type="hidden" name="categoryId" value="@Model.SelectedCategoryId" /> }
         <div class="input-group input-group-lg shadow-sm">
             <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
-            <input name="search" value="@ViewBag.Search" class="form-control border-start-0" placeholder="Busque por mesas, resina, madeira..." />
+            <input name="search" value="@ViewBag.Search" class="form-control border-start-0" placeholder="Busque por mesas, madeira..." />
             <button class="btn btn-artisan px-4" type="submit">Buscar</button>
         </div>
     </form>

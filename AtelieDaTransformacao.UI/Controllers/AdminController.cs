@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -39,7 +39,9 @@ public class AdminController : Controller
     [HttpGet]
     public async Task<IActionResult> CreateProduct()
     {
-        var categories = await _categoryService.GetAllAsync();
+        var categories = (await _categoryService.GetAllAsync())
+            .Where(c => !IsResinCategory(c.Name))
+            .ToList();
 
         var viewModel = new ProductFormViewModel
         {
@@ -58,7 +60,9 @@ public class AdminController : Controller
     {
         if (!ModelState.IsValid)
         {
-            model.Categories = await _categoryService.GetAllAsync();
+            model.Categories = (await _categoryService.GetAllAsync())
+                .Where(c => !IsResinCategory(c.Name))
+                .ToList();
             return View(model);
         }
 
@@ -111,7 +115,9 @@ public class AdminController : Controller
         catch (Exception ex)
         {
             ModelState.AddModelError(string.Empty, ex.Message);
-            model.Categories = await _categoryService.GetAllAsync();
+            model.Categories = (await _categoryService.GetAllAsync())
+                .Where(c => !IsResinCategory(c.Name))
+                .ToList();
             return View(model);
         }
     }
@@ -124,7 +130,9 @@ public class AdminController : Controller
         if (product == null)
             return NotFound();
 
-        var categories = await _categoryService.GetAllAsync();
+        var categories = (await _categoryService.GetAllAsync())
+            .Where(c => !IsResinCategory(c.Name))
+            .ToList();
 
         var viewModel = new ProductFormViewModel
         {
@@ -150,7 +158,9 @@ public class AdminController : Controller
     {
         if (!ModelState.IsValid)
         {
-            model.Categories = await _categoryService.GetAllAsync();
+            model.Categories = (await _categoryService.GetAllAsync())
+                .Where(c => !IsResinCategory(c.Name))
+                .ToList();
             return View(model);
         }
 
@@ -175,7 +185,9 @@ public class AdminController : Controller
         catch (Exception ex)
         {
             ModelState.AddModelError(string.Empty, ex.Message);
-            model.Categories = await _categoryService.GetAllAsync();
+            model.Categories = (await _categoryService.GetAllAsync())
+                .Where(c => !IsResinCategory(c.Name))
+                .ToList();
             return View(model);
         }
     }
@@ -192,6 +204,11 @@ public class AdminController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CreateCategory(CreateProductCategoryDto model)
     {
+        if (IsResinCategory(model.Name))
+        {
+            ModelState.AddModelError(nameof(model.Name), "Essa categoria não está disponível.");
+        }
+
         if (!ModelState.IsValid)
             return View(model);
 
@@ -212,9 +229,15 @@ public class AdminController : Controller
     [HttpGet]
     public async Task<IActionResult> Categories()
     {
-        var categories = await _categoryService.GetAllAsync();
+        var categories = (await _categoryService.GetAllAsync())
+            .Where(c => !IsResinCategory(c.Name))
+            .ToList();
         return View(categories);
     }
+
+    private static bool IsResinCategory(string? categoryName) =>
+        !string.IsNullOrWhiteSpace(categoryName) &&
+        categoryName.Contains("resina", StringComparison.OrdinalIgnoreCase);
 
     [HttpPost]
     [ValidateAntiForgeryToken]

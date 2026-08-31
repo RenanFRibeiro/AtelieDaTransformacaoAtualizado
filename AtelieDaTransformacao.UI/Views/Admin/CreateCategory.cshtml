@@ -1,4 +1,4 @@
-﻿@model AtelieDaTransformacao.Application.DTOs.CreateProductCategoryDto
+@model AtelieDaTransformacao.Application.DTOs.CreateProductCategoryDto
 @{
     Layout = "_AdminLayout";
     ViewData["Title"] = "Nova Categoria";
@@ -18,7 +18,7 @@
 
             <div class="mb-4">
                 <label asp-for="Name" class="form-label fw-semibold text-secondary small text-uppercase">Nome da Categoria</label>
-                <input asp-for="Name" class="form-control form-control-lg fs-6 rounded-3" placeholder="Ex: Tábuas de Corte, Mesas Resinadas..." required />
+                <input asp-for="Name" class="form-control form-control-lg fs-6 rounded-3" placeholder="Ex: Tábuas de Corte, Mesas, Aparadores..." required />
                 <span asp-validation-for="Name" class="text-danger small"></span>
             </div>
 
