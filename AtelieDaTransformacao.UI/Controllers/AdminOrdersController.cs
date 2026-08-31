@@ -250,6 +250,57 @@ public sealed class AdminOrdersController : Controller
     }
 
     // =========================================================
+    // CANCELAR PEDIDO
+    // =========================================================
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Cancel(int id)
+    {
+        var order =
+            await _repository.GetByIdAsync(id);
+
+        if (order == null)
+        {
+            TempData["ErrorMessage"] =
+                "Pedido não encontrado.";
+
+            return RedirectToAction(
+                nameof(Index));
+        }
+
+        var cancelled =
+            await _repository.CancelAsync(id);
+
+        if (!cancelled)
+        {
+            TempData["ErrorMessage"] =
+                "Não foi possível cancelar o pedido.";
+
+            return RedirectToAction(
+                nameof(Details),
+                new
+                {
+                    id
+                });
+        }
+
+        await NotifyStatusAsync(
+            id,
+            order.UserId);
+
+        TempData["SuccessMessage"] =
+            $"Pedido {order.OrderNumber} foi cancelado com sucesso.";
+
+        return RedirectToAction(
+            nameof(Details),
+            new
+            {
+                id
+            });
+    }
+
+    // =========================================================
     // SIGNALR
     // =========================================================
 
@@ -279,5 +330,43 @@ public sealed class AdminOrdersController : Controller
                     autoAdvance = order.AutoAdvance,
                     updatedAt = order.UpdatedAt.ToString("O")
                 });
+    }
+
+    // =========================================================
+    // AVANÇAR AUTOMÁTICO - TODOS OS PEDIDOS ELEGÍVEIS
+    // =========================================================
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AdvanceAutomatic()
+    {
+        var orders = await _repository.GetForAutomationAsync();
+
+        var results = new List<int>();
+
+        foreach (var order in orders)
+        {
+            var next = order.Status.GetNext();
+
+            if (next.HasValue)
+            {
+                var changed = await _repository.UpdateStatusAsync(
+                    order.Id,
+                    next.Value);
+
+                if (changed)
+                {
+                    results.Add(order.Id);
+                    await NotifyStatusAsync(order.Id, order.UserId);
+                }
+            }
+        }
+
+        return Json(new
+        {
+            success = true,
+            message = $"{results.Count} pedido(s) avançado(s) com sucesso.",
+            advancedCount = results.Count
+        });
     }
 }

@@ -11,17 +11,27 @@
         <h2 class="fw-bold text-dark m-0">Pedidos</h2>
         <p class="text-muted small m-0">Altere manualmente ou ative a progressão automática de cada pedido.</p>
     </div>
-    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-dark rounded-pill">Ver loja</a>
+    <div class="d-flex gap-2">
+        <button type="button" 
+                class="btn btn-success rounded-pill" 
+                id="btnAdvanceAutomatic"
+                onclick="advanceAllAutomatic()">
+            <i class="bi bi-arrow-repeat me-1"></i>Avançar Automáticos
+        </button>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-dark rounded-pill">Ver loja</a>
+    </div>
 </div>
 
 @if (TempData["SuccessMessage"] is string success)
 {
-    <div class="alert alert-success">@success</div>
+    <div class="alert alert-success" id="alertSuccess">@success</div>
 }
 @if (TempData["ErrorMessage"] is string error)
 {
-    <div class="alert alert-danger">@error</div>
+    <div class="alert alert-danger" id="alertError">@error</div>
 }
+
+<div id="autoAdvanceAlert"></div>
 
 <div class="card border-0 shadow-sm rounded-4 overflow-hidden bg-white">
     <div class="table-responsive">
@@ -39,7 +49,7 @@
             <tbody>
                 @foreach (var order in Model)
                 {
-                    <tr>
+                    <tr id="order-@order.Id">
                         <td class="ps-4">
                             <strong>@order.OrderNumber</strong>
                             <small class="text-muted d-block">@order.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</small>
@@ -77,76 +87,58 @@
                                 </button>
                             </form>
                         </td>
-                        <td class="text-end pe-4">
-
-                            <div class="d-inline-flex flex-wrap gap-2">
-
+                        <td class="text-center pe-4">
+                            <div class="d-flex gap-2 justify-content-center flex-nowrap">
+                                
+                                <!-- BOTÃO AVANÇAR (Individual) -->
                                 @if (order.Status != OrderStatus.Entregue &&
                                      order.Status != OrderStatus.Cancelado)
                                 {
-                                    <form asp-action="Advance"
-                                          method="post">
-
-                                        @Html.AntiForgeryToken()
-
-                                        <input type="hidden"
-                                               name="id"
-                                               value="@order.Id" />
-
-                                        <button type="submit"
-                                                class="btn btn-sm btn-outline-primary rounded-pill">
-
-                                            Avançar
-
-                                        </button>
-
-                                    </form>
+                                    <button type="button" 
+                                            class="btn btn-sm btn-outline-primary rounded-pill" 
+                                            onclick="advanceIndividual(@order.Id)"
+                                            id="btnAdvance-@order.Id">
+                                        <i class="bi bi-arrow-right me-1"></i>Avançar
+                                    </button>
+                                }
+                                else
+                                {
+                                    <span class="btn btn-sm btn-outline-secondary rounded-pill disabled">
+                                        <i class="bi bi-arrow-right me-1"></i>Avançar
+                                    </span>
                                 }
 
+                                <!-- BOTÃO CANCELAR -->
                                 @if (order.Status.CanCancel())
                                 {
-                                    <form asp-action="Cancel"
-                                          method="post"
-                                          onsubmit="return confirm('Cancelar este pedido e devolver o estoque?');">
-
-                                        @Html.AntiForgeryToken()
-
-                                        <input type="hidden"
-                                               name="id"
-                                               value="@order.Id" />
-
-                                        <button type="submit"
-                                                class="btn btn-sm btn-outline-danger rounded-pill">
-
-                                            <i class="bi bi-x-circle me-1"></i>
-
-                                            Cancelar
-
-                                        </button>
-
-                                    </form>
+                                    <button type="button"
+                                            class="btn btn-sm btn-outline-danger rounded-pill"
+                                            onclick="if (confirm('Cancelar este pedido e devolver o estoque?')) { cancelOrder(@order.Id); }"
+                                            id="btnCancel-@order.Id">
+                                        <i class="bi bi-x-circle me-1"></i>Cancelar
+                                    </button>
                                 }
                                 else if (order.Status == OrderStatus.Cancelado)
                                 {
                                     <span class="badge bg-danger rounded-pill px-3 py-2">
-
-                                        Cancelado
-
+                                        <i class="bi bi-x-circle me-1"></i>Cancelado
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="btn btn-sm btn-outline-secondary rounded-pill disabled">
+                                        <i class="bi bi-x-circle me-1"></i>Cancelar
                                     </span>
                                 }
 
+                                <!-- BOTÃO VER -->
                                 <a asp-controller="AdminOrders"
                                    asp-action="Details"
                                    asp-route-id="@order.Id"
-                                   target="_blank"
-                                   class="btn btn-sm btn-outline-dark rounded-pill">
-
-                                    Abrir
-
+                                   class="btn btn-sm btn-outline-secondary rounded-pill">
+                                    <i class="bi bi-eye me-1"></i>Ver
                                 </a>
-
                             </div>
-
                         </td>
                     </tr>
                 }
@@ -155,6 +147,155 @@
     </div>
 </div>
 
-<div class="alert alert-light border mt-4 small">
-    <strong>Automação:</strong> quando ativada, o sistema avança o pedido automaticamente em intervalos pré-configurados. O administrador pode intervir manualmente a qualquer momento.
-</div>
+<script>
+// =========================================================
+// AVANÇAR AUTOMÁTICOS (Todos com AutoAdvance = true)
+// =========================================================
+async function advanceAllAutomatic() {
+    const btn = document.getElementById('btnAdvanceAutomatic');
+    const alertDiv = document.getElementById('autoAdvanceAlert');
+    
+    btn.disabled = true;
+    btn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Processando...';
+    
+    try {
+        const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+        
+        const response = await fetch('@Url.Action("AdvanceAutomatic", "AdminOrders")', {
+            method: 'POST',
+            headers: {
+                'RequestVerificationToken': token,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                '__RequestVerificationToken': token
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            alertDiv.innerHTML = `
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle me-2"></i>
+                    ${data.message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            
+            // Recarrega a página após 2 segundos
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            alertDiv.innerHTML = `
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    Erro ao avançar pedidos automáticos.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        alertDiv.innerHTML = `
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                Erro na requisição: ${error.message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `;
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-arrow-repeat me-1"></i>Avançar Automáticos';
+    }
+}
+
+// =========================================================
+// AVANÇAR PEDIDO INDIVIDUAL (sem recarregar página)
+// =========================================================
+async function advanceIndividual(orderId) {
+    const btn = document.getElementById(`btnAdvance-${orderId}`);
+    const row = document.getElementById(`order-${orderId}`);
+    
+    btn.disabled = true;
+    btn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Processando...';
+    
+    try {
+        const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+        
+        const response = await fetch('@Url.Action("Advance", "AdminOrders")', {
+            method: 'POST',
+            headers: {
+                'RequestVerificationToken': token,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                '__RequestVerificationToken': token,
+                'id': orderId
+            })
+        });
+        
+        if (response.ok) {
+            // Mostra feedback visual
+            row.style.backgroundColor = '#d4edda';
+            
+            setTimeout(() => {
+                row.style.backgroundColor = '';
+                location.reload(); // Recarrega para atualizar status
+            }, 1500);
+        } else {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-arrow-right me-1"></i>Avançar';
+            alert('Erro ao avançar pedido. Tente novamente.');
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-arrow-right me-1"></i>Avançar';
+        alert('Erro na requisição: ' + error.message);
+    }
+}
+
+// =========================================================
+// CANCELAR PEDIDO INDIVIDUAL (sem recarregar página)
+// =========================================================
+async function cancelOrder(orderId) {
+    const btn = document.getElementById(`btnCancel-${orderId}`);
+    const row = document.getElementById(`order-${orderId}`);
+    
+    btn.disabled = true;
+    btn.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Cancelando...';
+    
+    try {
+        const token = document.querySelector('input[name="__RequestVerificationToken"]')?.value;
+        
+        const response = await fetch('@Url.Action("Cancel", "AdminOrders")', {
+            method: 'POST',
+            headers: {
+                'RequestVerificationToken': token,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                '__RequestVerificationToken': token,
+                'id': orderId
+            })
+        });
+        
+        if (response.ok) {
+            // Mostra feedback visual
+            row.style.backgroundColor = '#f8d7da';
+            
+            setTimeout(() => {
+                row.style.backgroundColor = '';
+                location.reload(); // Recarrega para atualizar status
+            }, 1500);
+        } else {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="bi bi-x-circle me-1"></i>Cancelar';
+            alert('Erro ao cancelar pedido. Tente novamente.');
+        }
+    } catch (error) {
+        console.error('Erro:', error);
+        btn.disabled = false;
+        btn.innerHTML = '<i class="bi bi-x-circle me-1"></i>Cancelar';
+        alert('Erro na requisição: ' + error.message);
+    }
+}
+</script>
