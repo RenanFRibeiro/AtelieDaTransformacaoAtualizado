@@ -96,7 +96,7 @@
                             </div>
                         </div>
 
-                        <article class="product-card-modern featured-product-card">
+                        <article class="product-card-modern featured-product-card" data-product-title="@prod.Title">
                             <a asp-action="ProductDetails" asp-route-id="@prod.Id" class="product-image-link" aria-label="Ver detalhes de @prod.Title">
                                 @if (prod.IsFeatured)
                                 {
@@ -165,7 +165,7 @@
                     {
                         var imageUrl = string.IsNullOrWhiteSpace(prod.Image) ? "/images/placeholder.jpg" : prod.Image;
 
-                        <article class="product-card-modern">
+                        <article class="product-card-modern" data-product-title="@prod.Title">
                             <a asp-action="ProductDetails" asp-route-id="@prod.Id" class="product-image-link" aria-label="Ver detalhes de @prod.Title">
                                 @if (prod.IsFeatured)
                                 {
@@ -234,6 +234,13 @@
                     <a asp-action="Index" class="btn btn-artisan rounded-pill px-4">Ver todas as peças</a>
                 </div>
             }
+
+            <div id="clientSearchEmpty" class="empty-collection" hidden>
+                <div class="empty-collection-icon"><i class="bi bi-search"></i></div>
+                <span class="eyebrow">COLEÇÃO</span>
+                <h2 class="serif-title">Nenhuma peça encontrada.</h2>
+                <p>Digite o início do nome de outra peça para filtrar a coleção.</p>
+            </div>
         </div>
     </section>
 

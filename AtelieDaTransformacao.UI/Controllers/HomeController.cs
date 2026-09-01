@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AtelieDaTransformacao.Application.Interfaces;
 using AtelieDaTransformacao.Application.ViewModels;
@@ -68,9 +68,7 @@ public class HomeController : Controller
         {
             var term = search.Trim();
             viewModel.Products = viewModel.Products.Where(p =>
-                p.Title.Contains(term, StringComparison.OrdinalIgnoreCase) ||
-                p.Description.Contains(term, StringComparison.OrdinalIgnoreCase) ||
-                p.CategoryName.Contains(term, StringComparison.OrdinalIgnoreCase));
+                p.Title.StartsWith(term, StringComparison.OrdinalIgnoreCase));
             ViewBag.Search = term;
         }
 
