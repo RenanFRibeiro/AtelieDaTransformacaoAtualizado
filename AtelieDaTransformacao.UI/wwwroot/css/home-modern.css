@@ -862,3 +862,15 @@ h1, h2, h3, h4, h5, h6,
         display: none;
     }
 }
+
+
+/* Ajuste final do carrossel: eliminar a faixa clara entre o header e o hero. */
+.navbar-artisan {
+    border-bottom: 0 !important;
+    box-shadow: none !important;
+}
+
+.artisan-hero {
+    margin-top: -4px !important;
+    border-top: 0 !important;
+}
