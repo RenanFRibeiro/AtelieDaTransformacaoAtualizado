@@ -26,11 +26,11 @@ html { scroll-behavior: smooth; }
 body {
     background: var(--modern-cream);
     color: var(--modern-text);
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6,
-.serif-title { font-family: 'Playfair Display', serif; }
+.serif-title { font-family: 'Montserrat', sans-serif; }
 
 .site-main { width: 100%; }
 .home-container {
@@ -107,23 +107,23 @@ h1, h2, h3, h4, h5, h6,
 .artisan-hero { margin: 0; background: var(--modern-brown-950); }
 .artisan-hero .carousel-inner { overflow: hidden; }
 .artisan-hero-slide {
-    min-height: clamp(520px, 64vh, 720px);
+    min-height: clamp(500px, 62vh, 650px);
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
     display: flex;
     align-items: center;
 }
-.artisan-hero-content { padding-top: 3.5rem; padding-bottom: 3.5rem; color: #fff8ef; }
+.artisan-hero-content { padding-top: 2.8rem; padding-bottom: 3.8rem; color: #fff8ef; }
 .hero-eyebrow {
-    display: inline-block; color: var(--modern-caramel); font-size: .73rem; font-weight: 700;
-    letter-spacing: .2em; margin-bottom: 1rem;
+    display: inline-block; color: var(--modern-caramel); font-size: .7rem; font-weight: 600;
+    letter-spacing: .2em; margin-bottom: 1.05rem;
 }
-.artisan-hero-content h1 {
-    max-width: 780px; font-size: clamp(2.65rem, 5vw, 5.35rem); line-height: .98;
-    letter-spacing: -.04em; margin-bottom: 1.35rem;
+.artisan-hero-content .hero-title {
+    max-width: 590px; font-family: 'Montserrat', sans-serif; font-size: clamp(2.45rem, 4.15vw, 4.15rem);
+    font-weight: 500; line-height: 1.08; letter-spacing: -.035em; margin: 0 0 1.25rem;
 }
-.artisan-hero-content p { max-width: 610px; color: rgba(255,248,239,.78); font-size: 1.04rem; line-height: 1.75; margin-bottom: 1.7rem; }
+.artisan-hero-content p { max-width: 570px; color: rgba(255,248,239,.78); font-size: .98rem; line-height: 1.72; margin-bottom: 1.65rem; }
 .hero-actions { display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; }
 .btn-artisan {
     background: var(--modern-terracotta) !important; border-color: var(--modern-terracotta) !important;
@@ -152,7 +152,7 @@ h1, h2, h3, h4, h5, h6,
     gap: 48px; align-items: end; margin-bottom: 48px;
 }
 .eyebrow { color: var(--modern-terracotta); font-size: .7rem; font-weight: 800; letter-spacing: .19em; }
-.collection-title { color: var(--modern-brown-950); font-size: clamp(2.4rem, 4vw, 4.4rem); line-height: 1; letter-spacing: -.04em; margin: .65rem 0 1rem; max-width: 850px; }
+.collection-title { color: var(--modern-brown-950); font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: clamp(2.4rem, 4vw, 4.4rem); line-height: 1.04; letter-spacing: -.04em; margin: .65rem 0 1rem; max-width: 850px; }
 .collection-subtitle { color: var(--modern-muted); font-size: 1rem; line-height: 1.75; max-width: 680px; margin: 0; }
 .collection-actions {
     display: flex;
@@ -283,7 +283,7 @@ h1, h2, h3, h4, h5, h6,
 .craft-image-wrap::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 45%, rgba(23,14,9,.72)); }
 .craft-image-caption { position: absolute; left: 28px; right: 28px; bottom: 26px; z-index: 2; }
 .craft-image-caption span { display: block; color: var(--modern-caramel); text-transform: uppercase; letter-spacing: .15em; font-size: .64rem; font-weight: 800; margin-bottom: .3rem; }
-.craft-image-caption strong { display: block; font-family: 'Playfair Display', serif; font-size: 1.35rem; }
+.craft-image-caption strong { display: block; font-family: 'Montserrat', sans-serif; font-size: 1.35rem; }
 
 /* LOCALIZAÇÃO */
 .location-section { background: var(--modern-cream); padding: 92px 0 100px; }
@@ -304,7 +304,7 @@ h1, h2, h3, h4, h5, h6,
 .benefits-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 35px; }
 .benefit-item { display: flex; gap: 15px; align-items: flex-start; }
 .benefit-icon { flex: 0 0 46px; width: 46px; height: 46px; border-radius: 50%; background: var(--modern-beige); color: var(--modern-terracotta); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
-.benefit-item h2 { font-family: 'DM Sans', sans-serif; color: var(--modern-brown-950); font-size: .84rem; font-weight: 700; margin: 3px 0 6px; }
+.benefit-item h2 { font-family: 'Montserrat', sans-serif; color: var(--modern-brown-950); font-size: .84rem; font-weight: 700; margin: 3px 0 6px; }
 .benefit-item p { color: var(--modern-muted); font-size: .72rem; line-height: 1.55; margin: 0; }
 .artisan-footer { background: var(--modern-brown-950); color: rgba(255,248,239,.64); padding: 68px 0 24px; }
 .footer-grid { display: grid; grid-template-columns: 1.7fr .7fr .8fr; gap: 60px; padding-bottom: 52px; }
@@ -344,7 +344,7 @@ h1, h2, h3, h4, h5, h6,
     .navbar-collapse { background: var(--modern-brown-900); border: 1px solid rgba(208,161,92,.14); border-radius: 16px; margin-top: 8px; padding: 8px 14px; box-shadow: 0 20px 45px rgba(0,0,0,.25); }
     .navbar-fixed-spacer { height: 70px !important; }
     .artisan-hero-slide { min-height: 590px; }
-    .artisan-hero-content h1 { max-width: 680px; }
+    .artisan-hero-content .hero-title { max-width: 620px; }
     .home-container { width: min(100% - 36px, 1440px); }
     .products-grid-modern { grid-template-columns: repeat(2, minmax(0,1fr)); }
     .products-grid-modern.single-product-layout { grid-template-columns: minmax(260px, .85fr) minmax(300px, 1.15fr); }
@@ -363,9 +363,9 @@ h1, h2, h3, h4, h5, h6,
     .brand-name { font-size: 1.03rem; }
     .header-menu-link-v3 { font-size: .76rem; }
     .header-register-link { font-size: .72rem; }
-    .artisan-hero-slide { min-height: 570px; background-position: 62% center; }
+    .artisan-hero-slide { min-height: 560px; background-position: 62% center; }
     .artisan-hero-content { padding-top: 2rem; padding-bottom: 4rem; }
-    .artisan-hero-content h1 { font-size: clamp(2.35rem, 11vw, 3.7rem); }
+    .artisan-hero-content .hero-title { font-size: clamp(2.15rem, 9vw, 3.35rem); max-width: 560px; }
     .artisan-hero-content p { font-size: .88rem; }
     .artisan-hero .carousel-control-prev, .artisan-hero .carousel-control-next { display: none; }
     .home-collection-section { padding: 65px 0 75px; }
@@ -550,7 +550,7 @@ h1, h2, h3, h4, h5, h6,
 .featured-product-info strong {
     display: block;
     color: var(--modern-brown-950);
-    font-family: 'Playfair Display', serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 1rem;
     font-weight: 600;
 }

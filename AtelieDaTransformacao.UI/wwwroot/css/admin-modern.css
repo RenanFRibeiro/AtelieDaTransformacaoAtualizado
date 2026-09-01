@@ -31,7 +31,7 @@ body.admin-body {
         radial-gradient(circle at 88% 0%, rgba(197,138,88,.08), transparent 28rem),
         var(--admin-cream);
     color: var(--admin-text);
-    font-family: 'DM Sans', 'Plus Jakarta Sans', sans-serif;
+    font-family: 'Montserrat', 'Plus Jakarta Sans', sans-serif;
     -webkit-font-smoothing: antialiased;
 }
 
@@ -77,7 +77,7 @@ body.admin-body {
     font-size: 1rem;
 }
 .admin-brand-title {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: 1.05rem;
     line-height: 1.05;
     letter-spacing: -.02em;
@@ -228,7 +228,7 @@ body.admin-body {
 .admin-topbar-title strong {
     display: block;
     color: var(--admin-brown-950);
-    font-family: 'Playfair Display', serif;
+    font-family: 'Montserrat', sans-serif;
     font-size: clamp(1.15rem, 2vw, 1.55rem);
     line-height: 1.1;
 }
@@ -270,7 +270,7 @@ body.admin-body {
     margin-bottom: 28px;
 }
 .admin-page-head h1,
-.admin-page-head h2 { margin: 0; color: var(--admin-brown-950); font-family: 'Playfair Display', serif; letter-spacing: -.025em; }
+.admin-page-head h2 { margin: 0; color: var(--admin-brown-950); font-family: 'Montserrat', sans-serif; font-weight: 600; letter-spacing: -.025em; }
 .admin-page-head h1 { font-size: clamp(1.9rem, 3vw, 2.7rem); }
 .admin-page-head p { margin: 7px 0 0; color: var(--admin-muted); font-size: .82rem; line-height: 1.65; }
 .admin-page-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
@@ -342,7 +342,7 @@ body.admin-body {
 }
 .admin-stat-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
 .admin-stat-label { color: var(--admin-muted); font-size: .64rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
-.admin-stat-value { color: var(--admin-brown-950); font-family: 'Playfair Display', serif; font-size: 2rem; line-height: 1; margin-top: 7px; }
+.admin-stat-value { color: var(--admin-brown-950); font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 2rem; line-height: 1; margin-top: 7px; }
 .admin-stat-icon { width: 42px; height: 42px; border-radius: 13px; display: grid; place-items: center; background: var(--admin-beige); color: var(--admin-terracotta); }
 
 /* Cores dos cards de estatísticas */
@@ -391,7 +391,7 @@ body.admin-body {
 }
 
 .admin-section-head { display: flex; align-items: center; justify-content: space-between; gap: 15px; padding: 20px 22px; border-bottom: 1px solid var(--admin-line); }
-.admin-section-title { margin: 0; color: var(--admin-brown-950); font-family: 'Playfair Display', serif; font-size: 1.2rem; }
+.admin-section-title { margin: 0; color: var(--admin-brown-950); font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 1.2rem; }
 .admin-section-subtitle { margin: 3px 0 0; color: var(--admin-muted); font-size: .7rem; }
 .admin-product-thumb { width: 54px; height: 54px; object-fit: cover; border-radius: 13px; border: 1px solid var(--admin-line); background: var(--admin-beige); }
 .admin-product-name { color: var(--admin-brown-950); font-weight: 800; font-size: .79rem; }
@@ -448,7 +448,7 @@ body.admin-collapsed .admin-logout i { margin: 0 !important; }
         border-bottom: 1px solid rgba(208,161,92,.2);
         box-shadow: 0 8px 25px rgba(25,15,10,.12);
     }
-    .admin-mobile-brand { color: #fff8ef; text-decoration: none; font-family: 'Playfair Display', serif; font-size: 1.05rem; }
+    .admin-mobile-brand { color: #fff8ef; text-decoration: none; font-family: 'Montserrat', sans-serif; font-size: 1.05rem; }
     .admin-mobile-brand strong { color: var(--admin-caramel); }
     .admin-mobile-menu-button { border: 1px solid rgba(255,255,255,.15); background: rgba(255,255,255,.05); color: #fff; border-radius: 10px; width: 42px; height: 42px; }
     .admin-topbar { top: 68px; min-height: 72px; padding-inline: 18px; }

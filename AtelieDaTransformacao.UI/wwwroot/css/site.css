@@ -21,14 +21,14 @@ body {
 }
 
 .serif-title {
-    font-family: 'Playfair Display', serif;
-    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600 !important;
     letter-spacing: -0.02em;
 }
 
-/* Tipografia de títulos: Playfair Display Bold */
+/* Tipografia de títulos: Montserrat Bold */
 h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Montserrat', sans-serif;
     font-weight: 700;
 }
 
@@ -378,7 +378,7 @@ div.position-fixed.bottom-0 button {
 .step-item p { color: #6c635e; font-size: .9rem; margin: 0; }
 .value-card, .quote-card { background: #fff; border: 1px solid rgba(61,43,31,.08); border-radius: 1.25rem; padding: 2rem; height: 100%; box-shadow: 0 10px 30px rgba(61,43,31,.05); }
 .value-card i { font-size: 2rem; color: var(--artisan-gold); display: block; margin-bottom: 1rem; }
-.value-card h4 { font-family: 'Playfair Display', serif; font-weight: 700; }
+.value-card h4 { font-family: 'Montserrat', sans-serif; font-weight: 700; }
 .about-art-placeholder { min-height: 380px; border-radius: 1.5rem; display:flex; align-items:center; justify-content:center; background: linear-gradient(135deg, var(--artisan-wood), var(--artisan-clay)); color: var(--artisan-gold); }
 .about-art-placeholder i { font-size: 8rem; opacity: .8; }
 .gallery-grid { display:grid; grid-template-columns:repeat(4,1fr); grid-auto-rows:220px; gap:1rem; }
@@ -386,7 +386,7 @@ div.position-fixed.bottom-0 button {
 .gallery-card:nth-child(2n) { background:linear-gradient(145deg, var(--artisan-clay), #d59a68); }
 .gallery-card:nth-child(3n) { background:linear-gradient(145deg, #7a614f, var(--artisan-gold)); }
 .gallery-card:before { content:''; position:absolute; inset:0; background:linear-gradient(transparent, rgba(0,0,0,.55)); }
-.gallery-card > div { position:relative; z-index:1; }.gallery-card span { font-size:.75rem; text-transform:uppercase; letter-spacing:.1em; opacity:.8; }.gallery-card h3 { margin:.3rem 0 0; font-family:'Playfair Display',serif; }
+.gallery-card > div { position:relative; z-index:1; }.gallery-card span { font-size:.75rem; text-transform:uppercase; letter-spacing:.1em; opacity:.8; }.gallery-card h3 { margin:.3rem 0 0; font-family:'Montserrat',serif; }
 .gallery-large { grid-column:span 2; grid-row:span 2; }
 @media(max-width:767px){ .gallery-grid { grid-template-columns:1fr 1fr; }.gallery-large { grid-column:span 2; }.business-steps{padding:2rem 1.25rem;} }
 

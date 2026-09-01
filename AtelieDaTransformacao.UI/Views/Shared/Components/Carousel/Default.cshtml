@@ -21,7 +21,7 @@
             var title = i switch
             {
                 0 => "O feito à mão encontra o seu espaço.",
-                1 => "Peças pensadas para durar e marcar presença.",
+                1 => "Peças pensadas para<br>durar e marcar<br>presença.",
                 _ => "Do material bruto a uma peça única."
             };
             var text = i switch
@@ -32,10 +32,10 @@
             };
 
             <div class="carousel-item @(i == 0 ? "active" : "")">
-                <div class="artisan-hero-slide" style="background-image: linear-gradient(90deg, rgba(31, 20, 14, .88) 0%, rgba(31, 20, 14, .62) 42%, rgba(31, 20, 14, .18) 100%), url('@url');">
+                <div class="artisan-hero-slide" style="background-image: linear-gradient(90deg, rgba(31, 20, 14, .93) 0%, rgba(31, 20, 14, .68) 42%, rgba(31, 20, 14, .22) 100%), url('@url');">
                     <div class="home-container artisan-hero-content">
                         <span class="hero-eyebrow">@eyebrow</span>
-                        <h1 class="serif-title">@title</h1>
+                        <h1 class="serif-title">@Html.Raw(title)</h1>
                         <p>@text</p>
                         <div class="hero-actions">
                             <a asp-controller="Home" asp-action="Index" class="btn btn-artisan rounded-pill px-4">Explorar coleção</a>
