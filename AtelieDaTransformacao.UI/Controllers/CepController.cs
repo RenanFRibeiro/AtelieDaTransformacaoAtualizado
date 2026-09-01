@@ -1,4 +1,5 @@
 ﻿using AtelieDaTransformacao.Application.Interfaces;
+using AtelieDaTransformacao.Application.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AtelieDaTransformacao.UI.Controllers;
@@ -9,9 +10,7 @@ public sealed class CepController : Controller
     private readonly ICepService _cepService;
     private readonly IFreteService _freteService;
 
-    public CepController(
-        ICepService cepService,
-        IFreteService freteService)
+    public CepController(ICepService cepService, IFreteService freteService)
     {
         _cepService = cepService;
         _freteService = freteService;
@@ -26,7 +25,7 @@ public sealed class CepController : Controller
         var resultado = await _cepService.BuscarEnderecoPorCepAsync(cep);
 
         if (resultado is null)
-            return Ok(new { erro = true, mensagem = "CEP não encontrado." });
+            return Ok(new { erro = true, mensagem = "CEP não encontrado ou inválido." });
 
         return Ok(new
         {
@@ -39,21 +38,13 @@ public sealed class CepController : Controller
         });
     }
 
-    [HttpGet("CalcularFrete")]
-    public async Task<IActionResult> CalcularFrete([FromQuery] string cep)
+    [HttpPost("CalcularFrete")]
+    public async Task<IActionResult> CalcularFrete([FromBody] FreteRequestDto request)
     {
-        if (string.IsNullOrWhiteSpace(cep))
-            return BadRequest(new { disponivel = false, mensagem = "CEP não informado." });
+        if (request == null || string.IsNullOrWhiteSpace(request.CepDestino))
+            return BadRequest(new { disponivel = false, mensagem = "Dados de frete inválidos." });
 
-        var resultado = await _freteService.CalcularFreteAsync(cep);
-
-        return Ok(new
-        {
-            disponivel = resultado.Disponivel,
-            valor = resultado.Valor,
-            valorFormatado = resultado.Valor.ToString("N2"),
-            prazo = resultado.PrazoEstimadoDias,
-            descricao = resultado.Descricao
-        });
+        var opcoes = await _freteService.CalcularFreteAsync(request);
+        return Ok(opcoes);
     }
 }

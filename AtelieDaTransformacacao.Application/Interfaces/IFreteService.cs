@@ -3,13 +3,12 @@
 namespace AtelieDaTransformacao.Application.Interfaces;
 
 /// <summary>
-/// Serviço de cálculo de frete por CEP de destino.
+/// Serviço de cálculo de frete baseado em volume, peso e distâncias.
 /// </summary>
 public interface IFreteService
 {
     /// <summary>
-    /// Calcula o valor do frete e o prazo estimado de entrega
-    /// com base no CEP de destino.
+    /// Calcula as opções disponíveis de frete com base na origem, destino, dimensões e peso.
     /// </summary>
-    Task<FreteResult> CalcularFreteAsync(string cepDestino);
+    Task<List<FreteResult>> CalcularFreteAsync(FreteRequestDto request);
 }

@@ -105,6 +105,12 @@
                                 <input asp-for="State" maxlength="2" class="form-control form-control-lg rounded-3 text-uppercase" autocomplete="address-level1" />
                                 <span asp-validation-for="State" class="text-danger small"></span>
                             </div>
+                            
+                            <!-- Nova área interativa de seleções de frete -->
+                            <div class="col-12 mt-4" id="freightOptionsContainer" style="display: none;">
+                                <label class="form-label fw-semibold">Opções de Frete Disponíveis</label>
+                                <div class="row g-2" id="freightOptionsList"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -192,7 +198,6 @@
                         <strong>@Model.Items.Sum(x => x.Quantity)</strong>
                     </div>
 
-                    <!-- Nova linha para o Frete -->
                     <div class="d-flex justify-content-between align-items-center mb-3" id="shippingCostRow">
                         <span class="text-muted">
                             Frete 
@@ -206,7 +211,6 @@
                         <span class="fs-4 fw-bold" id="totalDisplay" data-subtotal="@Model.Subtotal.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)">R$ @Model.Total.ToString("N2")</span>
                     </div>
 
-                    <!-- Campos hidden para enviar ao backend -->
                     <input type="hidden" asp-for="ShippingCost" id="hiddenShippingCost" />
                     <input type="hidden" asp-for="ShippingEstimateDays" id="hiddenShippingEstimateDays" />
 
@@ -231,9 +235,9 @@
         word-break: break-word;
     }
 
-    .payment-option { cursor: pointer; transition: .2s ease; background: #fff; }
-    .payment-option:hover { transform: translateY(-1px); box-shadow: 0 .35rem 1rem rgba(0,0,0,.06); }
-    .payment-option:has(input:checked) { border-color: var(--artisan-clay,#b85a3a) !important; box-shadow: 0 0 0 2px rgba(184,90,58,.12); }
+    .payment-option, .freight-option { cursor: pointer; transition: .2s ease; background: #fff; }
+    .payment-option:hover, .freight-option:hover { transform: translateY(-1px); box-shadow: 0 .35rem 1rem rgba(0,0,0,.06); }
+    .payment-option:has(input:checked), .freight-option:has(input:checked) { border-color: var(--artisan-clay,#b85a3a) !important; box-shadow: 0 0 0 2px rgba(184,90,58,.12); }
 </style>
 
 @section Scripts {
@@ -280,6 +284,17 @@
             hiddenShippingCost.value = shippingCost.toFixed(2).replace('.', ',');
         }
 
+        window.selectFreight = function(radioElement) {
+            const valor = parseFloat(radioElement.value);
+            const days = radioElement.getAttribute('data-days');
+            const name = radioElement.getAttribute('data-name');
+            
+            shippingEstimateDisplay.className = "text-success d-block";
+            shippingEstimateDisplay.textContent = `Via ${name} (${days} dias úteis)`;
+            hiddenShippingEstimateDays.value = days;
+            updateOrderTotal(valor);
+        }
+
         async function fetchEnderecoAndFrete() {
             const cep = cepInput.value.replace(/\D/g, '');
             if (cep.length !== 8) return;
@@ -287,7 +302,7 @@
             const isPickup = delivery?.value === 'Retirada no ateliê';
             if (isPickup) return;
 
-            // 1. Buscar Endereço
+            // 1. Preencher Endereço
             try {
                 const response = await fetch(`/Cep/BuscarEndereco?cep=${cep}`);
                 if (response.ok) {
@@ -298,33 +313,72 @@
                         document.getElementById('City').value = data.cidade;
                         document.getElementById('State').value = data.estado;
                         document.getElementById('AddressNumber').focus();
+                    } else {
+                        alert(data.mensagem || "CEP não encontrado. Por favor, preencha manualmente.");
                     }
                 }
             } catch (err) {
                 console.error('Erro ao buscar CEP:', err);
             }
 
-            // 2. Calcular Frete
+            // 2. Calcular Frete Dinamicamente
             try {
                 shippingEstimateDisplay.textContent = "Calculando...";
-                shippingEstimateDisplay.className = "text-warning d-block"; // Muda a cor pra amarelinho
+                shippingEstimateDisplay.className = "text-warning d-block";
+                document.getElementById('freightOptionsContainer').style.display = 'none';
                 
-                const responseFrete = await fetch(`/Cep/CalcularFrete?cep=${cep}`);
+                // Variáveis enviadas para cálculo com peso e dimensões inclusas
+                const requestData = {
+                    CepDestino: cep,
+                    CepOrigem: "01000000",
+                    PesoKg: 1.5, // Dinâmico de acordo com os produtos da loja
+                    AlturaCm: 25,
+                    LarguraCm: 25,
+                    ComprimentoCm: 20
+                };
+
+                const responseFrete = await fetch('/Cep/CalcularFrete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestData)
+                });
                 
                 if (responseFrete.ok) {
-                    const frete = await responseFrete.json();
-                    if (frete.disponivel) {
+                    const opcoes = await responseFrete.json();
+                    
+                    if (opcoes && opcoes.length > 0 && opcoes[0].disponivel !== false) {
                         shippingEstimateDisplay.className = "text-success d-block";
-                        shippingEstimateDisplay.textContent = `Em média ${frete.prazo} dias úteis (${frete.descricao})`;
-                        hiddenShippingEstimateDays.value = frete.prazo;
-                        updateOrderTotal(frete.valor);
+                        shippingEstimateDisplay.textContent = "Selecione uma opção de frete";
+                        
+                        const list = document.getElementById('freightOptionsList');
+                        list.innerHTML = '';
+                        
+                        opcoes.forEach((opcao, index) => {
+                            const isChecked = index === 0 ? 'checked' : '';
+                            const formatter = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+                            
+                            const div = document.createElement('div');
+                            div.className = 'col-md-6';
+                            div.innerHTML = `
+                                <label class="freight-option border rounded-4 p-3 d-flex gap-3 align-items-center h-100">
+                                    <input class="form-check-input mt-0" type="radio" name="SelectedFreight" value="${opcao.valor}" data-days="${opcao.prazoEstimadoDias}" data-name="${opcao.nome}" ${isChecked} onchange="selectFreight(this)">
+                                    <span>
+                                        <strong class="d-block">${opcao.nome} - ${formatter.format(opcao.valor)}</strong>
+                                        <small class="text-muted">${opcao.descricao} (Aprox. ${opcao.prazoEstimadoDias} dias)</small>
+                                    </span>
+                                </label>
+                            `;
+                            list.appendChild(div);
+                        });
+                        
+                        document.getElementById('freightOptionsContainer').style.display = 'block';
+                        selectFreight(list.querySelector('input[type="radio"]')); // Seleciona automaticamente o primeiro (PAC)
                     } else {
                         shippingEstimateDisplay.className = "text-danger d-block";
-                        shippingEstimateDisplay.textContent = frete.mensagem || "Indisponível para esta região.";
+                        shippingEstimateDisplay.textContent = opcoes[0]?.descricao || "Indisponível para esta região.";
                         updateOrderTotal(0);
                     }
                 } else {
-                    // SE DER ERRO NO SERVIDOR (ex: 404 ou 500)
                     shippingEstimateDisplay.className = "text-danger d-block";
                     shippingEstimateDisplay.textContent = "Erro de conexão (Cód: " + responseFrete.status + ")";
                     updateOrderTotal(0);
@@ -347,6 +401,7 @@
             });
             
             if (pickup) {
+                document.getElementById('freightOptionsContainer').style.display = 'none';
                 shippingEstimateDisplay.className = "text-success d-block";
                 shippingEstimateDisplay.textContent = "Retirada grátis na loja";
                 updateOrderTotal(0);
@@ -354,6 +409,7 @@
                 fetchEnderecoAndFrete();
             } else {
                 shippingEstimateDisplay.textContent = "";
+                document.getElementById('freightOptionsContainer').style.display = 'none';
                 updateOrderTotal(0);
             }
         }

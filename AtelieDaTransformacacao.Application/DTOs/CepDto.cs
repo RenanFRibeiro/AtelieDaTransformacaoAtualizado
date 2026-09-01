@@ -18,10 +18,24 @@ public sealed class CepDto
 }
 
 /// <summary>
-/// Resultado do cálculo de frete.
+/// Requisição com parâmetros obrigatórios para cálculo de frete.
+/// </summary>
+public class FreteRequestDto
+{
+    public string CepOrigem { get; set; } = "01000000";
+    public string CepDestino { get; set; } = string.Empty;
+    public decimal PesoKg { get; set; }
+    public decimal AlturaCm { get; set; }
+    public decimal LarguraCm { get; set; }
+    public decimal ComprimentoCm { get; set; }
+}
+
+/// <summary>
+/// Resultado de uma opção cálculo de frete.
 /// </summary>
 public sealed class FreteResult
 {
+    public string Nome { get; set; } = string.Empty;
     public decimal Valor { get; set; }
     public int PrazoEstimadoDias { get; set; }
     public string Descricao { get; set; } = string.Empty;
