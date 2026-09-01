@@ -191,10 +191,24 @@
                         <span class="text-muted">Itens</span>
                         <strong>@Model.Items.Sum(x => x.Quantity)</strong>
                     </div>
+
+                    <!-- Nova linha para o Frete -->
+                    <div class="d-flex justify-content-between align-items-center mb-3" id="shippingCostRow">
+                        <span class="text-muted">
+                            Frete 
+                            <small id="shippingEstimateDisplay" class="text-success d-block"></small>
+                        </span>
+                        <strong id="shippingCostDisplay">R$ @Model.ShippingCost.ToString("N2")</strong>
+                    </div>
+
                     <div class="d-flex justify-content-between align-items-center">
                         <span class="fw-bold">Total</span>
-                        <span class="fs-4 fw-bold">R$ @Model.Total.ToString("N2")</span>
+                        <span class="fs-4 fw-bold" id="totalDisplay" data-subtotal="@Model.Subtotal.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)">R$ @Model.Total.ToString("N2")</span>
                     </div>
+
+                    <!-- Campos hidden para enviar ao backend -->
+                    <input type="hidden" asp-for="ShippingCost" id="hiddenShippingCost" />
+                    <input type="hidden" asp-for="ShippingEstimateDays" id="hiddenShippingEstimateDays" />
 
                     <div class="alert alert-light border rounded-4 mt-4 mb-0">
                         <i class="bi bi-shield-check text-gold me-2"></i>
@@ -236,28 +250,92 @@
 
         function formatPhone(value) {
             const digits = value.replace(/\D/g, '').slice(0, 11);
-
             if (digits.length <= 10) {
-                return digits
-                    .replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3')
-                    .replace(/-$/, '');
+                return digits.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3').replace(/-$/, '');
             }
-
-            return digits
-                .replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3')
-                .replace(/-$/, '');
+            return digits.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3').replace(/-$/, '');
         }
 
-        phoneInput?.addEventListener('input', function () {
-            this.value = formatPhone(this.value);
-        });
-
-        if (phoneInput?.value) {
-            phoneInput.value = formatPhone(phoneInput.value);
-        }
+        phoneInput?.addEventListener('input', function () { this.value = formatPhone(this.value); });
+        if (phoneInput?.value) { phoneInput.value = formatPhone(phoneInput.value); }
 
         const delivery = document.getElementById('deliveryMethod');
         const addressFields = ['PostalCode','ShippingAddress','AddressNumber','District','City','State'];
+
+        const cepInput = document.getElementById('PostalCode');
+        const hiddenShippingCost = document.getElementById('hiddenShippingCost');
+        const hiddenShippingEstimateDays = document.getElementById('hiddenShippingEstimateDays');
+        const shippingCostDisplay = document.getElementById('shippingCostDisplay');
+        const shippingEstimateDisplay = document.getElementById('shippingEstimateDisplay');
+        const totalDisplay = document.getElementById('totalDisplay');
+        
+        function updateOrderTotal(shippingCost) {
+            const subtotal = parseFloat(totalDisplay.getAttribute('data-subtotal')) || 0;
+            const total = subtotal + shippingCost;
+            
+            const formatter = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+            
+            shippingCostDisplay.textContent = shippingCost === 0 ? 'Grátis' : formatter.format(shippingCost);
+            totalDisplay.textContent = formatter.format(total);
+            hiddenShippingCost.value = shippingCost.toFixed(2).replace('.', ',');
+        }
+
+        async function fetchEnderecoAndFrete() {
+            const cep = cepInput.value.replace(/\D/g, '');
+            if (cep.length !== 8) return;
+
+            const isPickup = delivery?.value === 'Retirada no ateliê';
+            if (isPickup) return;
+
+            // 1. Buscar Endereço
+            try {
+                const response = await fetch(`/Cep/BuscarEndereco?cep=${cep}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (!data.erro) {
+                        document.getElementById('ShippingAddress').value = data.logradouro;
+                        document.getElementById('District').value = data.bairro;
+                        document.getElementById('City').value = data.cidade;
+                        document.getElementById('State').value = data.estado;
+                        document.getElementById('AddressNumber').focus();
+                    }
+                }
+            } catch (err) {
+                console.error('Erro ao buscar CEP:', err);
+            }
+
+            // 2. Calcular Frete
+            try {
+                shippingEstimateDisplay.textContent = "Calculando...";
+                shippingEstimateDisplay.className = "text-warning d-block"; // Muda a cor pra amarelinho
+                
+                const responseFrete = await fetch(`/Cep/CalcularFrete?cep=${cep}`);
+                
+                if (responseFrete.ok) {
+                    const frete = await responseFrete.json();
+                    if (frete.disponivel) {
+                        shippingEstimateDisplay.className = "text-success d-block";
+                        shippingEstimateDisplay.textContent = `Em média ${frete.prazo} dias úteis (${frete.descricao})`;
+                        hiddenShippingEstimateDays.value = frete.prazo;
+                        updateOrderTotal(frete.valor);
+                    } else {
+                        shippingEstimateDisplay.className = "text-danger d-block";
+                        shippingEstimateDisplay.textContent = frete.mensagem || "Indisponível para esta região.";
+                        updateOrderTotal(0);
+                    }
+                } else {
+                    // SE DER ERRO NO SERVIDOR (ex: 404 ou 500)
+                    shippingEstimateDisplay.className = "text-danger d-block";
+                    shippingEstimateDisplay.textContent = "Erro de conexão (Cód: " + responseFrete.status + ")";
+                    updateOrderTotal(0);
+                }
+            } catch (err) {
+                console.error('Erro ao calcular frete:', err);
+                shippingEstimateDisplay.className = "text-danger d-block";
+                shippingEstimateDisplay.textContent = "Erro ao calcular o frete.";
+                updateOrderTotal(0);
+            }
+        }
 
         function syncDeliveryFields() {
             const pickup = delivery?.value === 'Retirada no ateliê';
@@ -267,8 +345,20 @@
                 el.disabled = pickup;
                 el.closest('.col-md-4, .col-md-8, .col-md-2')?.classList.toggle('opacity-50', pickup);
             });
+            
+            if (pickup) {
+                shippingEstimateDisplay.className = "text-success d-block";
+                shippingEstimateDisplay.textContent = "Retirada grátis na loja";
+                updateOrderTotal(0);
+            } else if (cepInput.value.replace(/\D/g, '').length === 8) {
+                fetchEnderecoAndFrete();
+            } else {
+                shippingEstimateDisplay.textContent = "";
+                updateOrderTotal(0);
+            }
         }
 
+        cepInput?.addEventListener('blur', fetchEnderecoAndFrete);
         delivery?.addEventListener('change', syncDeliveryFields);
         syncDeliveryFields();
     </script>

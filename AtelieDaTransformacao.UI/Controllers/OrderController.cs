@@ -387,6 +387,9 @@ public sealed class OrderController : Controller
                     Notes =
                         checkout.Notes?.Trim() ?? string.Empty,
 
+                    ShippingCost =
+                        checkout.ShippingCost,
+
                     CheckoutJson =
                         JsonSerializer.Serialize(new OrderCheckoutSnapshot
                         {
@@ -402,6 +405,7 @@ public sealed class OrderController : Controller
                             State = checkout.State,
                             DeliveryMethod = checkout.DeliveryMethod,
                             PaymentMethod = checkout.PaymentMethod,
+                            ShippingCost = checkout.ShippingCost,
                             Notes = checkout.Notes
                         }),
 
@@ -411,7 +415,7 @@ public sealed class OrderController : Controller
 
                     Total =
                         snapshots.Sum(
-                            x => x.Subtotal),
+                            x => x.Subtotal) + checkout.ShippingCost,
 
                     Status =
                         OrderStatus.Criado,

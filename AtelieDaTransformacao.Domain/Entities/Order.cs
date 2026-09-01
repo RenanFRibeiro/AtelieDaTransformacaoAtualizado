@@ -34,6 +34,8 @@ public sealed class Order
 
     public decimal Total { get; set; }
 
+    public decimal ShippingCost { get; set; }
+
     public OrderStatus Status { get; set; } =
         OrderStatus.Criado;
 
@@ -78,5 +80,6 @@ public sealed class OrderCheckoutSnapshot
     public string State { get; set; } = string.Empty;
     public string DeliveryMethod { get; set; } = string.Empty;
     public string PaymentMethod { get; set; } = string.Empty;
+    public decimal ShippingCost { get; set; }
     public string Notes { get; set; } = string.Empty;
 }

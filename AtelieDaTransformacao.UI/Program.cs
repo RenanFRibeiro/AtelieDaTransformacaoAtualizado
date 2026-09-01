@@ -138,6 +138,18 @@ public static class Program
             IOrderService,
             OrderService>();
 
+        // =========================================================
+        // CEP E FRETE SERVICES
+        // =========================================================
+
+        builder.Services.AddHttpClient<
+            ICepService,
+            CepService>();
+
+        builder.Services.AddScoped<
+            IFreteService,
+            FreteService>();
+
 
         // =========================================================
         // WHATSAPP

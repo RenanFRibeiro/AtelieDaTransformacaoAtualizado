@@ -76,7 +76,19 @@ public sealed class CheckoutViewModel
     [Display(Name = "Observações")]
     public string Notes { get; set; } = string.Empty;
 
-    public decimal Total => Items.Sum(x => x.Subtotal);
+    /// <summary>
+    /// Valor do frete calculado (preenchido via AJAX no checkout).
+    /// </summary>
+    public decimal ShippingCost { get; set; }
+
+    /// <summary>
+    /// Prazo estimado de entrega em dias úteis.
+    /// </summary>
+    public int ShippingEstimateDays { get; set; }
+
+    public decimal Subtotal => Items.Sum(x => x.Subtotal);
+
+    public decimal Total => Subtotal + ShippingCost;
 }
 
 
