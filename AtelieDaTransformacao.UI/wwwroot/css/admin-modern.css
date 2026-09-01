@@ -96,7 +96,12 @@ body.admin-body {
 .admin-nav {
     padding-top: 22px;
     overflow-y: auto;
-    scrollbar-width: thin;
+    overflow-x: hidden;
+    scrollbar-width: none;
+}
+
+.admin-nav::-webkit-scrollbar {
+    display: none;
 }
 .admin-nav-label {
     display: block;
