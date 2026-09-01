@@ -107,20 +107,20 @@
             <div class="offcanvas-body d-flex flex-column">
                 <nav class="admin-nav p-0" aria-label="Navegação administrativa mobile">
                     <span class="admin-nav-label">Gestão</span>
-                    <a class="nav-link @(currentController == "Admin" && currentAction == "Index" ? "active" : "")" data-bs-dismiss="offcanvas" asp-controller="Admin" asp-action="Index">
+                    <a class="nav-link @(currentController == "Admin" && currentAction == "Index" ? "active" : "")" href="@Url.Action("Index", "Admin")">
                         <i class="bi bi-grid-1x2-fill"></i><span>Dashboard</span>
                     </a>
-                    <a class="nav-link @(currentController == "Admin" && (currentAction == "CreateProduct" || currentAction == "EditProduct") ? "active" : "")" data-bs-dismiss="offcanvas" asp-controller="Admin" asp-action="CreateProduct">
+                    <a class="nav-link @(currentController == "Admin" && (currentAction == "CreateProduct" || currentAction == "EditProduct") ? "active" : "")" href="@Url.Action("CreateProduct", "Admin")">
                         <i class="bi bi-plus-square-fill"></i><span>Nova peça</span>
                     </a>
-                    <a class="nav-link @(currentController == "Admin" && (currentAction == "Categories" || currentAction == "CreateCategory") ? "active" : "")" data-bs-dismiss="offcanvas" asp-controller="Admin" asp-action="Categories">
+                    <a class="nav-link @(currentController == "Admin" && (currentAction == "Categories" || currentAction == "CreateCategory") ? "active" : "")" href="@Url.Action("Categories", "Admin")">
                         <i class="bi bi-collection-fill"></i><span>Categorias</span>
                     </a>
-                    <a class="nav-link @(currentController == "AdminOrders" ? "active" : "")" data-bs-dismiss="offcanvas" asp-controller="AdminOrders" asp-action="Index">
+                    <a class="nav-link @(currentController == "AdminOrders" ? "active" : "")" href="@Url.Action("Index", "AdminOrders")">
                         <i class="bi bi-receipt-cutoff"></i><span>Pedidos</span>
                     </a>
                     <span class="admin-nav-label mt-4">Atalhos</span>
-                    <a class="nav-link external" data-bs-dismiss="offcanvas" asp-controller="Home" asp-action="Index">
+                    <a class="nav-link external" href="@Url.Action("Index", "Home")">
                         <i class="bi bi-shop"></i><span>Ver loja</span>
                     </a>
                 </nav>

@@ -214,77 +214,149 @@ div.position-fixed.bottom-0 button {
         box-shadow: 0 4px 12px rgba(184, 93, 67, 0.25);
     }
 
-/* === Mobile: overrides para dashboard offcanvas (admin) — PRETO (forçado) === */
+/* === Mobile: dashboard administrativo === */
 @media (max-width: 767.98px) {
-    /* offcanvas: branco com texto preto (mesma aparência do sidebar desktop) */
-    #adminSidebarMobile,
-    #adminSidebarMobile.offcanvas,
-    #adminSidebarMobile .offcanvas-body {
-        background-color: #ffffff !important;
-        color: var(--text-main) !important;
+    /* Mantém o menu acima do backdrop para garantir que todos os links recebam o toque. */
+    .offcanvas-backdrop {
+        z-index: 1050 !important;
+        background-color: rgba(33, 21, 15, 0.30) !important;
     }
 
-    /* header / título */
+    #adminSidebarMobile.offcanvas {
+        z-index: 1060 !important;
+        background: #f6f0e8 !important;
+        color: #2b211c !important;
+        box-shadow: 10px 0 35px rgba(33, 21, 15, 0.18);
+        pointer-events: auto !important;
+    }
+
     #adminSidebarMobile .offcanvas-header {
-        border-bottom-color: #e5e7eb !important;
-        background: transparent !important;
+        min-height: 66px;
+        border-bottom: 1px solid rgba(58, 36, 26, 0.12) !important;
+        background: #21150f !important;
+        color: #fff8ef !important;
     }
 
-    #adminSidebarMobile .offcanvas-title {
-        color: var(--text-main) !important;
+    #adminSidebarMobile .offcanvas-header .admin-brand-title {
+        color: #fff8ef !important;
         font-weight: 700 !important;
     }
 
-    /* botão fechar (X) em tom escuro */
+    #adminSidebarMobile .offcanvas-header .admin-brand-title strong {
+        color: #c58a58 !important;
+    }
+
+    #adminSidebarMobile .offcanvas-header small {
+        color: rgba(255, 248, 239, 0.65) !important;
+    }
+
     #adminSidebarMobile .btn-close {
-        filter: none !important;
-        opacity: 0.9 !important;
+        filter: invert(1) !important;
+        opacity: 0.95 !important;
+        width: 1rem;
+        height: 1rem;
     }
 
-    /* links igual ao sidebar desktop */
+    #adminSidebarMobile .offcanvas-body {
+        background: #f6f0e8 !important;
+        padding: 20px 14px 18px !important;
+        pointer-events: auto !important;
+    }
+
+    #adminSidebarMobile .admin-nav {
+        overflow: visible !important;
+        padding-top: 0 !important;
+    }
+
+    #adminSidebarMobile .admin-nav-label {
+        color: #76685d !important;
+        padding: 0 10px 9px !important;
+        font-size: .60rem;
+    }
+
     #adminSidebarMobile .nav-link {
-        color: #666 !important;
-        padding: 12px 0 !important;
-        font-weight: 500 !important;
-        display: flex;
-        align-items: center;
-    }
-
-    /* ícones com destaque da paleta */
-    #adminSidebarMobile .nav-link i {
-        color: var(--artisan-clay) !important;
-        margin-right: 10px;
-        font-size: 1.05rem;
-    }
-
-    /* hover / active igual ao desktop */
-    #adminSidebarMobile .nav-link:hover,
-    #adminSidebarMobile .nav-link.active {
-        background-color: rgba(184,93,67,0.1) !important;
-        color: var(--artisan-clay) !important;
-    }
-
-    /* botão Sair igual ao desktop */
-    #adminSidebarMobile form .btn-outline-danger {
-        border-color: var(--artisan-clay) !important;
-        color: var(--artisan-clay) !important;
+        position: relative;
+        z-index: 1;
+        min-height: 48px !important;
+        margin: 5px 0 !important;
+        padding: 11px 13px !important;
+        border: 1px solid transparent;
+        border-radius: 12px !important;
+        color: #3a241a !important;
         background: transparent !important;
+        font-weight: 700 !important;
+        text-decoration: none !important;
+        cursor: pointer !important;
+        -webkit-tap-highlight-color: transparent;
+        transition: background-color .15s ease, color .15s ease, border-color .15s ease !important;
     }
 
-    #adminSidebarMobile form .btn-outline-danger:hover {
-        background-color: var(--artisan-clay) !important;
-        color: #fff !important;
+    #adminSidebarMobile .nav-link i {
+        width: 22px;
+        margin-right: 2px !important;
+        color: #a85c3d !important;
+        font-size: 1rem;
+        text-align: center;
     }
 
-    /* backdrop menos agressivo */
-    .offcanvas-backdrop {
-        background-color: rgba(0,0,0,0.25) !important;
+    /* Estado ativo com contraste alto para ficar evidente qual tela está aberta. */
+    #adminSidebarMobile .nav-link.active {
+        color: #ffffff !important;
+        background: #a85c3d !important;
+        border-color: #8f4b31 !important;
+        box-shadow: 0 6px 16px rgba(143, 75, 49, 0.22) !important;
     }
 
-    /* z-index */
-    .offcanvas-backdrop,
-    #adminSidebarMobile.offcanvas {
-        z-index: 1050 !important;
+    #adminSidebarMobile .nav-link.active i {
+        color: #ffffff !important;
+    }
+
+    /* Estado de toque/hover sem deixar o texto desaparecer. */
+    #adminSidebarMobile .nav-link:hover,
+    #adminSidebarMobile .nav-link:focus-visible,
+    #adminSidebarMobile .nav-link:active {
+        color: #3a241a !important;
+        background: #e9ded0 !important;
+        border-color: rgba(168, 92, 61, 0.22) !important;
+        outline: none;
+    }
+
+    #adminSidebarMobile .nav-link.active:hover,
+    #adminSidebarMobile .nav-link.active:focus-visible,
+    #adminSidebarMobile .nav-link.active:active {
+        color: #ffffff !important;
+        background: #8f4b31 !important;
+        border-color: #8f4b31 !important;
+    }
+
+    #adminSidebarMobile .nav-link.external {
+        color: #3a241a !important;
+    }
+
+    #adminSidebarMobile .nav-link.external i {
+        color: #a85c3d !important;
+    }
+
+    #adminSidebarMobile form {
+        position: relative;
+        z-index: 1;
+    }
+
+    #adminSidebarMobile .admin-logout {
+        min-height: 46px;
+        border: 1px solid rgba(58, 36, 26, 0.16) !important;
+        border-radius: 12px !important;
+        background: #fffdf9 !important;
+        color: #3a241a !important;
+        cursor: pointer !important;
+    }
+
+    #adminSidebarMobile .admin-logout:hover,
+    #adminSidebarMobile .admin-logout:focus-visible,
+    #adminSidebarMobile .admin-logout:active {
+        background: #3a241a !important;
+        border-color: #3a241a !important;
+        color: #ffffff !important;
     }
 }
 
