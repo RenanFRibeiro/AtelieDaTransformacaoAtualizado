@@ -13,7 +13,7 @@ public sealed class Order
     public string? UserEmail { get; set; }
 
     // Compatibilidade com bancos existentes que ainda possuem os campos
-    // obrigatórios do checkout como colunas da tabela Orders.
+    // obrigat monórios do checkout como colunas da tabela Orders.
     public string? CustomerName { get; set; }
 
     public string? CustomerEmail { get; set; }

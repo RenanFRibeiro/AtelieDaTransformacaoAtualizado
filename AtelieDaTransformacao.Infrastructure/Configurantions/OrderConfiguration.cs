@@ -63,6 +63,10 @@ public sealed class OrderConfiguration
             .HasColumnType("decimal(18,2)")
             .IsRequired();
 
+        builder.Property(x => x.ShippingCost)
+            .HasColumnType("decimal(18,2)")
+            .IsRequired();
+
         builder.Property(x => x.Status)
             .HasConversion<int>()
             .IsRequired();
