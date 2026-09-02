@@ -1,25 +1,17 @@
-using System.Data;
-using System.Security.Claims;
-using System.Text.Json;
-
-using AtelieDaTransformacao.Application.Interfaces;
 using AtelieDaTransformacao.Application.ViewModels;
 using AtelieDaTransformacao.Domain.Entities;
-using AtelieDaTransformacao.Domain.Enums;
 using AtelieDaTransformacao.Domain.Interfaces;
 using AtelieDaTransformacao.Infrastructure.Context;
-
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
-namespace AtelieDaTransformacao.UI.Controllers;
-
-using System.Security.Claims;
+using System.Data;
+using System.Text.Json;
 using AtelieDaTransformacao.Application.Interfaces;
 using AtelieDaTransformacao.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+
+namespace AtelieDaTransformacao.UI.Controllers;
 
 [Authorize]
 public sealed class OrderController : Controller

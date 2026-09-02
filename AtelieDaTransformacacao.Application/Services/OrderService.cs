@@ -42,7 +42,9 @@ public sealed class OrderService : IOrderService
         Id = order.Id,
         OrderNumber = order.OrderNumber,
         UserId = order.UserId,
-        UserEmail = order.UserEmail,
+        UserEmail = order.UserEmail ?? order.CustomerEmail ?? string.Empty,
+        CustomerName = order.CustomerName ?? order.UserEmail ?? order.CustomerEmail ?? "Cliente",
+        CustomerPhone = order.CustomerPhone,
         Total = order.Total,
         Status = order.Status,
         StatusName = order.Status.ToDisplayName(),
@@ -61,7 +63,11 @@ public sealed class OrderService : IOrderService
             Id = order.Id,
             OrderNumber = order.OrderNumber,
             UserId = order.UserId,
-            UserEmail = order.UserEmail,
+            UserEmail = order.UserEmail ?? order.CustomerEmail ?? string.Empty,
+            CustomerName = string.IsNullOrWhiteSpace(checkout.CustomerName)
+                ? (order.CustomerName ?? order.UserEmail ?? order.CustomerEmail ?? "Cliente")
+                : checkout.CustomerName,
+            CustomerPhone = string.IsNullOrWhiteSpace(checkout.CustomerPhone) ? order.CustomerPhone : checkout.CustomerPhone,
             Total = order.Total,
             Status = order.Status,
             StatusName = order.Status.ToDisplayName(),
@@ -70,9 +76,9 @@ public sealed class OrderService : IOrderService
             UpdatedAt = order.UpdatedAt,
             StatusChangedAt = order.StatusChangedAt,
             Items = DeserializeItems(order.ItemsJson),
-            CustomerName = checkout.CustomerName,
-            CustomerEmail = checkout.CustomerEmail,
-            CustomerPhone = checkout.CustomerPhone,
+            CustomerEmail = string.IsNullOrWhiteSpace(checkout.CustomerEmail)
+                ? (order.CustomerEmail ?? order.UserEmail ?? string.Empty)
+                : checkout.CustomerEmail,
             ShippingAddress = BuildShippingAddress(checkout),
             PaymentMethod = checkout.PaymentMethod,
             DeliveryMethod = checkout.DeliveryMethod,

@@ -96,6 +96,22 @@ public sealed class OrderAutomationWorker
                                         .ToString("O")
                             },
                             stoppingToken);
+
+                    await hub.Clients
+                        .Group(OrderStatusHub.AdminGroupName)
+                        .SendAsync(
+                            "AdminOrderUpdated",
+                            new
+                            {
+                                orderId = order.Id,
+                                orderNumber = order.OrderNumber,
+                                customer = order.CustomerName,
+                                status = (int)next.Value,
+                                statusName = next.Value.ToDisplayName(),
+                                total = order.Total,
+                                updatedAt = DateTime.UtcNow.ToString("O")
+                            },
+                            stoppingToken);
                 }
             }
             catch (

@@ -13,6 +13,10 @@ public class OrderListDto
 
     public string UserEmail { get; set; } = string.Empty;
 
+    public string CustomerName { get; set; } = string.Empty;
+
+    public string? CustomerPhone { get; set; }
+
     public decimal Total { get; set; }
 
     public OrderStatus Status { get; set; }
@@ -30,14 +34,9 @@ public class OrderListDto
 
 public class OrderDetailsDto : OrderListDto
 {
-    public List<AtelieDaTransformacao.Domain.Entities.OrderItemSnapshot> Items { get; set; } = new();
-
-    // Propriedades adicionadas para a view Details.cshtml
-    public string CustomerName { get; set; } = string.Empty;
+    public List<OrderItemSnapshot> Items { get; set; } = new();
 
     public string CustomerEmail { get; set; } = string.Empty;
-
-    public string? CustomerPhone { get; set; }
 
     public string ShippingAddress { get; set; } = string.Empty;
 

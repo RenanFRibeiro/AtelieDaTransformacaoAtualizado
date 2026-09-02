@@ -5,6 +5,7 @@ using AtelieDaTransformacao.Infrastructure.Context;
 using AtelieDaTransformacao.Infrastructure.Schema;
 using AtelieDaTransformacao.Infrastructure.Repositories;
 using AtelieDaTransformacao.UI.Hubs;
+using AtelieDaTransformacao.UI.Services;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -130,6 +131,8 @@ public static class Program
         builder.Services.AddControllersWithViews();
 
         builder.Services.AddSignalR();
+
+        builder.Services.AddHostedService<OrderAutomationWorker>();
 
         var app =
             builder.Build();
