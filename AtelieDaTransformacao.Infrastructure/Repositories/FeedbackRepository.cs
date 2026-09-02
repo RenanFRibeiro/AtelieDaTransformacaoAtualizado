@@ -282,7 +282,11 @@ public sealed class FeedbackRepository : IFeedbackRepository
     {
         await EnsureSchemaAsync();
 
-        var sql = """
+        var whereClause = approved.HasValue
+            ? "WHERE IsAprovado = @IsAprovado"
+            : string.Empty;
+
+        var sql = $"""
             SELECT
                 Id,
                 UsuarioId,
@@ -297,13 +301,8 @@ public sealed class FeedbackRepository : IFeedbackRepository
                 AprovadoPor,
                 DataCriacao
             FROM dbo.Feedbacks
-            """ + (approved.HasValue
-                ? " WHERE IsAprovado = @IsAprovado "
-                : string.Empty) + """
-            ORDER BY
-                IsAprovado ASC,
-                DataCriacao DESC,
-                Id DESC;
+            {whereClause}
+            ORDER BY IsAprovado ASC, DataCriacao DESC, Id DESC;
             """;
 
         var result = new List<Feedback>();
