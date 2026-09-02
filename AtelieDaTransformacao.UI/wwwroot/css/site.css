@@ -214,149 +214,77 @@ div.position-fixed.bottom-0 button {
         box-shadow: 0 4px 12px rgba(184, 93, 67, 0.25);
     }
 
-/* === Mobile: dashboard administrativo === */
+/* === Mobile: overrides para dashboard offcanvas (admin) — PRETO (forçado) === */
 @media (max-width: 767.98px) {
-    /* Mantém o menu acima do backdrop para garantir que todos os links recebam o toque. */
-    .offcanvas-backdrop {
-        z-index: 1050 !important;
-        background-color: rgba(33, 21, 15, 0.30) !important;
-    }
-
-    #adminSidebarMobile.offcanvas {
-        z-index: 1060 !important;
-        background: #f6f0e8 !important;
-        color: #2b211c !important;
-        box-shadow: 10px 0 35px rgba(33, 21, 15, 0.18);
-        pointer-events: auto !important;
-    }
-
-    #adminSidebarMobile .offcanvas-header {
-        min-height: 66px;
-        border-bottom: 1px solid rgba(58, 36, 26, 0.12) !important;
-        background: #21150f !important;
-        color: #fff8ef !important;
-    }
-
-    #adminSidebarMobile .offcanvas-header .admin-brand-title {
-        color: #fff8ef !important;
-        font-weight: 700 !important;
-    }
-
-    #adminSidebarMobile .offcanvas-header .admin-brand-title strong {
-        color: #c58a58 !important;
-    }
-
-    #adminSidebarMobile .offcanvas-header small {
-        color: rgba(255, 248, 239, 0.65) !important;
-    }
-
-    #adminSidebarMobile .btn-close {
-        filter: invert(1) !important;
-        opacity: 0.95 !important;
-        width: 1rem;
-        height: 1rem;
-    }
-
+    /* offcanvas: branco com texto preto (mesma aparência do sidebar desktop) */
+    #adminSidebarMobile,
+    #adminSidebarMobile.offcanvas,
     #adminSidebarMobile .offcanvas-body {
-        background: #f6f0e8 !important;
-        padding: 20px 14px 18px !important;
-        pointer-events: auto !important;
+        background-color: #ffffff !important;
+        color: var(--text-main) !important;
     }
 
-    #adminSidebarMobile .admin-nav {
-        overflow: visible !important;
-        padding-top: 0 !important;
-    }
-
-    #adminSidebarMobile .admin-nav-label {
-        color: #76685d !important;
-        padding: 0 10px 9px !important;
-        font-size: .60rem;
-    }
-
-    #adminSidebarMobile .nav-link {
-        position: relative;
-        z-index: 1;
-        min-height: 48px !important;
-        margin: 5px 0 !important;
-        padding: 11px 13px !important;
-        border: 1px solid transparent;
-        border-radius: 12px !important;
-        color: #3a241a !important;
+    /* header / título */
+    #adminSidebarMobile .offcanvas-header {
+        border-bottom-color: #e5e7eb !important;
         background: transparent !important;
+    }
+
+    #adminSidebarMobile .offcanvas-title {
+        color: var(--text-main) !important;
         font-weight: 700 !important;
-        text-decoration: none !important;
-        cursor: pointer !important;
-        -webkit-tap-highlight-color: transparent;
-        transition: background-color .15s ease, color .15s ease, border-color .15s ease !important;
     }
 
+    /* botão fechar (X) em tom escuro */
+    #adminSidebarMobile .btn-close {
+        filter: none !important;
+        opacity: 0.9 !important;
+    }
+
+    /* links igual ao sidebar desktop */
+    #adminSidebarMobile .nav-link {
+        color: #666 !important;
+        padding: 12px 0 !important;
+        font-weight: 500 !important;
+        display: flex;
+        align-items: center;
+    }
+
+    /* ícones com destaque da paleta */
     #adminSidebarMobile .nav-link i {
-        width: 22px;
-        margin-right: 2px !important;
-        color: #a85c3d !important;
-        font-size: 1rem;
-        text-align: center;
+        color: var(--artisan-clay) !important;
+        margin-right: 10px;
+        font-size: 1.05rem;
     }
 
-    /* Estado ativo com contraste alto para ficar evidente qual tela está aberta. */
-    #adminSidebarMobile .nav-link.active {
-        color: #ffffff !important;
-        background: #a85c3d !important;
-        border-color: #8f4b31 !important;
-        box-shadow: 0 6px 16px rgba(143, 75, 49, 0.22) !important;
-    }
-
-    #adminSidebarMobile .nav-link.active i {
-        color: #ffffff !important;
-    }
-
-    /* Estado de toque/hover sem deixar o texto desaparecer. */
+    /* hover / active igual ao desktop */
     #adminSidebarMobile .nav-link:hover,
-    #adminSidebarMobile .nav-link:focus-visible,
-    #adminSidebarMobile .nav-link:active {
-        color: #3a241a !important;
-        background: #e9ded0 !important;
-        border-color: rgba(168, 92, 61, 0.22) !important;
-        outline: none;
+    #adminSidebarMobile .nav-link.active {
+        background-color: rgba(184,93,67,0.1) !important;
+        color: var(--artisan-clay) !important;
     }
 
-    #adminSidebarMobile .nav-link.active:hover,
-    #adminSidebarMobile .nav-link.active:focus-visible,
-    #adminSidebarMobile .nav-link.active:active {
-        color: #ffffff !important;
-        background: #8f4b31 !important;
-        border-color: #8f4b31 !important;
+    /* botão Sair igual ao desktop */
+    #adminSidebarMobile form .btn-outline-danger {
+        border-color: var(--artisan-clay) !important;
+        color: var(--artisan-clay) !important;
+        background: transparent !important;
     }
 
-    #adminSidebarMobile .nav-link.external {
-        color: #3a241a !important;
+    #adminSidebarMobile form .btn-outline-danger:hover {
+        background-color: var(--artisan-clay) !important;
+        color: #fff !important;
     }
 
-    #adminSidebarMobile .nav-link.external i {
-        color: #a85c3d !important;
+    /* backdrop menos agressivo */
+    .offcanvas-backdrop {
+        background-color: rgba(0,0,0,0.25) !important;
     }
 
-    #adminSidebarMobile form {
-        position: relative;
-        z-index: 1;
-    }
-
-    #adminSidebarMobile .admin-logout {
-        min-height: 46px;
-        border: 1px solid rgba(58, 36, 26, 0.16) !important;
-        border-radius: 12px !important;
-        background: #fffdf9 !important;
-        color: #3a241a !important;
-        cursor: pointer !important;
-    }
-
-    #adminSidebarMobile .admin-logout:hover,
-    #adminSidebarMobile .admin-logout:focus-visible,
-    #adminSidebarMobile .admin-logout:active {
-        background: #3a241a !important;
-        border-color: #3a241a !important;
-        color: #ffffff !important;
+    /* z-index */
+    .offcanvas-backdrop,
+    #adminSidebarMobile.offcanvas {
+        z-index: 1050 !important;
     }
 }
 
@@ -850,3 +778,106 @@ div.position-fixed.bottom-0 button {
 .btn-outline-artisan-dark[class*="btn"] {
     line-height: 1.5;
 }
+
+
+/* =============================================================================
+   MEUS PEDIDOS - layout responsivo e refinado
+   ============================================================================= */
+.order-page-title { font-size: clamp(2rem, 4vw, 2.75rem); }
+.order-card { background: #fff; transition: transform .2s ease, box-shadow .2s ease; }
+.order-card:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(61,43,31,.08) !important; }
+.order-card-main { display: grid; grid-template-columns: minmax(250px, 1.6fr) minmax(120px, .7fr) minmax(150px, .9fr) minmax(320px, 1.8fr); align-items: center; gap: 24px; }
+.order-info { min-width: 0; }
+.order-label { display:block; font-size:.78rem; color:#7a716b; margin-bottom:5px; }
+.order-number { display:block; font-size:1.05rem; overflow-wrap:anywhere; line-height:1.3; }
+.order-date { display:flex; align-items:center; gap:6px; color:#7a716b; font-size:.78rem; margin-top:7px; }
+.order-total { font-size:1.15rem; }
+.order-status-block { display:flex; flex-direction:column; align-items:flex-start; }
+.order-status { width:max-content; max-width:100%; white-space:normal; }
+.order-auto { display:block; color:#198754; font-size:.72rem; margin-top:7px; }
+.order-auto i { margin-right:3px; }
+.order-actions { display:flex; flex-wrap:wrap; justify-content:flex-end; align-items:center; gap:9px; min-width:0; }
+.order-action-btn { min-height:42px; white-space:nowrap; }
+.order-cancel-form { margin:0; }
+.order-disabled-action { min-height:42px; display:inline-flex; align-items:center; justify-content:center; white-space:normal; text-align:center; }
+.order-note { border-top:1px solid #eee7df; margin-top:22px; padding-top:13px; color:#766e68; font-size:.8rem; }
+.order-note-danger { color:#b02a37; }
+.order-empty-card { min-height:320px; display:flex; align-items:center; justify-content:center; }
+.order-empty-icon { width:74px; height:74px; margin:auto; border-radius:50%; display:flex; align-items:center; justify-content:center; background:var(--artisan-linen); color:var(--artisan-gold); font-size:2rem; }
+.order-empty-text { max-width:520px; }
+
+@media (max-width: 1199.98px) {
+    .order-card-main { grid-template-columns: 1.35fr .8fr .9fr; }
+    .order-actions { grid-column: 1 / -1; justify-content:flex-start; padding-top:4px; border-top:1px solid #f0ebe5; }
+}
+
+@media (max-width: 767.98px) {
+    .order-page { padding-top: 28px !important; padding-bottom: 36px !important; }
+    .order-page-title { font-size:2rem; }
+    .order-back-button { width:100%; }
+    .order-card-main { grid-template-columns: 1fr 1fr; gap:18px 14px; }
+    .order-number-block { grid-column:1 / -1; padding-bottom:14px; border-bottom:1px solid #eee7df; }
+    .order-status-block { align-items:flex-start; }
+    .order-actions { grid-column:1 / -1; flex-direction:column; align-items:stretch; gap:8px; }
+    .order-action-btn, .order-disabled-action, .order-cancel-form { width:100%; }
+    .order-cancel-form button { width:100%; }
+    .order-note { margin-top:18px; line-height:1.5; }
+}
+
+@media (max-width: 399.98px) {
+    .order-card-main { grid-template-columns:1fr; }
+    .order-number-block { grid-column:auto; }
+    .order-status-block { grid-column:auto; }
+    .order-total { font-size:1.05rem; }
+}
+
+/* ===== AJUSTE VISUAL DAS AVALIAÇÕES EM MEUS PEDIDOS ===== */
+.order-feedback-area {
+    width: 100%;
+    margin-top: 1.5rem;
+}
+
+.feedback-order-card {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid rgba(0, 0, 0, .08);
+    border-radius: 18px;
+    background: #faf9f7;
+}
+
+.feedback-order-card .d-flex {
+    align-items: flex-start;
+}
+
+.feedback-order-card h5,
+.feedback-order-card h6,
+.feedback-order-card p {
+    margin-bottom: .35rem;
+}
+
+.feedback-order-card .badge {
+    white-space: nowrap;
+}
+
+.feedback-inline-stars {
+    color: #d39b42;
+    letter-spacing: .08em;
+    white-space: nowrap;
+}
+
+.feedback-inline-image {
+    display: block;
+    width: min(100%, 280px);
+    max-height: 230px;
+    object-fit: cover;
+    border-radius: 16px;
+    margin-top: .75rem;
+}
+
+@media (max-width: 767.98px) {
+    .feedback-order-card {
+        padding: 1rem;
+    }
+}
+

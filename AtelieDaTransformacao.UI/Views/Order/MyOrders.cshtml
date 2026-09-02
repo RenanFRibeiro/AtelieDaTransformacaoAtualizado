@@ -6,331 +6,168 @@
     ViewData["Title"] = "Meus Pedidos";
 }
 
-<div class="container py-5">
+<div class="container py-4 py-lg-5 order-page">
 
-    <!-- CABEÇALHO -->
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
-
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4 mb-lg-5">
         <div>
-            <span class="text-uppercase text-gold fw-bold small">
-                Acompanhamento
-            </span>
-
-            <h1 class="serif-title fw-bold mb-1">
-                Meus pedidos
-            </h1>
-
-            <p class="text-muted mb-0">
-                Acompanhe cada etapa do pedido sem sair do site.
-            </p>
+            <span class="text-uppercase text-gold fw-bold small">Acompanhamento</span>
+            <h1 class="serif-title fw-bold mb-1 order-page-title">Meus pedidos</h1>
+            <p class="text-muted mb-0">Acompanhe cada etapa do seu pedido sem sair do site.</p>
         </div>
 
-        <a asp-controller="Home"
-           asp-action="Index"
-           class="btn btn-outline-dark rounded-pill px-4">
-
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-dark rounded-pill px-4 order-back-button">
             <i class="bi bi-arrow-left me-1"></i>
-
             Voltar para a coleção
-
         </a>
-
     </div>
 
-
-    <!-- MENSAGENS -->
     @if (TempData["SuccessMessage"] is string success)
     {
-        <div class="alert alert-success rounded-3">
-            <i class="bi bi-check-circle me-2"></i>
-            @success
-        </div>
+        <div class="alert alert-success rounded-4 shadow-sm"> <i class="bi bi-check-circle me-2"></i>@success </div>
     }
 
     @if (TempData["ErrorMessage"] is string error)
     {
-        <div class="alert alert-danger rounded-3">
-            <i class="bi bi-exclamation-circle me-2"></i>
-            @error
-        </div>
+        <div class="alert alert-danger rounded-4 shadow-sm"> <i class="bi bi-exclamation-circle me-2"></i>@error </div>
     }
 
-
-    <!-- NENHUM PEDIDO -->
     @if (Model == null || Model.Count == 0)
     {
-        <div class="card border-0 shadow-sm rounded-4 p-5 text-center">
-
-            <i class="bi bi-box-seam display-3 text-gold"></i>
-
-            <h2 class="serif-title fw-bold mt-3">
-                Você ainda não possui pedidos
-            </h2>
-
-            <p class="text-muted">
-                Adicione produtos ao carrinho para realizar seu primeiro pedido.
-            </p>
-
-            <a asp-controller="Home"
-               asp-action="Index"
-               class="btn btn-artisan rounded-pill px-4">
-
-                <i class="bi bi-bag me-1"></i>
-
-                Ver coleção
-
-            </a>
-
+        <div class="card border-0 shadow-sm rounded-4 order-empty-card">
+            <div class="card-body p-4 p-md-5 text-center">
+                <div class="order-empty-icon"><i class="bi bi-box-seam"></i></div>
+                <h2 class="serif-title fw-bold mt-3">Você ainda não possui pedidos</h2>
+                <p class="text-muted mx-auto order-empty-text">Adicione uma peça ao carrinho e escolha <strong>"Comprar pelo site"</strong>.</p>
+                <a asp-controller="Home" asp-action="Index" class="btn btn-artisan rounded-pill px-4">
+                    <i class="bi bi-bag me-1"></i> Ver coleção
+                </a>
+            </div>
         </div>
     }
     else
     {
-        <!-- LISTA DE PEDIDOS -->
-        <div class="row g-4">
-
+        <div class="d-flex flex-column gap-3 gap-lg-4">
             @foreach (var order in Model)
             {
-                var canCancel =
-                    order.Status.CanCancel();
+                var canCancel = order.Status.CanCancel();
+                var isCancelled = order.Status == OrderStatus.Cancelado;
 
-                var isCancelled =
-                    order.Status == OrderStatus.Cancelado;
-
-                <div class="col-12">
-
-                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
-
-                        <div class="card-body p-4">
-
-                            <div class="row align-items-center g-4">
-
-                                <!-- PEDIDO -->
-                                <div class="col-lg-3">
-
-                                    <span class="small text-muted d-block">
-                                        Pedido
-                                    </span>
-
-                                    <strong class="fs-5 d-block">
-                                        @order.OrderNumber
-                                    </strong>
-
-                                    <small class="text-muted d-block mt-1">
-
-                                        <i class="bi bi-calendar3 me-1"></i>
-
-                                        @order.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")
-
-                                    </small>
-
-                                </div>
-
-
-                                <!-- TOTAL -->
-                                <div class="col-lg-2">
-
-                                    <span class="small text-muted d-block">
-                                        Total
-                                    </span>
-
-                                    <strong class="fs-5">
-                                        R$ @order.Total.ToString("N2")
-                                    </strong>
-
-                                </div>
-
-
-                                <!-- STATUS -->
-                                <div class="col-lg-2">
-
-                                    <span class="small text-muted d-block">
-                                        Status
-                                    </span>
-
-                                    @if (isCancelled)
-                                    {
-                                        <span class="badge rounded-pill px-3 py-2 bg-danger">
-
-                                            <i class="bi bi-x-circle me-1"></i>
-
-                                            @order.StatusName
-
-                                        </span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge rounded-pill px-3 py-2 bg-dark">
-
-                                            @order.StatusName
-
-                                        </span>
-                                    }
-
-                                    @if (order.AutoAdvance &&
-                                         !isCancelled)
-                                    {
-                                        <small class="text-success d-block mt-2">
-
-                                            <i class="bi bi-arrow-repeat me-1"></i>
-
-                                            Atualização automática
-
-                                        </small>
-                                    }
-
-                                </div>
-
-
-                                <!-- AÇÕES -->
-                                <div class="col-lg-5">
-
-                                    <div class="d-flex flex-wrap justify-content-lg-end gap-2">
-
-                                        <!-- ACOMPANHAR -->
-                                        <a asp-controller="Order"
-                                           asp-action="Details"
-                                           asp-route-id="@order.Id"
-                                           class="btn btn-artisan rounded-pill px-4">
-
-                                            <i class="bi bi-eye me-1"></i>
-
-                                            Acompanhar pedido
-
-                                        </a>
-
-
-                                        <!-- CANCELAR -->
-                                        @if (canCancel)
-                                        {
-                                            <form asp-controller="Order"
-                                                  asp-action="Cancel"
-                                                  method="post"
-                                                  class="d-inline"
-                                                  onsubmit="return confirm('Tem certeza que deseja cancelar este pedido? O estoque será devolvido.');">
-
-                                                @Html.AntiForgeryToken()
-
-                                                <input type="hidden"
-                                                       name="id"
-                                                       value="@order.Id" />
-
-                                                <button type="submit"
-                                                        class="btn btn-outline-danger rounded-pill px-3">
-
-                                                    <i class="bi bi-x-circle me-1"></i>
-
-                                                    Cancelar pedido
-
-                                                </button>
-
-                                            </form>
-                                        }
-                                        else if (isCancelled)
-                                        {
-                                            <span class="badge bg-danger rounded-pill px-3 py-2 d-flex align-items-center">
-
-                                                <i class="bi bi-x-circle me-1"></i>
-
-                                                Pedido cancelado
-
-                                            </span>
-                                        }
-                                        else
-                                        {
-                                            <span class="badge bg-light text-muted border rounded-pill px-3 py-2 d-flex align-items-center">
-
-                                                <i class="bi bi-lock me-1"></i>
-
-                                                Cancelamento indisponível
-
-                                            </span>
-                                        }
-
-                                    </div>
-
-                                </div>
-
+                <article class="card border-0 shadow-sm rounded-4 overflow-hidden order-card" data-order-card="@order.Id">
+                    <div class="card-body p-3 p-md-4">
+                        <div class="order-card-main">
+                            <div class="order-info order-number-block">
+                                <span class="order-label">Pedido</span>
+                                <strong class="order-number">@order.OrderNumber</strong>
+                                <span class="order-date">
+                                    <i class="bi bi-calendar3"></i>
+                                    @(order.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm"))
+                                </span>
                             </div>
 
+                            <div class="order-info">
+                                <span class="order-label">Total</span>
+                                <strong class="order-total">R$ @order.Total.ToString("N2")</strong>
+                            </div>
+
+                            <div class="order-info order-status-block">
+                                <span class="order-label">Status</span>
+                                @if (isCancelled)
+                                {
+                                    <span class="badge rounded-pill px-3 py-2 bg-danger order-status" data-order-status="@order.Id">
+                                        <i class="bi bi-x-circle me-1"></i> Cancelado
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge rounded-pill px-3 py-2 bg-dark order-status" data-order-status="@order.Id">
+                                        @order.StatusName
+                                    </span>
+                                }
+                                @if (order.AutoAdvance && !isCancelled)
+                                {
+                                    <span class="order-auto"><i class="bi bi-arrow-repeat"></i> Atualização automática</span>
+                                }
+                            </div>
+
+                            <div class="order-actions">
+                                <a asp-controller="Order" asp-action="Details" asp-route-id="@order.Id" class="btn btn-artisan rounded-pill px-4 order-action-btn">
+                                    <i class="bi bi-eye me-1"></i> Acompanhar pedido
+                                </a>
+
+                                @if (canCancel)
+                                {
+                                    <form asp-controller="Order" asp-action="Cancel" method="post" class="order-cancel-form"
+                                          onsubmit="return confirm('Tem certeza que deseja cancelar este pedido? O estoque reservado será devolvido.');">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@order.Id" />
+                                        <button type="submit" class="btn btn-outline-danger rounded-pill px-4 order-action-btn">
+                                            <i class="bi bi-x-circle me-1"></i> Cancelar pedido
+                                        </button>
+                                    </form>
+                                }
+                                else if (isCancelled)
+                                {
+                                    <span class="badge bg-danger rounded-pill px-3 py-2 order-disabled-action">
+                                        <i class="bi bi-x-circle me-1"></i> Pedido cancelado
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-light text-muted border rounded-pill px-3 py-2 order-disabled-action">
+                                        <i class="bi bi-lock me-1"></i> Cancelamento indisponível
+                                    </span>
+                                }
+                            </div>
                         </div>
 
+                        @if (canCancel)
+                        {
+                            <div class="order-note">
+                                <i class="bi bi-info-circle me-1"></i>
+                                Você pode cancelar este pedido enquanto ele não estiver <strong>enviado</strong> ou <strong>entregue</strong>.
+                            </div>
+                        }
+                        else if (isCancelled)
+                        {
+                            <div class="order-note order-note-danger">
+                                <i class="bi bi-x-circle me-1"></i>
+                                Este pedido foi cancelado e não poderá avançar para as próximas etapas.
+                            </div>
+                        }
                     </div>
-
-                </div>
+                </article>
             }
-
         </div>
     }
-
 </div>
 
-
-@section Scripts
-{
+@section Scripts {
     <script>
-
         async function refreshOrder(orderId) {
             try {
-                const response =
-                    await fetch(
-                        `/Order/Status/${orderId}`,
-                        {
-                            cache: "no-store"
-                        });
+                const response = await fetch(`/Order/Status/${orderId}`, { cache: "no-store" });
+                if (!response.ok) return;
+                const data = await response.json();
+                const badge = document.querySelector(`[data-order-status="${orderId}"]`);
+                if (!badge) return;
 
-                if (!response.ok)
-                    return;
-
-                const data =
-                    await response.json();
-
-                const card =
-                    document.querySelector(
-                        `[data-order-card="${orderId}"]`);
-
-                const badge =
-                    document.querySelector(
-                        `[data-order-status="${orderId}"]`);
-
-                if (badge) {
-                    badge.textContent =
-                        data.statusName;
+                if (Number(data.status) === 7) {
+                    badge.className = "badge rounded-pill px-3 py-2 bg-danger order-status";
+                    badge.innerHTML = '<i class="bi bi-x-circle me-1"></i> Cancelado';
+                } else {
+                    badge.className = "badge rounded-pill px-3 py-2 bg-dark order-status";
+                    badge.textContent = data.statusName;
                 }
-            }
-            catch {
-                // Evita quebrar a página caso a atualização falhe.
+            } catch (error) {
+                console.error("Erro ao atualizar o pedido:", error);
             }
         }
 
-
-        document.addEventListener(
-            "DOMContentLoaded",
-            () => {
-                document
-                    .querySelectorAll(
-                        "[data-order-card]")
-                    .forEach(card => {
-                        const id =
-                            card.dataset.orderCard;
-
-                        refreshOrder(id);
-                    });
-
-
-                setInterval(
-                    () => {
-                        document
-                            .querySelectorAll(
-                                "[data-order-card]")
-                            .forEach(card => {
-                                const id =
-                                    card.dataset.orderCard;
-
-                                refreshOrder(id);
-                            });
-                    },
-                    10000);
-            });
-
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll("[data-order-card]").forEach(card => refreshOrder(card.dataset.orderCard));
+            setInterval(() => {
+                document.querySelectorAll("[data-order-card]").forEach(card => refreshOrder(card.dataset.orderCard));
+            }, 10000);
+        });
     </script>
 }

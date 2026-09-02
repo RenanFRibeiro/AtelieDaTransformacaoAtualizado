@@ -1,4 +1,4 @@
-﻿@model IReadOnlyList<AtelieDaTransformacao.Application.DTOs.OrderListDto>
+@model IReadOnlyList<AtelieDaTransformacao.Application.DTOs.OrderListDto>
 
 @using AtelieDaTransformacao.Domain.Enums
 
@@ -8,10 +8,10 @@
 
 <div class="container py-5">
 
-    <!-- CABEÇALHO -->
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
 
         <div>
+
             <span class="text-uppercase text-gold fw-bold small">
                 Acompanhamento
             </span>
@@ -23,6 +23,7 @@
             <p class="text-muted mb-0">
                 Acompanhe cada etapa do seu pedido sem sair do site.
             </p>
+
         </div>
 
         <a asp-controller="Home"
@@ -37,27 +38,30 @@
 
     </div>
 
-
-    <!-- MENSAGENS -->
     @if (TempData["SuccessMessage"] is string success)
     {
         <div class="alert alert-success rounded-4 shadow-sm">
+
             <i class="bi bi-check-circle me-2"></i>
+
             @success
+
         </div>
     }
 
     @if (TempData["ErrorMessage"] is string error)
     {
         <div class="alert alert-danger rounded-4 shadow-sm">
+
             <i class="bi bi-exclamation-circle me-2"></i>
+
             @error
+
         </div>
     }
 
-
-    <!-- SEM PEDIDOS -->
-    @if (Model == null || Model.Count == 0)
+    @if (Model == null ||
+         Model.Count == 0)
     {
         <div class="card border-0 shadow-sm rounded-4 p-5 text-center">
 
@@ -86,12 +90,12 @@
     }
     else
     {
-        <!-- LISTA DE PEDIDOS -->
         <div class="row g-4">
 
             @foreach (var order in Model)
             {
-                var canCancel = order.Status.CanCancel();
+                var canCancel =
+                    order.Status.CanCancel();
 
                 <div class="col-12">
 
@@ -102,7 +106,6 @@
 
                             <div class="row align-items-center g-4">
 
-                                <!-- PEDIDO -->
                                 <div class="col-lg-3">
 
                                     <span class="small text-muted d-block">
@@ -117,14 +120,12 @@
 
                                         <i class="bi bi-calendar3 me-1"></i>
 
-                                        @order.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")
+                                        @(order.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm"))
 
                                     </small>
 
                                 </div>
 
-
-                                <!-- TOTAL -->
                                 <div class="col-lg-2">
 
                                     <span class="small text-muted d-block">
@@ -137,15 +138,14 @@
 
                                 </div>
 
-
-                                <!-- STATUS -->
                                 <div class="col-lg-2">
 
                                     <span class="small text-muted d-block mb-1">
                                         Status
                                     </span>
 
-                                    @if (order.Status == OrderStatus.Cancelado)
+                                    @if (order.Status ==
+                                         OrderStatus.Cancelado)
                                     {
                                         <span class="badge rounded-pill px-3 py-2 bg-danger"
                                               data-order-status="@order.Id">
@@ -167,7 +167,8 @@
                                     }
 
                                     @if (order.AutoAdvance &&
-                                         order.Status != OrderStatus.Cancelado)
+                                         order.Status !=
+                                         OrderStatus.Cancelado)
                                     {
                                         <small class="text-success d-block mt-1">
 
@@ -180,13 +181,10 @@
 
                                 </div>
 
-
-                                <!-- AÇÕES -->
                                 <div class="col-lg-5">
 
                                     <div class="d-flex flex-wrap justify-content-lg-end gap-2">
 
-                                        <!-- ACOMPANHAR -->
                                         <a asp-controller="Order"
                                            asp-action="Details"
                                            asp-route-id="@order.Id"
@@ -198,8 +196,6 @@
 
                                         </a>
 
-
-                                        <!-- CANCELAR -->
                                         @if (canCancel)
                                         {
                                             <form asp-controller="Order"
@@ -225,7 +221,9 @@
 
                                             </form>
                                         }
-                                        else if (order.Status == OrderStatus.Cancelado)
+                                        else if (
+                                            order.Status ==
+                                            OrderStatus.Cancelado)
                                         {
                                             <span class="badge bg-danger rounded-pill px-3 py-2 d-flex align-items-center">
 
@@ -252,8 +250,6 @@
 
                             </div>
 
-
-                            <!-- INFORMAÇÃO SOBRE CANCELAMENTO -->
                             @if (canCancel)
                             {
                                 <div class="border-top mt-4 pt-3">
@@ -262,14 +258,18 @@
 
                                         <i class="bi bi-info-circle me-1"></i>
 
-                                        Você pode cancelar este pedido enquanto ele não
-                                        estiver <strong>enviado</strong> ou <strong>entregue</strong>.
+                                        Você pode cancelar este pedido enquanto
+                                        ele não estiver
+                                        <strong>enviado</strong> ou
+                                        <strong>entregue</strong>.
 
                                     </div>
 
                                 </div>
                             }
-                            else if (order.Status == OrderStatus.Cancelado)
+                            else if (
+                                order.Status ==
+                                OrderStatus.Cancelado)
                             {
                                 <div class="border-top mt-4 pt-3">
 
@@ -277,8 +277,8 @@
 
                                         <i class="bi bi-x-circle me-1"></i>
 
-                                        Este pedido foi cancelado e não poderá avançar
-                                        para as próximas etapas.
+                                        Este pedido foi cancelado e não poderá
+                                        avançar para as próximas etapas.
 
                                     </div>
 
@@ -286,6 +286,17 @@
                             }
 
                         </div>
+
+                        @if (order.Status ==
+                             OrderStatus.Entregue)
+                        {
+                            @await Component.InvokeAsync(
+                                "Feedbacks",
+                                new
+                                {
+                                    orderId = order.Id
+                                })
+                        }
 
                     </div>
 
@@ -297,9 +308,110 @@
 
 </div>
 
+<style>
+    /* ===== Avaliações dos produtos ===== */
+    .order-feedback-area {
+        margin-top: 0 !important;
+        padding: 26px 24px 28px !important;
+        border-top: 1px solid rgba(0, 0, 0, .08);
+        background: #fff;
+    }
 
-@section Scripts {
+    .order-feedback-area > .text-uppercase,
+    .order-feedback-area .text-uppercase {
+        display: block;
+        margin-bottom: 4px;
+        font-size: .72rem;
+        letter-spacing: .04em;
+    }
 
+    .order-feedback-area h4,
+    .order-feedback-area h5,
+    .order-feedback-area h6 {
+        margin-top: 0;
+        margin-bottom: 14px;
+        line-height: 1.2;
+    }
+
+    .feedback-order-card {
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 0 12px 0 !important;
+        padding: 18px 20px !important;
+        border: 1px solid rgba(0, 0, 0, .09) !important;
+        border-radius: 16px !important;
+        background: #fbfaf8 !important;
+        box-shadow: none !important;
+        box-sizing: border-box;
+    }
+
+    .feedback-order-card:last-child {
+        margin-bottom: 0 !important;
+    }
+
+    .feedback-order-card .small {
+        line-height: 1.45;
+    }
+
+    .feedback-order-card .fw-bold {
+        color: #241812;
+    }
+
+    .feedback-order-card .badge {
+        flex-shrink: 0;
+        white-space: nowrap;
+    }
+
+    .feedback-order-card .btn {
+        margin-top: 8px;
+    }
+
+    .feedback-inline-stars {
+        display: inline-flex;
+        align-items: center;
+        gap: 2px;
+        color: #d39b42;
+        letter-spacing: 0;
+        line-height: 1;
+    }
+
+    .feedback-inline-image {
+        display: block;
+        width: min(100%, 280px);
+        max-height: 220px;
+        object-fit: cover;
+        border-radius: 14px;
+        margin-top: 12px;
+    }
+
+    /* Data da avaliação: nunca deixa o texto quebrar */
+    .feedback-order-card .text-muted {
+        overflow-wrap: break-word;
+    }
+
+    /* ===== Responsividade ===== */
+    @@media (max-width: 767.98px) {
+        .order-feedback-area {
+            padding: 22px 16px 24px !important;
+        }
+
+        .feedback-order-card {
+            padding: 16px !important;
+            border-radius: 14px !important;
+        }
+
+        .feedback-order-card .d-flex {
+            align-items: flex-start !important;
+        }
+
+        .feedback-order-card .btn {
+            width: 100%;
+        }
+    }
+</style>
+
+@section Scripts
+{
     <script>
 
         async function refreshOrder(orderId) {
@@ -321,16 +433,11 @@
 
                 const badge =
                     document.querySelector(
-                        `[data-order-status="${orderId}"]`
-                    );
+                        `[data-order-status="${orderId}"]`);
 
                 if (!badge)
                     return;
 
-
-                /*
-                 * Atualiza o texto do status
-                 */
                 if (Number(data.status) === 7) {
 
                     badge.className =
@@ -355,59 +462,39 @@
 
                 console.error(
                     "Erro ao atualizar o pedido:",
-                    error
-                );
+                    error);
 
             }
 
         }
 
-
         document.addEventListener(
             "DOMContentLoaded",
             () => {
 
-                /*
-                 * Atualização inicial
-                 */
                 document
                     .querySelectorAll(
-                        "[data-order-card]"
-                    )
-                    .forEach(card => {
+                        "[data-order-card]")
+                    .forEach(
+                        card =>
+                            refreshOrder(
+                                card.dataset.orderCard));
 
-                        refreshOrder(
-                            card.dataset.orderCard
-                        );
-
-                    });
-
-
-                /*
-                 * Atualização a cada 10 segundos
-                 */
                 setInterval(
                     () => {
 
                         document
                             .querySelectorAll(
-                                "[data-order-card]"
-                            )
-                            .forEach(card => {
-
-                                refreshOrder(
-                                    card.dataset.orderCard
-                                );
-
-                            });
+                                "[data-order-card]")
+                            .forEach(
+                                card =>
+                                    refreshOrder(
+                                        card.dataset.orderCard));
 
                     },
-                    10000
-                );
+                    10000);
 
-            }
-        );
+            });
 
     </script>
-
 }

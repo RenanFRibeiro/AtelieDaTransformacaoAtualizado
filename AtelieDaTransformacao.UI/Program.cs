@@ -15,11 +15,8 @@ public static class Program
 {
     public static async Task Main(string[] args)
     {
-        var builder = WebApplication.CreateBuilder(args);
-
-        // =========================================================
-        // CONNECTION STRING
-        // =========================================================
+        var builder =
+            WebApplication.CreateBuilder(args);
 
         var connectionString =
             builder.Configuration.GetConnectionString(
@@ -27,21 +24,11 @@ public static class Program
             ?? throw new InvalidOperationException(
                 "Connection string 'DefaultConnection' not found.");
 
-
-        // =========================================================
-        // DATABASE
-        // =========================================================
-
         builder.Services.AddDbContext<
             AtelieDaTransformacaoDbContext>(
             options =>
                 options.UseSqlServer(
                     connectionString));
-
-
-        // =========================================================
-        // IDENTITY
-        // =========================================================
 
         builder.Services
             .AddIdentity<IdentityUser, IdentityRole>(
@@ -69,11 +56,6 @@ public static class Program
                 AtelieDaTransformacaoDbContext>()
             .AddDefaultTokenProviders();
 
-
-        // =========================================================
-        // COOKIE DE AUTENTICAÇÃO
-        // =========================================================
-
         builder.Services.ConfigureApplicationCookie(
             options =>
             {
@@ -90,11 +72,6 @@ public static class Program
                     true;
             });
 
-
-        // =========================================================
-        // PRODUCT REPOSITORIES
-        // =========================================================
-
         builder.Services.AddScoped<
             IProductRepository,
             ProductRepository>();
@@ -103,23 +80,17 @@ public static class Program
             IProductCategoryRepository,
             ProductCategoryRepository>();
 
-
-        // =========================================================
-        // ORDER REPOSITORY
-        // =========================================================
+        builder.Services.AddScoped<
+            IOrderRepository,
+            OrderRepository>();
 
         builder.Services.AddScoped<
-    IOrderRepository,
-    OrderRepository>();
+            IFeedbackRepository,
+            FeedbackRepository>();
 
         builder.Services.AddScoped<
             IOrderService,
             OrderService>();
-
-
-        // =========================================================
-        // PRODUCT SERVICES
-        // =========================================================
 
         builder.Services.AddScoped<
             IProductService,
@@ -129,19 +100,6 @@ public static class Program
             IProductCategoryService,
             ProductCategoryService>();
 
-
-        // =========================================================
-        // ORDER SERVICE
-        // =========================================================
-
-        builder.Services.AddScoped<
-            IOrderService,
-            OrderService>();
-
-        // =========================================================
-        // CEP E FRETE SERVICES
-        // =========================================================
-
         builder.Services.AddHttpClient<
             ICepService,
             CepService>();
@@ -150,19 +108,9 @@ public static class Program
             IFreteService,
             FreteService>();
 
-
-        // =========================================================
-        // WHATSAPP
-        // =========================================================
-
         builder.Services.AddScoped<
             IWhatsAppService,
             WhatsAppService>();
-
-
-        // =========================================================
-        // SESSION
-        // =========================================================
 
         builder.Services.AddDistributedMemoryCache();
 
@@ -179,32 +127,12 @@ public static class Program
                     true;
             });
 
-
-        // =========================================================
-        // MVC
-        // =========================================================
-
         builder.Services.AddControllersWithViews();
-
-
-        // =========================================================
-        // SIGNALR
-        // =========================================================
 
         builder.Services.AddSignalR();
 
-
-        // =========================================================
-        // BUILD
-        // =========================================================
-
         var app =
             builder.Build();
-
-
-        // =========================================================
-        // DATABASE MIGRATIONS
-        // =========================================================
 
         await using (
             var scope =
@@ -216,13 +144,10 @@ public static class Program
                         AtelieDaTransformacaoDbContext>();
 
             await db.Database.MigrateAsync();
-            await OrderSchemaInitializer.EnsureAsync(db);
+
+            await OrderSchemaInitializer
+                .EnsureAsync(db);
         }
-
-
-        // =========================================================
-        // ERROR HANDLING
-        // =========================================================
 
         if (!app.Environment.IsDevelopment())
         {
@@ -231,11 +156,6 @@ public static class Program
 
             app.UseHsts();
         }
-
-
-        // =========================================================
-        // HTTP PIPELINE
-        // =========================================================
 
         app.UseHttpsRedirection();
 
@@ -249,28 +169,13 @@ public static class Program
 
         app.UseAuthorization();
 
-
-        // =========================================================
-        // SIGNALR HUB
-        // =========================================================
-
         app.MapHub<OrderStatusHub>(
             "/hubs/orders");
-
-
-        // =========================================================
-        // MVC ROUTE
-        // =========================================================
 
         app.MapControllerRoute(
             name: "default",
             pattern:
                 "{controller=Home}/{action=Index}/{id?}");
-
-
-        // =========================================================
-        // START
-        // =========================================================
 
         await app.RunAsync();
     }

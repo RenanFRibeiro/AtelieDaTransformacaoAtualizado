@@ -5,325 +5,811 @@
 }
 
 <div class="home-page">
-    <section class="home-collection-section" aria-labelledby="collection-title">
+
+    <section class="home-collection-section"
+             aria-labelledby="collection-title">
+
         <div class="home-container">
+
             <div class="collection-heading">
+
                 <div>
-                    <span class="eyebrow">COLEÇÃO ARTESANAL TOP</span>
-                    <h1 id="collection-title" class="serif-title collection-title">Peças que transformam ambientes.</h1>
-                    <p class="collection-subtitle">Descubra criações exclusivas ou conte sua ideia para desenvolvermos um projeto personalizado.</p>
+
+                    <span class="eyebrow">
+                        COLEÇÃO ARTESANAL TOP
+                    </span>
+
+                    <h1 id="collection-title"
+                        class="serif-title collection-title">
+                        Peças que transformam ambientes.
+                    </h1>
+
+                    <p class="collection-subtitle">
+                        Descubra criações exclusivas ou conte sua ideia
+                        para desenvolvermos um projeto personalizado.
+                    </p>
+
                 </div>
 
                 <div class="collection-actions">
-                    <a asp-controller="Quote" asp-action="Index" class="btn btn-artisan btn-lg rounded-pill px-4" role="button" aria-label="Solicitar orçamento para personalização">
-                        <i class="bi bi-rulers me-2"></i><span>Solicitar orçamento</span>
+
+                    <a asp-controller="Quote"
+                       asp-action="Index"
+                       class="btn btn-artisan btn-lg rounded-pill px-4"
+                       role="button"
+                       aria-label="Solicitar orçamento para personalização">
+
+                        <i class="bi bi-rulers me-2"></i>
+
+                        <span>
+                            Solicitar orçamento
+                        </span>
+
                     </a>
-                    <a asp-action="Gallery" class="btn btn-outline-artisan-dark btn-lg rounded-pill px-4" role="button" aria-label="Ver projetos anteriores">
-                        <span>Ver projetos</span> <i class="bi bi-arrow-up-right ms-1"></i>
+
+                    <a asp-action="Gallery"
+                       class="btn btn-outline-artisan-dark btn-lg rounded-pill px-4"
+                       role="button"
+                       aria-label="Ver projetos anteriores">
+
+                        <span>
+                            Ver projetos
+                        </span>
+
+                        <i class="bi bi-arrow-up-right ms-1"></i>
+
                     </a>
+
                 </div>
+
             </div>
 
             <div class="collection-tools">
-                <form method="get" class="product-search-modern" role="search">
+
+                <form method="get"
+                      class="product-search-modern"
+                      role="search">
+
                     @if (Model.SelectedCategoryId.HasValue)
                     {
-                        <input type="hidden" name="categoryId" value="@Model.SelectedCategoryId" />
+                        <input type="hidden"
+                               name="categoryId"
+                               value="@Model.SelectedCategoryId" />
                     }
-                    <label class="visually-hidden" for="homeProductSearch">Buscar na coleção</label>
+
+                    <label class="visually-hidden"
+                           for="homeProductSearch">
+                        Buscar na coleção
+                    </label>
+
                     <div class="search-box">
-                        <i class="bi bi-search" aria-hidden="true"></i>
-                        <input id="homeProductSearch" name="search" value="@ViewBag.Search" placeholder="Busque por peças, madeira, decoração..." autocomplete="off" />
-                        <button type="submit">Buscar</button>
+
+                        <i class="bi bi-search"
+                           aria-hidden="true"></i>
+
+                        <input id="homeProductSearch"
+                               name="search"
+                               value="@ViewBag.Search"
+                               placeholder="Busque por peças, madeira, decoração..."
+                               autocomplete="off" />
+
+                        <button type="submit">
+                            Buscar
+                        </button>
+
                     </div>
+
                 </form>
 
-                <div class="category-pills" aria-label="Categorias">
+                <div class="category-pills"
+                     aria-label="Categorias">
+
                     <a href="@Url.Action("Index", "Home")"
                        class="filter-pill-modern @(Model.SelectedCategoryId == null ? "active" : "")">
+
                         Todas as peças
+
                     </a>
+
                     @foreach (var cat in Model.Categories)
                     {
                         <a href="@Url.Action("Index", "Home", new { categoryId = cat.Id })"
                            class="filter-pill-modern @(Model.SelectedCategoryId == cat.Id ? "active" : "")">
+
                             @cat.Name
+
                         </a>
                     }
+
                 </div>
+
             </div>
 
             @if (Model.Products.Any())
             {
                 <div class="collection-meta">
-                    <span><strong>@Model.Products.Count()</strong> @(Model.Products.Count() == 1 ? "peça disponível" : "peças disponíveis")</span>
+
+                    <span>
+                        <strong>
+                            @Model.Products.Count()
+                        </strong>
+
+                        @(Model.Products.Count() == 1
+                            ? "peça disponível"
+                            : "peças disponíveis")
+                    </span>
+
                     <span class="collection-meta-line"></span>
-                    <span>Feitas para transformar espaços.</span>
+
+                    <span>
+                        Feitas para transformar espaços.
+                    </span>
+
                 </div>
 
                 @if (Model.Products.Count() == 1)
                 {
-                    var prod = Model.Products.First();
-                    var imageUrl = string.IsNullOrWhiteSpace(prod.Image) ? "/images/placeholder.jpg" : prod.Image;
+                    var prod =
+                        Model.Products.First();
+
+                    var imageUrl =
+                        string.IsNullOrWhiteSpace(
+                            prod.Image)
+                            ? "/images/placeholder.jpg"
+                            : prod.Image;
 
                     <div class="featured-product-stage">
+
                         <div class="featured-product-copy">
+
                             <div class="featured-copy-top">
-                                <span class="eyebrow">PEÇA EM DESTAQUE</span>
-                                <span class="featured-index">01 / 01</span>
+
+                                <span class="eyebrow">
+                                    PEÇA EM DESTAQUE
+                                </span>
+
+                                <span class="featured-index">
+                                    01 / 01
+                                </span>
+
                             </div>
-                            <h2 class="serif-title">Uma criação feita para transformar o ambiente.</h2>
-                            <p>Conheça esta peça em destaque e descubra seus detalhes, materiais e possibilidades de uso.</p>
+
+                            <h2 class="serif-title">
+                                Uma criação feita para transformar o ambiente.
+                            </h2>
+
+                            <p>
+                                Conheça esta peça em destaque e descubra
+                                seus detalhes, materiais e possibilidades de uso.
+                            </p>
 
                             <div class="featured-product-info">
+
                                 <div>
-                                    <span>Peça selecionada</span>
-                                    <strong>@prod.Title</strong>
+
+                                    <span>
+                                        Peça selecionada
+                                    </span>
+
+                                    <strong>
+                                        @prod.Title
+                                    </strong>
+
                                 </div>
+
                                 <div>
-                                    <span>Categoria</span>
-                                    <strong>@prod.CategoryName</strong>
+
+                                    <span>
+                                        Categoria
+                                    </span>
+
+                                    <strong>
+                                        @prod.CategoryName
+                                    </strong>
+
                                 </div>
+
                             </div>
 
                             <div class="featured-product-actions">
-                                <a asp-action="ProductDetails" asp-route-id="@prod.Id" class="btn btn-artisan rounded-pill px-4">
-                                    Ver peça <i class="bi bi-arrow-up-right ms-1"></i>
+
+                                <a asp-action="ProductDetails"
+                                   asp-route-id="@prod.Id"
+                                   class="btn btn-artisan rounded-pill px-4">
+
+                                    Ver peça
+
+                                    <i class="bi bi-arrow-up-right ms-1"></i>
+
                                 </a>
-                                <a asp-action="Gallery" class="featured-text-link">
-                                    Ver projetos <i class="bi bi-arrow-right"></i>
+
+                                <a asp-action="Gallery"
+                                   class="featured-text-link">
+
+                                    Ver projetos
+
+                                    <i class="bi bi-arrow-right"></i>
+
                                 </a>
+
                             </div>
+
                         </div>
 
-                        <article class="product-card-modern featured-product-card" data-product-title="@prod.Title">
-                            <a asp-action="ProductDetails" asp-route-id="@prod.Id" class="product-image-link" aria-label="Ver detalhes de @prod.Title">
+                        <article class="product-card-modern featured-product-card"
+                                 data-product-title="@prod.Title">
+
+                            <a asp-action="ProductDetails"
+                               asp-route-id="@prod.Id"
+                               class="product-image-link"
+                               aria-label="Ver detalhes de @prod.Title">
+
                                 @if (prod.IsFeatured)
                                 {
-                                    <span class="product-badge"><i class="bi bi-stars me-1"></i>Destaque</span>
+                                    <span class="product-badge">
+
+                                        <i class="bi bi-stars me-1"></i>
+
+                                        Destaque
+
+                                    </span>
                                 }
+
                                 <div class="product-image-modern">
-                                    <img src="@imageUrl" alt="@prod.Title" loading="lazy" />
-                                    <span class="product-view-chip visible"><i class="bi bi-arrow-up-right"></i></span>
+
+                                    <img src="@imageUrl"
+                                         alt="@prod.Title"
+                                         loading="lazy" />
+
+                                    <span class="product-view-chip visible">
+
+                                        <i class="bi bi-arrow-up-right"></i>
+
+                                    </span>
+
                                 </div>
+
                             </a>
 
                             <div class="product-content-modern">
+
                                 <div class="featured-card-heading">
+
                                     <div>
-                                        <span class="product-category-modern">@prod.CategoryName</span>
-                                        <h2 class="product-title-modern">@prod.Title</h2>
+
+                                        <span class="product-category-modern">
+                                            @prod.CategoryName
+                                        </span>
+
+                                        <h2 class="product-title-modern">
+                                            @prod.Title
+                                        </h2>
+
                                     </div>
-                                    <span class="featured-card-dot" aria-hidden="true"></span>
+
+                                    <span class="featured-card-dot"
+                                          aria-hidden="true"></span>
+
                                 </div>
-                                @if (!string.IsNullOrWhiteSpace(prod.Description))
+
+                                @if (!string.IsNullOrWhiteSpace(
+                                    prod.Description))
                                 {
-                                    <p class="product-description-modern">@prod.Description</p>
+                                    <p class="product-description-modern">
+                                        @prod.Description
+                                    </p>
                                 }
 
                                 <div class="product-footer-modern">
+
                                     <div>
-                                        <span class="product-price-label">Valor unitário</span>
-                                        <strong class="product-price">@prod.Price.ToString("C")</strong>
+
+                                        <span class="product-price-label">
+                                            Valor unitário
+                                        </span>
+
+                                        <strong class="product-price">
+                                            @prod.Price.ToString("C")
+                                        </strong>
+
                                     </div>
 
                                     <div class="product-actions-modern">
-                                        <a asp-action="ProductDetails" asp-route-id="@prod.Id" class="product-detail-button" title="Ver detalhes">
+
+                                        <a asp-action="ProductDetails"
+                                           asp-route-id="@prod.Id"
+                                           class="product-detail-button"
+                                           title="Ver detalhes">
+
                                             <i class="bi bi-eye"></i>
-                                            <span class="visually-hidden">Ver detalhes</span>
+
+                                            <span class="visually-hidden">
+                                                Ver detalhes
+                                            </span>
+
                                         </a>
 
                                         @if (User.Identity?.IsAuthenticated == true)
                                         {
                                             @if (prod.IsAvailable)
                                             {
-                                                <form asp-controller="Cart" asp-action="Add" method="post" class="m-0">
+                                                <form asp-controller="Cart"
+                                                      asp-action="Add"
+                                                      method="post"
+                                                      class="m-0">
+
                                                     @Html.AntiForgeryToken()
-                                                    <input type="hidden" name="id" value="@prod.Id" />
-                                                    <input type="hidden" name="quantity" value="1" />
-                                                    <button type="submit" class="add-cart-button">
+
+                                                    <input type="hidden"
+                                                           name="id"
+                                                           value="@prod.Id" />
+
+                                                    <input type="hidden"
+                                                           name="quantity"
+                                                           value="1" />
+
+                                                    <button type="submit"
+                                                            class="add-cart-button">
+
                                                         <i class="bi bi-bag-plus"></i>
-                                                        <span>Adicionar</span>
+
+                                                        <span>
+                                                            Adicionar
+                                                        </span>
+
                                                     </button>
+
                                                 </form>
                                             }
                                             else
                                             {
-                                                <span class="unavailable-button">Indisponível</span>
+                                                <span class="unavailable-button">
+                                                    Indisponível
+                                                </span>
                                             }
                                         }
+
                                     </div>
+
                                 </div>
+
                             </div>
+
                         </article>
+
                     </div>
                 }
                 else
                 {
                     <div class="products-grid-modern">
-                    @foreach (var prod in Model.Products)
-                    {
-                        var imageUrl = string.IsNullOrWhiteSpace(prod.Image) ? "/images/placeholder.jpg" : prod.Image;
 
-                        <article class="product-card-modern" data-product-title="@prod.Title">
-                            <a asp-action="ProductDetails" asp-route-id="@prod.Id" class="product-image-link" aria-label="Ver detalhes de @prod.Title">
-                                @if (prod.IsFeatured)
-                                {
-                                    <span class="product-badge"><i class="bi bi-stars me-1"></i>Destaque</span>
-                                }
-                                <div class="product-image-modern">
-                                    <img src="@imageUrl" alt="@prod.Title" loading="lazy" />
-                                    <span class="product-view-chip"><i class="bi bi-arrow-up-right"></i></span>
-                                </div>
-                            </a>
+                        @foreach (var prod in Model.Products)
+                        {
+                            var imageUrl =
+                                string.IsNullOrWhiteSpace(
+                                    prod.Image)
+                                    ? "/images/placeholder.jpg"
+                                    : prod.Image;
 
-                            <div class="product-content-modern">
-                                <span class="product-category-modern">@prod.CategoryName</span>
-                                <h2 class="product-title-modern">@prod.Title</h2>
-                                @if (!string.IsNullOrWhiteSpace(prod.Description))
-                                {
-                                    <p class="product-description-modern">@prod.Description</p>
-                                }
+                            <article class="product-card-modern"
+                                     data-product-title="@prod.Title">
 
-                                <div class="product-footer-modern">
-                                    <div>
-                                        <span class="product-price-label">Valor unitário</span>
-                                        <strong class="product-price">@prod.Price.ToString("C")</strong>
+                                <a asp-action="ProductDetails"
+                                   asp-route-id="@prod.Id"
+                                   class="product-image-link"
+                                   aria-label="Ver detalhes de @prod.Title">
+
+                                    @if (prod.IsFeatured)
+                                    {
+                                        <span class="product-badge">
+
+                                            <i class="bi bi-stars me-1"></i>
+
+                                            Destaque
+
+                                        </span>
+                                    }
+
+                                    <div class="product-image-modern">
+
+                                        <img src="@imageUrl"
+                                             alt="@prod.Title"
+                                             loading="lazy" />
+
+                                        <span class="product-view-chip">
+
+                                            <i class="bi bi-arrow-up-right"></i>
+
+                                        </span>
+
                                     </div>
 
-                                    <div class="product-actions-modern">
-                                        <a asp-action="ProductDetails" asp-route-id="@prod.Id" class="product-detail-button" title="Ver detalhes">
-                                            <i class="bi bi-eye"></i>
-                                            <span class="visually-hidden">Ver detalhes</span>
-                                        </a>
+                                </a>
 
-                                        @if (User.Identity?.IsAuthenticated == true)
-                                        {
-                                            @if (prod.IsAvailable)
+                                <div class="product-content-modern">
+
+                                    <span class="product-category-modern">
+                                        @prod.CategoryName
+                                    </span>
+
+                                    <h2 class="product-title-modern">
+                                        @prod.Title
+                                    </h2>
+
+                                    @if (!string.IsNullOrWhiteSpace(
+                                        prod.Description))
+                                    {
+                                        <p class="product-description-modern">
+                                            @prod.Description
+                                        </p>
+                                    }
+
+                                    <div class="product-footer-modern">
+
+                                        <div>
+
+                                            <span class="product-price-label">
+                                                Valor unitário
+                                            </span>
+
+                                            <strong class="product-price">
+                                                @prod.Price.ToString("C")
+                                            </strong>
+
+                                        </div>
+
+                                        <div class="product-actions-modern">
+
+                                            <a asp-action="ProductDetails"
+                                               asp-route-id="@prod.Id"
+                                               class="product-detail-button"
+                                               title="Ver detalhes">
+
+                                                <i class="bi bi-eye"></i>
+
+                                                <span class="visually-hidden">
+                                                    Ver detalhes
+                                                </span>
+
+                                            </a>
+
+                                            @if (User.Identity?.IsAuthenticated == true)
                                             {
-                                                <form asp-controller="Cart" asp-action="Add" method="post" class="m-0">
-                                                    @Html.AntiForgeryToken()
-                                                    <input type="hidden" name="id" value="@prod.Id" />
-                                                    <input type="hidden" name="quantity" value="1" />
-                                                    <button type="submit" class="add-cart-button">
-                                                        <i class="bi bi-bag-plus"></i>
-                                                        <span>Adicionar</span>
-                                                    </button>
-                                                </form>
+                                                @if (prod.IsAvailable)
+                                                {
+                                                    <form asp-controller="Cart"
+                                                          asp-action="Add"
+                                                          method="post"
+                                                          class="m-0">
+
+                                                        @Html.AntiForgeryToken()
+
+                                                        <input type="hidden"
+                                                               name="id"
+                                                               value="@prod.Id" />
+
+                                                        <input type="hidden"
+                                                               name="quantity"
+                                                               value="1" />
+
+                                                        <button type="submit"
+                                                                class="add-cart-button">
+
+                                                            <i class="bi bi-bag-plus"></i>
+
+                                                            <span>
+                                                                Adicionar
+                                                            </span>
+
+                                                        </button>
+
+                                                    </form>
+                                                }
+                                                else
+                                                {
+                                                    <span class="unavailable-button">
+                                                        Indisponível
+                                                    </span>
+                                                }
                                             }
-                                            else
-                                            {
-                                                <span class="unavailable-button">Indisponível</span>
-                                            }
-                                        }
+
+                                        </div>
+
                                     </div>
+
                                 </div>
-                            </div>
-                        </article>
-                    }
+
+                            </article>
+                        }
+
                     </div>
                 }
             }
             else
             {
                 <div class="empty-collection">
-                    <div class="empty-collection-icon"><i class="bi bi-search"></i></div>
-                    <span class="eyebrow">COLEÇÃO</span>
-                    <h2 class="serif-title">Nenhuma peça encontrada.</h2>
-                    <p>Tente outro termo de busca ou veja novamente toda a coleção.</p>
-                    <a asp-action="Index" class="btn btn-artisan rounded-pill px-4">Ver todas as peças</a>
+
+                    <div class="empty-collection-icon">
+                        <i class="bi bi-search"></i>
+                    </div>
+
+                    <span class="eyebrow">
+                        COLEÇÃO
+                    </span>
+
+                    <h2 class="serif-title">
+                        Nenhuma peça encontrada.
+                    </h2>
+
+                    <p>
+                        Tente outro termo de busca ou veja novamente toda a coleção.
+                    </p>
+
+                    <a asp-action="Index"
+                       class="btn btn-artisan rounded-pill px-4">
+
+                        Ver todas as peças
+
+                    </a>
+
                 </div>
             }
 
-            <div id="clientSearchEmpty" class="empty-collection" hidden>
-                <div class="empty-collection-icon"><i class="bi bi-search"></i></div>
-                <span class="eyebrow">COLEÇÃO</span>
-                <h2 class="serif-title">Nenhuma peça encontrada.</h2>
-                <p>Digite o início do nome de outra peça para filtrar a coleção.</p>
+            <div id="clientSearchEmpty"
+                 class="empty-collection"
+                 hidden>
+
+                <div class="empty-collection-icon">
+                    <i class="bi bi-search"></i>
+                </div>
+
+                <span class="eyebrow">
+                    COLEÇÃO
+                </span>
+
+                <h2 class="serif-title">
+                    Nenhuma peça encontrada.
+                </h2>
+
+                <p>
+                    Digite o início do nome de outra peça
+                    para filtrar a coleção.
+                </p>
+
             </div>
+
         </div>
+
     </section>
 
-    <section class="process-section" aria-labelledby="process-title">
+    @await Component.InvokeAsync("Feedbacks")
+
+    <section class="process-section"
+             aria-labelledby="process-title">
+
         <div class="home-container">
+
             <div class="process-intro">
-                <span class="eyebrow">COMO FUNCIONA</span>
-                <h2 id="process-title" class="serif-title">Sua ideia pode virar uma peça única.</h2>
-                <p>Do primeiro contato ao acabamento, construímos cada detalhe junto com você.</p>
+
+                <span class="eyebrow">
+                    COMO FUNCIONA
+                </span>
+
+                <h2 id="process-title"
+                    class="serif-title">
+                    Sua ideia pode virar uma peça única.
+                </h2>
+
+                <p>
+                    Do primeiro contato ao acabamento,
+                    construímos cada detalhe junto com você.
+                </p>
+
             </div>
 
             <div class="process-steps">
-                <div class="process-step">
-                    <span class="process-number">01</span>
-                    <div class="process-icon"><i class="bi bi-chat-heart"></i></div>
-                    <h3>Conte sua ideia</h3>
-                    <p>Fale sobre o ambiente, as medidas e o que você imagina para a peça.</p>
-                </div>
-                <div class="process-step">
-                    <span class="process-number">02</span>
-                    <div class="process-icon"><i class="bi bi-pencil-ruler"></i></div>
-                    <h3>Definimos o projeto</h3>
-                    <p>Alinhamos materiais, proporções, acabamento e todos os detalhes.</p>
-                </div>
-                <div class="process-step">
-                    <span class="process-number">03</span>
-                    <div class="process-icon"><i class="bi bi-hammer"></i></div>
-                    <h3>Criamos</h3>
-                    <p>Acompanhamos a produção até entregar uma peça feita para o seu espaço.</p>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <section class="craft-section" aria-labelledby="craft-title">
-        <div class="home-container craft-grid">
-            <div class="craft-copy">
-                <span class="eyebrow eyebrow-light">O VALOR ESTÁ NOS DETALHES</span>
-                <h2 id="craft-title" class="serif-title">Matéria-prima, técnica e cuidado artesanal.</h2>
-                <p>Cada criação nasce da combinação entre materiais naturais, experiência e atenção aos pequenos detalhes que fazem uma peça se destacar.</p>
-                <a asp-controller="Home" asp-action="About" class="craft-link">Conheça o Ateliê <i class="bi bi-arrow-right"></i></a>
-            </div>
-            <div class="craft-image-wrap">
-                <img src="~/images/carousel/slide02.jpg.jpg" alt="Processo artesanal de trabalho em madeira" loading="lazy" />
-                <div class="craft-image-caption">
-                    <span>Feito no ateliê</span>
-                    <strong>Cada peça tem seu próprio processo.</strong>
-                </div>
-            </div>
-        </div>
-    </section>
+                <div class="process-step">
 
-    <section class="location-section" aria-labelledby="location-map-title">
-        <div class="home-container">
-            <div class="location-card-modern">
-                <div class="location-copy">
-                    <span class="eyebrow">NOSSA LOCALIZAÇÃO</span>
-                    <h2 id="location-map-title" class="serif-title">Onde estamos.</h2>
-                    <p>Encontre o Ateliê da Transformação e, se quiser, venha conversar sobre sua próxima peça.</p>
+                    <span class="process-number">
+                        01
+                    </span>
 
-                    <div class="location-address">
-                        <span class="location-icon"><i class="bi bi-geo-alt"></i></span>
-                        <div>
-                            <strong>Ateliê da Transformação</strong>
-                            <span>R. Camomila, 99 - Antigo 375 - Jardim Helena<br />São Paulo - SP, 08090-530</span>
-                        </div>
+                    <div class="process-icon">
+                        <i class="bi bi-chat-heart"></i>
                     </div>
 
-                    <a class="btn btn-artisan rounded-pill px-4" target="_blank" rel="noopener noreferrer"
+                    <h3>
+                        Conte sua ideia
+                    </h3>
+
+                    <p>
+                        Fale sobre o ambiente, as medidas
+                        e o que você imagina para a peça.
+                    </p>
+
+                </div>
+
+                <div class="process-step">
+
+                    <span class="process-number">
+                        02
+                    </span>
+
+                    <div class="process-icon">
+                        <i class="bi bi-pencil-ruler"></i>
+                    </div>
+
+                    <h3>
+                        Definimos o projeto
+                    </h3>
+
+                    <p>
+                        Alinhamos materiais, proporções,
+                        acabamento e todos os detalhes.
+                    </p>
+
+                </div>
+
+                <div class="process-step">
+
+                    <span class="process-number">
+                        03
+                    </span>
+
+                    <div class="process-icon">
+                        <i class="bi bi-hammer"></i>
+                    </div>
+
+                    <h3>
+                        Criamos
+                    </h3>
+
+                    <p>
+                        Acompanhamos a produção até entregar
+                        uma peça feita para o seu espaço.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="craft-section"
+             aria-labelledby="craft-title">
+
+        <div class="home-container craft-grid">
+
+            <div class="craft-copy">
+
+                <span class="eyebrow eyebrow-light">
+                    O VALOR ESTÁ NOS DETALHES
+                </span>
+
+                <h2 id="craft-title"
+                    class="serif-title">
+                    Matéria-prima, técnica e cuidado artesanal.
+                </h2>
+
+                <p>
+                    Cada criação nasce da combinação entre
+                    materiais naturais, experiência e atenção
+                    aos pequenos detalhes que fazem uma peça se destacar.
+                </p>
+
+                <a asp-controller="Home"
+                   asp-action="About"
+                   class="craft-link">
+
+                    Conheça o Ateliê
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+            <div class="craft-image-wrap">
+
+                <img src="~/images/carousel/slide02.jpg.jpg"
+                     alt="Processo artesanal de trabalho em madeira"
+                     loading="lazy" />
+
+                <div class="craft-image-caption">
+
+                    <span>
+                        Feito no ateliê
+                    </span>
+
+                    <strong>
+                        Cada peça tem seu próprio processo.
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="location-section"
+             aria-labelledby="location-map-title">
+
+        <div class="home-container">
+
+            <div class="location-card-modern">
+
+                <div class="location-copy">
+
+                    <span class="eyebrow">
+                        NOSSA LOCALIZAÇÃO
+                    </span>
+
+                    <h2 id="location-map-title"
+                        class="serif-title">
+                        Onde estamos.
+                    </h2>
+
+                    <p>
+                        Encontre o Ateliê da Transformação e,
+                        se quiser, venha conversar sobre sua próxima peça.
+                    </p>
+
+                    <div class="location-address">
+
+                        <span class="location-icon">
+                            <i class="bi bi-geo-alt"></i>
+                        </span>
+
+                        <div>
+
+                            <strong>
+                                Ateliê da Transformação
+                            </strong>
+
+                            <span>
+                                R. Camomila, 99 - Antigo 375 -
+                                Jardim Helena<br />
+                                São Paulo - SP, 08090-530
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <a class="btn btn-artisan rounded-pill px-4"
+                       target="_blank"
+                       rel="noopener noreferrer"
                        href="https://www.google.com/maps/search/?api=1&query=R.+Camomila%2C+99+-+Antigo+375+-+Jardim+Helena%2C+S%C3%A3o+Paulo+-+SP%2C+08090-530">
-                        <i class="bi bi-map me-2"></i>Como chegar
+
+                        <i class="bi bi-map me-2"></i>
+
+                        Como chegar
+
                     </a>
+
                 </div>
 
                 <div class="location-map-frame-modern">
+
                     <iframe
                         src="https://www.google.com/maps?q=R.+Camomila%2C+99+-+Antigo+375+-+Jardim+Helena%2C+S%C3%A3o+Paulo+-+SP%2C+08090-530&output=embed"
                         title="Mapa com a localização do Ateliê da Transformação"
                         loading="lazy"
                         allowfullscreen
-                        referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+
                 </div>
+
             </div>
+
         </div>
+
     </section>
+
 </div>
