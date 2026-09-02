@@ -20,6 +20,16 @@ public sealed class Feedback
 
     public bool IsAnonimo { get; set; }
 
+    /// <summary>
+    /// Novo feedback entra sempre pendente. Somente o administrador
+    /// pode alterar este campo para liberar a publicação.
+    /// </summary>
+    public bool IsAprovado { get; set; }
+
+    public DateTime? AprovadoEm { get; set; }
+
+    public string? AprovadoPor { get; set; }
+
     public DateTime DataCriacao { get; set; } = DateTime.UtcNow;
 
     [NotMapped]

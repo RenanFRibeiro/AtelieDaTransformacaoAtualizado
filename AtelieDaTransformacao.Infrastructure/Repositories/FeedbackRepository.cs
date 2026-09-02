@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using AtelieDaTransformacao.Domain.Entities;
 using AtelieDaTransformacao.Domain.Interfaces;
 using Microsoft.Data.SqlClient;
@@ -45,6 +45,9 @@ public sealed class FeedbackRepository : IFeedbackRepository
                 Comentario,
                 ImagemUrl,
                 IsAnonimo,
+                IsAprovado,
+                AprovadoEm,
+                AprovadoPor,
                 DataCriacao
             FROM dbo.Feedbacks
             WHERE UsuarioId = @UsuarioId
@@ -98,6 +101,9 @@ public sealed class FeedbackRepository : IFeedbackRepository
                 Comentario,
                 ImagemUrl,
                 IsAnonimo,
+                IsAprovado,
+                AprovadoEm,
+                AprovadoPor,
                 DataCriacao
             FROM dbo.Feedbacks
             WHERE UsuarioId = @UsuarioId
@@ -152,6 +158,9 @@ public sealed class FeedbackRepository : IFeedbackRepository
                 f.Comentario,
                 f.ImagemUrl,
                 f.IsAnonimo,
+                f.IsAprovado,
+                f.AprovadoEm,
+                f.AprovadoPor,
                 f.DataCriacao,
 
                 CASE
@@ -215,6 +224,8 @@ public sealed class FeedbackRepository : IFeedbackRepository
                   AND Claim.ClaimType = @SurnameClaim
             ) surnameClaim
 
+            WHERE f.IsAprovado = 1
+
             ORDER BY
                 f.DataCriacao DESC,
                 f.Id DESC;
@@ -264,6 +275,106 @@ public sealed class FeedbackRepository : IFeedbackRepository
         }
 
         return result;
+    }
+
+    public async Task<IReadOnlyList<Feedback>> GetAllForAdminAsync(
+        bool? approved = null)
+    {
+        await EnsureSchemaAsync();
+
+        var sql = """
+            SELECT
+                Id,
+                UsuarioId,
+                ProdutoId,
+                PedidoId,
+                Nota,
+                Comentario,
+                ImagemUrl,
+                IsAnonimo,
+                IsAprovado,
+                AprovadoEm,
+                AprovadoPor,
+                DataCriacao
+            FROM dbo.Feedbacks
+            """ + (approved.HasValue
+                ? " WHERE IsAprovado = @IsAprovado "
+                : string.Empty) + """
+            ORDER BY
+                IsAprovado ASC,
+                DataCriacao DESC,
+                Id DESC;
+            """;
+
+        var result = new List<Feedback>();
+
+        await using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync();
+        await using var command = new SqlCommand(sql, connection);
+
+        if (approved.HasValue)
+        {
+            command.Parameters.Add("@IsAprovado", SqlDbType.Bit).Value = approved.Value;
+        }
+
+        await using var reader = await command.ExecuteReaderAsync();
+        while (await reader.ReadAsync())
+        {
+            result.Add(Map(reader));
+        }
+
+        return result;
+    }
+
+    public async Task<int> GetPendingCountAsync()
+    {
+        await EnsureSchemaAsync();
+
+        const string sql = """
+            SELECT COUNT(1)
+            FROM dbo.Feedbacks
+            WHERE IsAprovado = 0;
+            """;
+
+        await using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync();
+        await using var command = new SqlCommand(sql, connection);
+
+        return Convert.ToInt32(await command.ExecuteScalarAsync());
+    }
+
+    public async Task<bool> SetApprovalAsync(
+        int id,
+        bool approved,
+        string adminUserId)
+    {
+        await EnsureSchemaAsync();
+
+        const string sql = """
+            UPDATE dbo.Feedbacks
+            SET
+                IsAprovado = @IsAprovado,
+                AprovadoEm = CASE
+                    WHEN @IsAprovado = 1 THEN SYSUTCDATETIME()
+                    ELSE NULL
+                END,
+                AprovadoPor = CASE
+                    WHEN @IsAprovado = 1 THEN @AprovadoPor
+                    ELSE NULL
+                END
+            WHERE Id = @Id;
+            """;
+
+        await using var connection = new SqlConnection(_connectionString);
+        await connection.OpenAsync();
+        await using var command = new SqlCommand(sql, connection);
+
+        command.Parameters.Add("@Id", SqlDbType.Int).Value = id;
+        command.Parameters.Add("@IsAprovado", SqlDbType.Bit).Value = approved;
+        command.Parameters.Add("@AprovadoPor", SqlDbType.NVarChar, 450).Value =
+            (object?)adminUserId ?? DBNull.Value;
+
+        return await command.ExecuteNonQueryAsync() > 0;
     }
 
     public async Task AddAsync(Feedback feedback)
@@ -393,6 +504,14 @@ public sealed class FeedbackRepository : IFeedbackRepository
                             CONSTRAINT DF_Feedbacks_IsAnonimo
                             DEFAULT (0),
 
+                        IsAprovado BIT NOT NULL
+                            CONSTRAINT DF_Feedbacks_IsAprovado
+                            DEFAULT (0),
+
+                        AprovadoEm DATETIME2 NULL,
+
+                        AprovadoPor NVARCHAR(450) NULL,
+
                         DataCriacao DATETIME2 NOT NULL
                             CONSTRAINT DF_Feedbacks_DataCriacao
                             DEFAULT (SYSUTCDATETIME()),
@@ -437,6 +556,42 @@ public sealed class FeedbackRepository : IFeedbackRepository
                         PedidoId
                     );
 
+                END;
+
+                IF COL_LENGTH(N'dbo.Feedbacks', N'IsAprovado') IS NULL
+                BEGIN
+                    ALTER TABLE dbo.Feedbacks
+                        ADD IsAprovado BIT NOT NULL
+                            CONSTRAINT DF_Feedbacks_IsAprovado
+                            DEFAULT (0) WITH VALUES;
+                END;
+
+                IF COL_LENGTH(N'dbo.Feedbacks', N'AprovadoEm') IS NULL
+                BEGIN
+                    ALTER TABLE dbo.Feedbacks
+                        ADD AprovadoEm DATETIME2 NULL;
+                END;
+
+                IF COL_LENGTH(N'dbo.Feedbacks', N'AprovadoPor') IS NULL
+                BEGIN
+                    ALTER TABLE dbo.Feedbacks
+                        ADD AprovadoPor NVARCHAR(450) NULL;
+                END;
+
+                IF NOT EXISTS
+                (
+                    SELECT 1
+                    FROM sys.indexes
+                    WHERE name = N'IX_Feedbacks_IsAprovado_DataCriacao'
+                      AND object_id = OBJECT_ID(N'dbo.Feedbacks')
+                )
+                BEGIN
+                    CREATE INDEX IX_Feedbacks_IsAprovado_DataCriacao
+                    ON dbo.Feedbacks
+                    (
+                        IsAprovado,
+                        DataCriacao DESC
+                    );
                 END;
                 """;
 
@@ -497,6 +652,20 @@ public sealed class FeedbackRepository : IFeedbackRepository
             IsAnonimo =
                 reader.GetBoolean(
                     reader.GetOrdinal("IsAnonimo")),
+
+            IsAprovado =
+                reader.GetBoolean(
+                    reader.GetOrdinal("IsAprovado")),
+
+            AprovadoEm =
+                reader.IsDBNull(reader.GetOrdinal("AprovadoEm"))
+                    ? null
+                    : reader.GetDateTime(reader.GetOrdinal("AprovadoEm")),
+
+            AprovadoPor =
+                reader.IsDBNull(reader.GetOrdinal("AprovadoPor"))
+                    ? null
+                    : reader.GetString(reader.GetOrdinal("AprovadoPor")),
 
             DataCriacao =
                 reader.GetDateTime(

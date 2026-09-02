@@ -70,6 +70,11 @@
                     <i class="bi bi-clock-history"></i><span>Histórico</span>
                 </a>
 
+                <a class="nav-link @(currentController == "AdminFeedback" ? "active" : "")"
+                   asp-controller="AdminFeedback" asp-action="Index" title="Triagem de feedbacks">
+                    <i class="bi bi-chat-heart-fill"></i><span>Feedbacks</span>
+                </a>
+
                 <span class="admin-nav-label mt-4">Atalhos</span>
 
                 <a class="nav-link external" asp-controller="Home" asp-action="Index" title="Ver loja">
@@ -126,6 +131,9 @@
                     </a>
                     <a class="nav-link @(currentController == "AdminOrders" && currentAction == "History" ? "active" : "")" href="@Url.Action("History", "AdminOrders")">
                         <i class="bi bi-clock-history"></i><span>Histórico</span>
+                    </a>
+                    <a class="nav-link @(currentController == "AdminFeedback" ? "active" : "")" href="@Url.Action("Index", "AdminFeedback")">
+                        <i class="bi bi-chat-heart-fill"></i><span>Feedbacks</span>
                     </a>
                     <span class="admin-nav-label mt-4">Atalhos</span>
                     <a class="nav-link external" href="@Url.Action("Index", "Home")">

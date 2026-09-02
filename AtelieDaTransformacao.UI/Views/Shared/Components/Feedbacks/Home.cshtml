@@ -1,220 +1,147 @@
-﻿@model IReadOnlyList<AtelieDaTransformacao.Application.ViewModels.FeedbackCardViewModel>
+@model IReadOnlyList<AtelieDaTransformacao.Application.ViewModels.FeedbackCardViewModel>
 
 @if (Model.Count > 0)
 {
-    <section class="feedback-section"
-             aria-labelledby="feedback-title">
-
+    <section class="feedback-section" aria-labelledby="feedback-title">
         <div class="home-container">
-
             <div class="feedback-heading">
-
                 <div>
-
-                    <span class="eyebrow">
-                        QUEM JÁ COMPROU
-                    </span>
-
-                    <h2 id="feedback-title"
-                        class="serif-title">
-                        Histórias de quem recebeu.
-                    </h2>
-
-                    <p>
-                        Avaliações reais de clientes que compraram
-                        e receberam suas peças.
-                    </p>
-
+                    <span class="eyebrow">QUEM JÁ COMPROU</span>
+                    <h2 id="feedback-title" class="serif-title">Histórias de quem recebeu.</h2>
+                    <p>Avaliações reais de clientes que compraram e receberam suas peças.</p>
                 </div>
-
             </div>
 
-            <div class="feedback-grid">
-
-                @foreach (var feedback in Model)
-                {
-                    <article class="feedback-card">
-
-                        @if (!string.IsNullOrWhiteSpace(
-                            feedback.ImagemUrl))
+            @if (Model.Count > 3)
+            {
+                <div id="approvedFeedbackCarousel"
+                     class="carousel slide feedback-carousel"
+                     data-bs-ride="carousel"
+                     data-bs-interval="5200"
+                     data-bs-pause="hover"
+                     data-bs-touch="true">
+                    <div class="carousel-inner">
+                        @for (var index = 0; index < Model.Count; index++)
                         {
-                            <div class="feedback-card-image">
-
-                                <img src="@feedback.ImagemUrl"
-                                     alt="Foto enviada pelo cliente para a avaliação de @feedback.ProdutoNome"
-                                     loading="lazy" />
-
+                            var feedback = Model[index];
+                            <div class="carousel-item @(index == 0 ? "active" : "")">
+                                <article class="feedback-card feedback-card-carousel mx-auto">
+                                    @if (!string.IsNullOrWhiteSpace(feedback.ImagemUrl))
+                                    {
+                                        <div class="feedback-card-image">
+                                            <img src="@feedback.ImagemUrl"
+                                                 alt="Foto enviada pelo cliente para a avaliação de @feedback.ProdutoNome"
+                                                 loading="lazy" />
+                                        </div>
+                                    }
+                                    <div class="feedback-card-body">
+                                        <div class="feedback-card-stars" aria-label="@feedback.Nota de 5 estrelas">
+                                            @for (var star = 1; star <= 5; star++)
+                                            {
+                                                <i class="bi @(star <= feedback.Nota ? "bi-star-fill" : "bi-star")"></i>
+                                            }
+                                        </div>
+                                        <blockquote>“@feedback.Comentario”</blockquote>
+                                        <div class="feedback-card-footer">
+                                            <div>
+                                                <strong>@feedback.PublicName</strong>
+                                                <span>@feedback.ProdutoNome</span>
+                                            </div>
+                                            <time datetime="@feedback.DataCriacao.ToString("O")">
+                                                @feedback.DataCriacao.ToLocalTime().ToString("dd/MM/yyyy")
+                                            </time>
+                                        </div>
+                                    </div>
+                                </article>
                             </div>
                         }
+                    </div>
 
-                        <div class="feedback-card-body">
+                    <button class="carousel-control-prev feedback-carousel-control" type="button"
+                            data-bs-target="#approvedFeedbackCarousel" data-bs-slide="prev" aria-label="Feedback anterior">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    </button>
+                    <button class="carousel-control-next feedback-carousel-control" type="button"
+                            data-bs-target="#approvedFeedbackCarousel" data-bs-slide="next" aria-label="Próximo feedback">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    </button>
 
-                            <div class="feedback-card-stars"
-                                 aria-label="@feedback.Nota de 5 estrelas">
-
-                                @for (var star = 1; star <= 5; star++)
-                                {
-                                    <i class="bi @(star <= feedback.Nota ? "bi-star-fill" : "bi-star")"></i>
-                                }
-
-                            </div>
-
-                            <blockquote>
-                                “@feedback.Comentario”
-                            </blockquote>
-
-                            <div class="feedback-card-footer">
-
-                                <div>
-
-                                    <strong>
-                                        @feedback.PublicName
-                                    </strong>
-
-                                    <span>
-                                        @feedback.ProdutoNome
-                                    </span>
-
+                    <div class="carousel-indicators feedback-carousel-indicators">
+                        @for (var index = 0; index < Model.Count; index++)
+                        {
+                            <button type="button"
+                                    data-bs-target="#approvedFeedbackCarousel"
+                                    data-bs-slide-to="@index"
+                                    class="@(index == 0 ? "active" : "")"
+                                    aria-label="Ir para feedback @(index + 1)"></button>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="feedback-grid">
+                    @foreach (var feedback in Model)
+                    {
+                        <article class="feedback-card">
+                            @if (!string.IsNullOrWhiteSpace(feedback.ImagemUrl))
+                            {
+                                <div class="feedback-card-image">
+                                    <img src="@feedback.ImagemUrl"
+                                         alt="Foto enviada pelo cliente para a avaliação de @feedback.ProdutoNome"
+                                         loading="lazy" />
                                 </div>
-
-                                <time datetime="@feedback.DataCriacao.ToString("O")">
-                                    @(feedback.DataCriacao.ToLocalTime().ToString("dd/MM/yyyy"))
-                                </time>
-
+                            }
+                            <div class="feedback-card-body">
+                                <div class="feedback-card-stars" aria-label="@feedback.Nota de 5 estrelas">
+                                    @for (var star = 1; star <= 5; star++)
+                                    {
+                                        <i class="bi @(star <= feedback.Nota ? "bi-star-fill" : "bi-star")"></i>
+                                    }
+                                </div>
+                                <blockquote>“@feedback.Comentario”</blockquote>
+                                <div class="feedback-card-footer">
+                                    <div>
+                                        <strong>@feedback.PublicName</strong>
+                                        <span>@feedback.ProdutoNome</span>
+                                    </div>
+                                    <time datetime="@feedback.DataCriacao.ToString("O")">
+                                        @feedback.DataCriacao.ToLocalTime().ToString("dd/MM/yyyy")
+                                    </time>
+                                </div>
                             </div>
-
-                        </div>
-
-                    </article>
-                }
-
-            </div>
-
+                        </article>
+                    }
+                </div>
+            }
         </div>
-
     </section>
 
     <style>
-
-        .feedback-section {
-            padding: 5rem 0;
-            background: #f7f3ec;
-        }
-
-        .feedback-heading {
-            display: flex;
-            justify-content: space-between;
-            align-items: end;
-            margin-bottom: 2rem;
-        }
-
-        .feedback-heading h2 {
-            margin-bottom: .5rem;
-        }
-
-        .feedback-heading p {
-            max-width: 680px;
-            color: #6d6a65;
-            margin-bottom: 0;
-        }
-
-        .feedback-grid {
-            display: grid;
-            grid-template-columns:
-                repeat(3, minmax(0, 1fr));
-            gap: 1.5rem;
-        }
-
-        .feedback-card {
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            background: #fff;
-            border: 1px solid rgba(0, 0, 0, .07);
-            border-radius: 24px;
-            box-shadow:
-                0 12px 35px rgba(0, 0, 0, .06);
-        }
-
-        .feedback-card-image {
-            aspect-ratio: 16 / 10;
-            overflow: hidden;
-            background: #eee;
-        }
-
-        .feedback-card-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .feedback-card-body {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            height: 100%;
-            padding: 1.5rem;
-        }
-
-        .feedback-card-stars {
-            color: #d39b42;
-            letter-spacing: .08em;
-        }
-
-        .feedback-card blockquote {
-            flex: 1;
-            margin: 0;
-            color: #292722;
-            font-size: 1.02rem;
-            line-height: 1.7;
-        }
-
-        .feedback-card-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: end;
-            gap: 1rem;
-            padding-top: 1rem;
-            border-top:
-                1px solid rgba(0, 0, 0, .07);
-        }
-
-        .feedback-card-footer div {
-            display: flex;
-            flex-direction: column;
-            gap: .15rem;
-        }
-
-        .feedback-card-footer strong {
-            font-size: .95rem;
-        }
-
-        .feedback-card-footer span,
-        .feedback-card-footer time {
-            color: #77736d;
-            font-size: .82rem;
-        }
-
-        @@media (max-width: 991.98px) {
-
-            .feedback-grid {
-                grid-template-columns:
-                    repeat(2, minmax(0, 1fr));
-            }
-
-        }
-
-        @@media (max-width: 575.98px) {
-
-            .feedback-section {
-                padding: 3.5rem 0;
-            }
-
-            .feedback-grid {
-                grid-template-columns: 1fr;
-            }
-
-        }
-
+        .feedback-section { padding: 5rem 0; background: #f7f3ec; }
+        .feedback-heading { display:flex; justify-content:space-between; align-items:end; margin-bottom:2rem; }
+        .feedback-heading h2 { margin-bottom:.5rem; }
+        .feedback-heading p { max-width:680px; color:#6d6a65; margin-bottom:0; }
+        .feedback-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1.5rem; }
+        .feedback-card { display:flex; flex-direction:column; overflow:hidden; background:#fff; border:1px solid rgba(0,0,0,.07); border-radius:24px; box-shadow:0 12px 35px rgba(0,0,0,.06); }
+        .feedback-card-image { aspect-ratio:16/10; overflow:hidden; background:#eee; }
+        .feedback-card-image img { width:100%; height:100%; object-fit:cover; }
+        .feedback-card-body { display:flex; flex-direction:column; gap:1rem; height:100%; padding:1.5rem; }
+        .feedback-card-stars { color:#d39b42; letter-spacing:.08em; }
+        .feedback-card blockquote { flex:1; margin:0; color:#292722; font-size:1.02rem; line-height:1.7; }
+        .feedback-card-footer { display:flex; justify-content:space-between; align-items:end; gap:1rem; padding-top:1rem; border-top:1px solid rgba(0,0,0,.07); }
+        .feedback-card-footer div { display:flex; flex-direction:column; gap:.15rem; }
+        .feedback-card-footer strong { font-size:.95rem; }
+        .feedback-card-footer span,.feedback-card-footer time { color:#77736d; font-size:.82rem; }
+        .feedback-carousel { padding:0 4.5rem 3.25rem; }
+        .feedback-card-carousel { width:min(100%,760px); min-height:300px; }
+        .feedback-carousel .carousel-item { padding:.25rem 0; }
+        .feedback-carousel-control { width:3.25rem; height:3.25rem; top:50%; transform:translateY(-50%); border-radius:50%; background:rgba(40,30,25,.9); opacity:.9; }
+        .feedback-carousel .carousel-control-prev { left:.5rem; }
+        .feedback-carousel .carousel-control-next { right:.5rem; }
+        .feedback-carousel-indicators { bottom:0; margin-bottom:0; }
+        .feedback-carousel-indicators button { width:8px; height:8px; border-radius:50%; margin:0 4px; }
+        @@media (max-width:991.98px) { .feedback-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .feedback-carousel { padding-left:3.75rem; padding-right:3.75rem; } }
+        @@media (max-width:575.98px) { .feedback-section { padding:3.5rem 0; } .feedback-grid { grid-template-columns:1fr; } .feedback-carousel { padding:0 0 3rem; } .feedback-card-carousel { width:100%; } .feedback-carousel-control { width:2.7rem; height:2.7rem; } .feedback-carousel .carousel-control-prev { left:.5rem; } .feedback-carousel .carousel-control-next { right:.5rem; } }
     </style>
 }

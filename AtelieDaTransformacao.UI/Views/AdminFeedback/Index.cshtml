@@ -1,0 +1,207 @@
+@model AtelieDaTransformacao.UI.Models.AdminFeedbackViewModel
+
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Triagem de Feedbacks";
+}
+
+<div class="admin-page-head">
+    <div>
+        <span class="admin-eyebrow">PAINEL ADMINISTRATIVO</span>
+        <h1>Triagem de Feedbacks</h1>
+        <p>Revise cada avaliação antes de liberar sua exibição pública no site.</p>
+    </div>
+
+    <div class="admin-page-actions">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-dark rounded-pill px-4">
+            <i class="bi bi-shop me-2"></i>Ver loja
+        </a>
+    </div>
+</div>
+
+@if (TempData["SuccessMessage"] is string success)
+{
+    <div class="alert alert-success rounded-4 border-0 shadow-sm mb-4">
+        <i class="bi bi-check-circle me-2"></i>@success
+    </div>
+}
+
+@if (TempData["ErrorMessage"] is string error)
+{
+    <div class="alert alert-danger rounded-4 border-0 shadow-sm mb-4">
+        <i class="bi bi-exclamation-circle me-2"></i>@error
+    </div>
+}
+
+<div class="row g-3 mb-4">
+    <div class="col-12 col-md-4">
+        <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+            <span class="text-muted small text-uppercase fw-semibold">Pendentes nesta busca</span>
+            <strong class="display-6 fw-bold mt-1">@Model.Pendentes</strong>
+            <span class="text-muted small">Aguardando aprovação manual.</span>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+            <span class="text-muted small text-uppercase fw-semibold">Aprovados nesta busca</span>
+            <strong class="display-6 fw-bold mt-1">@Model.Aprovados</strong>
+            <span class="text-muted small">Liberados para o site.</span>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
+            <span class="text-muted small text-uppercase fw-semibold">Regra pública</span>
+            <strong class="fs-3 fw-bold mt-2">Apenas aprovados</strong>
+            <span class="text-muted small">Feedback novo nunca é publicado automaticamente.</span>
+        </div>
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+    <div class="p-4 border-bottom">
+        <div class="d-flex flex-column flex-lg-row justify-content-between gap-3 align-items-lg-end">
+            <div>
+                <h2 class="h4 fw-bold mb-1">Fila de análise</h2>
+                <p class="text-muted mb-0">Aprove, retire da publicação ou filtre os comentários.</p>
+            </div>
+
+            <form method="get" asp-action="Index" class="row g-2">
+                <div class="col-12 col-md-auto">
+                    <select name="status" class="form-select rounded-pill">
+                        <option value="">Todos</option>
+                        <option value="pendentes" selected="@(Model.Status == "pendentes")">Pendentes</option>
+                        <option value="aprovados" selected="@(Model.Status == "aprovados")">Aprovados</option>
+                    </select>
+                </div>
+                <div class="col-12 col-md-auto">
+                    <input name="cliente" value="@Model.Cliente" class="form-control rounded-pill" placeholder="Cliente ou e-mail" />
+                </div>
+                <div class="col-12 col-md-auto">
+                    <input name="produto" value="@Model.Produto" class="form-control rounded-pill" placeholder="Produto" />
+                </div>
+                <div class="col-12 col-md-auto d-flex gap-2">
+                    <button class="btn btn-dark rounded-pill px-4" type="submit">
+                        <i class="bi bi-funnel me-1"></i>Filtrar
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary rounded-pill">Limpar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @if (!Model.Feedbacks.Any())
+    {
+        <div class="text-center p-5">
+            <i class="bi bi-chat-square-heart fs-1 text-muted d-block mb-3"></i>
+            <h3 class="h5 fw-bold">Nenhum feedback encontrado</h3>
+            <p class="text-muted mb-0">A fila está limpa para os filtros selecionados.</p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead class="table-light">
+                    <tr class="small text-uppercase text-muted">
+                        <th class="ps-4">Feedback</th>
+                        <th>Cliente</th>
+                        <th>Produto</th>
+                        <th>Status</th>
+                        <th class="text-end pe-4">Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var feedback in Model.Feedbacks)
+                    {
+                        <tr>
+                            <td class="ps-4" style="min-width:360px;max-width:520px;">
+                                <div class="d-flex gap-3">
+                                    @if (!string.IsNullOrWhiteSpace(feedback.ImagemUrl))
+                                    {
+                                        <img src="@feedback.ImagemUrl"
+                                             alt="Imagem do feedback"
+                                             loading="lazy"
+                                             style="width:72px;height:72px;object-fit:cover;border-radius:16px;flex:0 0 auto;" />
+                                    }
+                                    <div>
+                                        <div class="mb-1" aria-label="Nota @feedback.Nota de 5">
+                                            @for (var star = 1; star <= 5; star++)
+                                            {
+                                                <i class="bi @(star <= feedback.Nota ? "bi-star-fill" : "bi-star")" style="color:#d39b42;"></i>
+                                            }
+                                        </div>
+                                        <div class="text-dark" style="line-height:1.55;">
+                                            @feedback.Comentario
+                                        </div>
+                                        <small class="text-muted d-block mt-1">
+                                            Recebido em @feedback.DataCriacao.ToLocalTime().ToString("dd/MM/yyyy HH:mm")
+                                        </small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <strong>@feedback.Cliente</strong>
+                                @if (!string.IsNullOrWhiteSpace(feedback.Email))
+                                {
+                                    <small class="text-muted d-block">@feedback.Email</small>
+                                }
+                                @if (feedback.IsAnonimo)
+                                {
+                                    <span class="badge rounded-pill text-bg-light mt-1">Anônimo no site</span>
+                                }
+                            </td>
+                            <td>
+                                <span class="fw-semibold">@feedback.Produto</span>
+                                <small class="text-muted d-block">Pedido #@feedback.PedidoId</small>
+                            </td>
+                            <td>
+                                @if (feedback.IsAprovado)
+                                {
+                                    <span class="badge rounded-pill text-bg-success">
+                                        <i class="bi bi-check-circle me-1"></i>Aprovado
+                                    </span>
+                                    @if (feedback.AprovadoEm.HasValue)
+                                    {
+                                        <small class="text-muted d-block mt-1">
+                                            @feedback.AprovadoEm.Value.ToLocalTime().ToString("dd/MM/yyyy HH:mm")
+                                        </small>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="badge rounded-pill text-bg-warning">
+                                        <i class="bi bi-hourglass-split me-1"></i>Pendente
+                                    </span>
+                                }
+                            </td>
+                            <td class="text-end pe-4">
+                                @if (!feedback.IsAprovado)
+                                {
+                                    <form asp-action="Approve" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@feedback.Id" />
+                                        <button type="submit" class="btn btn-success rounded-pill px-3"
+                                                onclick="return confirm('Aprovar este feedback e liberá-lo publicamente?');">
+                                            <i class="bi bi-check-lg me-1"></i>Aprovar
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form asp-action="Revoke" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@feedback.Id" />
+                                        <button type="submit" class="btn btn-outline-danger rounded-pill px-3"
+                                                onclick="return confirm('Retirar este feedback da publicação pública?');">
+                                            <i class="bi bi-eye-slash me-1"></i>Retirar
+                                        </button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

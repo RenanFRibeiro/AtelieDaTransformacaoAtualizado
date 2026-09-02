@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using System.Text.Json;
 using AtelieDaTransformacao.Application.ViewModels;
 using AtelieDaTransformacao.Domain.Entities;
@@ -41,7 +41,7 @@ public sealed class FeedbacksViewComponent : ViewComponent
 
         var feedbacks =
             await _feedbackRepository
-                .GetPublishedAsync(12);
+                .GetPublishedAsync(50);
 
         var cards =
             new List<FeedbackCardViewModel>();

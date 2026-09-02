@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using System.Text.Json;
 using AtelieDaTransformacao.Application.ViewModels;
 using AtelieDaTransformacao.Domain.Entities;
@@ -206,7 +206,7 @@ public sealed class FeedbackController : Controller
                 .AddAsync(feedback);
 
             TempData["SuccessMessage"] =
-                "Obrigado! Sua avaliação foi publicada com sucesso.";
+                "Obrigado! Sua avaliação foi enviada para análise. Ela ficará visível no site após a aprovação da nossa equipe.";
 
             return RedirectToAction(
                 "Index",

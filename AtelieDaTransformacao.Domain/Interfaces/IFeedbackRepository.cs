@@ -1,4 +1,4 @@
-﻿using AtelieDaTransformacao.Domain.Entities;
+using AtelieDaTransformacao.Domain.Entities;
 
 namespace AtelieDaTransformacao.Domain.Interfaces;
 
@@ -15,6 +15,16 @@ public interface IFeedbackRepository
 
     Task<IReadOnlyList<Feedback>> GetPublishedAsync(
         int limit = 12);
+
+    Task<IReadOnlyList<Feedback>> GetAllForAdminAsync(
+        bool? approved = null);
+
+    Task<int> GetPendingCountAsync();
+
+    Task<bool> SetApprovalAsync(
+        int id,
+        bool approved,
+        string adminUserId);
 
     Task AddAsync(Feedback feedback);
 }
