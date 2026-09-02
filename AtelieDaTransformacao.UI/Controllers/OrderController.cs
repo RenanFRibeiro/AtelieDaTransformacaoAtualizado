@@ -1,17 +1,27 @@
+using System.Data;
+using System.Security.Claims;
+using System.Text.Json;
+
+using AtelieDaTransformacao.Application.Interfaces;
 using AtelieDaTransformacao.Application.ViewModels;
 using AtelieDaTransformacao.Domain.Entities;
+using AtelieDaTransformacao.Domain.Enums;
 using AtelieDaTransformacao.Domain.Interfaces;
 using AtelieDaTransformacao.Infrastructure.Context;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Data;
-using System.Text.Json;
+using Microsoft.AspNetCore.SignalR;
+using AtelieDaTransformacao.UI.Hubs;
+
+namespace AtelieDaTransformacao.UI.Controllers;
+
+using System.Security.Claims;
 using AtelieDaTransformacao.Application.Interfaces;
 using AtelieDaTransformacao.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-
-namespace AtelieDaTransformacao.UI.Controllers;
 
 [Authorize]
 public sealed class OrderController : Controller
@@ -22,15 +32,18 @@ public sealed class OrderController : Controller
     private readonly AtelieDaTransformacaoDbContext _context;
     private readonly IOrderRepository _orderRepository;
     private readonly IOrderService _orderService;
+    private readonly IHubContext<OrderStatusHub> _hub;
 
     public OrderController(
     AtelieDaTransformacaoDbContext context,
     IOrderService orderService,
-    IOrderRepository orderRepository)
+    IOrderRepository orderRepository,
+    IHubContext<OrderStatusHub> hub)
     {
         _context = context;
         _orderService = orderService;
         _orderRepository = orderRepository;
+        _hub = hub;
     }
 
     // =========================================================
@@ -239,6 +252,24 @@ public sealed class OrderController : Controller
 
         TempData["SuccessMessage"] =
             $"Pedido {order.OrderNumber} cancelado com sucesso.";
+
+        var cancelledOrder = await _orderService.GetByIdAsync(id);
+        if (cancelledOrder != null)
+        {
+            await _hub.Clients
+                .Group(OrderStatusHub.AdminGroupName)
+                .SendAsync(
+                    "AdminOrderStatusUpdated",
+                    new
+                    {
+                        orderId = cancelledOrder.Id,
+                        orderNumber = cancelledOrder.OrderNumber,
+                        status = (int)cancelledOrder.Status,
+                        statusName = cancelledOrder.StatusName,
+                        isHistory = true,
+                        updatedAt = cancelledOrder.UpdatedAt.ToString("O")
+                    });
+        }
 
         return RedirectToAction(
             nameof(Details),

@@ -5,9 +5,8 @@ using AtelieDaTransformacao.UI.Hubs;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Text;
-using AtelieDaTransformacao.UI.Models;
 using Microsoft.AspNetCore.SignalR;
+using System.Text;
 
 namespace AtelieDaTransformacao.UI.Controllers;
 
@@ -35,132 +34,78 @@ public sealed class AdminOrdersController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
+        // O painel principal mostra somente pedidos ainda em processamento.
+        // Enviado, Entregue e Cancelado pertencem exclusivamente ao Histórico.
         var orders =
-            await _orderService.GetAllAsync();
+            await _orderService.GetActiveAsync();
 
         return View(orders);
     }
 
     // =========================================================
-    // DETALHES DO PEDIDO
+    // HISTÓRICO
     // =========================================================
 
     [HttpGet]
     public async Task<IActionResult> History(
-        string? status = null,
-        string? customer = null,
-        DateTime? from = null,
-        DateTime? to = null)
+        OrderStatus? status = null,
+        string? client = null,
+        DateTime? startDate = null,
+        DateTime? endDate = null)
     {
-        var orders = await _orderService.GetAllAsync();
-        var historyStatuses = new[]
-        {
-            OrderStatus.Cancelado,
-            OrderStatus.Enviado,
-            OrderStatus.Entregue
-        };
+        var orders = await _orderService.GetHistoryAsync(
+            status, client, startDate, endDate);
 
-        IEnumerable<AtelieDaTransformacao.Application.DTOs.OrderListDto> query =
-            orders.Where(x => historyStatuses.Contains(x.Status));
+        ViewBag.Status = status;
+        ViewBag.Client = client;
+        ViewBag.StartDate = startDate?.ToString("yyyy-MM-dd");
+        ViewBag.EndDate = endDate?.ToString("yyyy-MM-dd");
 
-        if (Enum.TryParse<OrderStatus>(status, true, out var parsedStatus) &&
-            historyStatuses.Contains(parsedStatus))
-        {
-            query = query.Where(x => x.Status == parsedStatus);
-        }
-        else
-        {
-            status = null;
-        }
-
-        if (!string.IsNullOrWhiteSpace(customer))
-        {
-            var term = customer.Trim();
-            query = query.Where(x =>
-                x.CustomerName.Contains(term, StringComparison.OrdinalIgnoreCase) ||
-                x.UserEmail.Contains(term, StringComparison.OrdinalIgnoreCase) ||
-                (x.CustomerPhone?.Contains(term, StringComparison.OrdinalIgnoreCase) ?? false));
-        }
-
-        if (from.HasValue)
-        {
-            var start = from.Value.Date;
-            query = query.Where(x => x.CreatedAt.ToLocalTime().Date >= start);
-        }
-
-        if (to.HasValue)
-        {
-            var end = to.Value.Date;
-            query = query.Where(x => x.CreatedAt.ToLocalTime().Date <= end);
-        }
-
-        var model = new AdminOrderHistoryViewModel
-        {
-            Orders = query.OrderByDescending(x => x.StatusChangedAt).ToList(),
-            Status = status,
-            Customer = customer,
-            From = from,
-            To = to
-        };
-
-        return View(model);
+        return View(orders);
     }
 
     [HttpGet]
     public async Task<IActionResult> ExportHistory(
-        string? status = null,
-        string? customer = null,
-        DateTime? from = null,
-        DateTime? to = null)
+        OrderStatus? status = null,
+        string? client = null,
+        DateTime? startDate = null,
+        DateTime? endDate = null)
     {
-        var modelResult = await HistoryModelAsync(status, customer, from, to);
-        var csv = new StringBuilder();
-        csv.AppendLine("Pedido;Cliente;E-mail;Status;Total;Criado em;Status alterado em");
+        var orders = await _orderService.GetHistoryAsync(
+            status, client, startDate, endDate);
 
-        foreach (var order in modelResult.Orders)
+        static string Csv(string? value)
         {
-            csv.AppendLine(string.Join(';', new[]
-            {
+            var text = value ?? string.Empty;
+            return $"\"{text.Replace("\"", "\"\"")}\"";
+        }
+
+        var csv = new StringBuilder();
+        csv.AppendLine("Pedido;Cliente;E-mail;Data de criação;Data da alteração;Status;Total");
+
+        foreach (var order in orders)
+        {
+            csv.AppendLine(string.Join(";",
                 Csv(order.OrderNumber),
                 Csv(order.CustomerName),
                 Csv(order.UserEmail),
-                Csv(order.StatusName),
-                order.Total.ToString("F2", new System.Globalization.CultureInfo("pt-BR")),
                 Csv(order.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")),
-                Csv(order.StatusChangedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm"))
-            }));
+                Csv(order.StatusChangedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")),
+                Csv(order.StatusName),
+                Csv(order.Total.ToString("N2"))));
         }
 
-        var bytes = Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes(csv.ToString())).ToArray();
-        var fileName = $"historico-pedidos-{DateTime.Now:yyyyMMdd-HHmm}.csv";
-        return File(bytes, "text/csv; charset=utf-8", fileName);
+        var bytes = Encoding.UTF8.GetPreamble()
+            .Concat(Encoding.UTF8.GetBytes(csv.ToString()))
+            .ToArray();
+
+        return File(bytes, "text/csv; charset=utf-8",
+            $"historico-pedidos-{DateTime.Now:yyyyMMdd-HHmm}.csv");
     }
 
-    private async Task<AdminOrderHistoryViewModel> HistoryModelAsync(
-        string? status, string? customer, DateTime? from, DateTime? to)
-    {
-        var orders = await _orderService.GetAllAsync();
-        var historyStatuses = new[] { OrderStatus.Cancelado, OrderStatus.Enviado, OrderStatus.Entregue };
-        IEnumerable<AtelieDaTransformacao.Application.DTOs.OrderListDto> query = orders.Where(x => historyStatuses.Contains(x.Status));
-
-        if (Enum.TryParse<OrderStatus>(status, true, out var parsedStatus) && historyStatuses.Contains(parsedStatus))
-            query = query.Where(x => x.Status == parsedStatus);
-        if (!string.IsNullOrWhiteSpace(customer))
-        {
-            var term = customer.Trim();
-            query = query.Where(x => x.CustomerName.Contains(term, StringComparison.OrdinalIgnoreCase) || x.UserEmail.Contains(term, StringComparison.OrdinalIgnoreCase) || (x.CustomerPhone?.Contains(term, StringComparison.OrdinalIgnoreCase) ?? false));
-        }
-        if (from.HasValue) query = query.Where(x => x.CreatedAt.ToLocalTime().Date >= from.Value.Date);
-        if (to.HasValue) query = query.Where(x => x.CreatedAt.ToLocalTime().Date <= to.Value.Date);
-
-        return new AdminOrderHistoryViewModel { Orders = query.OrderByDescending(x => x.StatusChangedAt).ToList(), Status = status, Customer = customer, From = from, To = to };
-    }
-
-    private static string Csv(string? value)
-    {
-        var text = value ?? string.Empty;
-        return $"\"{text.Replace("\"", "\"\"")}\"";
-    }
+    // =========================================================
+    // DETALHES DO PEDIDO
+    // =========================================================
 
     [HttpGet]
     public async Task<IActionResult> Details(
@@ -204,8 +149,9 @@ public sealed class AdminOrdersController : Controller
                 nameof(Index));
         }
 
-        var changed =
-            await _repository.UpdateStatusAsync(
+        var changed = status == OrderStatus.Cancelado
+            ? await _repository.CancelAsync(id)
+            : await _repository.UpdateStatusAsync(
                 id,
                 status,
                 autoAdvance);
@@ -450,19 +396,19 @@ public sealed class AdminOrdersController : Controller
                     updatedAt = order.UpdatedAt.ToString("O")
                 });
 
-        await _hub
-            .Clients
+        await _hub.Clients
             .Group(OrderStatusHub.AdminGroupName)
             .SendAsync(
-                "AdminOrderUpdated",
+                "AdminOrderStatusUpdated",
                 new
                 {
                     orderId = order.Id,
                     orderNumber = order.OrderNumber,
-                    customer = order.CustomerName,
                     status = (int)order.Status,
                     statusName = order.StatusName,
-                    total = order.Total,
+                    isHistory = order.Status is OrderStatus.Enviado
+                        or OrderStatus.Entregue
+                        or OrderStatus.Cancelado,
                     updatedAt = order.UpdatedAt.ToString("O")
                 });
     }

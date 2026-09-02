@@ -1,224 +1,154 @@
-@model AtelieDaTransformacao.UI.Models.AdminOrderHistoryViewModel
+@model IReadOnlyList<AtelieDaTransformacao.Application.DTOs.OrderListDto>
 @using AtelieDaTransformacao.Domain.Enums
 @{
     Layout = "_AdminLayout";
     ViewData["Title"] = "Histórico de pedidos";
+    var selectedStatus = ViewBag.Status as OrderStatus?;
+    var client = ViewBag.Client as string;
+    var startDate = ViewBag.StartDate as string;
+    var endDate = ViewBag.EndDate as string;
+    var historyOrders = Model;
+    var sent = historyOrders.Count(x => x.Status == OrderStatus.Enviado);
+    var delivered = historyOrders.Count(x => x.Status == OrderStatus.Entregue);
+    var cancelled = historyOrders.Count(x => x.Status == OrderStatus.Cancelado);
+    var total = historyOrders.Sum(x => x.Total);
 }
 
-<div class="admin-page-head history-head">
+<div class="admin-page-head">
     <div>
-        <span class="history-eyebrow"><i class="bi bi-archive"></i> Central de histórico</span>
-        <h1>Pedidos encerrados</h1>
-        <p>Consulte pedidos enviados, entregues e cancelados com filtros, detalhes e relatórios.</p>
+        <span class="admin-eyebrow">GESTÃO</span>
+        <h1>Histórico de pedidos</h1>
+        <p>Pedidos enviados, entregues e cancelados ficam aqui e deixam automaticamente o painel ativo.</p>
     </div>
     <div class="admin-page-actions">
-        <button type="button" class="admin-top-action" id="btnNotifications">
-            <i class="bi bi-bell"></i><span>Ativar notificações</span>
-        </button>
-        <a asp-action="ExportHistory" asp-route-status="@Model.Status" asp-route-customer="@Model.Customer" asp-route-from="@(Model.From?.ToString("yyyy-MM-dd"))" asp-route-to="@(Model.To?.ToString("yyyy-MM-dd"))" class="admin-top-action primary">
-            <i class="bi bi-file-earmark-spreadsheet"></i><span>Exportar relatório</span>
+        <a asp-action="Index" class="btn btn-outline-dark rounded-pill px-4">
+            <i class="bi bi-arrow-left me-2"></i>Pedidos ativos
+        </a>
+        <a id="exportHistory" class="btn btn-dark rounded-pill px-4" href="#">
+            <i class="bi bi-download me-2"></i>Exportar CSV
         </a>
     </div>
 </div>
 
-<div class="history-tabs">
-    <a asp-action="Index" class="history-tab"><i class="bi bi-kanban"></i> Fluxo atual</a>
-    <a asp-action="History" class="history-tab active"><i class="bi bi-archive"></i> Histórico</a>
+<div class="row g-3 mb-4">
+    <div class="col-6 col-xl-3"><div class="card h-100"><div class="card-body"><small class="text-muted">Enviados</small><div class="fs-3 fw-bold">@sent</div></div></div></div>
+    <div class="col-6 col-xl-3"><div class="card h-100"><div class="card-body"><small class="text-muted">Entregues</small><div class="fs-3 fw-bold">@delivered</div></div></div></div>
+    <div class="col-6 col-xl-3"><div class="card h-100"><div class="card-body"><small class="text-muted">Cancelados</small><div class="fs-3 fw-bold">@cancelled</div></div></div></div>
+    <div class="col-6 col-xl-3"><div class="card h-100"><div class="card-body"><small class="text-muted">Valor filtrado</small><div class="fs-3 fw-bold">R$ @total.ToString("N2")</div></div></div></div>
 </div>
 
-<div class="history-stats">
-    <div class="history-stat-card">
-        <span class="history-stat-icon"><i class="bi bi-collection"></i></span>
-        <div><small>Total filtrado</small><strong>@Model.TotalCount</strong></div>
-    </div>
-    <div class="history-stat-card cancelled">
-        <span class="history-stat-icon"><i class="bi bi-x-circle"></i></span>
-        <div><small>Cancelados</small><strong>@Model.CancelledCount</strong></div>
-    </div>
-    <div class="history-stat-card shipped">
-        <span class="history-stat-icon"><i class="bi bi-truck"></i></span>
-        <div><small>Enviados</small><strong>@Model.ShippedCount</strong></div>
-    </div>
-    <div class="history-stat-card delivered">
-        <span class="history-stat-icon"><i class="bi bi-check2-circle"></i></span>
-        <div><small>Entregues</small><strong>@Model.DeliveredCount</strong></div>
-    </div>
-    <div class="history-stat-card value">
-        <span class="history-stat-icon"><i class="bi bi-cash-stack"></i></span>
-        <div><small>Valor dos pedidos</small><strong>R$ @Model.TotalValue.ToString("N2")</strong></div>
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" asp-action="History" class="row g-3 align-items-end">
+            <div class="col-12 col-md-3">
+                <label class="form-label small text-muted">Status</label>
+                <select class="form-select" name="status">
+                    <option value="">Todos</option>
+                    <option value="Enviado" selected="@(selectedStatus == OrderStatus.Enviado)">Enviado</option>
+                    <option value="Entregue" selected="@(selectedStatus == OrderStatus.Entregue)">Entregue</option>
+                    <option value="Cancelado" selected="@(selectedStatus == OrderStatus.Cancelado)">Cancelado</option>
+                </select>
+            </div>
+            <div class="col-12 col-md-3">
+                <label class="form-label small text-muted">Cliente / pedido</label>
+                <input class="form-control" name="client" value="@client" placeholder="Nome, e-mail ou nº do pedido" />
+            </div>
+            <div class="col-6 col-md-2">
+                <label class="form-label small text-muted">De</label>
+                <input class="form-control" type="date" name="startDate" value="@startDate" />
+            </div>
+            <div class="col-6 col-md-2">
+                <label class="form-label small text-muted">Até</label>
+                <input class="form-control" type="date" name="endDate" value="@endDate" />
+            </div>
+            <div class="col-12 col-md-2 d-flex gap-2">
+                <button class="btn btn-dark rounded-pill flex-grow-1" type="submit"><i class="bi bi-funnel me-1"></i>Filtrar</button>
+                <a asp-action="History" class="btn btn-outline-secondary rounded-pill" title="Limpar filtros"><i class="bi bi-x-lg"></i></a>
+            </div>
+        </form>
     </div>
 </div>
 
-<section class="history-panel">
-    <div class="history-panel-head">
+<div class="card">
+    <div class="admin-section-head">
         <div>
-            <h2>Filtrar histórico</h2>
-            <p>Combine status, período e cliente para encontrar exatamente o que precisa.</p>
+            <h2 class="admin-section-title">Pedidos arquivados</h2>
+            <p class="admin-section-subtitle">O histórico é atualizado automaticamente quando um pedido sai do fluxo ativo.</p>
         </div>
-        <a asp-action="History" class="history-clear"><i class="bi bi-arrow-counterclockwise"></i> Limpar filtros</a>
+        <span class="admin-badge featured"><i class="bi bi-check2-circle"></i>@Model.Count pedido(s)</span>
     </div>
 
-    <form asp-action="History" method="get" class="history-filters">
-        <div class="history-filter-field history-filter-status">
-            <label for="status">Status</label>
-            <select id="status" name="status" class="form-select">
-                <option value="" selected="@(string.IsNullOrWhiteSpace(Model.Status) ? "selected" : null)">Todos os históricos</option>
-                <option value="Enviado" selected="@(Model.Status == "Enviado" ? "selected" : null)">Enviados</option>
-                <option value="Entregue" selected="@(Model.Status == "Entregue" ? "selected" : null)">Entregues</option>
-                <option value="Cancelado" selected="@(Model.Status == "Cancelado" ? "selected" : null)">Cancelados</option>
-            </select>
-        </div>
-        <div class="history-filter-field history-filter-customer">
-            <label for="customer">Cliente</label>
-            <div class="history-input-icon"><i class="bi bi-search"></i><input id="customer" name="customer" value="@Model.Customer" class="form-control" placeholder="Nome, e-mail ou telefone" /></div>
-        </div>
-        <div class="history-filter-field">
-            <label for="from">Data inicial</label>
-            <input id="from" name="from" type="date" value="@(Model.From?.ToString("yyyy-MM-dd"))" class="form-control" />
-        </div>
-        <div class="history-filter-field">
-            <label for="to">Data final</label>
-            <input id="to" name="to" type="date" value="@(Model.To?.ToString("yyyy-MM-dd"))" class="form-control" />
-        </div>
-        <button type="submit" class="history-filter-submit"><i class="bi bi-funnel"></i> Aplicar filtros</button>
-    </form>
-</section>
-
-<section class="history-panel history-results-panel">
-    <div class="history-panel-head">
-        <div>
-            <h2>Resultados</h2>
-            <p>@Model.TotalCount pedido(s) encontrado(s) com os filtros atuais.</p>
-        </div>
-        <span class="history-live"><span></span> Atualização automática</span>
-    </div>
-
-    @if (Model.Orders.Count == 0)
+    @if (!Model.Any())
     {
-        <div class="history-empty">
-            <div class="history-empty-icon"><i class="bi bi-inbox"></i></div>
-            <h3>Nenhum pedido encontrado</h3>
-            <p>Tente ampliar o período ou remover algum filtro para visualizar outros pedidos.</p>
-            <a asp-action="History" class="history-clear-button">Ver todo o histórico</a>
+        <div class="p-5 text-center text-muted">
+            <i class="bi bi-inbox fs-1 d-block mb-3"></i>
+            <h3 class="h5">Nenhum pedido encontrado</h3>
+            <p class="mb-0">Ajuste os filtros ou aguarde pedidos serem enviados, entregues ou cancelados.</p>
         </div>
     }
     else
     {
-        <div class="history-table-wrap">
-            <table class="history-table">
-                <thead>
-                    <tr>
-                        <th>Pedido</th>
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead class="table-light">
+                    <tr class="small text-uppercase text-muted">
+                        <th class="ps-4">Pedido</th>
                         <th>Cliente</th>
-                        <th>Status</th>
                         <th>Total</th>
-                        <th>Data</th>
-                        <th class="text-end">Ações</th>
+                        <th>Status</th>
+                        <th>Atualizado em</th>
+                        <th class="text-center pe-4">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var order in Model.Orders)
-                    {
-                        var statusClass = order.Status switch
-                        {
-                            OrderStatus.Cancelado => "cancelled",
-                            OrderStatus.Enviado => "shipped",
-                            OrderStatus.Entregue => "delivered",
-                            _ => ""
-                        };
-                        <tr data-order-id="@order.Id">
-                            <td>
-                                <a asp-action="Details" asp-route-id="@order.Id" class="history-order-number">@order.OrderNumber</a>
-                                <small>Atualizado em @order.StatusChangedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</small>
-                            </td>
-                            <td>
-                                <strong>@(string.IsNullOrWhiteSpace(order.CustomerName) ? "Cliente" : order.CustomerName)</strong>
-                                <small>@order.UserEmail</small>
-                            </td>
-                            <td><span class="history-status @statusClass"><i class="bi @(order.Status == OrderStatus.Cancelado ? "bi-x-circle" : order.Status == OrderStatus.Entregue ? "bi-check2-circle" : "bi-truck")"></i>@order.StatusName</span></td>
-                            <td class="history-total">R$ @order.Total.ToString("N2")</td>
-                            <td><span class="history-date">@order.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy")</span><small>@order.CreatedAt.ToLocalTime().ToString("HH:mm")</small></td>
-                            <td class="text-end">
-                                <a asp-action="Details" asp-route-id="@order.Id" class="history-action"><i class="bi bi-eye"></i> Detalhes</a>
-                            </td>
-                        </tr>
-                    }
+                @foreach (var order in Model)
+                {
+                    <tr id="history-order-@order.Id">
+                        <td class="ps-4"><strong>@order.OrderNumber</strong><small class="text-muted d-block">@order.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</small></td>
+                        <td><span class="d-block">@order.CustomerName</span><small class="text-muted">@order.UserEmail</small></td>
+                        <td class="fw-semibold">R$ @order.Total.ToString("N2")</td>
+                        <td>
+                            <span class="badge rounded-pill px-3 py-2 @(order.Status == OrderStatus.Cancelado ? "bg-danger" : order.Status == OrderStatus.Entregue ? "bg-success" : "bg-secondary")">
+                                @order.StatusName
+                            </span>
+                        </td>
+                        <td>@order.StatusChangedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</td>
+                        <td class="text-center pe-4">
+                            <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm btn-outline-secondary rounded-pill"><i class="bi bi-eye me-1"></i>Ver</a>
+                        </td>
+                    </tr>
+                }
                 </tbody>
             </table>
         </div>
     }
-</section>
-
-<div id="historyToast" class="history-toast" role="status" aria-live="polite">
-    <span class="history-toast-icon"><i class="bi bi-bell"></i></span>
-    <div><strong id="historyToastTitle">Pedido atualizado</strong><span id="historyToastText"></span></div>
-    <button type="button" id="historyToastClose" aria-label="Fechar"><i class="bi bi-x"></i></button>
 </div>
 
-@section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/@@microsoft/signalr@10.0.0/dist/browser/signalr.min.js"></script>
-    <script>
-        (() => {
-            const toast = document.getElementById('historyToast');
-            const toastTitle = document.getElementById('historyToastTitle');
-            const toastText = document.getElementById('historyToastText');
-            const closeToast = document.getElementById('historyToastClose');
-            const notificationButton = document.getElementById('btnNotifications');
-            let toastTimer;
+<script src="https://cdn.jsdelivr.net/npm/@@microsoft/signalr@10.0.0/dist/browser/signalr.min.js"></script>
+<script>
+(() => {
+    const params = new URLSearchParams();
+    const status = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(selectedStatus?.ToString()));
+    const client = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(client ?? ""));
+    const startDate = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(startDate ?? ""));
+    const endDate = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(endDate ?? ""));
+    if (status) params.set('status', status);
+    if (client) params.set('client', client);
+    if (startDate) params.set('startDate', startDate);
+    if (endDate) params.set('endDate', endDate);
+    document.getElementById('exportHistory').href = '@Url.Action("ExportHistory", "AdminOrders")' + (params.toString() ? '?' + params.toString() : '');
 
-            function showToast(title, text) {
-                toastTitle.textContent = title;
-                toastText.textContent = text;
-                toast.classList.add('show');
-                clearTimeout(toastTimer);
-                toastTimer = setTimeout(() => toast.classList.remove('show'), 6500);
-            }
-
-            closeToast?.addEventListener('click', () => toast.classList.remove('show'));
-
-            async function requestNotifications() {
-                if (!('Notification' in window)) {
-                    showToast('Notificações indisponíveis', 'Seu navegador não oferece notificações do sistema.');
-                    return;
-                }
-                const permission = await Notification.requestPermission();
-                if (permission === 'granted') {
-                    notificationButton.innerHTML = '<i class="bi bi-bell-fill"></i><span>Notificações ativas</span>';
-                    notificationButton.classList.add('primary');
-                    showToast('Notificações ativadas', 'Você será avisado quando um pedido mudar de status.');
-                } else {
-                    showToast('Notificações não ativadas', 'Você pode liberar essa permissão nas configurações do navegador.');
-                }
-            }
-
-            if ('Notification' in window && Notification.permission === 'granted') {
-                notificationButton.innerHTML = '<i class="bi bi-bell-fill"></i><span>Notificações ativas</span>';
-                notificationButton.classList.add('primary');
-            }
-            notificationButton?.addEventListener('click', requestNotifications);
-
-            if (!window.signalR) return;
-
-            const connection = new signalR.HubConnectionBuilder()
-                .withUrl('/hubs/orders')
-                .withAutomaticReconnect()
-                .build();
-
-            connection.on('AdminOrderUpdated', data => {
-                const message = `${data.orderNumber} • ${data.customer || 'Cliente'} → ${data.statusName}`;
-                showToast('Pedido atualizado', message);
-
-                if ('Notification' in window && Notification.permission === 'granted') {
-                    new Notification('Ateliê da Transformação', {
-                        body: message,
-                        tag: `order-${data.orderId}`
-                    });
-                }
-
-                setTimeout(() => window.location.reload(), 1800);
-            });
-
-            connection.start().catch(error => console.warn('Não foi possível conectar às notificações:', error));
-        })();
-    </script>
-}
+    if (typeof signalR === 'undefined') return;
+    const connection = new signalR.HubConnectionBuilder().withUrl('/hubs/orders').withAutomaticReconnect().build();
+    connection.on('AdminOrderStatusUpdated', data => {
+        const row = document.getElementById(`history-order-${data.orderId}`);
+        const isHistory = [5, 6, 7].includes(Number(data.status));
+        if (isHistory) {
+            window.location.reload();
+        } else if (row) {
+            window.location.reload();
+        }
+    });
+    connection.start().catch(error => console.error('SignalR histórico:', error));
+})();
+</script>

@@ -57,6 +57,62 @@ public sealed class OrderRepository : IOrderRepository
     }
 
     public async Task<IReadOnlyList<Order>>
+        GetActiveAsync()
+    {
+        return await _context.Orders
+            .AsNoTracking()
+            .Where(x =>
+                x.Status != OrderStatus.Enviado &&
+                x.Status != OrderStatus.Entregue &&
+                x.Status != OrderStatus.Cancelado)
+            .OrderByDescending(x => x.CreatedAt)
+            .ToListAsync();
+    }
+
+    public async Task<IReadOnlyList<Order>>
+        GetHistoryAsync(
+            OrderStatus? status = null,
+            string? client = null,
+            DateTime? startDate = null,
+            DateTime? endDate = null)
+    {
+        var query = _context.Orders
+            .AsNoTracking()
+            .Where(x =>
+                x.Status == OrderStatus.Enviado ||
+                x.Status == OrderStatus.Entregue ||
+                x.Status == OrderStatus.Cancelado);
+
+        if (status.HasValue)
+            query = query.Where(x => x.Status == status.Value);
+
+        if (!string.IsNullOrWhiteSpace(client))
+        {
+            var term = client.Trim();
+            query = query.Where(x =>
+                (x.UserEmail ?? string.Empty).Contains(term) ||
+                (x.CustomerName ?? string.Empty).Contains(term) ||
+                x.OrderNumber.Contains(term));
+        }
+
+        if (startDate.HasValue)
+        {
+            var start = startDate.Value.Date.ToUniversalTime();
+            query = query.Where(x => x.StatusChangedAt >= start);
+        }
+
+        if (endDate.HasValue)
+        {
+            var end = endDate.Value.Date.AddDays(1).AddTicks(-1).ToUniversalTime();
+            query = query.Where(x => x.StatusChangedAt <= end);
+        }
+
+        return await query
+            .OrderByDescending(x => x.StatusChangedAt)
+            .ToListAsync();
+    }
+
+    public async Task<IReadOnlyList<Order>>
         GetForAutomationAsync()
     {
         return await _context.Orders

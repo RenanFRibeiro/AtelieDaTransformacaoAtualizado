@@ -25,6 +25,18 @@ public sealed class OrderService : IOrderService
     public async Task<IReadOnlyList<OrderListDto>> GetAllAsync()
         => (await _repository.GetAllAsync()).Select(ToListDto).ToList();
 
+    public async Task<IReadOnlyList<OrderListDto>> GetActiveAsync()
+        => (await _repository.GetActiveAsync()).Select(ToListDto).ToList();
+
+    public async Task<IReadOnlyList<OrderListDto>> GetHistoryAsync(
+        OrderStatus? status = null,
+        string? client = null,
+        DateTime? startDate = null,
+        DateTime? endDate = null)
+        => (await _repository.GetHistoryAsync(status, client, startDate, endDate))
+            .Select(ToListDto)
+            .ToList();
+
     public async Task<OrderDetailsDto?> GetByIdForUserAsync(int id, string userId)
     {
         var order = await _repository.GetByIdForUserAsync(id, userId);
@@ -42,9 +54,8 @@ public sealed class OrderService : IOrderService
         Id = order.Id,
         OrderNumber = order.OrderNumber,
         UserId = order.UserId,
-        UserEmail = order.UserEmail ?? order.CustomerEmail ?? string.Empty,
-        CustomerName = order.CustomerName ?? order.UserEmail ?? order.CustomerEmail ?? "Cliente",
-        CustomerPhone = order.CustomerPhone,
+        UserEmail = order.UserEmail ?? string.Empty,
+        CustomerName = order.CustomerName ?? string.Empty,
         Total = order.Total,
         Status = order.Status,
         StatusName = order.Status.ToDisplayName(),
@@ -63,11 +74,7 @@ public sealed class OrderService : IOrderService
             Id = order.Id,
             OrderNumber = order.OrderNumber,
             UserId = order.UserId,
-            UserEmail = order.UserEmail ?? order.CustomerEmail ?? string.Empty,
-            CustomerName = string.IsNullOrWhiteSpace(checkout.CustomerName)
-                ? (order.CustomerName ?? order.UserEmail ?? order.CustomerEmail ?? "Cliente")
-                : checkout.CustomerName,
-            CustomerPhone = string.IsNullOrWhiteSpace(checkout.CustomerPhone) ? order.CustomerPhone : checkout.CustomerPhone,
+            UserEmail = order.UserEmail,
             Total = order.Total,
             Status = order.Status,
             StatusName = order.Status.ToDisplayName(),
@@ -76,9 +83,9 @@ public sealed class OrderService : IOrderService
             UpdatedAt = order.UpdatedAt,
             StatusChangedAt = order.StatusChangedAt,
             Items = DeserializeItems(order.ItemsJson),
-            CustomerEmail = string.IsNullOrWhiteSpace(checkout.CustomerEmail)
-                ? (order.CustomerEmail ?? order.UserEmail ?? string.Empty)
-                : checkout.CustomerEmail,
+            CustomerName = checkout.CustomerName,
+            CustomerEmail = checkout.CustomerEmail,
+            CustomerPhone = checkout.CustomerPhone,
             ShippingAddress = BuildShippingAddress(checkout),
             PaymentMethod = checkout.PaymentMethod,
             DeliveryMethod = checkout.DeliveryMethod,

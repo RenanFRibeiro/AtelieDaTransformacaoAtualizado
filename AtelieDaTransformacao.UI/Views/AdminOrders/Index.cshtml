@@ -18,7 +18,7 @@
                 onclick="advanceAllAutomatic()">
             <i class="bi bi-arrow-repeat me-1"></i>Avançar Automáticos
         </button>
-        <a asp-action="History" class="btn btn-outline-dark rounded-pill px-4"><i class="bi bi-archive me-2"></i>Histórico</a>
+        <a asp-controller="AdminOrders" asp-action="History" class="btn btn-outline-dark rounded-pill px-4"><i class="bi bi-clock-history me-2"></i>Histórico</a>
         <a asp-controller="Home" asp-action="Index" class="btn btn-outline-dark rounded-pill px-4"><i class="bi bi-shop me-2"></i>Ver loja</a>
     </div>
 </div>
@@ -249,8 +249,7 @@ async function advanceIndividual(orderId) {
             
             setTimeout(() => {
                 row.style.backgroundColor = '';
-                location.reload(); // Recarrega para atualizar status
-            }, 1500);
+            }, 1200);
         } else {
             btn.disabled = false;
             btn.innerHTML = '<i class="bi bi-arrow-right me-1"></i>Avançar';
@@ -295,8 +294,7 @@ async function cancelOrder(orderId) {
             
             setTimeout(() => {
                 row.style.backgroundColor = '';
-                location.reload(); // Recarrega para atualizar status
-            }, 1500);
+            }, 1200);
         } else {
             btn.disabled = false;
             btn.innerHTML = '<i class="bi bi-x-circle me-1"></i>Cancelar';
@@ -309,4 +307,54 @@ async function cancelOrder(orderId) {
         alert('Erro na requisição: ' + error.message);
     }
 }
+
+
+// =========================================================
+// ATUALIZAÇÃO EM TEMPO REAL DO PAINEL ADMINISTRATIVO
+// =========================================================
+document.addEventListener('DOMContentLoaded', async () => {
+    if (typeof signalR === 'undefined') return;
+
+    try {
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl('/hubs/orders')
+            .withAutomaticReconnect()
+            .build();
+
+        connection.on('AdminOrderStatusUpdated', data => {
+            const row = document.getElementById(`order-${data.orderId}`);
+            const isHistory = [5, 6, 7].includes(Number(data.status));
+
+            if (isHistory && row) {
+                row.style.transition = 'opacity .25s ease, transform .25s ease';
+                row.style.opacity = '0';
+                row.style.transform = 'translateX(20px)';
+                setTimeout(() => row.remove(), 280);
+                return;
+            }
+
+            if (!isHistory && row) {
+                const select = row.querySelector('select[name="status"]');
+                if (select) {
+                    select.value = String(data.status);
+                    select.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+                row.style.transition = 'background-color .25s ease';
+                row.style.backgroundColor = '#edf6ef';
+                setTimeout(() => row.style.backgroundColor = '', 1200);
+                return;
+            }
+
+            // Se outro pedido voltou do histórico para o fluxo ativo,
+            // recarrega para que ele apareça sem intervenção manual.
+            if (!isHistory && !row) {
+                window.location.reload();
+            }
+        });
+
+        await connection.start();
+    } catch (error) {
+        console.error('SignalR administrativo:', error);
+    }
+});
 </script>

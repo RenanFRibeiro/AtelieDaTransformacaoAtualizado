@@ -16,6 +16,14 @@ public interface IOrderRepository
 
     Task<IReadOnlyList<Order>> GetAllAsync();
 
+    Task<IReadOnlyList<Order>> GetActiveAsync();
+
+    Task<IReadOnlyList<Order>> GetHistoryAsync(
+        OrderStatus? status = null,
+        string? client = null,
+        DateTime? startDate = null,
+        DateTime? endDate = null);
+
     Task<IReadOnlyList<Order>> GetForAutomationAsync();
 
     Task AddAsync(Order order);
