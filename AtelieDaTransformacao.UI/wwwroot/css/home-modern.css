@@ -1180,3 +1180,166 @@ h1, h2, h3, h4, h5, h6,
 @media (prefers-reduced-motion: reduce) {
     .filter-pill-modern,.about-principle,.about-text-link i { transition:none !important; }
 }
+
+
+/* ============================================================================
+   HEADER REFINADO — MINIMALISTA / RESPONSIVO
+   Escopo exclusivo do cabeçalho. Não altera o restante da interface.
+   ============================================================================ */
+.navbar-artisan {
+    height: 72px;
+    min-height: 72px;
+    background: rgba(33, 21, 15, .94) !important;
+    border-bottom: 1px solid rgba(208, 161, 92, .18);
+    box-shadow: 0 8px 26px rgba(25, 15, 10, .10);
+    backdrop-filter: blur(18px) saturate(115%);
+    -webkit-backdrop-filter: blur(18px) saturate(115%);
+    transition: background .25s ease, box-shadow .25s ease;
+}
+.navbar-inner { min-height: 72px; }
+.artisan-brand { gap: .62rem; min-width: 0; }
+.brand-mark {
+    width: 32px; height: 32px; flex: 0 0 32px;
+    font-size: .82rem;
+    transition: transform .22s ease, background .22s ease, border-color .22s ease;
+}
+.artisan-brand:hover .brand-mark { transform: translateY(-1px); background: rgba(197,138,88,.17); border-color: rgba(197,138,88,.38); }
+.brand-name { font-size: 1.16rem; white-space: nowrap; }
+
+.artisan-main-nav { gap: .08rem; }
+.nav-link-artisan {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .42rem;
+    min-height: 38px;
+    padding: .42rem .72rem !important;
+    border-radius: 10px;
+    font-size: .78rem;
+    letter-spacing: .01em;
+    transition: color .2s ease, background .2s ease;
+}
+.nav-link-artisan i { font-size: .78rem; opacity: .72; transition: transform .2s ease, opacity .2s ease; }
+.nav-link-artisan:hover, .nav-link-artisan:focus-visible { background: rgba(255,255,255,.045); }
+.nav-link-artisan:hover i, .nav-link-artisan:focus-visible i { opacity: 1; transform: translateY(-1px); }
+.nav-link-artisan::after { bottom: 3px; height: 1px; }
+
+.header-actions-v3 { gap: .2rem; }
+.header-menu-link-v3 {
+    position: relative;
+    min-width: 38px;
+    min-height: 38px;
+    justify-content: center;
+    padding: .5rem;
+    border: 1px solid transparent;
+    overflow: hidden;
+    white-space: nowrap;
+    transition: max-width .24s ease, padding .24s ease, background .2s ease, border-color .2s ease, color .2s ease;
+}
+.header-menu-link-v3 i { margin-right: 0; font-size: .9rem; flex: 0 0 auto; }
+.header-menu-link-v3 span {
+    display: inline-block;
+    max-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    transform: translateX(-4px);
+    transition: max-width .24s ease, opacity .16s ease, transform .24s ease;
+}
+.header-menu-link-v3:hover,
+.header-menu-link-v3:focus-visible {
+    max-width: 145px;
+    padding-inline: .72rem;
+    background: rgba(255,255,255,.055);
+    border-color: rgba(255,255,255,.08);
+}
+.header-menu-link-v3:hover span,
+.header-menu-link-v3:focus-visible span { max-width: 90px; opacity: 1; transform: translateX(0); }
+.header-quote-link:hover, .header-quote-link:focus-visible { background: rgba(197,138,88,.10); border-color: rgba(197,138,88,.18); }
+.header-register-link { min-height: 38px; padding-inline: .78rem; }
+
+.artisan-toggler {
+    width: 42px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255,255,255,.13) !important;
+    border-radius: 11px;
+    background: rgba(255,255,255,.035);
+    box-shadow: none !important;
+    transition: background .2s ease, border-color .2s ease, transform .2s ease;
+}
+.artisan-toggler:hover, .artisan-toggler:focus-visible { background: rgba(255,255,255,.07); border-color: rgba(197,138,88,.35) !important; transform: translateY(-1px); }
+.artisan-toggler-icon { width: 18px; height: 14px; display: flex; flex-direction: column; justify-content: space-between; }
+.artisan-toggler-icon span { width: 100%; height: 1.5px; border-radius: 2px; background: #fff8ef; transition: transform .22s ease, opacity .18s ease; }
+
+@media (min-width: 992px) {
+    .navbar-collapse { align-items: center; }
+    .header-actions-v3 { margin-left: auto; }
+}
+
+@media (max-width: 991.98px) {
+    .navbar-artisan, .navbar-inner { min-height: 68px; }
+    .navbar-artisan { height: 68px; }
+    .navbar-inner { width: min(100% - 24px, 1680px); }
+    .artisan-brand { padding-block: .6rem; }
+    .brand-name { font-size: 1.02rem; }
+    .brand-mark { width: 30px; height: 30px; flex-basis: 30px; }
+    .navbar-collapse {
+        margin-top: 8px;
+        padding: 8px;
+        background: rgba(33,21,15,.985);
+        border: 1px solid rgba(208,161,92,.16);
+        border-radius: 16px;
+        box-shadow: 0 18px 45px rgba(0,0,0,.25);
+    }
+    .artisan-main-nav { width: 100%; margin: 0 !important; gap: 2px; }
+    .artisan-main-nav .nav-item { width: 100%; }
+    .nav-link-artisan {
+        width: 100%;
+        justify-content: flex-start;
+        gap: .75rem;
+        min-height: 44px;
+        padding: .62rem .78rem !important;
+        border-radius: 10px;
+    }
+    .nav-link-artisan i { width: 18px; text-align: center; font-size: .9rem; }
+    .nav-link-artisan::after { display: none; }
+    .header-actions-v3 {
+        width: 100%;
+        justify-content: stretch;
+        align-items: stretch;
+        flex-wrap: wrap;
+        gap: 4px;
+        padding: 6px 0 2px;
+        border-top: 1px solid rgba(255,255,255,.06);
+        margin-top: 5px;
+    }
+    .header-menu-link-v3, .header-register-link {
+        flex: 1 1 calc(50% - 4px);
+        justify-content: flex-start;
+        max-width: none !important;
+        min-height: 42px;
+        padding: .58rem .72rem;
+    }
+    .header-menu-link-v3 span { max-width: 120px; opacity: 1; transform: none; }
+    .header-menu-link-v3:hover, .header-menu-link-v3:focus-visible { padding-inline: .72rem; }
+    .header-menu-link-v3 i { margin-right: .48rem; }
+    .header-register-link { justify-content: center; }
+    .navbar-fixed-spacer { height: 68px !important; }
+}
+
+@media (max-width: 575.98px) {
+    .navbar-inner { width: calc(100% - 20px); }
+    .brand-name { font-size: .94rem; }
+    .brand-mark { width: 29px; height: 29px; flex-basis: 29px; }
+    .navbar-collapse { margin-top: 6px; border-radius: 14px; }
+    .header-actions-v3 .header-menu-link-v3,
+    .header-actions-v3 .header-register-link { flex-basis: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .navbar-artisan, .brand-mark, .nav-link-artisan, .nav-link-artisan i,
+    .header-menu-link-v3, .header-menu-link-v3 span, .artisan-toggler,
+    .artisan-toggler-icon span { transition: none !important; }
+}
