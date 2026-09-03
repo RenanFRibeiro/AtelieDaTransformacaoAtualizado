@@ -77,6 +77,8 @@ public sealed class FeedbackCardViewModel
 {
     public int Id { get; set; }
 
+    public int ProdutoId { get; set; }
+
     public string PublicName { get; set; } = "Cliente";
 
     public string ProdutoNome { get; set; } = string.Empty;

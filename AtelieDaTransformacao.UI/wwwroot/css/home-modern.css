@@ -880,3 +880,108 @@ h1, h2, h3, h4, h5, h6,
     margin-top: -4px !important;
     border-top: 0 !important;
 }
+
+
+/* ============================================================================
+   FEEDBACKS — CARROSSEL COM 3 CARDS VISÍVEIS
+   ============================================================================
+   O componente usa uma janela de 3 avaliações e avança uma posição por vez.
+   Assim, ao trocar o slide, um card sai e outro entra mantendo sempre 3.
+   ============================================================================ */
+.feedback-carousel-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 1.5rem !important;
+    align-items: stretch;
+}
+
+.feedback-carousel-grid .feedback-card {
+    width: 100%;
+    min-width: 0;
+}
+
+/* Transição moderna e leve: os 3 cards permanecem na mesma composição
+   enquanto o conjunto atual desaparece suavemente e o próximo entra. */
+.feedback-carousel .carousel-item {
+    transition: opacity .72s ease-in-out !important;
+}
+
+.feedback-carousel .carousel-item-next,
+.feedback-carousel .carousel-item-prev,
+.feedback-carousel .carousel-item.active,
+.feedback-carousel .carousel-item-start,
+.feedback-carousel .carousel-item-end {
+    transform: none !important;
+}
+
+.feedback-carousel .carousel-item:not(.active) {
+    opacity: 0;
+}
+
+.feedback-carousel .carousel-item.active {
+    opacity: 1;
+}
+
+/* ============================================================================
+   WHATSAPP — BOTÃO FLUTUANTE EM BOLINHA NO CANTO INFERIOR DIREITO
+   ============================================================================ */
+a.whatsapp-float {
+    position: fixed !important;
+    right: 24px !important;
+    bottom: 24px !important;
+    z-index: 10000 !important;
+    width: 58px !important;
+    height: 58px !important;
+    min-width: 58px !important;
+    min-height: 58px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 50% !important;
+    background: #25D366 !important;
+    color: #fff !important;
+    text-decoration: none !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .22) !important;
+    line-height: 1 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+}
+
+a.whatsapp-float i {
+    display: block !important;
+    margin: 0 !important;
+    color: #fff !important;
+    font-size: 28px !important;
+    line-height: 1 !important;
+}
+
+a.whatsapp-float:hover,
+a.whatsapp-float:focus-visible {
+    background: #20bd5a !important;
+    color: #fff !important;
+    transform: scale(1.06) !important;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, .26) !important;
+}
+
+a.whatsapp-float:focus-visible {
+    outline: 3px solid rgba(37, 211, 102, .35);
+    outline-offset: 3px;
+}
+
+@media (max-width: 991.98px) {
+    a.whatsapp-float {
+        right: 16px !important;
+        bottom: 16px !important;
+        width: 52px !important;
+        height: 52px !important;
+        min-width: 52px !important;
+        min-height: 52px !important;
+    }
+
+    a.whatsapp-float i {
+        font-size: 24px !important;
+    }
+}

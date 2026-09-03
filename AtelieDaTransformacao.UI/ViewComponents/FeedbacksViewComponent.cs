@@ -66,6 +66,9 @@ public sealed class FeedbacksViewComponent : ViewComponent
                     Id =
                         feedback.Id,
 
+                    ProdutoId =
+                        feedback.ProdutoId,
+
                     PublicName =
                         string.IsNullOrWhiteSpace(
                             feedback.PublicName)
