@@ -362,3 +362,5 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /AtelieDaTransformacao.Desktop/Forms/ProductDialog.resx
+/AtelieDaTransformacao.UI/Views/Shared/_Layout.cshtml.css
+/AtelieDaTransformacao.UI/wwwroot/css/home-modern.css
