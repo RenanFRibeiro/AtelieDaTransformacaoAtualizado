@@ -56,14 +56,18 @@ public sealed class RegisterDto
     public string City { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Informe o estado.")]
-    [StringLength(2, MinimumLength = 2, ErrorMessage = "Use a UF com 2 letras.")]
-    [RegularExpression("^[A-Za-z]{2}$", ErrorMessage = "Informe a UF com 2 letras.")]
+    [StringLength(2, MinimumLength = 2,
+        ErrorMessage = "Use a UF com 2 letras.")]
+    [RegularExpression("^[A-Za-z]{2}$",
+        ErrorMessage = "Informe a UF com 2 letras.")]
     [Display(Name = "Estado")]
     public string State { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Informe o CEP.")]
-    [StringLength(9, MinimumLength = 8, ErrorMessage = "Informe um CEP válido.")]
-    [RegularExpression("^\\d{5}-?\\d{3}$", ErrorMessage = "Informe um CEP válido.")]
+    [StringLength(9, MinimumLength = 8,
+        ErrorMessage = "Informe um CEP válido.")]
+    [RegularExpression("^\\d{5}-?\\d{3}$",
+        ErrorMessage = "Informe um CEP válido.")]
     [Display(Name = "CEP")]
     public string PostalCode { get; set; } = string.Empty;
 
@@ -74,14 +78,24 @@ public sealed class RegisterDto
     public string Email { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Crie uma senha.")]
-    [MinLength(6, ErrorMessage = "A senha deve ter pelo menos 6 caracteres.")]
+    [StringLength(100, MinimumLength = 8,
+        ErrorMessage = "A senha deve ter pelo menos 8 caracteres.")]
+    [RegularExpression(
+        @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).+$",
+        ErrorMessage = "A senha deve conter letra maiúscula, letra minúscula, número e caractere especial.")]
     [Display(Name = "Senha")]
     public string Password { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Confirme sua senha.")]
-    [Compare(nameof(Password), ErrorMessage = "As senhas não coincidem.")]
+    [Compare(nameof(Password),
+        ErrorMessage = "As senhas não coincidem.")]
     [Display(Name = "Confirmar senha")]
     public string ConfirmPassword { get; set; } = string.Empty;
+
+    [Range(typeof(bool), "true", "true",
+        ErrorMessage = "Você precisa aceitar os Termos de Uso e a Política de Privacidade.")]
+    [Display(Name = "Aceito os termos")]
+    public bool AcceptTerms { get; set; }
 }
 
 public sealed class UserDto

@@ -55,7 +55,29 @@
 
     <div class="card border-0 shadow-sm rounded-4 mt-4">
         <div class="card-body p-4 p-lg-5">
-            <div class="auth-section-title"><span>3</span><div><strong>Alterar senha</strong><br><small>Troque sua senha com segurança</small></div></div>
+            <div class="auth-section-title"><span>3</span><div><strong>Alterar e-mail</strong><br><small>Confirme sua senha para autorizar a alteração</small></div></div>
+            @if (TempData["EmailSuccess"] is string emailSuccess)
+            {
+                <div class="alert alert-success d-flex align-items-center gap-2" role="alert"><i class="bi bi-check-circle"></i><span>@emailSuccess</span></div>
+            }
+            @if (TempData["EmailError"] is string emailError)
+            {
+                <div class="alert alert-danger d-flex align-items-center gap-2" role="alert"><i class="bi bi-exclamation-triangle"></i><span>@emailError</span></div>
+            }
+            <form asp-action="ChangeEmail" method="post" autocomplete="off">
+                @Html.AntiForgeryToken()
+                <div class="row g-3">
+                    <div class="col-md-6"><label for="NewEmail" class="form-label">Novo e-mail</label><input id="NewEmail" name="NewEmail" type="email" class="form-control form-control-lg" autocomplete="email" placeholder="novo@email.com" required /></div>
+                    <div class="col-md-6"><label for="EmailCurrentPassword" class="form-label">Senha atual</label><div class="position-relative"><input id="EmailCurrentPassword" name="CurrentPassword" type="password" class="form-control form-control-lg pe-5" autocomplete="current-password" required /><button type="button" class="password-toggle" data-target="EmailCurrentPassword" aria-label="Mostrar senha" title="Mostrar senha"><i class="bi bi-eye"></i></button></div></div>
+                </div>
+                <div class="d-flex justify-content-end mt-4"><button type="submit" class="btn btn-outline-dark rounded-pill px-4"><i class="bi bi-shield-check me-2"></i>Confirmar novo e-mail</button></div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 mt-4">
+        <div class="card-body p-4 p-lg-5">
+            <div class="auth-section-title"><span>4</span><div><strong>Alterar senha</strong><br><small>Troque sua senha com segurança</small></div></div>
 
             @if (TempData["PasswordSuccess"] is string passwordSuccess)
             {
@@ -85,7 +107,7 @@
                     <div class="col-md-4">
                         <label for="NewPassword" class="form-label">Nova senha</label>
                         <div class="position-relative">
-                            <input id="NewPassword" name="NewPassword" type="password" class="form-control form-control-lg pe-5" autocomplete="new-password" minlength="6" required />
+                            <input id="NewPassword" name="NewPassword" type="password" class="form-control form-control-lg pe-5" autocomplete="new-password" minlength="8" required />
                             <button type="button" class="password-toggle" data-target="NewPassword" aria-label="Mostrar senha" title="Mostrar senha">
                                 <i class="bi bi-eye"></i>
                             </button>
@@ -94,7 +116,7 @@
                     <div class="col-md-4">
                         <label for="ConfirmNewPassword" class="form-label">Confirmar nova senha</label>
                         <div class="position-relative">
-                            <input id="ConfirmNewPassword" name="ConfirmNewPassword" type="password" class="form-control form-control-lg pe-5" autocomplete="new-password" minlength="6" required />
+                            <input id="ConfirmNewPassword" name="ConfirmNewPassword" type="password" class="form-control form-control-lg pe-5" autocomplete="new-password" minlength="8" required />
                             <button type="button" class="password-toggle" data-target="ConfirmNewPassword" aria-label="Mostrar senha" title="Mostrar senha">
                                 <i class="bi bi-eye"></i>
                             </button>
@@ -126,7 +148,8 @@
             z-index: 2;
         }
         .password-toggle:hover { color: #bd5b3b; }
-        .password-toggle:focus { outline: none; box-shadow: none; }
+        .password-toggle:focus { outline: 2px solid rgba(168,92,61,.35); outline-offset: 2px; box-shadow: none; }
+        .auth-section-title { margin-bottom: 1.25rem; }
     </style>
     <script>
         document.querySelector('input[name="State"]')?.addEventListener('input', function () {

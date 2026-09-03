@@ -61,6 +61,20 @@ public sealed class ProfileViewModel
 }
 
 
+public sealed class ChangeEmailViewModel
+{
+    [Required(ErrorMessage = "Informe sua senha atual.")]
+    [DataType(DataType.Password)]
+    [Display(Name = "Senha atual")]
+    public string CurrentPassword { get; set; } = string.Empty;
+
+    [Required(ErrorMessage = "Informe o novo e-mail.")]
+    [EmailAddress(ErrorMessage = "Informe um e-mail válido.")]
+    [StringLength(180)]
+    [Display(Name = "Novo e-mail")]
+    public string NewEmail { get; set; } = string.Empty;
+}
+
 public sealed class ChangePasswordViewModel
 {
     [Required(ErrorMessage = "Informe sua senha atual.")]
@@ -69,7 +83,8 @@ public sealed class ChangePasswordViewModel
     public string CurrentPassword { get; set; } = string.Empty;
 
     [Required(ErrorMessage = "Informe a nova senha.")]
-    [StringLength(100, MinimumLength = 6, ErrorMessage = "A nova senha deve ter pelo menos 6 caracteres.")]
+    [StringLength(100, MinimumLength = 8, ErrorMessage = "A nova senha deve ter pelo menos 8 caracteres.")]
+    [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).+$", ErrorMessage = "A nova senha deve conter letra maiúscula, letra minúscula, número e caractere especial.")]
     [DataType(DataType.Password)]
     [Display(Name = "Nova senha")]
     public string NewPassword { get; set; } = string.Empty;

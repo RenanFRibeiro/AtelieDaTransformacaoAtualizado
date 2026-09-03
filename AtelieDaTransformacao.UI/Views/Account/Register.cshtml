@@ -115,7 +115,11 @@
                                     </div>
                                     <div class="col-md-4">
                                         <label asp-for="PostalCode" class="form-label"></label>
-                                        <input asp-for="PostalCode" class="form-control form-control-lg" maxlength="9" autocomplete="postal-code" inputmode="numeric" placeholder="00000-000" />
+                                        <div class="input-group input-group-lg">
+                                            <input asp-for="PostalCode" class="form-control" maxlength="9" autocomplete="postal-code" inputmode="numeric" placeholder="00000-000" />
+                                            <span class="input-group-text cep-status" id="cepStatus" aria-live="polite"><i class="bi bi-search"></i></span>
+                                        </div>
+                                        <small class="form-text text-muted">Digite o CEP para preencher endereço, bairro, cidade e UF automaticamente.</small>
                                         <span asp-validation-for="PostalCode" class="text-danger small"></span>
                                     </div>
                                 </div>
@@ -129,7 +133,7 @@
                                     <div class="col-md-6">
                                         <label asp-for="Password" class="form-label"></label>
                                         <div class="input-group input-group-lg">
-                                            <input asp-for="Password" class="form-control" type="password" autocomplete="new-password" placeholder="Mínimo de 6 caracteres" />
+                                            <input asp-for="Password" class="form-control" type="password" autocomplete="new-password" placeholder="8+ caracteres, com maiúscula, minúscula, número e símbolo" />
                                             <button type="button" class="btn btn-outline-secondary toggle-password" data-target="Password" aria-label="Mostrar ou ocultar senha"><i class="bi bi-eye"></i></button>
                                         </div>
                                         <span asp-validation-for="Password" class="text-danger small"></span>
@@ -142,6 +146,13 @@
                                         </div>
                                         <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
                                     </div>
+                                </div>
+                                <div class="form-check auth-terms mt-4">
+                                    <input asp-for="AcceptTerms" class="form-check-input" />
+                                    <label asp-for="AcceptTerms" class="form-check-label">
+                                        Li e aceito os <a asp-controller="Home" asp-action="Terms" target="_blank" rel="noopener">Termos de Uso</a> e a <a asp-controller="Home" asp-action="Privacy" target="_blank" rel="noopener">Política de Privacidade</a>.
+                                    </label>
+                                    <span asp-validation-for="AcceptTerms" class="text-danger small d-block"></span>
                                 </div>
                                 <button type="submit" class="btn btn-artisan btn-lg w-100 rounded-3 mt-4 py-3">
                                     <i class="bi bi-person-plus me-2"></i> Criar minha conta
@@ -169,23 +180,52 @@
                 const showing = input.type === 'text';
                 input.type = showing ? 'password' : 'text';
                 icon.className = showing ? 'bi bi-eye' : 'bi bi-eye-slash';
+                button.setAttribute('aria-label', showing ? 'Mostrar senha' : 'Esconder senha');
             });
         });
 
-        document.querySelector('input[name="State"]')?.addEventListener('input', function () {
-            this.value = this.value.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 2);
+        const state = document.querySelector('input[name="State"]');
+        const cep = document.querySelector('input[name="PostalCode"]');
+        const phone = document.querySelector('input[name="Phone"]');
+        const address = document.querySelector('input[name="Address"]');
+        const district = document.querySelector('input[name="District"]');
+        const city = document.querySelector('input[name="City"]');
+        const status = document.getElementById('cepStatus');
+        let cepTimer;
+
+        state?.addEventListener('input', function () { this.value = this.value.toUpperCase().replace(/[^A-Z]/g, '').slice(0, 2); });
+        phone?.addEventListener('input', function () {
+            const digits = this.value.replace(/\D/g, '').slice(0, 11);
+            this.value = digits.length <= 10
+                ? digits.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3').replace(/-$/, '')
+                : digits.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3').replace(/-$/, '');
         });
-        document.querySelector('input[name="PostalCode"]')?.addEventListener('input', function () {
+
+        async function buscarCep() {
+            const digits = (cep?.value || '').replace(/\D/g, '');
+            if (digits.length !== 8) return;
+            if (status) status.innerHTML = '<span class="spinner-border spinner-border-sm" aria-hidden="true"></span>';
+            try {
+                const response = await fetch('@Url.Action("BuscarEndereco", "Cep")?cep=' + encodeURIComponent(digits), { headers: { 'Accept': 'application/json' } });
+                const data = await response.json();
+                if (data.erro) throw new Error(data.mensagem || 'CEP não encontrado.');
+                if (address && data.logradouro) address.value = data.logradouro;
+                if (district && data.bairro) district.value = data.bairro;
+                if (city && data.cidade) city.value = data.cidade;
+                if (state && data.estado) state.value = data.estado.toUpperCase();
+                if (status) status.innerHTML = '<i class="bi bi-check-circle-fill text-success" title="Endereço localizado"></i>';
+                [address, district, city, state].forEach(el => el?.dispatchEvent(new Event('change', { bubbles: true })));
+            } catch (error) {
+                if (status) status.innerHTML = '<i class="bi bi-exclamation-circle text-warning" title="Não foi possível localizar o CEP"></i>';
+            }
+        }
+
+        cep?.addEventListener('input', function () {
             const digits = this.value.replace(/\D/g, '').slice(0, 8);
             this.value = digits.length > 5 ? digits.slice(0, 5) + '-' + digits.slice(5) : digits;
+            clearTimeout(cepTimer);
+            if (digits.length === 8) cepTimer = setTimeout(buscarCep, 250);
         });
-        document.querySelector('input[name="Phone"]')?.addEventListener('input', function () {
-            const digits = this.value.replace(/\D/g, '').slice(0, 11);
-            if (digits.length <= 10) {
-                this.value = digits.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3').replace(/-$/, '');
-            } else {
-                this.value = digits.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3').replace(/-$/, '');
-            }
-        });
+        cep?.addEventListener('blur', buscarCep);
     </script>
 }

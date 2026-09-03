@@ -41,7 +41,7 @@ public class AccountController : Controller
             model.Email.Trim(),
             model.Password,
             isPersistent: false,
-            lockoutOnFailure: false);
+            lockoutOnFailure: true);
 
         if (result.Succeeded)
         {
@@ -102,6 +102,13 @@ public class AccountController : Controller
         {
             ModelState.AddModelError(nameof(model.Email),
                 "Já existe uma conta com este e-mail. Faça login para continuar.");
+            return View(model);
+        }
+
+        if (!model.AcceptTerms)
+        {
+            ModelState.AddModelError(nameof(model.AcceptTerms),
+                "Aceite os Termos de Uso e a Política de Privacidade para continuar.");
             return View(model);
         }
 
@@ -252,6 +259,66 @@ public class AccountController : Controller
 
         await _signInManager.RefreshSignInAsync(user);
         TempData["SuccessMessage"] = "Seus dados foram atualizados com sucesso.";
+        return RedirectToAction(nameof(Profile));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ChangeEmail(ChangeEmailViewModel model)
+    {
+        if (!(User.Identity?.IsAuthenticated ?? false))
+            return RedirectToAction(nameof(Login));
+
+        if (!ModelState.IsValid)
+        {
+            TempData["EmailError"] = string.Join(" ", ModelState.Values
+                .SelectMany(v => v.Errors).Select(e => e.ErrorMessage)
+                .Where(e => !string.IsNullOrWhiteSpace(e)));
+            return RedirectToAction(nameof(Profile));
+        }
+
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null) return RedirectToAction(nameof(Login));
+
+        var currentEmail = user.Email ?? string.Empty;
+        var newEmail = model.NewEmail.Trim().ToLowerInvariant();
+        if (string.Equals(currentEmail, newEmail, StringComparison.OrdinalIgnoreCase))
+        {
+            TempData["EmailError"] = "O novo e-mail precisa ser diferente do atual.";
+            return RedirectToAction(nameof(Profile));
+        }
+
+        if (!await _userManager.CheckPasswordAsync(user, model.CurrentPassword))
+        {
+            TempData["EmailError"] = "A senha atual está incorreta. O e-mail não foi alterado.";
+            return RedirectToAction(nameof(Profile));
+        }
+
+        var existing = await _userManager.FindByEmailAsync(newEmail);
+        if (existing != null && existing.Id != user.Id)
+        {
+            TempData["EmailError"] = "Este e-mail já está vinculado a outra conta.";
+            return RedirectToAction(nameof(Profile));
+        }
+
+        var result = await _userManager.ChangeEmailAsync(user, newEmail, await _userManager.GenerateChangeEmailTokenAsync(user, newEmail));
+        if (!result.Succeeded)
+        {
+            TempData["EmailError"] = string.Join(" ", result.Errors.Select(FriendlyIdentityError));
+            return RedirectToAction(nameof(Profile));
+        }
+
+        user.UserName = newEmail;
+        var usernameResult = await _userManager.UpdateAsync(user);
+        if (!usernameResult.Succeeded)
+        {
+            TempData["EmailError"] = "O e-mail foi alterado, mas não foi possível atualizar o usuário de login. Tente entrar novamente.";
+            await _signInManager.RefreshSignInAsync(user);
+            return RedirectToAction(nameof(Profile));
+        }
+
+        await _signInManager.RefreshSignInAsync(user);
+        TempData["EmailSuccess"] = "Seu e-mail foi alterado com sucesso.";
         return RedirectToAction(nameof(Profile));
     }
 
