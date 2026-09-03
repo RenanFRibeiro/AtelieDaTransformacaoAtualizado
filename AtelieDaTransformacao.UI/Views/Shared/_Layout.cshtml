@@ -24,8 +24,15 @@
                     <span class="serif-title brand-name">Ateliê da <strong>Transformação</strong></span>
                 </a>
 
-                <button class="navbar-toggler artisan-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Abrir menu">
-                    <span class="navbar-toggler-icon"></span>
+                <button class="navbar-toggler artisan-toggler" type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#mainNavbar"
+                        aria-controls="mainNavbar"
+                        aria-expanded="false"
+                        aria-label="Abrir menu">
+                    <span class="artisan-toggler-icon" aria-hidden="true">
+                        <span></span><span></span><span></span>
+                    </span>
                 </button>
 
                 <div class="collapse navbar-collapse" id="mainNavbar">
@@ -40,34 +47,34 @@
                         {
                             if (!User.IsInRole("Admin"))
                             {
-                                <a class="header-menu-link-v3 header-quote-link" asp-controller="Quote" asp-action="Index" title="Solicitar orçamento">
+                                <a class="header-menu-link-v3 header-quote-link" aria-label="Solicitar orçamento" asp-controller="Quote" asp-action="Index" title="Solicitar orçamento">
                                     <i class="bi bi-pencil-square" aria-hidden="true"></i><span>Orçamento</span>
                                 </a>
                             }
 
                             if (User.IsInRole("Admin") || User.IsInRole("Funcionario") || User.IsInRole("Employee"))
                             {
-                                <a class="header-menu-link-v3" asp-controller="Admin" asp-action="Index" title="Painel do Artesão">
+                                <a class="header-menu-link-v3" asp-controller="Admin" asp-action="Index" title="Painel do Artesão" aria-label="Painel do Artesão">
                                     <i class="bi bi-sliders" aria-hidden="true"></i><span>Painel</span>
                                 </a>
                             }
 
                             if (!User.IsInRole("Admin"))
                             {
-                                <a class="header-menu-link-v3" asp-controller="Account" asp-action="Profile" title="Meu perfil">
+                                <a class="header-menu-link-v3" asp-controller="Account" asp-action="Profile" title="Meu perfil" aria-label="Meu perfil">
                                     <i class="bi bi-person-circle" aria-hidden="true"></i><span>Meu perfil</span>
                                 </a>
-                                <a class="header-menu-link-v3" asp-controller="Order" asp-action="Index" title="Meus pedidos">
+                                <a class="header-menu-link-v3" asp-controller="Order" asp-action="Index" title="Meus pedidos" aria-label="Meus pedidos">
                                     <i class="bi bi-box-seam" aria-hidden="true"></i><span>Meus pedidos</span>
                                 </a>
-                                <a class="header-menu-link-v3 position-relative" asp-controller="Cart" asp-action="Index" title="Ver carrinho">
+                                <a class="header-menu-link-v3 position-relative" asp-controller="Cart" asp-action="Index" title="Ver carrinho" aria-label="Carrinho">
                                     <i class="bi bi-bag" aria-hidden="true"></i><span>Carrinho</span>
                                     <span class="badge cart-badge" id="cartCountBadge" style="display:none;">0</span>
                                 </a>
                             }
 
                             <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
-                                <button type="submit" class="header-menu-link-v3 header-logout-v3" title="Sair">
+                                <button type="submit" class="header-menu-link-v3 header-logout-v3" title="Sair" aria-label="Sair">
                                     <i class="bi bi-box-arrow-right" aria-hidden="true"></i><span>Sair</span>
                                 </button>
                             </form>

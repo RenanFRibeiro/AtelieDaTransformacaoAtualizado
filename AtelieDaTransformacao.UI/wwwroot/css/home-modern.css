@@ -647,394 +647,451 @@ h1, h2, h3, h4, h5, h6,
     margin-inline: auto;
 }
 
-@media (max-width: 1050px) {
-    .featured-product-stage {
-        grid-template-columns: minmax(0, 1fr) minmax(330px, .82fr);
+@media (min-width: 1200px) {
+    /* ============================================================================
+       RESPONSIVIDADE: HEADER E MENU HAMBURGER
+       ============================================================================ */
+
+    .navbar-artisan {
+        height: 72px;
+        min-height: 72px;
     }
-
-    .featured-product-copy {
-        padding: 46px;
+    
+    .navbar-inner {
+        width: min(100% - 40px, 1580px);
+        min-height: 72px;
+        gap: 18px;
     }
-
-    .featured-product-copy h2 {
-        font-size: clamp(2.35rem, 4.5vw, 3.5rem);
+    
+    .brand-name {
+        font-size: 1.18rem;
+        white-space: nowrap;
     }
-}
-
-@media (max-width: 767.98px) {
-    .collection-heading,
-    .collection-tools,
-    .collection-meta {
-        width: 100%;
+    
+    .artisan-main-nav {
+        gap: 2px;
     }
-
-    .featured-product-stage {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        min-height: 0;
-        border-radius: 22px;
+    
+    .nav-link-artisan {
+        min-height: 40px;
+        padding: .5rem .82rem !important;
+        font-size: .82rem;
     }
-
-    .featured-product-copy {
-        padding: 34px 24px 30px;
-        order: 0;
+    
+    .header-actions-v3 {
+        gap: 5px;
     }
-
-    .featured-product-copy h2 {
-        font-size: clamp(2.15rem, 10vw, 3rem);
+    
+    .header-menu-link-v3 {
+        min-width: 40px;
+        height: 40px;
     }
-
-    .featured-product-copy > p {
-        font-size: .84rem;
-    }
-
-    .featured-product-info {
-        grid-template-columns: 1fr;
-    }
-
-    .featured-product-info > div + div {
-        padding-left: 0;
-        border-left: 0;
-        border-top: 1px solid rgba(58,36,26,.12);
-    }
-
-    .featured-product-actions {
-        gap: 16px;
-    }
-
-    .featured-product-actions .btn {
-        width: auto;
-    }
-
-    .featured-product-card {
-        order: 1;
-    }
-
-    .featured-product-card .product-image-modern {
-        height: min(84vw, 420px);
-    }
-
-    .featured-product-card .product-content-modern {
-        padding: 20px 18px 18px;
-    }
-}
-
-@media (max-width: 420px) {
-    .featured-copy-top {
-        margin-bottom: 17px;
-    }
-
-    .featured-product-copy {
-        padding: 28px 20px 25px;
-    }
-
-    .featured-product-copy h2 {
-        font-size: 2.15rem;
-    }
-
-    .featured-product-actions {
-        align-items: stretch;
-        flex-direction: column;
-    }
-
-    .featured-product-actions .btn,
-    .featured-text-link {
-        justify-content: center;
-    }
-}
-
-/* ============================================================================
-  AÇÕES DA COLEÇÃO
-  ============================================================================ */
-
-.collection-actions {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    align-items: center;
-    margin-bottom: 48px;
-    width: 100%;
-}
-
-.btn-artisan {
-    display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    background: var(--modern-terracotta) !important;
-    color: white !important;
-    border: none !important;
-    border-radius: 8px !important;
-    font-size: 0.9rem;
-    font-weight: 700;
-    padding: 10px 18px !important;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-.btn-artisan:hover,
-.btn-artisan:focus {
-    background: var(--modern-terracotta-dark) !important;
-    transform: translateY(-1px);
-    box-shadow: 0 8px 20px rgba(168, 92, 61, 0.2) !important;
-    color: white !important;
-    text-decoration: none;
-}
-
-.btn-artisan.btn-lg {
-    padding: 11px 20px !important;
-    font-size: 0.95rem;
-}
-
-.btn-outline-artisan-dark {
-    display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    background: transparent !important;
-    color: var(--modern-brown-950) !important;
-    border: 1.5px solid var(--modern-brown-950) !important;
-    border-radius: 8px !important;
-    font-size: 0.9rem;
-    font-weight: 700;
-    padding: 9px 16px !important;
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-.btn-outline-artisan-dark:hover,
-.btn-outline-artisan-dark:focus {
-    background: var(--modern-brown-950) !important;
-    color: white !important;
-    box-shadow: 0 8px 20px rgba(42, 33, 28, 0.15);
-    text-decoration: none;
-}
-
-.btn-outline-artisan-dark.btn-lg {
-    padding: 10px 20px !important;
-    font-size: 0.95rem;
-}
-
-.btn-artisan i,
-.btn-outline-artisan-dark i {
-    font-size: 0.85rem;
-}
-
-/* Responsivo - Mobile */
-@media (max-width: 640px) {
-    .collection-actions {
-        flex-direction: row;
-        gap: 10px;
-        margin-bottom: 36px;
-    }
-
-    .btn-artisan,
-    .btn-outline-artisan-dark {
-        font-size: 0.85rem;
-        padding: 9px 14px !important;
-        flex: 1;
-        min-width: 140px;
-    }
-
-    .btn-artisan.btn-lg,
-    .btn-outline-artisan-dark.btn-lg {
-        font-size: 0.85rem;
-        padding: 9px 14px !important;
-    }
-}
-
-@media (max-width: 480px) {
-    .collection-actions {
-        gap: 8px;
-    }
-
-    .btn-artisan,
-    .btn-outline-artisan-dark {
-        font-size: 0.8rem;
-        padding: 8px 12px !important;
-        min-width: auto;
-        flex: 1;
-    }
-
-    .btn-artisan i,
-    .btn-outline-artisan-dark i {
+    
+    .artisan-toggler {
         display: none;
     }
 }
 
-
-/* Ajuste final do carrossel: eliminar a faixa clara entre o header e o hero. */
-.navbar-artisan {
-    border-bottom: 0 !important;
-    box-shadow: none !important;
-}
-
-.artisan-hero {
-    margin-top: -4px !important;
-    border-top: 0 !important;
-}
-
-
-/* ============================================================================
-   FEEDBACKS — CARROSSEL COM 3 CARDS VISÍVEIS
-   ============================================================================
-   O componente usa uma janela de 3 avaliações e avança uma posição por vez.
-   Assim, ao trocar o slide, um card sai e outro entra mantendo sempre 3.
-   ============================================================================ */
-.feedback-carousel-grid {
-    display: grid !important;
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    gap: 1.5rem !important;
-    align-items: stretch;
-}
-
-.feedback-carousel-grid .feedback-card {
-    width: 100%;
-    min-width: 0;
-}
-
-/* Transição moderna e leve: os 3 cards permanecem na mesma composição
-   enquanto o conjunto atual desaparece suavemente e o próximo entra. */
-.feedback-carousel .carousel-item {
-    transition: opacity .72s ease-in-out !important;
-}
-
-.feedback-carousel .carousel-item-next,
-.feedback-carousel .carousel-item-prev,
-.feedback-carousel .carousel-item.active,
-.feedback-carousel .carousel-item-start,
-.feedback-carousel .carousel-item-end {
-    transform: none !important;
-}
-
-.feedback-carousel .carousel-item:not(.active) {
-    opacity: 0;
-}
-
-.feedback-carousel .carousel-item.active {
-    opacity: 1;
-}
-
-/* ============================================================================
-   WHATSAPP — BOTÃO FLUTUANTE EM BOLINHA NO CANTO INFERIOR DIREITO
-   ============================================================================ */
-a.whatsapp-float {
-    position: fixed !important;
-    right: 24px !important;
-    bottom: 24px !important;
-    z-index: 10000 !important;
-    width: 58px !important;
-    height: 58px !important;
-    min-width: 58px !important;
-    min-height: 58px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    border-radius: 50% !important;
-    background: #25D366 !important;
-    color: #fff !important;
-    text-decoration: none !important;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, .22) !important;
-    line-height: 1 !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: none !important;
-}
-
-a.whatsapp-float i {
-    display: block !important;
-    margin: 0 !important;
-    color: #fff !important;
-    font-size: 28px !important;
-    line-height: 1 !important;
-}
-
-a.whatsapp-float:hover,
-a.whatsapp-float:focus-visible {
-    background: #20bd5a !important;
-    color: #fff !important;
-    transform: scale(1.06) !important;
-    box-shadow: 0 10px 28px rgba(0, 0, 0, .26) !important;
-}
-
-a.whatsapp-float:focus-visible {
-    outline: 3px solid rgba(37, 211, 102, .35);
-    outline-offset: 3px;
-}
-
-@media (max-width: 991.98px) {
-    a.whatsapp-float {
-        right: 16px !important;
-        bottom: 16px !important;
-        width: 52px !important;
-        height: 52px !important;
-        min-width: 52px !important;
-        min-height: 52px !important;
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .navbar-artisan {
+        height: 68px;
+        min-height: 68px;
     }
-
-    a.whatsapp-float i {
-        font-size: 24px !important;
+    
+    .navbar-inner {
+        width: min(100% - 32px, 1400px);
+        min-height: 68px;
+        gap: 12px;
+    }
+    
+    .brand-name {
+        font-size: 1.05rem;
+        white-space: nowrap;
+    }
+    
+    .artisan-main-nav {
+        gap: 0px;
+    }
+    
+    .nav-link-artisan {
+        min-height: 36px;
+        padding: .45rem .7rem !important;
+        font-size: .78rem;
+    }
+    
+    .header-actions-v3 {
+        gap: 3px;
+    }
+    
+    .header-menu-link-v3 {
+        min-width: 36px;
+        height: 36px;
+        border-radius: 10px;
+    }
+    
+    .header-menu-link-v3 i {
+        font-size: .9rem;
+    }
+    
+    .artisan-toggler {
+        display: none;
     }
 }
 
-
-/* ============================================================================
-   HEADER REFINADO — minimalista, elegante e ultra-responsivo
-   ============================================================================ */
-.navbar-artisan {
-    height: 72px;
-    min-height: 72px;
-    border-bottom-color: rgba(208,161,92,.20);
-    box-shadow: 0 5px 22px rgba(25,15,10,.10);
-}
-.navbar-inner { min-height: 72px; }
-.artisan-brand { min-width: 0; }
-.brand-name { white-space: nowrap; }
-.artisan-main-nav { gap: .1rem; }
-.nav-link-artisan { letter-spacing: .01em; }
-.header-actions-v3 { gap: .18rem; }
-.header-menu-link-v3 {
-    min-height: 38px;
-    padding: .48rem .68rem;
-    border: 1px solid transparent;
-}
-.header-menu-link-v3 i { font-size: .86rem; }
-.header-menu-link-v3:focus-visible,
-.nav-link-artisan:focus-visible,
-.header-register-link:focus-visible,
-.artisan-brand:focus-visible { outline: 2px solid var(--modern-caramel); outline-offset: 3px; }
-.navbar-fixed-spacer { height: 72px !important; }
-
-@media (max-width: 1199.98px) {
-    .header-menu-link-v3 span { display: none; }
-    .header-menu-link-v3 { width: 38px; justify-content: center; padding: .45rem; }
-    .header-menu-link-v3 i { margin-right: 0; }
-    .header-register-link { padding-inline: .72rem; }
-}
+/* Tablet (768px - 991px) */
 @media (max-width: 991.98px) {
-    .navbar-artisan, .navbar-inner { min-height: 66px; }
-    .navbar-fixed-spacer { height: 66px !important; }
-    .artisan-brand { padding-block: .55rem; }
-    .header-actions-v3 { justify-content: flex-start; gap: .35rem; padding: 10px 0 12px; }
-    .header-menu-link-v3 span { display: inline; }
-    .header-menu-link-v3 { width: auto; min-height: 40px; }
-    .header-menu-link-v3 i { margin-right: .32rem; }
-    .navbar-collapse { margin-top: 5px; padding: 8px 12px 12px; border-radius: 18px; }
+    .navbar-artisan {
+        height: 64px;
+        min-height: 64px;
+        padding: 8px 0;
+    }
+    
+    .navbar-inner {
+        width: min(100% - 24px, 1200px);
+        min-height: 64px;
+        gap: 8px;
+    }
+    
+    .artisan-brand {
+        flex: 0 0 auto;
+        padding-block: .45rem;
+    }
+    
+    .brand-mark {
+        width: 32px;
+        height: 32px;
+        flex-shrink: 0;
+    }
+    
+    .brand-name {
+        font-size: 1rem;
+        white-space: nowrap;
+    }
+    
+    .artisan-main-nav {
+        flex-direction: column;
+        width: 100%;
+        gap: 2px;
+        padding: 4px 0;
+        margin-top: 0;
+    }
+    
+    .nav-item {
+        width: 100%;
+    }
+    
+    .nav-link-artisan {
+        width: 100%;
+        min-height: 40px;
+        justify-content: flex-start;
+        padding: .5rem .7rem !important;
+        font-size: .85rem;
+        border-radius: 10px;
+    }
+    
+    .nav-link-artisan::after {
+        display: none;
+    }
+    
+    .navbar-collapse {
+        width: 100%;
+        margin-top: 6px;
+        padding: 8px 10px 12px;
+        background: rgba(45, 29, 21, .97);
+        border: 1px solid rgba(208, 161, 92, .15);
+        border-radius: 16px;
+        box-shadow: 0 16px 36px rgba(0, 0, 0, .2);
+        flex-basis: unset;
+    }
+    
+    .navbar-collapse.show {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .header-actions-v3 {
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid rgba(208, 161, 92, .12);
+        flex-direction: column;
+        width: 100%;
+        gap: 4px;
+    }
+    
+    .header-menu-link-v3 {
+        width: 100%;
+        min-width: auto;
+        min-height: 40px;
+        height: 40px;
+        justify-content: flex-start;
+        padding: .5rem .65rem !important;
+        border-radius: 10px;
+    }
+    
+    .header-menu-link-v3 i {
+        flex-shrink: 0;
+        width: 18px;
+        font-size: .9rem;
+        margin-right: .4rem;
+    }
+    
+    .header-menu-link-v3 span {
+        width: auto !important;
+        max-width: 100% !important;
+        margin-left: 0 !important;
+        opacity: 1 !important;
+        display: inline;
+        font-size: .78rem;
+    }
+    
+    .header-menu-link-v3:hover,
+    .header-menu-link-v3:focus-visible {
+        width: 100%;
+        background: rgba(255, 255, 255, .08);
+    }
+    
+    .header-register-link {
+        width: 100%;
+        min-height: 40px;
+        padding: .5rem .65rem !important;
+        margin-left: 0;
+        margin-top: 4px;
+        border-top: 1px solid rgba(208, 161, 92, .12);
+        padding-top: .8rem !important;
+        border-radius: 0;
+    }
+    
+    .artisan-toggler {
+        display: inline-flex !important;
+        flex-shrink: 0;
+    }
 }
+
+/* Mobile grande (576px - 767px) */
+@media (max-width: 767.98px) {
+    .navbar-artisan {
+        height: 60px;
+        min-height: 60px;
+        padding: 6px 0;
+    }
+    
+    .navbar-inner {
+        width: min(100% - 20px, 540px);
+        min-height: 60px;
+        gap: 6px;
+    }
+    
+    .artisan-brand {
+        padding-block: .35rem;
+        gap: .5rem;
+    }
+    
+    .brand-mark {
+        width: 30px;
+        height: 30px;
+        font-size: .85rem;
+    }
+    
+    .brand-name {
+        font-size: .95rem;
+    }
+    
+    .brand-name strong {
+        display: none;
+    }
+    
+    .navbar-collapse {
+        padding: 6px 8px 10px;
+        margin-top: 4px;
+        border-radius: 12px;
+    }
+    
+    .artisan-main-nav {
+        padding: 2px 0;
+    }
+    
+    .nav-link-artisan {
+        min-height: 38px;
+        padding: .45rem .6rem !important;
+        font-size: .8rem;
+    }
+    
+    .header-actions-v3 {
+        gap: 3px;
+        padding-top: 6px;
+        margin-top: 6px;
+        padding: 6px 0 0;
+    }
+    
+    .header-menu-link-v3 {
+        min-height: 38px;
+        height: 38px;
+        padding: .45rem .6rem !important;
+        font-size: .75rem;
+    }
+    
+    .header-menu-link-v3 i {
+        font-size: .85rem;
+    }
+    
+    .header-register-link {
+        min-height: 38px;
+        padding: .45rem .6rem !important;
+        font-size: .74rem;
+    }
+    
+    .artisan-toggler {
+        width: 40px;
+        height: 40px;
+        padding: 6px !important;
+    }
+}
+
+/* Mobile pequeno (até 575px) */
 @media (max-width: 575.98px) {
-    .navbar-inner { width: min(100% - 20px, 1680px); }
-    .brand-name { font-size: .95rem; }
-    .brand-mark { width: 29px; height: 29px; flex: 0 0 auto; }
-    .header-actions-v3 { display: grid !important; grid-template-columns: repeat(2, minmax(0,1fr)); }
-    .header-menu-link-v3, .header-register-link { width: 100%; justify-content: center; }
-    .header-logout-v3 { width: 100%; }
+    .navbar-artisan {
+        height: 56px;
+        min-height: 56px;
+        padding: 4px 0;
+    }
+    
+    .navbar-inner {
+        width: min(100% - 16px, 100%);
+        min-height: 56px;
+        gap: 4px;
+    }
+    
+    .artisan-brand {
+        padding-block: .3rem;
+        gap: .4rem;
+        min-width: 0;
+    }
+    
+    .brand-mark {
+        width: 28px;
+        height: 28px;
+        flex-shrink: 0;
+        font-size: .8rem;
+    }
+    
+    .brand-name {
+        font-size: .88rem;
+        font-weight: 600;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    .brand-name strong {
+        display: none;
+    }
+    
+    .navbar-collapse {
+        width: calc(100% + 16px);
+        margin-left: -8px;
+        margin-right: -8px;
+        margin-top: 2px;
+        padding: 4px 6px 8px;
+        border-radius: 8px;
+        border: none;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, .18);
+    }
+    
+    .artisan-main-nav {
+        padding: 0;
+        gap: 1px;
+    }
+    
+    .nav-item {
+        width: 100%;
+    }
+    
+    .nav-link-artisan {
+        min-height: 36px;
+        padding: .4rem .5rem !important;
+        font-size: .75rem;
+        border-radius: 8px;
+    }
+    
+    .header-actions-v3 {
+        flex-direction: column;
+        width: 100%;
+        gap: 2px;
+        padding: 4px 0 0;
+        margin-top: 4px;
+        border-top: 1px solid rgba(208, 161, 92, .1);
+    }
+    
+    .header-menu-link-v3 {
+        width: 100%;
+        min-width: auto;
+        min-height: 36px;
+        height: 36px;
+        justify-content: flex-start;
+        padding: .4rem .5rem !important;
+        font-size: .72rem;
+        border-radius: 8px;
+    }
+    
+    .header-menu-link-v3 i {
+        width: 16px;
+        font-size: .8rem;
+        margin-right: .3rem;
+    }
+    
+    .header-menu-link-v3 span {
+        display: inline !important;
+        font-size: .72rem;
+    }
+    
+    .header-menu-link-v3:hover,
+    .header-menu-link-v3:focus-visible {
+        width: 100%;
+        background: rgba(255, 255, 255, .06);
+    }
+    
+    .header-register-link {
+        width: 100%;
+        min-height: 36px;
+        padding: .4rem .5rem !important;
+        margin-left: 0;
+        margin-top: 2px;
+        border-top: 1px solid rgba(208, 161, 92, .1);
+        padding-top: .6rem !important;
+        font-size: .72rem;
+        border-radius: 0 0 8px 8px;
+    }
+    
+    .cart-badge {
+        top: 2px;
+        right: 2px;
+        min-width: 13px;
+        height: 13px;
+        font-size: .5rem !important;
+    }
+    
+    .artisan-toggler {
+        width: 38px;
+        height: 38px;
+        padding: 4px !important;
+    }
+    
+    .artisan-toggler-icon {
+        width: 17px;
+        height: 13px;
+    }
+}
+
+/* Acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+    .navbar-collapse,
+    .header-menu-link-v3,
+    .header-menu-link-v3 span,
+    .artisan-toggler,
+    .artisan-toggler-icon span,
+    .header-register-link,
+    .nav-link-artisan {
+        transition: none !important;
+    }
 }
