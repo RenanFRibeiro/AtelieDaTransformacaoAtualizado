@@ -114,6 +114,13 @@ public class HomeController : Controller
     [HttpGet]
     public IActionResult Gallery() => View();
 
+    // Páginas institucionais usadas pelo rodapé e pelos links de navegação.
+    [HttpGet]
+    public IActionResult Privacy() => View();
+
+    [HttpGet]
+    public IActionResult Terms() => View();
+
     /// <summary>
     /// Exibe os detalhes de um produto específico.
     /// </summary>

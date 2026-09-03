@@ -1,3 +1,74 @@
-@{ ViewData["Title"] = "Projetos"; }
-<section class="page-hero text-center py-5 mb-5"><div class="container"><span class="eyebrow">PORTFÓLIO</span><h1 class="display-4 serif-title fw-bold mt-2">Projetos que inspiram novos espaços.</h1><p class="lead text-muted">Uma vitrine para apresentar trabalhos realizados, detalhes e possibilidades de personalização.</p></div></section>
-<div class="container pb-5"><div class="gallery-grid"><div class="gallery-card gallery-large"><div><span>Projeto personalizado</span><h3>Móveis com identidade</h3></div></div><div class="gallery-card"><div><span>Detalhes</span><h3>Madeira & acabamento</h3></div></div><div class="gallery-card"><div><span>Criações</span><h3>Peças exclusivas</h3></div></div><div class="gallery-card"><div><span>Acabamento</span><h3>Design contemporâneo</h3></div></div><div class="gallery-card"><div><span>Ambientes</span><h3>Transformação</h3></div></div></div><div class="text-center mt-5"><p class="text-muted">Substitua estes espaços pelas fotos reais dos trabalhos do ateliê para transformar esta página em um portfólio completo.</p><a asp-controller="Quote" asp-action="Index" class="btn btn-artisan rounded-pill px-4 py-3">Quero uma peça personalizada</a></div></div>
+@{
+    ViewData["Title"] = "Projetos";
+}
+
+<section class="projects-page" aria-labelledby="projects-title">
+    <div class="projects-hero">
+        <div class="container">
+            <div class="projects-hero-inner">
+                <span class="eyebrow">PORTFÓLIO</span>
+                <h1 id="projects-title" class="projects-title">Projetos que inspiram novos espaços.</h1>
+                <p class="projects-subtitle">Uma seleção de criações, materiais e acabamentos que traduzem o cuidado do Ateliê em cada detalhe.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container projects-content">
+        <div class="projects-heading">
+            <div>
+                <span class="eyebrow">ATELIÊ EM DETALHES</span>
+                <h2>Do material à peça final.</h2>
+            </div>
+            <p>Conheça um pouco do processo e da linguagem artesanal presentes em nossos projetos.</p>
+        </div>
+
+        <div class="projects-grid">
+            <article class="project-card project-card-featured">
+                <a class="project-media" href="~/images/carousel/slide01.jpg.jpg" target="_blank" rel="noopener noreferrer" aria-label="Ampliar projeto de móveis com identidade">
+                    <img src="~/images/carousel/slide01.jpg.jpg" alt="Detalhe de um projeto artesanal em madeira" loading="eager" />
+                    <span class="project-view"><i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
+                </a>
+                <div class="project-card-body">
+                    <span class="project-kicker">01 · Projeto personalizado</span>
+                    <h3>Móveis com identidade</h3>
+                    <p>Proporções, materiais e acabamento pensados para integrar o móvel ao ambiente.</p>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <a class="project-media" href="~/images/carousel/slide02.jpg.jpg" target="_blank" rel="noopener noreferrer" aria-label="Ampliar projeto de madeira e acabamento">
+                    <img src="~/images/carousel/slide02.jpg.jpg" alt="Detalhe de madeira e acabamento artesanal" loading="lazy" />
+                    <span class="project-view"><i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
+                </a>
+                <div class="project-card-body">
+                    <span class="project-kicker">02 · Madeira &amp; acabamento</span>
+                    <h3>Detalhes que fazem diferença</h3>
+                    <p>Texturas, encaixes e superfícies trabalhadas com atenção em cada etapa.</p>
+                </div>
+            </article>
+
+            <article class="project-card">
+                <a class="project-media" href="~/images/carousel/slide03.jpg.jpg" target="_blank" rel="noopener noreferrer" aria-label="Ampliar projeto de peças exclusivas">
+                    <img src="~/images/carousel/slide03.jpg.jpg" alt="Peça artesanal com acabamento contemporâneo" loading="lazy" />
+                    <span class="project-view"><i class="bi bi-arrow-up-right" aria-hidden="true"></i></span>
+                </a>
+                <div class="project-card-body">
+                    <span class="project-kicker">03 · Criações exclusivas</span>
+                    <h3>Design contemporâneo</h3>
+                    <p>Peças autorais que equilibram funcionalidade, presença e linguagem artesanal.</p>
+                </div>
+            </article>
+        </div>
+
+        <div class="projects-cta">
+            <div>
+                <span class="eyebrow">SEU PROJETO</span>
+                <h2>Tem uma ideia? Vamos transformar.</h2>
+                <p>Conte o que você imagina e converse com o Ateliê sobre uma criação personalizada.</p>
+            </div>
+            <a asp-controller="Quote" asp-action="Index" class="btn btn-artisan rounded-pill projects-cta-button">
+                Quero uma peça personalizada <i class="bi bi-arrow-up-right ms-2" aria-hidden="true"></i>
+            </a>
+        </div>
+    </div>
+</section>
