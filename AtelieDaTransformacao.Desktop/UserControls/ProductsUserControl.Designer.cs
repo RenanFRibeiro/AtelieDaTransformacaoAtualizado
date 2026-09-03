@@ -15,6 +15,7 @@ partial class ProductsUserControl
     private Guna.UI2.WinForms.Guna2Panel _tableCard = null!;
     private Guna.UI2.WinForms.Guna2DataGridView _grid = null!;
     private DataGridViewTextBoxColumn _idColumn = null!;
+    private DataGridViewTextBoxColumn _imageColumn = null!;
     private DataGridViewTextBoxColumn _productColumn = null!;
     private DataGridViewTextBoxColumn _categoryColumn = null!;
     private DataGridViewTextBoxColumn _priceColumn = null!;
@@ -26,7 +27,9 @@ partial class ProductsUserControl
 
     protected override void Dispose(bool disposing)
     {
-        if (disposing) components?.Dispose();
+        if (disposing)
+            components?.Dispose();
+
         base.Dispose(disposing);
     }
 
@@ -48,6 +51,7 @@ partial class ProductsUserControl
         Guna.UI2.WinForms.Suite.CustomizableEdges e14 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges e15 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
         Guna.UI2.WinForms.Suite.CustomizableEdges e16 = new Guna.UI2.WinForms.Suite.CustomizableEdges();
+
         DataGridViewCellStyle headerStyle = new DataGridViewCellStyle();
         DataGridViewCellStyle bodyStyle = new DataGridViewCellStyle();
         DataGridViewCellStyle actionStyle = new DataGridViewCellStyle();
@@ -59,9 +63,12 @@ partial class ProductsUserControl
         _refreshButton = new Guna.UI2.WinForms.Guna2Button();
         _categoryComboBox = new Guna.UI2.WinForms.Guna2ComboBox();
         _searchTextBox = new Guna.UI2.WinForms.Guna2TextBox();
+
         _tableCard = new Guna.UI2.WinForms.Guna2Panel();
         _grid = new Guna.UI2.WinForms.Guna2DataGridView();
+
         _idColumn = new DataGridViewTextBoxColumn();
+        _imageColumn = new DataGridViewTextBoxColumn();
         _productColumn = new DataGridViewTextBoxColumn();
         _categoryColumn = new DataGridViewTextBoxColumn();
         _priceColumn = new DataGridViewTextBoxColumn();
@@ -69,6 +76,7 @@ partial class ProductsUserControl
         _statusColumn = new DataGridViewTextBoxColumn();
         _featuredColumn = new DataGridViewTextBoxColumn();
         _actionsColumn = new DataGridViewButtonColumn();
+
         _countLabel = new Label();
 
         _toolbarCard.SuspendLayout();
@@ -76,17 +84,25 @@ partial class ProductsUserControl
         ((System.ComponentModel.ISupportInitialize)_grid).BeginInit();
         SuspendLayout();
 
+        // =========================================================
+        // TOOLBAR
+        // =========================================================
+
         _toolbarCard.BackColor = Color.White;
         _toolbarCard.BorderColor = Color.White;
         _toolbarCard.BorderRadius = 15;
         _toolbarCard.BorderThickness = 1;
+
         _toolbarCard.Controls.Add(_deleteButton);
         _toolbarCard.Controls.Add(_editButton);
         _toolbarCard.Controls.Add(_newButton);
         _toolbarCard.Controls.Add(_refreshButton);
         _toolbarCard.Controls.Add(_categoryComboBox);
         _toolbarCard.Controls.Add(_searchTextBox);
-        e1.TopLeft = false; e1.TopRight = false;
+
+        e1.TopLeft = false;
+        e1.TopRight = false;
+
         _toolbarCard.CustomizableEdges = e1;
         _toolbarCard.Dock = DockStyle.Top;
         _toolbarCard.FillColor = Color.LightGray;
@@ -96,6 +112,10 @@ partial class ProductsUserControl
         _toolbarCard.ShadowDecoration.CustomizableEdges = e2;
         _toolbarCard.Size = new Size(795, 92);
         _toolbarCard.TabIndex = 1;
+
+        // =========================================================
+        // EXCLUIR
+        // =========================================================
 
         _deleteButton.BackColor = Color.Transparent;
         _deleteButton.BorderRadius = 10;
@@ -110,6 +130,10 @@ partial class ProductsUserControl
         _deleteButton.TabIndex = 0;
         _deleteButton.Text = "🗑️ Excluir";
 
+        // =========================================================
+        // EDITAR
+        // =========================================================
+
         _editButton.BackColor = Color.Transparent;
         _editButton.BorderRadius = 10;
         _editButton.CustomizableEdges = e5;
@@ -122,6 +146,10 @@ partial class ProductsUserControl
         _editButton.Size = new Size(79, 36);
         _editButton.TabIndex = 1;
         _editButton.Text = "✏️ Editar";
+
+        // =========================================================
+        // NOVO PRODUTO
+        // =========================================================
 
         _newButton.BackColor = Color.Transparent;
         _newButton.BorderRadius = 10;
@@ -136,6 +164,10 @@ partial class ProductsUserControl
         _newButton.TabIndex = 2;
         _newButton.Text = "+ Novo Produto";
 
+        // =========================================================
+        // ATUALIZAR
+        // =========================================================
+
         _refreshButton.BackColor = Color.Transparent;
         _refreshButton.BorderRadius = 10;
         _refreshButton.CustomizableEdges = e9;
@@ -148,6 +180,10 @@ partial class ProductsUserControl
         _refreshButton.Size = new Size(88, 36);
         _refreshButton.TabIndex = 3;
         _refreshButton.Text = "🔄️ Atualizar";
+
+        // =========================================================
+        // CATEGORIA
+        // =========================================================
 
         _categoryComboBox.BackColor = Color.Transparent;
         _categoryComboBox.BorderColor = Color.FromArgb(226, 229, 236);
@@ -164,6 +200,10 @@ partial class ProductsUserControl
         _categoryComboBox.Size = new Size(177, 36);
         _categoryComboBox.TabIndex = 4;
 
+        // =========================================================
+        // PESQUISA
+        // =========================================================
+
         _searchTextBox.BackColor = Color.Transparent;
         _searchTextBox.BorderColor = Color.FromArgb(226, 229, 236);
         _searchTextBox.BorderRadius = 10;
@@ -179,13 +219,21 @@ partial class ProductsUserControl
         _searchTextBox.Size = new Size(166, 36);
         _searchTextBox.TabIndex = 5;
 
+        // =========================================================
+        // TABLE CARD
+        // =========================================================
+
         _tableCard.BackColor = Color.Transparent;
         _tableCard.BorderColor = Color.White;
         _tableCard.BorderRadius = 15;
         _tableCard.BorderThickness = 1;
+
         _tableCard.Controls.Add(_grid);
         _tableCard.Controls.Add(_countLabel);
-        e15.TopLeft = false; e15.TopRight = false;
+
+        e15.TopLeft = false;
+        e15.TopRight = false;
+
         _tableCard.CustomizableEdges = e15;
         _tableCard.Dock = DockStyle.Fill;
         _tableCard.FillColor = Color.White;
@@ -196,26 +244,44 @@ partial class ProductsUserControl
         _tableCard.Size = new Size(795, 466);
         _tableCard.TabIndex = 0;
 
+        // =========================================================
+        // GRID
+        // =========================================================
+
         _grid.AllowUserToAddRows = false;
         _grid.AllowUserToDeleteRows = false;
         _grid.AllowUserToResizeColumns = false;
         _grid.AllowUserToResizeRows = false;
+
         _grid.AutoGenerateColumns = false;
         _grid.BorderStyle = BorderStyle.None;
         _grid.ColumnHeadersHeight = 42;
-        _grid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+        _grid.ColumnHeadersHeightSizeMode =
+            DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+
         _grid.Dock = DockStyle.Fill;
+
         _grid.GridColor = Color.FromArgb(220, 220, 220);
         _grid.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+
         _grid.MultiSelect = false;
         _grid.ReadOnly = true;
         _grid.RowHeadersVisible = false;
+
         _grid.RowTemplate.Height = 40;
+
         _grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         _grid.ScrollBars = ScrollBars.Vertical;
-        _grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+        _grid.AutoSizeColumnsMode =
+            DataGridViewAutoSizeColumnsMode.Fill;
+
         _grid.Name = "_grid";
         _grid.TabIndex = 0;
+
+        // =========================================================
+        // CABEÇALHO
+        // =========================================================
 
         headerStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
         headerStyle.BackColor = LibraryTheme.AccentDark;
@@ -223,34 +289,169 @@ partial class ProductsUserControl
         headerStyle.ForeColor = Color.White;
         headerStyle.SelectionBackColor = LibraryTheme.AccentDark;
         headerStyle.SelectionForeColor = Color.White;
+
         _grid.ColumnHeadersDefaultCellStyle = headerStyle;
+
+        // =========================================================
+        // CORPO
+        // =========================================================
 
         bodyStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
         bodyStyle.BackColor = Color.White;
         bodyStyle.Font = new Font("Segoe UI", 9F);
         bodyStyle.ForeColor = LibraryTheme.Text;
-        bodyStyle.SelectionBackColor = Color.FromArgb(238, 232, 224);
+
+        bodyStyle.SelectionBackColor =
+            Color.FromArgb(238, 232, 224);
+
         bodyStyle.SelectionForeColor = LibraryTheme.Text;
         bodyStyle.Padding = new Padding(6, 0, 6, 0);
+
         _grid.DefaultCellStyle = bodyStyle;
 
-        _idColumn.Name = "Id"; _idColumn.DataPropertyName = "Id"; _idColumn.Visible = false;
-        _productColumn.Name = "Produto"; _productColumn.HeaderText = "Produto"; _productColumn.DataPropertyName = "Produto"; _productColumn.FillWeight = 22F; _productColumn.ReadOnly = true;
-        _categoryColumn.Name = "Categoria"; _categoryColumn.HeaderText = "Categoria"; _categoryColumn.DataPropertyName = "Categoria"; _categoryColumn.FillWeight = 18F; _categoryColumn.ReadOnly = true;
-        _priceColumn.Name = "Preço"; _priceColumn.HeaderText = "Preço"; _priceColumn.DataPropertyName = "Preço"; _priceColumn.FillWeight = 14F; _priceColumn.ReadOnly = true;
-        _stockColumn.Name = "Estoque"; _stockColumn.HeaderText = "Estoque"; _stockColumn.DataPropertyName = "Estoque"; _stockColumn.FillWeight = 11F; _stockColumn.ReadOnly = true;
-        _statusColumn.Name = "Status"; _statusColumn.HeaderText = "Status"; _statusColumn.DataPropertyName = "Status"; _statusColumn.FillWeight = 15F; _statusColumn.ReadOnly = true;
-        _featuredColumn.Name = "Destaque"; _featuredColumn.HeaderText = "Destaque"; _featuredColumn.DataPropertyName = "Destaque"; _featuredColumn.FillWeight = 11F; _featuredColumn.ReadOnly = true;
-        _actionsColumn.Name = "Acoes"; _actionsColumn.HeaderText = "Ações"; _actionsColumn.DataPropertyName = "Acoes"; _actionsColumn.Text = "Visualizar"; _actionsColumn.UseColumnTextForButtonValue = true; _actionsColumn.FillWeight = 14F; _actionsColumn.FlatStyle = FlatStyle.Flat;
-        actionStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+        // =========================================================
+        // COLUNA ID
+        // =========================================================
+
+        _idColumn.Name = "Id";
+        _idColumn.DataPropertyName = "Id";
+        _idColumn.Visible = false;
+
+        // =========================================================
+        // IMAGEM
+        // =========================================================
+
+        _imageColumn.Name = "Imagem";
+        _imageColumn.HeaderText = "Imagem";
+        _imageColumn.DataPropertyName = "Imagem";
+        _imageColumn.FillWeight = 11F;
+        _imageColumn.MinimumWidth = 82;
+        _imageColumn.ReadOnly = true;
+
+        // =========================================================
+        // PRODUTO
+        // =========================================================
+
+        _productColumn.Name = "Produto";
+        _productColumn.HeaderText = "Produto";
+        _productColumn.DataPropertyName = "Produto";
+        _productColumn.FillWeight = 24F;
+        _productColumn.MinimumWidth = 150;
+        _productColumn.ReadOnly = true;
+
+        // =========================================================
+        // CATEGORIA
+        // =========================================================
+
+        _categoryColumn.Name = "Categoria";
+        _categoryColumn.HeaderText = "Categoria";
+        _categoryColumn.DataPropertyName = "Categoria";
+        _categoryColumn.FillWeight = 15F;
+        _categoryColumn.MinimumWidth = 105;
+        _categoryColumn.ReadOnly = true;
+
+        // =========================================================
+        // PREÇO
+        // =========================================================
+
+        _priceColumn.Name = "Preço";
+        _priceColumn.HeaderText = "Preço";
+        _priceColumn.DataPropertyName = "Preço";
+        _priceColumn.FillWeight = 11F;
+        _priceColumn.MinimumWidth = 90;
+        _priceColumn.ReadOnly = true;
+
+        // =========================================================
+        // ESTOQUE
+        // =========================================================
+
+        _stockColumn.Name = "Estoque";
+        _stockColumn.HeaderText = "Estoque";
+        _stockColumn.DataPropertyName = "Estoque";
+        _stockColumn.FillWeight = 10F;
+        _stockColumn.MinimumWidth = 80;
+        _stockColumn.ReadOnly = true;
+
+        // =========================================================
+        // STATUS
+        // AUMENTADO
+        // =========================================================
+
+        _statusColumn.Name = "Status";
+        _statusColumn.HeaderText = "Status";
+        _statusColumn.DataPropertyName = "Status";
+
+        // antes: 14F / 105
+        _statusColumn.FillWeight = 17F;
+        _statusColumn.MinimumWidth = 120;
+
+        _statusColumn.ReadOnly = true;
+
+        // =========================================================
+        // DESTAQUE
+        // =========================================================
+
+        _featuredColumn.Name = "Destaque";
+        _featuredColumn.HeaderText = "Destaque";
+        _featuredColumn.DataPropertyName = "Destaque";
+        _featuredColumn.FillWeight = 9F;
+        _featuredColumn.MinimumWidth = 85;
+        _featuredColumn.ReadOnly = true;
+
+        // =========================================================
+        // AÇÕES
+        // AUMENTADO
+        // =========================================================
+
+        _actionsColumn.Name = "Acoes";
+        _actionsColumn.HeaderText = "Ações";
+        _actionsColumn.DataPropertyName = "Acoes";
+        _actionsColumn.Text = "Visualizar";
+        _actionsColumn.UseColumnTextForButtonValue = true;
+
+        // antes: 12F / 92
+        _actionsColumn.FillWeight = 15F;
+        _actionsColumn.MinimumWidth = 115;
+
+        _actionsColumn.FlatStyle = FlatStyle.Flat;
+
+        // =========================================================
+        // ESTILO DO BOTÃO VISUALIZAR
+        // =========================================================
+
+        actionStyle.Alignment =
+            DataGridViewContentAlignment.MiddleCenter;
+
         actionStyle.BackColor = LibraryTheme.Accent;
         actionStyle.ForeColor = Color.White;
-        actionStyle.SelectionBackColor = LibraryTheme.Accent;
+
+        actionStyle.SelectionBackColor =
+            LibraryTheme.Accent;
+
         actionStyle.SelectionForeColor = Color.White;
+
         _actionsColumn.DefaultCellStyle = actionStyle;
 
+        // =========================================================
+        // ADICIONA COLUNAS
+        // =========================================================
+
         _grid.Columns.AddRange(new DataGridViewColumn[]
-        { _idColumn, _productColumn, _categoryColumn, _priceColumn, _stockColumn, _statusColumn, _featuredColumn, _actionsColumn });
+        {
+            _idColumn,
+            _imageColumn,
+            _productColumn,
+            _categoryColumn,
+            _priceColumn,
+            _stockColumn,
+            _statusColumn,
+            _featuredColumn,
+            _actionsColumn
+        });
+
+        // =========================================================
+        // CONTADOR
+        // =========================================================
 
         _countLabel.BackColor = Color.WhiteSmoke;
         _countLabel.Dock = DockStyle.Bottom;
@@ -263,15 +464,23 @@ partial class ProductsUserControl
         _countLabel.Text = "0 produtos";
         _countLabel.TextAlign = ContentAlignment.MiddleLeft;
 
+        // =========================================================
+        // USER CONTROL
+        // =========================================================
+
         BackColor = Color.Transparent;
+
         Controls.Add(_tableCard);
         Controls.Add(_toolbarCard);
+
         Name = "ProductsUserControl";
         Size = new Size(795, 558);
 
         _tableCard.ResumeLayout(false);
         _toolbarCard.ResumeLayout(false);
+
         ((System.ComponentModel.ISupportInitialize)_grid).EndInit();
+
         ResumeLayout(false);
     }
 }

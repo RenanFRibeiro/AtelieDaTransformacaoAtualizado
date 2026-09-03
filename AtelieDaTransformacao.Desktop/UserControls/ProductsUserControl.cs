@@ -1,5 +1,7 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Net.Http;
+using System.Collections.Concurrent;
 using System.Windows.Forms;
 using AtelieDaTransformacao.Desktop.DTOs;
 using AtelieDaTransformacao.Desktop.Forms;
@@ -18,6 +20,15 @@ public partial class ProductsUserControl : UserControl
     private List<CategoryDto> _categoryItems = new();
 
     private bool _loading;
+
+    // Cacheia a imagem por URL/caminho para que o CellPainting nunca faça
+    // downloads repetidos durante os vários repaints do DataGridView.
+    private readonly ConcurrentDictionary<string, Task<Image?>> _imageCache = new(StringComparer.OrdinalIgnoreCase);
+    private static readonly HttpClient _imageClient = new()
+    {
+        Timeout = TimeSpan.FromSeconds(15)
+    };
+    private static readonly Image _imagePlaceholder = CreateImagePlaceholder();
 
     public ProductsUserControl()
     {
@@ -117,7 +128,7 @@ public partial class ProductsUserControl : UserControl
             42;
 
         _grid.RowTemplate.Height =
-            42;
+            72;
 
         // ------------------------------------------------------------
         // GUNA2
@@ -304,6 +315,9 @@ public partial class ProductsUserControl : UserControl
                 {
                     x.Id,
 
+                    Imagem =
+                        x.Image,
+
                     Produto =
                         x.Title,
 
@@ -345,6 +359,10 @@ public partial class ProductsUserControl : UserControl
 
             _countLabel.Text =
                 $"{_items.Count} produto(s) encontrado(s)";
+
+            // Começa o carregamento das imagens em segundo plano. O grid pode
+            // continuar responsivo e o CellPainting usa o cache quando a imagem chegar.
+            _ = PreloadImagesAsync(_items);
 
             // --------------------------------------------------------
             // GARANTIR PADRÃO DAS LINHAS
@@ -443,6 +461,52 @@ public partial class ProductsUserControl : UserControl
             _grid.Columns[e.ColumnIndex].Name;
 
         // ============================================================
+        // IMAGEM
+        // ============================================================
+
+        if (columnName == "Imagem")
+        {
+            e.Handled = true;
+
+            bool selected = _grid.Rows[e.RowIndex].Selected;
+            var backgroundColor = selected
+                ? Color.FromArgb(220, 220, 220)
+                : Color.White;
+
+            using var backgroundBrush = new SolidBrush(backgroundColor);
+            e.Graphics.FillRectangle(backgroundBrush, e.CellBounds);
+
+            var product = SelectedAt(e.RowIndex);
+            var imageKey = NormalizeImageKey(product?.Image);
+            Image? image = null;
+
+            if (!string.IsNullOrWhiteSpace(imageKey) &&
+                _imageCache.TryGetValue(imageKey, out var imageTask) &&
+                imageTask.IsCompletedSuccessfully)
+            {
+                image = imageTask.Result;
+            }
+
+            image ??= _imagePlaceholder;
+
+            var target = FitRectangle(
+                image.Size,
+                new Rectangle(
+                    e.CellBounds.X + 8,
+                    e.CellBounds.Y + 5,
+                    Math.Max(1, e.CellBounds.Width - 16),
+                    Math.Max(1, e.CellBounds.Height - 10)));
+
+            e.Graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            e.Graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
+            e.Graphics.DrawImage(image, target);
+
+            e.Paint(e.ClipBounds, DataGridViewPaintParts.Border);
+            return;
+        }
+
+        // ============================================================
         // VISUALIZAR
         // ============================================================
 
@@ -468,16 +532,17 @@ public partial class ProductsUserControl : UserControl
             // BOTÃO
             // --------------------------------------------------------
 
+            const int buttonWidth = 72;
+            const int buttonHeight = 24;
+
             var buttonBounds =
                 new Rectangle(
-                    e.CellBounds.X + 8,
-                    e.CellBounds.Y + 7,
-                    Math.Max(
-                        50,
-                        e.CellBounds.Width - 16),
-                    Math.Max(
-                        26,
-                        e.CellBounds.Height - 14));
+                    e.CellBounds.X +
+                        (e.CellBounds.Width - buttonWidth) / 2,
+                    e.CellBounds.Y +
+                        (e.CellBounds.Height - buttonHeight) / 2,
+                    buttonWidth,
+                    buttonHeight);
 
             using var path =
                 RoundedRect(
@@ -512,7 +577,7 @@ public partial class ProductsUserControl : UserControl
             using var font =
                 new Font(
                     "Segoe UI Semibold",
-                    8F);
+                    7.5F);
 
             using var textBrush =
                 new SolidBrush(
@@ -574,16 +639,35 @@ public partial class ProductsUserControl : UserControl
                 e.FormattedValue?.ToString()
                 ?? string.Empty;
 
+            using var statusFont =
+                new Font(
+                    "Segoe UI Semibold",
+                    7.5F);
+
+            var textSize =
+                e.Graphics.MeasureString(
+                    text,
+                    statusFont);
+
+            const int horizontalPadding = 14;
+            const int badgeHeight = 20;
+
+            var badgeWidth =
+                Math.Min(
+                    Math.Max(
+                        42,
+                        (int)Math.Ceiling(textSize.Width) +
+                            horizontalPadding),
+                    Math.Max(42, e.CellBounds.Width - 10));
+
             var bounds =
                 new Rectangle(
-                    e.CellBounds.X + 7,
-                    e.CellBounds.Y + 6,
-                    Math.Max(
-                        20,
-                        e.CellBounds.Width - 14),
-                    Math.Max(
-                        18,
-                        e.CellBounds.Height - 12));
+                    e.CellBounds.X +
+                        (e.CellBounds.Width - badgeWidth) / 2,
+                    e.CellBounds.Y +
+                        (e.CellBounds.Height - badgeHeight) / 2,
+                    badgeWidth,
+                    badgeHeight);
 
             using var path =
                 RoundedRect(
@@ -602,11 +686,6 @@ public partial class ProductsUserControl : UserControl
                 brush,
                 path);
 
-            using var font =
-                new Font(
-                    "Segoe UI Semibold",
-                    7.5F);
-
             using var textBrush =
                 new SolidBrush(
                     Color.White);
@@ -614,11 +693,11 @@ public partial class ProductsUserControl : UserControl
             var size =
                 e.Graphics.MeasureString(
                     text,
-                    font);
+                    statusFont);
 
             e.Graphics.DrawString(
                 text,
-                font,
+                statusFont,
                 textBrush,
                 bounds.X +
                     (bounds.Width -
@@ -643,7 +722,7 @@ public partial class ProductsUserControl : UserControl
         bool rowSelected =
             _grid.Rows[e.RowIndex].Selected;
 
-        Color backgroundColor =
+        Color cellBackgroundColor =
             rowSelected
                 ? Color.FromArgb(
                     220,
@@ -653,7 +732,7 @@ public partial class ProductsUserControl : UserControl
 
         using var cellBrush =
             new SolidBrush(
-                backgroundColor);
+                cellBackgroundColor);
 
         e.Graphics.FillRectangle(
             cellBrush,
@@ -702,6 +781,126 @@ public partial class ProductsUserControl : UserControl
         // A pintura personalizada não deve apagar as linhas da grade.
         // Desenhamos somente a borda depois do conteúdo para que ela permaneça fixa.
         e.Paint(e.ClipBounds, DataGridViewPaintParts.Border);
+    }
+
+    // ================================================================
+    // CACHE E CARREGAMENTO DAS IMAGENS
+    // ================================================================
+
+    private async Task PreloadImagesAsync(IEnumerable<ProductDto> products)
+    {
+        var keys = products
+            .Select(x => NormalizeImageKey(x.Image))
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        if (keys.Count == 0)
+            return;
+
+        await Task.WhenAll(keys.Select(GetImageAsync));
+
+        if (!IsDisposed && IsHandleCreated)
+            BeginInvoke(new Action(() =>
+            {
+                if (_grid.Columns["Imagem"] is { } imageColumn)
+                    _grid.InvalidateColumn(imageColumn.Index);
+            }));
+    }
+
+    private Task<Image?> GetImageAsync(string key)
+    {
+        var task = _imageCache.GetOrAdd(
+            key,
+            static imageKey => LoadImageAsync(imageKey));
+
+        // Não deixa uma falha temporária ficar armazenada no cache para sempre.
+        _ = task.ContinueWith(
+            completedTask =>
+            {
+                if (completedTask.Status == TaskStatus.RanToCompletion &&
+                    completedTask.Result is null)
+                {
+                    _imageCache.TryRemove(
+                        new KeyValuePair<string, Task<Image?>>(key, task));
+                }
+            },
+            CancellationToken.None,
+            TaskContinuationOptions.ExecuteSynchronously,
+            TaskScheduler.Default);
+
+        return task;
+    }
+
+    private static async Task<Image?> LoadImageAsync(string key)
+    {
+        try
+        {
+            return await ImageLoader.LoadAsync(key);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static string NormalizeImageKey(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return string.Empty;
+
+        var image = value.Trim();
+
+        if (Uri.TryCreate(image, UriKind.Absolute, out var absolute) &&
+            (absolute.Scheme == Uri.UriSchemeHttp || absolute.Scheme == Uri.UriSchemeHttps))
+            return absolute.ToString();
+
+        if (Path.IsPathRooted(image) && File.Exists(image))
+            return image;
+
+        if (Uri.TryCreate(AppConfig.ImageBaseUrl, UriKind.Absolute, out var baseUri))
+            return new Uri(baseUri, image.TrimStart('/', '\\')).ToString();
+
+        return image;
+    }
+
+    private static Rectangle FitRectangle(Size imageSize, Rectangle bounds)
+    {
+        if (imageSize.Width <= 0 || imageSize.Height <= 0)
+            return bounds;
+
+        var scale = Math.Min(
+            (double)bounds.Width / imageSize.Width,
+            (double)bounds.Height / imageSize.Height);
+
+        var width = Math.Max(1, (int)Math.Round(imageSize.Width * scale));
+        var height = Math.Max(1, (int)Math.Round(imageSize.Height * scale));
+
+        return new Rectangle(
+            bounds.X + (bounds.Width - width) / 2,
+            bounds.Y + (bounds.Height - height) / 2,
+            width,
+            height);
+    }
+
+    private static Image CreateImagePlaceholder()
+    {
+        var bitmap = new Bitmap(64, 64);
+        using var graphics = Graphics.FromImage(bitmap);
+        graphics.Clear(Color.FromArgb(245, 245, 245));
+        graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
+        using var borderPen = new Pen(Color.FromArgb(205, 205, 205), 1.5F);
+        graphics.DrawRectangle(borderPen, new Rectangle(5, 5, 54, 54));
+
+        using var iconPen = new Pen(Color.FromArgb(150, 150, 150), 2.2F);
+        graphics.DrawRectangle(iconPen, 17, 19, 30, 22);
+        graphics.DrawEllipse(iconPen, 35, 23, 6, 6);
+        graphics.DrawLine(iconPen, 19, 38, 27, 31);
+        graphics.DrawLine(iconPen, 27, 31, 34, 37);
+        graphics.DrawLine(iconPen, 34, 37, 40, 32);
+
+        return bitmap;
     }
 
     // ================================================================
