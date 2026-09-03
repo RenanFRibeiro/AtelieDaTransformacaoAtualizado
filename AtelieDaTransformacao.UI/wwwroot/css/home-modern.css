@@ -985,3 +985,56 @@ a.whatsapp-float:focus-visible {
         font-size: 24px !important;
     }
 }
+
+
+/* ============================================================================
+   HEADER REFINADO — minimalista, elegante e ultra-responsivo
+   ============================================================================ */
+.navbar-artisan {
+    height: 72px;
+    min-height: 72px;
+    border-bottom-color: rgba(208,161,92,.20);
+    box-shadow: 0 5px 22px rgba(25,15,10,.10);
+}
+.navbar-inner { min-height: 72px; }
+.artisan-brand { min-width: 0; }
+.brand-name { white-space: nowrap; }
+.artisan-main-nav { gap: .1rem; }
+.nav-link-artisan { letter-spacing: .01em; }
+.header-actions-v3 { gap: .18rem; }
+.header-menu-link-v3 {
+    min-height: 38px;
+    padding: .48rem .68rem;
+    border: 1px solid transparent;
+}
+.header-menu-link-v3 i { font-size: .86rem; }
+.header-menu-link-v3:focus-visible,
+.nav-link-artisan:focus-visible,
+.header-register-link:focus-visible,
+.artisan-brand:focus-visible { outline: 2px solid var(--modern-caramel); outline-offset: 3px; }
+.navbar-fixed-spacer { height: 72px !important; }
+
+@media (max-width: 1199.98px) {
+    .header-menu-link-v3 span { display: none; }
+    .header-menu-link-v3 { width: 38px; justify-content: center; padding: .45rem; }
+    .header-menu-link-v3 i { margin-right: 0; }
+    .header-register-link { padding-inline: .72rem; }
+}
+@media (max-width: 991.98px) {
+    .navbar-artisan, .navbar-inner { min-height: 66px; }
+    .navbar-fixed-spacer { height: 66px !important; }
+    .artisan-brand { padding-block: .55rem; }
+    .header-actions-v3 { justify-content: flex-start; gap: .35rem; padding: 10px 0 12px; }
+    .header-menu-link-v3 span { display: inline; }
+    .header-menu-link-v3 { width: auto; min-height: 40px; }
+    .header-menu-link-v3 i { margin-right: .32rem; }
+    .navbar-collapse { margin-top: 5px; padding: 8px 12px 12px; border-radius: 18px; }
+}
+@media (max-width: 575.98px) {
+    .navbar-inner { width: min(100% - 20px, 1680px); }
+    .brand-name { font-size: .95rem; }
+    .brand-mark { width: 29px; height: 29px; flex: 0 0 auto; }
+    .header-actions-v3 { display: grid !important; grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .header-menu-link-v3, .header-register-link { width: 100%; justify-content: center; }
+    .header-logout-v3 { width: 100%; }
+}

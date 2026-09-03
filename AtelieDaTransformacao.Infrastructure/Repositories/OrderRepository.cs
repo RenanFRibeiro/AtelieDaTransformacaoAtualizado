@@ -48,6 +48,65 @@ public sealed class OrderRepository : IOrderRepository
     }
 
     public async Task<IReadOnlyList<Order>>
+        GetActiveForUserAsync(string userId)
+    {
+        return await _context.Orders
+            .AsNoTracking()
+            .Where(x =>
+                x.UserId == userId &&
+                x.Status != OrderStatus.Enviado &&
+                x.Status != OrderStatus.Entregue &&
+                x.Status != OrderStatus.Cancelado)
+            .OrderByDescending(x => x.CreatedAt)
+            .ToListAsync();
+    }
+
+    public async Task<IReadOnlyList<Order>>
+        GetHistoryForUserAsync(
+            string userId,
+            OrderStatus? status = null,
+            string? keyword = null,
+            DateTime? startDate = null,
+            DateTime? endDate = null)
+    {
+        var query = _context.Orders
+            .AsNoTracking()
+            .Where(x =>
+                x.UserId == userId &&
+                (x.Status == OrderStatus.Enviado ||
+                 x.Status == OrderStatus.Entregue ||
+                 x.Status == OrderStatus.Cancelado));
+
+        if (status.HasValue)
+            query = query.Where(x => x.Status == status.Value);
+
+        if (!string.IsNullOrWhiteSpace(keyword))
+        {
+            var term = keyword.Trim();
+            query = query.Where(x =>
+                x.OrderNumber.Contains(term) ||
+                (x.CustomerName ?? string.Empty).Contains(term) ||
+                (x.UserEmail ?? string.Empty).Contains(term));
+        }
+
+        if (startDate.HasValue)
+        {
+            var start = startDate.Value.Date.ToUniversalTime();
+            query = query.Where(x => x.StatusChangedAt >= start);
+        }
+
+        if (endDate.HasValue)
+        {
+            var end = endDate.Value.Date.AddDays(1).AddTicks(-1).ToUniversalTime();
+            query = query.Where(x => x.StatusChangedAt <= end);
+        }
+
+        return await query
+            .OrderByDescending(x => x.StatusChangedAt)
+            .ToListAsync();
+    }
+
+    public async Task<IReadOnlyList<Order>>
         GetAllAsync()
     {
         return await _context.Orders

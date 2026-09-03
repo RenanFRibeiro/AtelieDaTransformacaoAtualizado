@@ -14,6 +14,16 @@ public interface IOrderRepository
     Task<IReadOnlyList<Order>> GetByUserIdAsync(
         string userId);
 
+    Task<IReadOnlyList<Order>> GetActiveForUserAsync(
+        string userId);
+
+    Task<IReadOnlyList<Order>> GetHistoryForUserAsync(
+        string userId,
+        OrderStatus? status = null,
+        string? keyword = null,
+        DateTime? startDate = null,
+        DateTime? endDate = null);
+
     Task<IReadOnlyList<Order>> GetAllAsync();
 
     Task<IReadOnlyList<Order>> GetActiveAsync();

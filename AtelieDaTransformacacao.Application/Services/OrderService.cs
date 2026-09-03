@@ -22,6 +22,19 @@ public sealed class OrderService : IOrderService
     public async Task<IReadOnlyList<OrderListDto>> GetByUserIdAsync(string userId)
         => (await _repository.GetByUserIdAsync(userId)).Select(ToListDto).ToList();
 
+    public async Task<IReadOnlyList<OrderListDto>> GetActiveForUserAsync(string userId)
+        => (await _repository.GetActiveForUserAsync(userId)).Select(ToListDto).ToList();
+
+    public async Task<IReadOnlyList<OrderListDto>> GetHistoryForUserAsync(
+        string userId,
+        OrderStatus? status = null,
+        string? keyword = null,
+        DateTime? startDate = null,
+        DateTime? endDate = null)
+        => (await _repository.GetHistoryForUserAsync(userId, status, keyword, startDate, endDate))
+            .Select(ToListDto)
+            .ToList();
+
     public async Task<IReadOnlyList<OrderListDto>> GetAllAsync()
         => (await _repository.GetAllAsync()).Select(ToListDto).ToList();
 

@@ -23,7 +23,7 @@
                 @Html.AntiForgeryToken()
                 <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
 
-                <div class="auth-section-title"><span>1</span><div><strong>Dados pessoais</strong><small>Informações da sua conta</small></div></div>
+                <div class="auth-section-title"><span>1</span><div><strong>Dados pessoais</strong><br><small>Informações da sua conta</small></div></div>
                 <div class="row g-3">
                     <div class="col-md-6"><label asp-for="FirstName" class="form-label"></label><input asp-for="FirstName" value="@Model.FirstName" class="form-control form-control-lg" autocomplete="given-name" /><span asp-validation-for="FirstName" class="text-danger small"></span></div>
                     <div class="col-md-6"><label asp-for="LastName" class="form-label"></label><input asp-for="LastName" value="@Model.LastName" class="form-control form-control-lg" autocomplete="family-name" /><span asp-validation-for="LastName" class="text-danger small"></span></div>
@@ -34,7 +34,7 @@
                     </div>
                 </div>
 
-                <div class="auth-section-title mt-4"><span>2</span><div><strong>Endereço</strong><small>Usado para suas compras e entregas</small></div></div>
+                <div class="auth-section-title mt-4"><span>2</span><div><strong>Endereço</strong><br><small>Usado para suas compras e entregas</small></div></div>
                 <div class="row g-3">
                     <div class="col-md-8"><label asp-for="Address" class="form-label"></label><input asp-for="Address" value="@Model.Address" class="form-control form-control-lg" autocomplete="street-address" /><span asp-validation-for="Address" class="text-danger small"></span></div>
                     <div class="col-md-4"><label asp-for="AddressNumber" class="form-label"></label><input asp-for="AddressNumber" value="@Model.AddressNumber" class="form-control form-control-lg" autocomplete="address-line2" /><span asp-validation-for="AddressNumber" class="text-danger small"></span></div>
@@ -55,7 +55,7 @@
 
     <div class="card border-0 shadow-sm rounded-4 mt-4">
         <div class="card-body p-4 p-lg-5">
-            <div class="auth-section-title"><span>3</span><div><strong>Alterar senha</strong><small>Troque sua senha com segurança</small></div></div>
+            <div class="auth-section-title"><span>3</span><div><strong>Alterar senha</strong><br><small>Troque sua senha com segurança</small></div></div>
 
             @if (TempData["PasswordSuccess"] is string passwordSuccess)
             {

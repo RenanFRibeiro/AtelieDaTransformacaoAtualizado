@@ -57,7 +57,32 @@ public sealed class OrderController : Controller
         var userId = CurrentUserId();
 
         var orders =
-            await _orderService.GetByUserIdAsync(userId);
+            await _orderService.GetActiveForUserAsync(userId);
+
+        return View(orders);
+    }
+
+    // =========================================================
+    // HISTÓRICO DOS PEDIDOS FINALIZADOS
+    // GET: /Order/History
+    // =========================================================
+
+    [HttpGet]
+    public async Task<IActionResult> History(
+        OrderStatus? status = null,
+        string? keyword = null,
+        DateTime? startDate = null,
+        DateTime? endDate = null)
+    {
+        var userId = CurrentUserId();
+
+        var orders = await _orderService.GetHistoryForUserAsync(
+            userId, status, keyword, startDate, endDate);
+
+        ViewBag.Status = status;
+        ViewBag.Keyword = keyword;
+        ViewBag.StartDate = startDate?.ToString("yyyy-MM-dd");
+        ViewBag.EndDate = endDate?.ToString("yyyy-MM-dd");
 
         return View(orders);
     }

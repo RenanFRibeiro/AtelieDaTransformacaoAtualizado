@@ -9,6 +9,17 @@ public interface IOrderService
         GetByUserIdAsync(string userId);
 
     Task<IReadOnlyList<OrderListDto>>
+        GetActiveForUserAsync(string userId);
+
+    Task<IReadOnlyList<OrderListDto>>
+        GetHistoryForUserAsync(
+            string userId,
+            OrderStatus? status = null,
+            string? keyword = null,
+            DateTime? startDate = null,
+            DateTime? endDate = null);
+
+    Task<IReadOnlyList<OrderListDto>>
         GetAllAsync();
 
     Task<IReadOnlyList<OrderListDto>>

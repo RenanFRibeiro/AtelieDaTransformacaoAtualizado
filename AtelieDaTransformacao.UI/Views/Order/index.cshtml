@@ -36,6 +36,10 @@
 
         </a>
 
+        <a asp-action="History" class="btn btn-light rounded-pill px-4 order-history-button">
+            <i class="bi bi-clock-history me-1"></i> Histórico
+        </a>
+
     </div>
 
     @if (TempData["SuccessMessage"] is string success)
@@ -412,89 +416,63 @@
 
 @section Scripts
 {
-    <script>
+<script>
+(function () {
+    const terminalStatuses = new Set([5, 6, 7]);
 
-        async function refreshOrder(orderId) {
+    function removeOrderCard(orderId) {
+        const card = document.querySelector(`[data-order-card="${orderId}"]`);
+        if (!card) return;
+        card.style.transition = 'opacity .24s ease, transform .24s ease, max-height .3s ease, margin .3s ease';
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(-6px)';
+        card.style.maxHeight = `${card.offsetHeight}px`;
+        requestAnimationFrame(() => {
+            card.style.maxHeight = '0';
+            card.style.marginBottom = '0';
+        });
+        setTimeout(() => {
+            card.remove();
+            if (!document.querySelector('[data-order-card]')) window.location.reload();
+        }, 330);
+    }
 
-            try {
+    function applyOrderStatus(data) {
+        const status = Number(data.status);
+        if (terminalStatuses.has(status)) {
+            removeOrderCard(data.orderId);
+            return;
+        }
+        const badge = document.querySelector(`[data-order-status="${data.orderId}"]`);
+        if (!badge) return;
+        badge.className = 'badge rounded-pill px-3 py-2 bg-dark order-status';
+        badge.textContent = data.statusName || '';
+    }
 
-                const response =
-                    await fetch(
-                        `/Order/Status/${orderId}`,
-                        {
-                            cache: "no-store"
-                        });
+    async function refreshOrder(orderId) {
+        try {
+            const response = await fetch(`/Order/Status/${orderId}`, { cache: 'no-store' });
+            if (!response.ok) return;
+            applyOrderStatus(await response.json());
+        } catch (_) { }
+    }
 
-                if (!response.ok)
-                    return;
+    document.addEventListener('DOMContentLoaded', async () => {
+        document.querySelectorAll('[data-order-card]').forEach(card => refreshOrder(card.dataset.orderCard));
 
-                const data =
-                    await response.json();
-
-                const badge =
-                    document.querySelector(
-                        `[data-order-status="${orderId}"]`);
-
-                if (!badge)
-                    return;
-
-                if (Number(data.status) === 7) {
-
-                    badge.className =
-                        "badge rounded-pill px-3 py-2 bg-danger";
-
-                    badge.innerHTML =
-                        '<i class="bi bi-x-circle me-1"></i> Cancelado';
-
-                }
-                else {
-
-                    badge.className =
-                        "badge rounded-pill px-3 py-2 bg-dark";
-
-                    badge.textContent =
-                        data.statusName;
-
-                }
-
-            }
-            catch (error) {
-
-                console.error(
-                    "Erro ao atualizar o pedido:",
-                    error);
-
-            }
-
+        if (typeof signalR !== 'undefined') {
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl('/hubs/orders')
+                .withAutomaticReconnect()
+                .build();
+            connection.on('StatusUpdated', applyOrderStatus);
+            connection.start().catch(() => {});
         }
 
-        document.addEventListener(
-            "DOMContentLoaded",
-            () => {
-
-                document
-                    .querySelectorAll(
-                        "[data-order-card]")
-                    .forEach(
-                        card =>
-                            refreshOrder(
-                                card.dataset.orderCard));
-
-                setInterval(
-                    () => {
-
-                        document
-                            .querySelectorAll(
-                                "[data-order-card]")
-                            .forEach(
-                                card =>
-                                    refreshOrder(
-                                        card.dataset.orderCard));
-
-                    },
-                    10000);
-
-            });
-
-    </script>
+        setInterval(() => {
+            document.querySelectorAll('[data-order-card]').forEach(card => refreshOrder(card.dataset.orderCard));
+        }, 10000);
+    });
+})();
+</script>
 }
