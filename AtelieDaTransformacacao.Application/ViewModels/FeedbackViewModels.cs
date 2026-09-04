@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 
 namespace AtelieDaTransformacao.Application.ViewModels;
@@ -23,14 +23,10 @@ public sealed class FeedbackFormViewModel
     [Display(Name = "Nota")]
     public int Nota { get; set; }
 
-    [Required(
-        ErrorMessage =
-            "Escreva um comentário sobre o produto.")]
     [StringLength(
         2000,
-        MinimumLength = 10,
         ErrorMessage =
-            "O comentário deve ter entre 10 e 2000 caracteres.")]
+            "O comentário pode ter no máximo 2000 caracteres.")]
     [Display(Name = "Comentário")]
     public string Comentario { get; set; } = string.Empty;
 

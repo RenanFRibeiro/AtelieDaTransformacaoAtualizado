@@ -366,6 +366,18 @@
 
 </div>
 
+@if (Model.Status == OrderStatus.Entregue)
+{
+    <div class="mt-4">
+        @await Component.InvokeAsync(
+            "Feedbacks",
+            new
+            {
+                orderId = Model.Id
+            })
+    </div>
+}
+
 
 <!-- ESTILOS DA TIMELINE -->
 

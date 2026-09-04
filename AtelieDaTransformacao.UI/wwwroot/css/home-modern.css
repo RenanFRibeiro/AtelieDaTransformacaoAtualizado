@@ -1304,6 +1304,27 @@ h1, h2, h3, h4, h5, h6,
 .nav-link-artisan::after { bottom: 3px; height: 1px; }
 
 .header-actions-v3 { gap: .2rem; }
+.header-user-email-v3 {
+    display: inline-flex;
+    align-items: center;
+    gap: .38rem;
+    max-width: 230px;
+    min-width: 0;
+    padding: .45rem .65rem;
+    color: rgba(255,248,239,.78);
+    font-size: .72rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+.header-user-email-v3 i {
+    color: var(--modern-caramel);
+    font-size: .82rem;
+    flex: 0 0 auto;
+}
+.header-user-email-v3 span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .header-menu-link-v3 {
     position: relative;
     min-width: 38px;
@@ -1393,6 +1414,13 @@ h1, h2, h3, h4, h5, h6,
         padding: 6px 0 2px;
         border-top: 1px solid rgba(255,255,255,.06);
         margin-top: 5px;
+    }
+    .header-user-email-v3 {
+        flex: 1 1 100%;
+        max-width: 100%;
+        justify-content: center;
+        padding: .45rem .72rem;
+        border-bottom: 1px solid rgba(255,255,255,.06);
     }
     .header-menu-link-v3, .header-register-link {
         flex: 1 1 calc(50% - 4px);

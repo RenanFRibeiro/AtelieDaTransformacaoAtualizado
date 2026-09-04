@@ -45,10 +45,22 @@
                     <div class="d-flex align-items-center header-actions-v3">
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
+                            var currentUserEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value
+                                ?? User.Identity.Name
+                                ?? string.Empty;
+
+                            if (!string.IsNullOrWhiteSpace(currentUserEmail))
+                            {
+                                <div class="header-user-email-v3" title="E-mail de login">
+                                    <i class="bi bi-person-check" aria-hidden="true"></i>
+                                    <span>@currentUserEmail</span>
+                                </div>
+                            }
+
                             if (!User.IsInRole("Admin"))
                             {
                                 <a class="header-menu-link-v3 header-quote-link" aria-label="Solicitar orçamento" asp-controller="Quote" asp-action="Index" title="Solicitar orçamento">
-                                    <i class="bi bi-pencil-square" aria-hidden="true"></i><span>Orçamento</span>
+                                    <i class="bi bi-pencil-square" aria-hidden="true"></i><span>ㅤOrçamento</span>
                                 </a>
                             }
 
