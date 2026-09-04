@@ -78,6 +78,12 @@
                         <div class="order-history-total"><span class="order-label">Total</span><strong>R$ @order.Total.ToString("N2")</strong></div>
                         <div class="order-history-action"><a asp-action="Details" asp-route-id="@order.Id" class="btn btn-outline-dark rounded-pill px-3"><i class="bi bi-eye me-1"></i> Detalhes</a></div>
                     </div>
+                    @if (order.Status == OrderStatus.Entregue)
+                    {
+                        <div class="mt-3">
+                            @await Component.InvokeAsync("Feedbacks", new { orderId = order.Id })
+                        </div>
+                    }
                 </div>
             </article>
         }

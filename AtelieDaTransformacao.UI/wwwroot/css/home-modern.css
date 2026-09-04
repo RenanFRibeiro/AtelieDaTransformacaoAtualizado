@@ -1616,3 +1616,56 @@ h1, h2, h3, h4, h5, h6,
 @media (prefers-reduced-motion: reduce) {
     .project-card, .project-media img, .project-view { transition: none !important; }
 }
+
+
+/* Ajustes responsivos solicitados — sem alterar a estrutura das demais telas. */
+@media (max-width: 991.98px) {
+    .header-actions-v3 {
+        align-items: stretch;
+    }
+
+    .header-user-email-v3 {
+        width: 100%;
+        max-width: none;
+        justify-content: center;
+        padding-inline: .35rem;
+        overflow: hidden;
+    }
+
+    .header-user-email-v3 span {
+        max-width: min(78vw, 360px);
+    }
+
+    .header-menu-link-v3,
+    .header-register-link {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .navbar-inner {
+        width: min(100% - 20px, 1680px);
+    }
+
+    .navbar-collapse {
+        margin-inline: -2px;
+    }
+
+    .header-actions-v3 {
+        gap: .35rem;
+    }
+
+    .header-actions-v3 .header-menu-link-v3,
+    .header-actions-v3 .header-register-link,
+    .header-actions-v3 form {
+        flex: 1 1 auto;
+    }
+
+    .header-actions-v3 .header-logout-v3 {
+        width: 100%;
+    }
+
+    .header-user-email-v3 span {
+        max-width: calc(100vw - 90px);
+    }
+}

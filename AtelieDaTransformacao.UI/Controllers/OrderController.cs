@@ -170,6 +170,7 @@ public sealed class OrderController : Controller
             ?? User.Identity?.Name
             ?? string.Empty;
 
+        model.Complement = string.Empty;
         NormalizePickupAddress(model);
 
         var cart = await GetCheckoutCartAsync(model.DirectProductId, model.DirectQuantity);
@@ -447,7 +448,7 @@ public sealed class OrderController : Controller
                             PostalCode = checkout.PostalCode,
                             ShippingAddress = checkout.ShippingAddress,
                             AddressNumber = checkout.AddressNumber,
-                            Complement = checkout.Complement,
+                            Complement = string.Empty,
                             District = checkout.District,
                             City = checkout.City,
                             State = checkout.State,
@@ -587,7 +588,6 @@ public sealed class OrderController : Controller
         {
             checkout.ShippingAddress,
             checkout.AddressNumber,
-            checkout.Complement,
             checkout.District,
             checkout.City,
             checkout.State,

@@ -92,9 +92,7 @@ public sealed class RegisterDto
     [Display(Name = "Confirmar senha")]
     public string ConfirmPassword { get; set; } = string.Empty;
 
-    [Range(typeof(bool), "true", "true",
-        ErrorMessage = "Você precisa aceitar os Termos de Uso e a Política de Privacidade.")]
-    [Display(Name = "Aceito os termos")]
+    [Display(Name = "Eu li e aceito os termos de uso")]
     public bool AcceptTerms { get; set; }
 }
 

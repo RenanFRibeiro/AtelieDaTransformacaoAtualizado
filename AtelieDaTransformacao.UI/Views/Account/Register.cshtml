@@ -92,13 +92,7 @@
                                         <label asp-for="AddressNumber" class="form-label"></label>
                                         <input asp-for="AddressNumber" class="form-control form-control-lg" autocomplete="address-line2" placeholder="Nº" />
                                         <span asp-validation-for="AddressNumber" class="text-danger small"></span>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label asp-for="Complement" class="form-label"></label>
-                                        <input asp-for="Complement" class="form-control form-control-lg" autocomplete="address-line2" placeholder="Apto, bloco, referência..." />
-                                        <span asp-validation-for="Complement" class="text-danger small"></span>
-                                    </div>
-                                    <div class="col-md-6">
+                                    </div><div class="col-md-6">
                                         <label asp-for="District" class="form-label"></label>
                                         <input asp-for="District" class="form-control form-control-lg" autocomplete="address-level3" placeholder="Bairro" />
                                         <span asp-validation-for="District" class="text-danger small"></span>
@@ -150,7 +144,7 @@
                                 <div class="form-check auth-terms mt-4">
                                     <input asp-for="AcceptTerms" class="form-check-input" />
                                     <label asp-for="AcceptTerms" class="form-check-label">
-                                        Li e aceito os <a asp-controller="Home" asp-action="Terms" target="_blank" rel="noopener">Termos de Uso</a> e a <a asp-controller="Home" asp-action="Privacy" target="_blank" rel="noopener">Política de Privacidade</a>.
+                                        Eu li e aceito os <a asp-controller="Home" asp-action="Terms" target="_blank" rel="noopener">Termos de Uso</a> e a <a asp-controller="Home" asp-action="Privacy" target="_blank" rel="noopener">Política de Privacidade</a>.
                                     </label>
                                     <span asp-validation-for="AcceptTerms" class="text-danger small d-block"></span>
                                 </div>
