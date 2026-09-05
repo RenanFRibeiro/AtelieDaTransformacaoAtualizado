@@ -17,7 +17,7 @@ builder.Services.AddDbContext<AtelieDaTransformacaoDbContext>(options =>
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
-    options.Password.RequiredLength = 6;
+    options.Password.RequiredLength = 8;
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
     options.Password.RequireUppercase = true;
@@ -72,8 +72,15 @@ app.UseExceptionHandler(errorApp =>
         context.Response.ContentType = "application/json";
         var feature = context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>();
         var ex = feature?.Error;
+        var logger = context.RequestServices.GetRequiredService<ILoggerFactory>().CreateLogger("GlobalExceptionHandler");
+        logger.LogError(ex, "Erro não tratado na API.");
         context.Response.StatusCode = ex is ArgumentException or InvalidOperationException ? 400 : 500;
-        await context.Response.WriteAsJsonAsync(new { message = ex?.Message ?? "Erro interno do servidor." });
+        await context.Response.WriteAsJsonAsync(new
+        {
+            message = context.Response.StatusCode == 400
+                ? "A requisição não pôde ser processada."
+                : "Ocorreu um erro interno. Tente novamente."
+        });
     });
 });
 

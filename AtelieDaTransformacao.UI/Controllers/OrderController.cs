@@ -1,40 +1,42 @@
 using System.Data;
 using System.Security.Claims;
 using System.Text.Json;
-
+using System.Text.RegularExpressions;
+using AtelieDaTransformacao.Application.DTOs;
 using AtelieDaTransformacao.Application.Interfaces;
 using AtelieDaTransformacao.Application.ViewModels;
 using AtelieDaTransformacao.Domain.Entities;
 using AtelieDaTransformacao.Domain.Enums;
 using AtelieDaTransformacao.Domain.Interfaces;
 using AtelieDaTransformacao.Infrastructure.Context;
-
+using AtelieDaTransformacao.UI.Hubs;
 using AtelieDaTransformacao.UI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.SignalR;
-using AtelieDaTransformacao.UI.Hubs;
+using Microsoft.EntityFrameworkCore;
 
 namespace AtelieDaTransformacao.UI.Controllers;
-
-using System.Security.Claims;
-using AtelieDaTransformacao.Application.Interfaces;
-using AtelieDaTransformacao.Domain.Enums;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 [Authorize]
 public sealed class OrderController : Controller
 {
-    private const string CartSessionKey =
-        "AtelieDaTransformacao.Cart";
+    private const string CartSessionKey = "AtelieDaTransformacao.Cart";
+    private static readonly HashSet<string> AllowedPaymentMethods = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "Pix",
+        "Cartão de crédito",
+        "Cartão de débito",
+        "Transferência bancária",
+        "A combinar"
+    };
 
     private readonly AtelieDaTransformacaoDbContext _context;
     private readonly IOrderRepository _orderRepository;
     private readonly IOrderService _orderService;
     private readonly IHubContext<OrderStatusHub> _hub;
     private readonly IEmailService _emailService;
+    private readonly IFreteService _freteService;
     private readonly ILogger<OrderController> _logger;
 
     public OrderController(
@@ -43,6 +45,7 @@ public sealed class OrderController : Controller
     IOrderRepository orderRepository,
     IHubContext<OrderStatusHub> hub,
     IEmailService emailService,
+    IFreteService freteService,
     ILogger<OrderController> logger)
     {
         _context = context;
@@ -50,6 +53,7 @@ public sealed class OrderController : Controller
         _orderRepository = orderRepository;
         _hub = hub;
         _emailService = emailService;
+        _freteService = freteService;
         _logger = logger;
     }
 
@@ -121,6 +125,44 @@ public sealed class OrderController : Controller
     // =========================================================
 
     [HttpGet]
+    public async Task<IActionResult> Notifications(DateTime? since = null)
+    {
+        var userId = CurrentUserId();
+        var minimum = DateTime.UtcNow.AddMinutes(-2);
+        var sinceUtc = since?.ToUniversalTime() ?? minimum;
+
+        if (sinceUtc < DateTime.UtcNow.AddHours(-24))
+            sinceUtc = DateTime.UtcNow.AddHours(-24);
+
+        var orders = await _context.Orders
+            .AsNoTracking()
+            .Where(x =>
+                x.UserId == userId &&
+                x.StatusChangedAt > sinceUtc)
+            .OrderBy(x => x.StatusChangedAt)
+            .Take(50)
+            .Select(x => new
+            {
+                orderId = x.Id,
+                orderNumber = x.OrderNumber,
+                status = (int)x.Status,
+                autoAdvance = x.AutoAdvance,
+                updatedAt = x.StatusChangedAt
+            })
+            .ToListAsync();
+
+        return Json(orders.Select(x => new
+        {
+            x.orderId,
+            x.orderNumber,
+            x.status,
+            statusName = ((OrderStatus)x.status).ToDisplayName(),
+            x.autoAdvance,
+            x.updatedAt
+        }));
+    }
+
+    [HttpGet]
     public async Task<IActionResult> Status(int id)
     {
         var userId = CurrentUserId();
@@ -173,12 +215,15 @@ public sealed class OrderController : Controller
     public async Task<IActionResult> Checkout(CheckoutViewModel model)
     {
         // O e-mail exibido no checkout corresponde sempre à conta autenticada.
+        ModelState.Remove(nameof(model.CustomerEmail));
+        ModelState.Remove(nameof(model.ShippingCost));
+        ModelState.Remove(nameof(model.ShippingEstimateDays));
+
         model.CustomerEmail = User.FindFirstValue(ClaimTypes.Email)
             ?? User.Identity?.Name
             ?? string.Empty;
 
-        model.Complement = string.Empty;
-        NormalizePickupAddress(model);
+        NormalizeCheckoutModel(model);
 
         var cart = await GetCheckoutCartAsync(model.DirectProductId, model.DirectQuantity);
         if (cart.Count == 0)
@@ -188,6 +233,8 @@ public sealed class OrderController : Controller
         }
 
         model.Items = ToCheckoutItems(cart);
+
+        await ValidateAndCalculateCheckoutAsync(model);
 
         if (!ModelState.IsValid)
             return View(model);
@@ -295,36 +342,26 @@ public sealed class OrderController : Controller
         TempData["SuccessMessage"] =
             $"Pedido {order.OrderNumber} cancelado com sucesso.";
 
-        var cancelledOrder = await _orderService.GetByIdAsync(id);
-        if (cancelledOrder != null)
+        var cancelledOrderEntity = await _orderRepository.GetByIdAsync(id);
+        if (cancelledOrderEntity != null)
         {
             try
             {
-                // O OrderService retorna OrderDetailsDto; o serviço de e-mail
-                // recebe a entidade Order. Buscamos a entidade pelo repositório.
-                var cancelledOrderEntity = await _orderRepository.GetByIdAsync(id);
-
-                if (cancelledOrderEntity != null)
-                    await _emailService.SendOrderStatusAsync(cancelledOrderEntity);
+                await _emailService.SendOrderStatusAsync(cancelledOrderEntity);
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, "Não foi possível enviar a atualização por e-mail do pedido {OrderNumber}.", cancelledOrder.OrderNumber);
+                _logger.LogWarning(ex, "Não foi possível enviar a atualização por e-mail do pedido {OrderNumber}.", cancelledOrderEntity.OrderNumber);
             }
 
-            await _hub.Clients
-                .Group(OrderStatusHub.AdminGroupName)
-                .SendAsync(
-                    "AdminOrderStatusUpdated",
-                    new
-                    {
-                        orderId = cancelledOrder.Id,
-                        orderNumber = cancelledOrder.OrderNumber,
-                        status = (int)cancelledOrder.Status,
-                        statusName = cancelledOrder.StatusName,
-                        isHistory = true,
-                        updatedAt = cancelledOrder.UpdatedAt.ToString("O")
-                    });
+            try
+            {
+                await BroadcastAdminStatusAsync(cancelledOrderEntity);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Não foi possível enviar a notificação administrativa do pedido {OrderNumber}.", cancelledOrderEntity.OrderNumber);
+            }
         }
 
         return RedirectToAction(
@@ -483,9 +520,11 @@ public sealed class OrderController : Controller
                             City = checkout.City,
                             State = checkout.State,
                             DeliveryMethod = checkout.DeliveryMethod,
+                            SelectedFreight = checkout.SelectedFreight ?? string.Empty,
+                            ShippingEstimateDays = checkout.ShippingEstimateDays,
                             PaymentMethod = checkout.PaymentMethod,
                             ShippingCost = checkout.ShippingCost,
-                            Notes = checkout.Notes
+                            Notes = checkout.Notes ?? string.Empty
                         }),
 
                     ItemsJson =
@@ -524,8 +563,9 @@ public sealed class OrderController : Controller
         {
             await transaction.RollbackAsync();
 
+            _logger.LogError(ex, "Erro ao criar pedido para o usuário {UserId}.", userId);
             TempData["ErrorMessage"] =
-                $"Não foi possível criar o pedido: {ex.Message}";
+                "Não foi possível finalizar o pedido agora. Seus dados não foram perdidos; revise as informações e tente novamente.";
 
             return null;
         }
@@ -533,25 +573,59 @@ public sealed class OrderController : Controller
 
     private async Task<List<CartItemViewModel>> GetCheckoutCartAsync(int? directProductId, int quantity)
     {
-        if (!directProductId.HasValue)
-            return GetCart();
-
-        quantity = Math.Max(1, quantity);
-        var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == directProductId.Value);
-        if (product is null || !product.IsAvailable || product.StockQuantity < quantity)
-            return new List<CartItemViewModel>();
-
-        return new List<CartItemViewModel>
+        if (directProductId.HasValue)
         {
-            new()
+            quantity = Math.Max(1, quantity);
+
+            var product = await _context.Products
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == directProductId.Value);
+
+            if (product is null || !product.IsAvailable || product.StockQuantity < quantity)
+                return new();
+
+            return new List<CartItemViewModel>
+            {
+                new()
+                {
+                    ProductId = product.Id,
+                    Title = product.Title,
+                    Image = product.Image,
+                    Price = product.Price,
+                    Quantity = quantity
+                }
+            };
+        }
+
+        var sessionCart = GetCart();
+        if (sessionCart.Count == 0)
+            return new();
+
+        var ids = sessionCart.Select(x => x.ProductId).Distinct().ToList();
+        var products = await _context.Products
+            .AsNoTracking()
+            .Where(x => ids.Contains(x.Id))
+            .ToDictionaryAsync(x => x.Id);
+
+        var refreshed = new List<CartItemViewModel>();
+        foreach (var item in sessionCart)
+        {
+            if (!products.TryGetValue(item.ProductId, out var product) || !product.IsAvailable)
+                continue;
+
+            var safeQuantity = Math.Clamp(item.Quantity, 1, product.StockQuantity);
+            refreshed.Add(new CartItemViewModel
             {
                 ProductId = product.Id,
                 Title = product.Title,
                 Image = product.Image,
                 Price = product.Price,
-                Quantity = quantity
-            }
-        };
+                Quantity = safeQuantity
+            });
+        }
+
+        SaveCart(refreshed);
+        return refreshed;
     }
 
     private CheckoutViewModel BuildCheckoutViewModel(
@@ -592,21 +666,95 @@ public sealed class OrderController : Controller
             Quantity = x.Quantity
         }).ToList();
 
-    private void NormalizePickupAddress(CheckoutViewModel model)
+    private void NormalizeCheckoutModel(CheckoutViewModel model)
     {
-        if (!string.Equals(model.DeliveryMethod, "Retirada no ateliê", StringComparison.OrdinalIgnoreCase))
+        model.CustomerName = model.CustomerName.Trim();
+        model.CustomerPhone = model.CustomerPhone.Trim();
+        model.PostalCode = model.PostalCode.Trim();
+        model.ShippingAddress = model.ShippingAddress.Trim();
+        model.AddressNumber = model.AddressNumber.Trim();
+        model.Complement = model.Complement.Trim();
+        model.District = model.District.Trim();
+        model.City = model.City.Trim();
+        model.State = model.State.Trim().ToUpperInvariant();
+        model.DeliveryMethod = model.DeliveryMethod.Trim();
+        model.SelectedFreight = model.SelectedFreight?.Trim();
+        model.PaymentMethod = model.PaymentMethod.Trim();
+        model.Notes = model.Notes?.Trim();
+
+        if (!AllowedPaymentMethods.Contains(model.PaymentMethod))
+            ModelState.AddModelError(nameof(model.PaymentMethod), "Selecione uma forma de pagamento válida.");
+
+        if (string.Equals(model.DeliveryMethod, "Retirada no ateliê", StringComparison.OrdinalIgnoreCase))
+        {
+            foreach (var field in new[] { "PostalCode", "ShippingAddress", "AddressNumber", "District", "City", "State", "SelectedFreight" })
+                ModelState.Remove(field);
+
+            model.PostalCode = string.Empty;
+            model.ShippingAddress = "Retirada no ateliê";
+            model.AddressNumber = string.Empty;
+            model.District = string.Empty;
+            model.City = string.Empty;
+            model.State = string.Empty;
+            model.SelectedFreight = string.Empty;
+            model.ShippingCost = 0m;
+            model.ShippingEstimateDays = 0;
             return;
+        }
 
-        var fields = new[] { "PostalCode", "ShippingAddress", "AddressNumber", "District", "City", "State" };
-        foreach (var field in fields)
-            ModelState.Remove(field);
+        if (!string.Equals(model.DeliveryMethod, "Entrega", StringComparison.OrdinalIgnoreCase))
+            ModelState.AddModelError(nameof(model.DeliveryMethod), "Selecione uma modalidade de recebimento válida.");
 
-        model.PostalCode = string.Empty;
-        model.ShippingAddress = "Retirada no ateliê";
-        model.AddressNumber = string.Empty;
-        model.District = string.Empty;
-        model.City = string.Empty;
-        model.State = string.Empty;
+    }
+
+    private async Task ValidateAndCalculateCheckoutAsync(CheckoutViewModel model)
+    {
+        if (!string.Equals(model.DeliveryMethod, "Entrega", StringComparison.OrdinalIgnoreCase))
+        {
+            model.ShippingCost = 0m;
+            model.ShippingEstimateDays = 0;
+            return;
+        }
+
+        if (!Regex.IsMatch(model.PostalCode, @"^\d{5}-?\d{3}$"))
+        {
+            ModelState.AddModelError(nameof(model.PostalCode), "Informe um CEP válido para calcular o frete.");
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(model.SelectedFreight))
+        {
+            ModelState.AddModelError(nameof(model.SelectedFreight), "Selecione uma opção de frete.");
+            return;
+        }
+
+        // O valor recebido do navegador nunca é considerado fonte de verdade.
+        // O servidor recalcula as opções com os dados atuais do pedido.
+        var options = await _freteService.CalcularFreteAsync(new FreteRequestDto
+        {
+            CepDestino = model.PostalCode,
+            CepOrigem = "01000000",
+            PesoKg = 1.5m,
+            AlturaCm = 25m,
+            LarguraCm = 25m,
+            ComprimentoCm = 20m
+        });
+
+        var selected = options.FirstOrDefault(x =>
+            x.Disponivel &&
+            string.Equals(x.Nome, model.SelectedFreight, StringComparison.OrdinalIgnoreCase));
+
+        if (selected is null)
+        {
+            ModelState.AddModelError(nameof(model.SelectedFreight), "A opção de frete selecionada não está disponível. Calcule o frete novamente.");
+            model.ShippingCost = 0m;
+            model.ShippingEstimateDays = 0;
+            return;
+        }
+
+        model.SelectedFreight = selected.Nome;
+        model.ShippingCost = selected.Valor;
+        model.ShippingEstimateDays = selected.PrazoEstimadoDias;
     }
 
     private static string FormatShippingAddress(CheckoutViewModel checkout)
@@ -625,6 +773,25 @@ public sealed class OrderController : Controller
         }.Where(x => !string.IsNullOrWhiteSpace(x));
 
         return string.Join(", ", parts);
+    }
+
+    private Task BroadcastAdminStatusAsync(Order order)
+    {
+        return _hub.Clients
+            .Group(OrderStatusHub.AdminGroupName)
+            .SendAsync(
+                "AdminOrderStatusUpdated",
+                new
+                {
+                    orderId = order.Id,
+                    orderNumber = order.OrderNumber,
+                    status = (int)order.Status,
+                    statusName = order.Status.ToDisplayName(),
+                    isHistory = order.Status is OrderStatus.Enviado
+                        or OrderStatus.Entregue
+                        or OrderStatus.Cancelado,
+                    updatedAt = order.UpdatedAt.ToString("O")
+                });
     }
 
     // =========================================================
@@ -652,8 +819,8 @@ public sealed class OrderController : Controller
 
     private static string GenerateOrderNumber()
     {
-        return
-            $"AT-{DateTime.Now:yyyyMMddHHmmss}-{Random.Shared.Next(10000, 99999)}";
+        var suffix = Guid.NewGuid().ToString("N")[..10].ToUpperInvariant();
+        return $"AT-{DateTime.UtcNow:yyyyMMddHHmmss}-{suffix}";
     }
 
     // =========================================================
@@ -679,6 +846,16 @@ public sealed class OrderController : Controller
         {
             return new();
         }
+    }
+
+    // =========================================================
+    // SALVAR CARRINHO NA SESSION
+    // =========================================================
+
+    private void SaveCart(List<CartItemViewModel> cart)
+    {
+        var json = JsonSerializer.Serialize(cart);
+        HttpContext.Session.SetString(CartSessionKey, json);
     }
 
     // =========================================================

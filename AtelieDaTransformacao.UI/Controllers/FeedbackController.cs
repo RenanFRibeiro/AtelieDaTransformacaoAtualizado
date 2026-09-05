@@ -64,7 +64,7 @@ public sealed class FeedbackController : Controller
                 "em um pedido entregue.";
 
             return RedirectToAction(
-                "Index",
+                "History",
                 "Order");
         }
 
@@ -81,7 +81,7 @@ public sealed class FeedbackController : Controller
                 "Este produto já foi avaliado neste pedido.";
 
             return RedirectToAction(
-                "Index",
+                "History",
                 "Order");
         }
 
@@ -125,7 +125,7 @@ public sealed class FeedbackController : Controller
                 "não pertence a um pedido entregue da sua conta.";
 
             return RedirectToAction(
-                "Index",
+                "History",
                 "Order");
         }
 
@@ -151,7 +151,7 @@ public sealed class FeedbackController : Controller
                 "Este produto já foi avaliado neste pedido.";
 
             return RedirectToAction(
-                "Index",
+                "History",
                 "Order");
         }
 
@@ -211,7 +211,7 @@ public sealed class FeedbackController : Controller
                 "Obrigado! Sua avaliação foi enviada para análise. Ela ficará visível no site após a aprovação da nossa equipe.";
 
             return RedirectToAction(
-                "Index",
+                "History",
                 "Order");
         }
         catch (InvalidOperationException ex)

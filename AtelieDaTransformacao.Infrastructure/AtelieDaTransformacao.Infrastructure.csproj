@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -26,10 +26,5 @@
     <ProjectReference Include="..\AtelieDaTransformacacao.Application\AtelieDaTransformacao.Application.csproj" />
     <ProjectReference Include="..\AtelieDaTransformacao.Domain\AtelieDaTransformacao.Domain.csproj" />
   </ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\AtelieDaTransformacacao.Application\AtelieDaTransformacao.Application.csproj" />
-		<ProjectReference Include="..\AtelieDaTransformacao.Domain\AtelieDaTransformacao.Domain.csproj" />
-	</ItemGroup>
 
 </Project>

@@ -175,6 +175,7 @@ public sealed class OrderRepository : IOrderRepository
         GetForAutomationAsync()
     {
         return await _context.Orders
+            .AsNoTracking()
             .Where(
                 x =>
                     x.AutoAdvance &&
@@ -223,6 +224,32 @@ public sealed class OrderRepository : IOrderRepository
         await _context.SaveChangesAsync();
 
         return true;
+    }
+
+
+    public async Task<bool> TryAdvanceAutomaticAsync(
+        int id,
+        OrderStatus expectedStatus,
+        OrderStatus nextStatus)
+    {
+        if (!Enum.IsDefined(expectedStatus) || !Enum.IsDefined(nextStatus))
+            return false;
+
+        var now = DateTime.UtcNow;
+
+        var affected = await _context.Orders
+            .Where(x =>
+                x.Id == id &&
+                x.AutoAdvance &&
+                x.Status == expectedStatus &&
+                x.Status != OrderStatus.Cancelado &&
+                x.Status != OrderStatus.Entregue)
+            .ExecuteUpdateAsync(setters => setters
+                .SetProperty(x => x.Status, nextStatus)
+                .SetProperty(x => x.UpdatedAt, now)
+                .SetProperty(x => x.StatusChangedAt, now));
+
+        return affected == 1;
     }
 
     public async Task<bool> SetAutoAdvanceAsync(

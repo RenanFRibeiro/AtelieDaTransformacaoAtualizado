@@ -96,13 +96,31 @@ public sealed class OrderService : IOrderService
             UpdatedAt = order.UpdatedAt,
             StatusChangedAt = order.StatusChangedAt,
             Items = DeserializeItems(order.ItemsJson),
-            CustomerName = checkout.CustomerName,
-            CustomerEmail = checkout.CustomerEmail,
-            CustomerPhone = checkout.CustomerPhone,
-            ShippingAddress = BuildShippingAddress(checkout),
-            PaymentMethod = checkout.PaymentMethod,
-            DeliveryMethod = checkout.DeliveryMethod,
-            Notes = checkout.Notes
+            CustomerName = string.IsNullOrWhiteSpace(checkout.CustomerName)
+                ? order.CustomerName ?? string.Empty
+                : checkout.CustomerName,
+            CustomerEmail = string.IsNullOrWhiteSpace(checkout.CustomerEmail)
+                ? order.CustomerEmail ?? order.UserEmail ?? string.Empty
+                : checkout.CustomerEmail,
+            CustomerPhone = string.IsNullOrWhiteSpace(checkout.CustomerPhone)
+                ? order.CustomerPhone
+                : checkout.CustomerPhone,
+            ShippingAddress = string.IsNullOrWhiteSpace(checkout.DeliveryMethod)
+                ? order.ShippingAddress ?? string.Empty
+                : BuildShippingAddress(checkout),
+            PaymentMethod = string.IsNullOrWhiteSpace(checkout.PaymentMethod)
+                ? order.PaymentMethod ?? string.Empty
+                : checkout.PaymentMethod,
+            DeliveryMethod = string.IsNullOrWhiteSpace(checkout.DeliveryMethod)
+                ? (string.Equals(order.ShippingAddress, "Retirada no ateliê", StringComparison.OrdinalIgnoreCase)
+                    ? "Retirada no ateliê"
+                    : (string.IsNullOrWhiteSpace(order.ShippingAddress) ? string.Empty : "Entrega"))
+                : checkout.DeliveryMethod,
+            SelectedFreight = checkout.SelectedFreight ?? string.Empty,
+            ShippingEstimateDays = checkout.ShippingEstimateDays,
+            Notes = string.IsNullOrWhiteSpace(checkout.Notes)
+                ? order.Notes
+                : checkout.Notes ?? string.Empty
         };
     }
 

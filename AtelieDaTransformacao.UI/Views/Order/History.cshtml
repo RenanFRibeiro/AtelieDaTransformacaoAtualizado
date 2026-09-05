@@ -91,18 +91,3 @@
     }
 </div>
 
-@section Scripts {
-<script>
-(() => {
-    if (typeof signalR === 'undefined') return;
-    const connection = new signalR.HubConnectionBuilder().withUrl('/hubs/orders').withAutomaticReconnect().build();
-    connection.on('StatusUpdated', data => {
-        if ([5,6,7].includes(Number(data.status))) {
-            // O histórico pode estar aberto em outra aba; recarrega apenas quando há uma mudança relevante.
-            window.location.reload();
-        }
-    });
-    connection.start().catch(() => {});
-})();
-</script>
-}

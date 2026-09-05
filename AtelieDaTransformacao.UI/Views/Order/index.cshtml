@@ -460,14 +460,9 @@
     document.addEventListener('DOMContentLoaded', async () => {
         document.querySelectorAll('[data-order-card]').forEach(card => refreshOrder(card.dataset.orderCard));
 
-        if (typeof signalR !== 'undefined') {
-            const connection = new signalR.HubConnectionBuilder()
-                .withUrl('/hubs/orders')
-                .withAutomaticReconnect()
-                .build();
-            connection.on('StatusUpdated', applyOrderStatus);
-            connection.start().catch(() => {});
-        }
+        window.addEventListener('order-status-updated', event => {
+            if (event.detail) applyOrderStatus(event.detail);
+        });
 
         setInterval(() => {
             document.querySelectorAll('[data-order-card]').forEach(card => refreshOrder(card.dataset.orderCard));

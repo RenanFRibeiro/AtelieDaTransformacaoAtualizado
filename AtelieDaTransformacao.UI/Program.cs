@@ -44,8 +44,9 @@ public static class Program
                     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
                     options.Lockout.AllowedForNewUsers = true;
 
-                    options.User.RequireUniqueEmail =
-                        true;
+                    options.User.RequireUniqueEmail = true;
+                    options.SignIn.RequireConfirmedEmail = false;
+                    options.Password.RequiredUniqueChars = 1;
                 })
             .AddEntityFrameworkStores<
                 AtelieDaTransformacaoDbContext>()
@@ -63,8 +64,10 @@ public static class Program
                 options.ExpireTimeSpan =
                     TimeSpan.FromHours(8);
 
-                options.SlidingExpiration =
-                    true;
+                options.SlidingExpiration = true;
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SameSite = SameSiteMode.Lax;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
             });
 
         builder.Services.AddScoped<
@@ -118,16 +121,25 @@ public static class Program
                 options.Cookie.HttpOnly =
                     true;
 
-                options.Cookie.IsEssential =
-                    true;
+                options.Cookie.IsEssential = true;
+                options.Cookie.SameSite = SameSiteMode.Lax;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
             });
 
         builder.Services.Configure<EmailOptions>(
             builder.Configuration.GetSection("Email"));
+        builder.Services.Configure<OrderAutomationOptions>(
+            builder.Configuration.GetSection("OrderAutomation"));
 
         builder.Services.AddSingleton<IEmailService, SmtpEmailService>();
 
-        builder.Services.AddControllersWithViews();
+        builder.Services.AddControllersWithViews(options =>
+        {
+            // Os campos não obrigatórios não devem receber [Required] implicitamente
+            // apenas por serem strings não anuláveis. As validações obrigatórias
+            // continuam sendo definidas explicitamente por [Required] e pelo domínio.
+            options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true;
+        });
 
         builder.Services.AddSignalR();
 

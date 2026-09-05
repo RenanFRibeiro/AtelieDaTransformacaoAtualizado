@@ -57,7 +57,7 @@
                             <div>
                                 <span class="small text-muted">02</span>
                                 <h4 class="serif-title fw-bold mb-1">Entrega</h4>
-                                <p class="small text-muted mb-0">O endereço abaixo veio do seu cadastro.</p>
+                                <p class="small text-muted mb-0">Revise o endereço e escolha entre entrega ou retirada.</p>
                             </div>
                             <i class="bi bi-truck fs-2 text-gold"></i>
                         </div>
@@ -102,9 +102,10 @@
                             </div>
                             
                             <!-- Nova área interativa de seleções de frete -->
-                            <div class="col-12 mt-4" id="freightOptionsContainer" style="display: none;">
-                                <label class="form-label fw-semibold">Opções de Frete Disponíveis</label>
+                            <div class="col-12 mt-4" id="freightOptionsContainer" hidden>
+                                <label class="form-label fw-semibold">Estimativa de frete</label>
                                 <div class="row g-2" id="freightOptionsList"></div>
+                                <span asp-validation-for="SelectedFreight" class="text-danger small d-block mt-2"></span>
                             </div>
                         </div>
                     </div>
@@ -208,6 +209,7 @@
 
                     <input type="hidden" asp-for="ShippingCost" id="hiddenShippingCost" />
                     <input type="hidden" asp-for="ShippingEstimateDays" id="hiddenShippingEstimateDays" />
+                    <input type="hidden" id="selectedFreightState" value="@Model.SelectedFreight" aria-hidden="true" />
 
                     <div class="alert alert-light border rounded-4 mt-4 mb-0">
                         <i class="bi bi-shield-check text-gold me-2"></i>
@@ -238,179 +240,231 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        document.getElementById('checkoutForm')?.addEventListener('submit', function () {
-            const button = document.getElementById('confirmCheckoutButton');
-            if (!button) return;
-            button.disabled = true;
-            button.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Criando pedido...';
-        });
+        (() => {
+            "use strict";
 
-        const phoneInput = document.querySelector('input[name="CustomerPhone"]');
+            const form = document.getElementById("checkoutForm");
+            const button = document.getElementById("confirmCheckoutButton");
+            const phoneInput = document.querySelector('input[name="CustomerPhone"]');
+            const delivery = document.getElementById("deliveryMethod");
+            const cepInput = document.getElementById("PostalCode");
+            const freightContainer = document.getElementById("freightOptionsContainer");
+            const freightList = document.getElementById("freightOptionsList");
+            const selectedFreightState = document.getElementById("selectedFreightState");
+            const shippingCost = document.getElementById("hiddenShippingCost");
+            const shippingEstimateDays = document.getElementById("hiddenShippingEstimateDays");
+            const shippingCostDisplay = document.getElementById("shippingCostDisplay");
+            const shippingEstimateDisplay = document.getElementById("shippingEstimateDisplay");
+            const totalDisplay = document.getElementById("totalDisplay");
+            const addressFields = ["PostalCode", "ShippingAddress", "AddressNumber", "District", "City", "State"];
 
-        function formatPhone(value) {
-            const digits = value.replace(/\D/g, '').slice(0, 11);
-            if (digits.length <= 10) {
-                return digits.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3').replace(/-$/, '');
-            }
-            return digits.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3').replace(/-$/, '');
-        }
+            const money = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+            const subtotal = Number.parseFloat(totalDisplay?.dataset.subtotal || "0") || 0;
 
-        phoneInput?.addEventListener('input', function () { this.value = formatPhone(this.value); });
-        if (phoneInput?.value) { phoneInput.value = formatPhone(phoneInput.value); }
-
-        const delivery = document.getElementById('deliveryMethod');
-        const addressFields = ['PostalCode','ShippingAddress','AddressNumber','District','City','State'];
-
-        const cepInput = document.getElementById('PostalCode');
-        const hiddenShippingCost = document.getElementById('hiddenShippingCost');
-        const hiddenShippingEstimateDays = document.getElementById('hiddenShippingEstimateDays');
-        const shippingCostDisplay = document.getElementById('shippingCostDisplay');
-        const shippingEstimateDisplay = document.getElementById('shippingEstimateDisplay');
-        const totalDisplay = document.getElementById('totalDisplay');
-        
-        function updateOrderTotal(shippingCost) {
-            const subtotal = parseFloat(totalDisplay.getAttribute('data-subtotal')) || 0;
-            const total = subtotal + shippingCost;
-            
-            const formatter = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
-            
-            shippingCostDisplay.textContent = shippingCost === 0 ? 'Grátis' : formatter.format(shippingCost);
-            totalDisplay.textContent = formatter.format(total);
-            hiddenShippingCost.value = shippingCost.toFixed(2).replace('.', ',');
-        }
-
-        window.selectFreight = function(radioElement) {
-            const valor = parseFloat(radioElement.value);
-            const days = radioElement.getAttribute('data-days');
-            const name = radioElement.getAttribute('data-name');
-            
-            shippingEstimateDisplay.className = "text-success d-block";
-            shippingEstimateDisplay.textContent = `Via ${name} (${days} dias úteis)`;
-            hiddenShippingEstimateDays.value = days;
-            updateOrderTotal(valor);
-        }
-
-        async function fetchEnderecoAndFrete() {
-            const cep = cepInput.value.replace(/\D/g, '');
-            if (cep.length !== 8) return;
-
-            const isPickup = delivery?.value === 'Retirada no ateliê';
-            if (isPickup) return;
-
-            // 1. Preencher Endereço
-            try {
-                const response = await fetch(`/Cep/BuscarEndereco?cep=${cep}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    if (!data.erro) {
-                        document.getElementById('ShippingAddress').value = data.logradouro;
-                        document.getElementById('District').value = data.bairro;
-                        document.getElementById('City').value = data.cidade;
-                        document.getElementById('State').value = data.estado;
-                        document.getElementById('AddressNumber').focus();
-                    } else {
-                        alert(data.mensagem || "CEP não encontrado. Por favor, preencha manualmente.");
-                    }
-                }
-            } catch (err) {
-                console.error('Erro ao buscar CEP:', err);
+            function formatPhone(value) {
+                const digits = String(value || "").replace(/\D/g, "").slice(0, 11);
+                if (digits.length <= 10) return digits.replace(/(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3").replace(/-$/, "");
+                return digits.replace(/(\d{2})(\d{5})(\d{0,4})/, "($1) $2-$3").replace(/-$/, "");
             }
 
-            // 2. Calcular Frete Dinamicamente
-            try {
-                shippingEstimateDisplay.textContent = "Calculando...";
-                shippingEstimateDisplay.className = "text-warning d-block";
-                document.getElementById('freightOptionsContainer').style.display = 'none';
-                
-                // Variáveis enviadas para cálculo com peso e dimensões inclusas
-                const requestData = {
-                    CepDestino: cep,
-                    CepOrigem: "01000000",
-                    PesoKg: 1.5, // Dinâmico de acordo com os produtos da loja
-                    AlturaCm: 25,
-                    LarguraCm: 25,
-                    ComprimentoCm: 20
-                };
+            phoneInput?.addEventListener("input", () => phoneInput.value = formatPhone(phoneInput.value));
+            if (phoneInput?.value) phoneInput.value = formatPhone(phoneInput.value);
 
-                const responseFrete = await fetch('/Cep/CalcularFrete', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(requestData)
+            function updateTotal(value) {
+                const amount = Math.max(0, Number(value) || 0);
+                if (shippingCostDisplay) shippingCostDisplay.textContent = amount === 0 ? "Grátis" : money.format(amount);
+                if (totalDisplay) totalDisplay.textContent = money.format(subtotal + amount);
+                if (shippingCost) shippingCost.value = amount.toFixed(2);
+            }
+
+            function setStatus(message, kind = "muted") {
+                if (!shippingEstimateDisplay) return;
+                shippingEstimateDisplay.className = `d-block text-${kind}`;
+                shippingEstimateDisplay.textContent = message;
+            }
+
+            function selectFreight(input) {
+                if (!input) return;
+                if (selectedFreightState) selectedFreightState.value = input.value;
+                shippingEstimateDays.value = input.dataset.days || "0";
+                updateTotal(input.dataset.value);
+                setStatus(`Via ${input.dataset.name} · ${input.dataset.days} dias úteis`, "success");
+            }
+
+            function setPickupMode(isPickup) {
+                addressFields.forEach(name => {
+                    const element = document.getElementById(name);
+                    if (!element) return;
+                    element.disabled = isPickup;
+                    element.closest("[class*='col-']")?.classList.toggle("opacity-50", isPickup);
                 });
-                
-                if (responseFrete.ok) {
-                    const opcoes = await responseFrete.json();
-                    
-                    if (opcoes && opcoes.length > 0 && opcoes[0].disponivel !== false) {
-                        shippingEstimateDisplay.className = "text-success d-block";
-                        shippingEstimateDisplay.textContent = "Selecione uma opção de frete";
-                        
-                        const list = document.getElementById('freightOptionsList');
-                        list.innerHTML = '';
-                        
-                        opcoes.forEach((opcao, index) => {
-                            const isChecked = index === 0 ? 'checked' : '';
-                            const formatter = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
-                            
-                            const div = document.createElement('div');
-                            div.className = 'col-md-6';
-                            div.innerHTML = `
-                                <label class="freight-option border rounded-4 p-3 d-flex gap-3 align-items-center h-100">
-                                    <input class="form-check-input mt-0" type="radio" name="SelectedFreight" value="${opcao.valor}" data-days="${opcao.prazoEstimadoDias}" data-name="${opcao.nome}" ${isChecked} onchange="selectFreight(this)">
-                                    <span>
-                                        <strong class="d-block">${opcao.nome} - ${formatter.format(opcao.valor)}</strong>
-                                        <small class="text-muted">${opcao.descricao} (Aprox. ${opcao.prazoEstimadoDias} dias)</small>
-                                    </span>
-                                </label>
-                            `;
-                            list.appendChild(div);
-                        });
-                        
-                        document.getElementById('freightOptionsContainer').style.display = 'block';
-                        selectFreight(list.querySelector('input[type="radio"]')); // Seleciona automaticamente o primeiro (PAC)
-                    } else {
-                        shippingEstimateDisplay.className = "text-danger d-block";
-                        shippingEstimateDisplay.textContent = opcoes[0]?.descricao || "Indisponível para esta região.";
-                        updateOrderTotal(0);
-                    }
-                } else {
-                    shippingEstimateDisplay.className = "text-danger d-block";
-                    shippingEstimateDisplay.textContent = "Erro de conexão (Cód: " + responseFrete.status + ")";
-                    updateOrderTotal(0);
+
+                if (isPickup) {
+                    freightContainer.hidden = true;
+                    freightList.replaceChildren();
+                    if (selectedFreightState) selectedFreightState.value = "";
+                    shippingEstimateDays.value = "0";
+                    updateTotal(0);
+                    setStatus("Retirada gratuita no ateliê", "success");
                 }
-            } catch (err) {
-                console.error('Erro ao calcular frete:', err);
-                shippingEstimateDisplay.className = "text-danger d-block";
-                shippingEstimateDisplay.textContent = "Erro ao calcular o frete.";
-                updateOrderTotal(0);
             }
-        }
 
-        function syncDeliveryFields() {
-            const pickup = delivery?.value === 'Retirada no ateliê';
-            addressFields.forEach(name => {
-                const el = document.getElementById(name);
-                if (!el) return;
-                el.disabled = pickup;
-                el.closest('.col-md-4, .col-md-8, .col-md-2')?.classList.toggle('opacity-50', pickup);
+            async function fetchAddress() {
+                const cep = cepInput?.value.replace(/\D/g, "") || "";
+                if (cep.length !== 8 || delivery?.value !== "Entrega") return;
+
+                try {
+                    const response = await fetch(`/Cep/BuscarEndereco?cep=${encodeURIComponent(cep)}`, { headers: { "Accept": "application/json" } });
+                    if (!response.ok) return;
+                    const data = await response.json();
+                    if (data.erro) {
+                        setStatus(data.mensagem || "CEP não encontrado. Preencha o endereço manualmente.", "warning");
+                        return;
+                    }
+                    document.getElementById("ShippingAddress").value = data.logradouro || "";
+                    document.getElementById("District").value = data.bairro || "";
+                    document.getElementById("City").value = data.cidade || "";
+                    document.getElementById("State").value = data.estado || "";
+                } catch {
+                    setStatus("Não foi possível consultar o CEP agora. Você pode preencher o endereço manualmente.", "warning");
+                }
+            }
+
+            async function calculateFreight() {
+                const cep = cepInput?.value.replace(/\D/g, "") || "";
+                if (delivery?.value !== "Entrega" || cep.length !== 8) return;
+
+                setStatus("Calculando opções de frete…", "warning");
+                freightContainer.hidden = true;
+                freightList.replaceChildren();
+
+                try {
+                    const response = await fetch("/Cep/CalcularFrete", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Accept": "application/json"
+                        },
+                        body: JSON.stringify({
+                            CepDestino: cep,
+                            CepOrigem: "01000000",
+                            PesoKg: 1.5,
+                            AlturaCm: 25,
+                            LarguraCm: 25,
+                            ComprimentoCm: 20
+                        })
+                    });
+
+                    if (!response.ok) throw new Error("freight");
+                    const options = await response.json();
+                    const available = Array.isArray(options) ? options.filter(x => x && x.disponivel !== false) : [];
+
+                    if (!available.length) {
+                        if (selectedFreightState) selectedFreightState.value = "";
+                        shippingEstimateDays.value = "0";
+                        updateTotal(0);
+                        setStatus("Não há opções de frete disponíveis para este CEP.", "danger");
+                        return;
+                    }
+
+                    const current = selectedFreightState?.value || "";
+                    available.forEach((option, index) => {
+                        const wrapper = document.createElement("div");
+                        wrapper.className = "col-md-6";
+
+                        const label = document.createElement("label");
+                        label.className = "freight-option border rounded-4 p-3 d-flex gap-3 align-items-center h-100";
+
+                        const input = document.createElement("input");
+                        input.type = "radio";
+                        input.name = "SelectedFreight";
+                        input.className = "form-check-input mt-0";
+                        input.value = option.nome;
+                        input.dataset.value = String(option.valor ?? 0);
+                        input.dataset.days = String(option.prazoEstimadoDias ?? 0);
+                        input.dataset.name = option.nome || "Frete";
+                        input.checked = current ? current.toLowerCase() === input.value.toLowerCase() : index === 0;
+                        input.addEventListener("change", () => selectFreight(input));
+
+                        const text = document.createElement("span");
+                        const strong = document.createElement("strong");
+                        strong.className = "d-block";
+                        strong.textContent = `${option.nome} · ${money.format(Number(option.valor) || 0)}`;
+                        const small = document.createElement("small");
+                        small.className = "text-muted";
+                        small.textContent = `${option.descricao || "Entrega"} · aproximadamente ${option.prazoEstimadoDias || 0} dias úteis`;
+                        text.append(strong, small);
+
+                        label.append(input, text);
+                        wrapper.appendChild(label);
+                        freightList.appendChild(wrapper);
+                    });
+
+                    freightContainer.hidden = false;
+                    selectFreight(freightList.querySelector("input:checked"));
+                } catch {
+                    if (selectedFreightState) selectedFreightState.value = "";
+                    shippingEstimateDays.value = "0";
+                    updateTotal(0);
+                    setStatus("Não foi possível calcular o frete agora. Tente novamente.", "danger");
+                }
+            }
+
+            let cepTimer;
+            cepInput?.addEventListener("input", () => {
+                const digits = cepInput.value.replace(/\D/g, "").slice(0, 8);
+                cepInput.value = digits.length > 5 ? `${digits.slice(0, 5)}-${digits.slice(5)}` : digits;
+                clearTimeout(cepTimer);
+                if (digits.length === 8) cepTimer = setTimeout(async () => {
+                    await fetchAddress();
+                    await calculateFreight();
+                }, 250);
             });
-            
-            if (pickup) {
-                document.getElementById('freightOptionsContainer').style.display = 'none';
-                shippingEstimateDisplay.className = "text-success d-block";
-                shippingEstimateDisplay.textContent = "Retirada grátis na loja";
-                updateOrderTotal(0);
-            } else if (cepInput.value.replace(/\D/g, '').length === 8) {
-                fetchEnderecoAndFrete();
-            } else {
-                shippingEstimateDisplay.textContent = "";
-                document.getElementById('freightOptionsContainer').style.display = 'none';
-                updateOrderTotal(0);
-            }
-        }
+            cepInput?.addEventListener("blur", async () => {
+                await fetchAddress();
+                await calculateFreight();
+            });
 
-        cepInput?.addEventListener('blur', fetchEnderecoAndFrete);
-        delivery?.addEventListener('change', syncDeliveryFields);
-        syncDeliveryFields();
+            delivery?.addEventListener("change", async () => {
+                const isPickup = delivery.value === "Retirada no ateliê";
+                setPickupMode(isPickup);
+                if (!isPickup) await calculateFreight();
+            });
+
+            form?.addEventListener("submit", event => {
+                // Garante que o radio selecionado seja o valor efetivamente enviado.
+                // Não dependemos de campo hidden para a escolha do frete.
+                if (delivery?.value === "Entrega") {
+                    const checked = freightList?.querySelector('input[name="SelectedFreight"]:checked');
+                    if (!checked) {
+                        event.preventDefault();
+                        freightContainer.hidden = false;
+                        setStatus("Selecione uma opção de frete para continuar.", "danger");
+                        checked?.focus();
+                        return;
+                    }
+                }
+
+                const isPickup = delivery?.value === "Retirada no ateliê";
+                if (!isPickup && !(selectedFreightState?.value || "").trim()) {
+                    event.preventDefault();
+                    setStatus("Selecione uma opção de frete antes de continuar.", "danger");
+                    freightContainer.hidden = false;
+                    freightContainer.scrollIntoView({ behavior: "smooth", block: "center" });
+                    return;
+                }
+
+                if (!form.checkValidity()) return;
+                if (!button) return;
+                button.disabled = true;
+                button.setAttribute("aria-busy", "true");
+                button.innerHTML = '<span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span> Processando…';
+            });
+
+            setPickupMode(delivery?.value === "Retirada no ateliê");
+            updateTotal(shippingCost?.value || 0);
+            if (delivery?.value === "Entrega" && (cepInput?.value.replace(/\D/g, "") || "").length === 8)
+                calculateFreight();
+        })();
     </script>
 }

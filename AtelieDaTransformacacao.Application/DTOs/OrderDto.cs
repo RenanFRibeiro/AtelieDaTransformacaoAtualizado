@@ -34,9 +34,7 @@ public class OrderDetailsDto : OrderListDto
 {
     public List<AtelieDaTransformacao.Domain.Entities.OrderItemSnapshot> Items { get; set; } = new();
 
-    // Propriedades adicionadas para a view Details.cshtml
-    public string CustomerName { get; set; } = string.Empty;
-
+    // Dados completos do checkout, preservando compatibilidade com pedidos antigos.
     public string CustomerEmail { get; set; } = string.Empty;
 
     public string? CustomerPhone { get; set; }
@@ -46,6 +44,10 @@ public class OrderDetailsDto : OrderListDto
     public string PaymentMethod { get; set; } = string.Empty;
 
     public string DeliveryMethod { get; set; } = string.Empty;
+
+    public string SelectedFreight { get; set; } = string.Empty;
+
+    public int ShippingEstimateDays { get; set; }
 
     public string? Notes { get; set; }
 }

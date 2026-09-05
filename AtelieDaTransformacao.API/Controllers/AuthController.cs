@@ -31,11 +31,15 @@ public sealed class AuthController : ControllerBase
         if (dto.Password != dto.ConfirmPassword)
             return BadRequest(new { message = "As senhas não coincidem." });
 
-        var existing = await _users.FindByEmailAsync(dto.Email);
+        var normalizedEmail = dto.Email?.Trim().ToLowerInvariant() ?? string.Empty;
+        if (normalizedEmail.Length > 180 || !System.Net.Mail.MailAddress.TryCreate(normalizedEmail, out _))
+            return BadRequest(new { message = "Informe um e-mail válido." });
+
+        var existing = await _users.FindByEmailAsync(normalizedEmail);
         if (existing is not null)
             return Conflict(new { message = "Já existe um usuário com este e-mail." });
 
-        var user = new IdentityUser { UserName = dto.Email.Trim(), Email = dto.Email.Trim(), EmailConfirmed = true };
+        var user = new IdentityUser { UserName = normalizedEmail, Email = normalizedEmail, EmailConfirmed = true };
         var result = await _users.CreateAsync(user, dto.Password);
         if (!result.Succeeded)
             return BadRequest(new { message = "Não foi possível criar o usuário.", errors = result.Errors.Select(e => e.Description) });

@@ -79,6 +79,8 @@ public sealed class OrderCheckoutSnapshot
     public string City { get; set; } = string.Empty;
     public string State { get; set; } = string.Empty;
     public string DeliveryMethod { get; set; } = string.Empty;
+    public string SelectedFreight { get; set; } = string.Empty;
+    public int ShippingEstimateDays { get; set; }
     public string PaymentMethod { get; set; } = string.Empty;
     public decimal ShippingCost { get; set; }
     public string Notes { get; set; } = string.Empty;

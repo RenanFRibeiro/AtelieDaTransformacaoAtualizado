@@ -3,10 +3,7 @@
 @{
     ViewData["Title"] = "Avaliar produto";
 
-    var productImage =
-        string.IsNullOrWhiteSpace(Model.ProdutoImagem)
-            ? "/images/placeholder.jpg"
-            : Model.ProdutoImagem;
+    var productImage = Model.ProdutoImagem;
 }
 
 <div class="container py-5">
@@ -40,9 +37,18 @@
 
                     <div class="d-flex align-items-center gap-3 p-3 rounded-4 border bg-light mb-4">
 
-                        <img src="@productImage"
-                             alt="@Model.ProdutoNome"
-                             style="width:80px;height:80px;object-fit:cover;border-radius:16px;" />
+                        @if (!string.IsNullOrWhiteSpace(productImage))
+                        {
+                            <img src="@productImage"
+                                 alt="@Model.ProdutoNome"
+                                 style="width:80px;height:80px;object-fit:cover;border-radius:16px;" />
+                        }
+                        else
+                        {
+                            <div class="feedback-product-placeholder" aria-hidden="true">
+                                <i class="bi bi-image"></i>
+                            </div>
+                        }
 
                         <div>
 
@@ -115,16 +121,15 @@
                                    class="form-label fw-bold">
 
                                 Comentário
-                                <span class="text-danger">*</span>
+                                <span class="text-muted fw-normal">(opcional)</span>
 
                             </label>
 
                             <textarea asp-for="Comentario"
                                       class="form-control rounded-4"
                                       rows="6"
-                                      minlength="10"
                                       maxlength="2000"
-                                      placeholder="Conte o que você achou da peça, acabamento, qualidade e experiência de compra..."></textarea>
+                                      placeholder="Conte o que você achou da peça, acabamento, qualidade e experiência de compra... (opcional)"></textarea>
 
                             <div class="d-flex justify-content-between mt-1">
 
@@ -132,7 +137,7 @@
                                       class="text-danger small"></span>
 
                                 <small class="text-muted">
-                                    Mínimo de 10 e máximo de 2000 caracteres
+                                    Máximo de 2000 caracteres
                                 </small>
 
                             </div>

@@ -237,13 +237,13 @@
                            name="id"
                            value="@Model.Id" />
 
-                    @if (Model.Status == OrderStatus.Entregue)
+                    @if (Model.Status is OrderStatus.Entregue or OrderStatus.Cancelado)
                     {
                         <button type="button"
                                 class="btn btn-outline-secondary w-100 rounded-pill"
                                 disabled>
 
-                            Pedido já entregue
+                            @(Model.Status == OrderStatus.Cancelado ? "Pedido cancelado" : "Pedido já entregue")
 
                         </button>
                     }

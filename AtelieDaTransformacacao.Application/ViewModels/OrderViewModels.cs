@@ -68,13 +68,16 @@ public sealed class CheckoutViewModel
     [Display(Name = "Entrega ou retirada")]
     public string DeliveryMethod { get; set; } = "Entrega";
 
+    [Display(Name = "Serviço de frete")]
+    public string? SelectedFreight { get; set; }
+
     [Required(ErrorMessage = "Selecione uma forma de pagamento.")]
     [Display(Name = "Forma de pagamento")]
     public string PaymentMethod { get; set; } = string.Empty;
 
     [StringLength(1000)]
     [Display(Name = "Observações")]
-    public string Notes { get; set; } = string.Empty;
+    public string? Notes { get; set; }
 
     /// <summary>
     /// Valor do frete calculado (preenchido via AJAX no checkout).
@@ -121,7 +124,7 @@ public sealed class OrderDetailsViewModel
     public string CustomerPhone { get; set; } = string.Empty;
     public string ShippingAddress { get; set; } = string.Empty;
     public string PaymentMethod { get; set; } = string.Empty;
-    public string Notes { get; set; } = string.Empty;
+    public string? Notes { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     public List<OrderItemViewModel> Items { get; set; } = new();

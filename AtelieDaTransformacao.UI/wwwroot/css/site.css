@@ -793,3 +793,327 @@ html[data-theme="dark"] .terms-check-box { background: #171311; border-color: #9
     .terms-consent { padding: 12px; }
     .notification-panel { position: fixed; top: 82px; right: 14px; }
 }
+
+
+/* ============================================================================
+   REFINAMENTO FINAL — UI/UX, ACESSIBILIDADE E RESPONSIVIDADE
+   ============================================================================ */
+:root {
+    color-scheme: light;
+    --surface: #fffdf9;
+    --surface-soft: #f7f2eb;
+    --border-soft: rgba(58,36,26,.12);
+    --text-main: #2d211b;
+    --text-muted: #76685d;
+    --focus-ring: 0 0 0 4px rgba(168,92,61,.18);
+}
+html[data-theme="dark"] {
+    color-scheme: dark;
+    --surface: #211b18;
+    --surface-soft: #2a211d;
+    --border-soft: rgba(255,255,255,.12);
+    --text-main: #f5eee8;
+    --text-muted: #c1b4a8;
+    --focus-ring: 0 0 0 4px rgba(197,138,88,.24);
+}
+
+body { color: var(--text-main); background: var(--surface); text-rendering: optimizeLegibility; }
+::selection { background: rgba(168,92,61,.18); }
+
+button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: none !important; box-shadow: var(--focus-ring) !important; }
+
+.form-control, .form-select, textarea {
+    min-height: 48px;
+    border-color: var(--border-soft);
+    color: var(--text-main);
+    background: var(--surface);
+    transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
+}
+.form-control:focus, .form-select:focus, textarea:focus {
+    border-color: rgba(168,92,61,.58);
+    box-shadow: var(--focus-ring);
+}
+.form-control:disabled, .form-select:disabled { opacity: .72; cursor: not-allowed; }
+
+.site-backbar { padding: 14px 20px 8px; }
+.site-back-button { min-height: 42px; font-weight: 700; }
+
+.terms-consent { background: var(--surface-soft); border-color: var(--border-soft); }
+.terms-check { min-width: 0; }
+.terms-check-text { min-width: 0; }
+.terms-check-text a { font-weight: 700; }
+.terms-check input:focus-visible + .terms-check-box { box-shadow: var(--focus-ring); }
+
+.notification-panel {
+    max-width: min(380px, calc(100vw - 24px));
+    max-height: min(520px, calc(100vh - 100px));
+    overflow: hidden;
+}
+.notification-list { max-height: 410px; overflow: auto; overscroll-behavior: contain; }
+.notification-item { position: relative; border: 1px solid transparent; }
+.notification-item:not(.is-read)::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 14px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--modern-terracotta, #a85c3d);
+}
+.notification-item:not(.is-read) { padding-left: 18px; }
+.header-icon-button.is-connecting::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border: 2px solid rgba(197,138,88,.55);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: atelie-spin .9s linear infinite;
+}
+@keyframes atelie-spin { to { transform: rotate(360deg); } }
+
+html[data-theme="dark"] .form-control,
+html[data-theme="dark"] .form-select,
+html[data-theme="dark"] textarea { background: #171311; color: #f5eee8; }
+html[data-theme="dark"] .payment-option,
+html[data-theme="dark"] .freight-option { background: #211b18; color: #f5eee8; border-color: var(--border-soft) !important; }
+html[data-theme="dark"] .alert-light { background: #2a211d; color: #f5eee8; border-color: var(--border-soft) !important; }
+html[data-theme="dark"] .text-dark { color: #f5eee8 !important; }
+
+/* Evita movimento involuntário em telas pequenas. */
+@media (max-width: 767.98px) {
+    .site-main { overflow-x: clip; }
+    .site-backbar { padding-inline: 14px; }
+    .site-back-button { width: 100%; }
+    .checkout-email-display { font-size: 1rem; }
+    .payment-option, .freight-option { min-height: 70px; }
+    .header-actions-v3 { gap: 7px; }
+}
+
+@media (max-width: 575.98px) {
+    .notification-panel { top: 76px; right: 12px; width: calc(100vw - 24px); }
+    .auth-card { padding: 1.25rem !important; }
+    .terms-check-box { flex-basis: 24px; width: 24px; height: 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .header-icon-button.is-connecting::after { animation: none; }
+}
+
+
+/* =============================================================================
+   SISTEMA VISUAL FINAL — TEMA, NOTIFICAÇÕES E CHECKOUT
+   ============================================================================= */
+:root {
+    --ui-bg: #f5f0e9;
+    --ui-surface: #fffdf9;
+    --ui-surface-2: #f8f4ee;
+    --ui-text: #2d211b;
+    --ui-muted: #76685d;
+    --ui-border: rgba(58,36,26,.13);
+    --ui-header: #2a1c16;
+    --ui-accent: #b86f49;
+    --ui-accent-strong: #965237;
+    --ui-gold: #c58a58;
+    --ui-danger: #b44c45;
+    --ui-success: #36765a;
+    --ui-shadow: 0 16px 45px rgba(48, 31, 21, .08);
+}
+
+html[data-theme="dark"] {
+    --ui-bg: #15110f;
+    --ui-surface: #211b18;
+    --ui-surface-2: #2a211d;
+    --ui-text: #f4ece5;
+    --ui-muted: #c0b2a7;
+    --ui-border: rgba(255,255,255,.12);
+    --ui-header: #100b09;
+    --ui-accent: #d08a61;
+    --ui-accent-strong: #e09a70;
+    --ui-gold: #d5a06d;
+    --ui-shadow: 0 18px 50px rgba(0,0,0,.28);
+}
+
+html, body { background: var(--ui-bg); color: var(--ui-text); }
+body { transition: background-color .2s ease, color .2s ease; }
+.navbar-artisan { background: var(--ui-header) !important; border-bottom-color: var(--ui-border) !important; }
+.card, .auth-card, .feedback-order-card, .terms-consent, .dropdown-menu, .modal-content,
+.offcanvas, .list-group-item, .table, .accordion-item { background-color: var(--ui-surface); color: var(--ui-text); border-color: var(--ui-border) !important; }
+.card { box-shadow: var(--ui-shadow); }
+.text-muted, .small.text-muted { color: var(--ui-muted) !important; }
+.form-label, label, .form-check-label { color: var(--ui-text); }
+.form-control, .form-select, textarea { background-color: var(--ui-surface); color: var(--ui-text); border-color: var(--ui-border); }
+.form-control::placeholder, textarea::placeholder { color: color-mix(in srgb, var(--ui-muted) 75%, transparent); }
+.form-control:focus, .form-select:focus, textarea:focus { background-color: var(--ui-surface); color: var(--ui-text); }
+.btn-outline-dark { color: var(--ui-text); border-color: var(--ui-border); }
+.btn-outline-dark:hover { background: var(--ui-text); color: var(--ui-surface); }
+.alert-light { background: var(--ui-surface-2) !important; color: var(--ui-text) !important; border-color: var(--ui-border) !important; }
+.alert-warning { color: var(--ui-text); }
+hr { border-color: var(--ui-border); opacity: 1; }
+
+/* Checkout: seleção realmente clicável e estado selecionado claro. */
+.payment-option, .freight-option {
+    background: var(--ui-surface);
+    color: var(--ui-text);
+    border-color: var(--ui-border) !important;
+    box-shadow: none;
+}
+.payment-option:hover, .freight-option:hover { border-color: var(--ui-accent) !important; background: var(--ui-surface-2); }
+.payment-option:has(input:checked), .freight-option:has(input:checked) {
+    border-color: var(--ui-accent) !important;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ui-accent) 16%, transparent);
+    background: color-mix(in srgb, var(--ui-accent) 6%, var(--ui-surface));
+}
+.checkout-email-display { color: var(--ui-text) !important; }
+.optional-label { color: var(--ui-muted); font-size: .72em; font-weight: 600; }
+
+/* Central de notificações */
+.notification-panel {
+    background: var(--ui-surface) !important;
+    color: var(--ui-text) !important;
+    border: 1px solid var(--ui-border) !important;
+    box-shadow: var(--ui-shadow) !important;
+    border-radius: 16px;
+    padding: 14px;
+}
+.notification-panel > .d-flex { padding: 2px 2px 10px; border-bottom: 1px solid var(--ui-border); }
+.notification-panel strong { color: var(--ui-text); }
+.notification-panel .btn-link { color: var(--ui-accent) !important; text-decoration: none; font-weight: 700; }
+.notification-list { padding-top: 8px; }
+.notification-empty { min-height: 120px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; color:var(--ui-muted); text-align:center; margin:0; }
+.notification-empty i { font-size:1.35rem; }
+.notification-item {
+    display:flex; gap:11px; align-items:flex-start; width:100%; padding:11px 10px !important;
+    border-radius:12px; text-decoration:none !important; background:transparent !important; color:var(--ui-text) !important;
+    transition:background-color .16s ease, transform .16s ease;
+}
+.notification-item:hover { background:var(--ui-surface-2) !important; transform:translateX(2px); }
+.notification-item::before { display:none !important; }
+.notification-item-icon { flex:0 0 32px; width:32px; height:32px; display:grid; place-items:center; border-radius:10px; background:color-mix(in srgb, var(--ui-accent) 13%, transparent); color:var(--ui-accent-strong); }
+.notification-item-content { min-width:0; display:flex; flex-direction:column; gap:2px; }
+.notification-item-content strong { font-size:.82rem; }
+.notification-item-content span { color:var(--ui-muted); font-size:.76rem; line-height:1.35; }
+.notification-item-content small { color:var(--ui-muted); font-size:.68rem; margin-top:3px; }
+.notification-item.is-read { opacity:.72; }
+.notification-badge { border:2px solid var(--ui-header); }
+
+/* Toast instantâneo quando o SignalR recebe a mudança. */
+.notification-toast-region {
+    position:fixed; z-index:1090; top:86px; right:18px; width:min(410px, calc(100vw - 36px));
+    display:flex; flex-direction:column; gap:10px; pointer-events:none;
+}
+.notification-toast {
+    pointer-events:auto; display:flex; gap:11px; align-items:flex-start; padding:13px 14px; border-radius:14px;
+    background:var(--ui-surface); color:var(--ui-text); border:1px solid var(--ui-border); box-shadow:var(--ui-shadow);
+    opacity:0; transform:translateY(-8px) scale(.98); transition:opacity .22s ease, transform .22s ease; cursor:pointer;
+}
+.notification-toast.is-visible { opacity:1; transform:none; }
+.notification-toast-icon { flex:0 0 34px; width:34px; height:34px; display:grid; place-items:center; border-radius:10px; background:color-mix(in srgb, var(--ui-accent) 14%, transparent); color:var(--ui-accent-strong); }
+.notification-toast-content { min-width:0; flex:1; display:flex; flex-direction:column; gap:2px; }
+.notification-toast-content strong { font-size:.84rem; }
+.notification-toast-content span { font-size:.75rem; line-height:1.4; color:var(--ui-muted); }
+.notification-toast-close { border:0; background:transparent; color:var(--ui-muted); padding:2px 3px; cursor:pointer; }
+.notification-toast-close:hover { color:var(--ui-text); }
+
+/* Admin/mobile: elimina fundos brancos fixos que quebravam o dark mode. */
+html[data-theme="dark"] #adminSidebarMobile,
+html[data-theme="dark"] #adminSidebarMobile .offcanvas-header,
+html[data-theme="dark"] #adminSidebarMobile .offcanvas-body { background:var(--ui-surface) !important; color:var(--ui-text) !important; border-color:var(--ui-border) !important; }
+html[data-theme="dark"] #adminSidebarMobile .admin-brand-title,
+html[data-theme="dark"] #adminSidebarMobile .offcanvas-title,
+html[data-theme="dark"] #adminSidebarMobile .nav-link,
+html[data-theme="dark"] #adminSidebarMobile small { color:var(--ui-text) !important; }
+
+@media (max-width: 767.98px) {
+    .notification-toast-region { top:74px; right:12px; width:calc(100vw - 24px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .notification-toast, .notification-item { transition:none; }
+}
+
+/* ============================================================================
+   TEMA CONSISTENTE — overrides finais para componentes Bootstrap e telas legadas
+   ============================================================================ */
+html[data-theme="light"] {
+    --bs-body-bg: var(--ui-bg);
+    --bs-body-color: var(--ui-text);
+    --bs-border-color: var(--ui-border);
+    --bs-secondary-color: var(--ui-muted);
+}
+
+html[data-theme="dark"] {
+    --bs-body-bg: var(--ui-bg);
+    --bs-body-color: var(--ui-text);
+    --bs-border-color: var(--ui-border);
+    --bs-secondary-color: var(--ui-muted);
+}
+
+html[data-theme="light"] .bg-white,
+html[data-theme="light"] .bg-light,
+html[data-theme="light"] .input-group-text,
+html[data-theme="light"] .table-light {
+    background-color: var(--ui-surface) !important;
+    color: var(--ui-text) !important;
+    border-color: var(--ui-border) !important;
+}
+
+html[data-theme="dark"] .bg-white,
+html[data-theme="dark"] .bg-light,
+html[data-theme="dark"] .input-group-text,
+html[data-theme="dark"] .table-light {
+    background-color: var(--ui-surface) !important;
+    color: var(--ui-text) !important;
+    border-color: var(--ui-border) !important;
+}
+
+html[data-theme="dark"] .table,
+html[data-theme="dark"] .table > :not(caption) > * > *,
+html[data-theme="dark"] .table-light > * {
+    color: var(--ui-text) !important;
+    background-color: transparent !important;
+    border-color: var(--ui-border) !important;
+}
+
+html[data-theme="dark"] .dropdown-menu,
+html[data-theme="dark"] .modal-content,
+html[data-theme="dark"] .offcanvas,
+html[data-theme="dark"] .list-group-item,
+html[data-theme="dark"] .accordion-item {
+    background-color: var(--ui-surface) !important;
+    color: var(--ui-text) !important;
+    border-color: var(--ui-border) !important;
+}
+
+html[data-theme="dark"] .form-check-input {
+    background-color: var(--ui-surface-2);
+    border-color: var(--ui-border);
+}
+
+html[data-theme="dark"] .form-check-input:checked {
+    background-color: var(--ui-accent);
+    border-color: var(--ui-accent);
+}
+
+html[data-theme="dark"] .form-text,
+html[data-theme="dark"] .form-label,
+html[data-theme="dark"] label {
+    color: var(--ui-text);
+}
+
+html[data-theme="dark"] .btn-close {
+    filter: invert(1) grayscale(1) brightness(1.8);
+}
+
+html[data-theme="dark"] .feedback-order-card,
+html[data-theme="dark"] .feedback-order-card .border-top {
+    border-color: var(--ui-border) !important;
+}
+
+html[data-theme="light"] .feedback-order-card {
+    background: var(--ui-surface) !important;
+    border-color: var(--ui-border) !important;
+    color: var(--ui-text);
+}

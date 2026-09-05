@@ -4,7 +4,16 @@
 
 @{
     ViewData["Title"] = $"Pedido #{Model.Id}";
-    var statuses = Enum.GetValues<OrderStatus>();
+    var statuses = new[]
+    {
+        OrderStatus.Criado,
+        OrderStatus.Pendente,
+        OrderStatus.Aprovado,
+        OrderStatus.Separacao,
+        OrderStatus.Faturado,
+        OrderStatus.Enviado,
+        OrderStatus.Entregue
+    };
 }
 
 <div class="container py-5">
@@ -79,8 +88,8 @@
                 </div>
 
                 @if (Model.Status == OrderStatus.Cancelado)
-{
-    <div class="alert alert-danger rounded-4">
+                {
+                    <div class="alert alert-danger rounded-4 mb-0">
 
         <i class="bi bi-x-circle me-2"></i>
 
@@ -89,8 +98,8 @@
         Este pedido foi encerrado e não avançará
         para as próximas etapas.
 
-    </div>
-}
+                    </div>
+                }
 
                 <div id="statusIcon"
                      class="rounded-circle bg-light p-3 fs-3 text-gold">
@@ -305,13 +314,25 @@
                     }
 
 
-                    <p class="small text-muted mb-0">
-
+                    <p class="small text-muted mb-2">
                         <i class="bi bi-geo-alt me-1"></i>
-
                         @Model.ShippingAddress
-
                     </p>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.DeliveryMethod))
+                    {
+                        <div class="small text-muted mb-1"><strong>Modalidade:</strong> @Model.DeliveryMethod</div>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(Model.SelectedFreight))
+                    {
+                        <div class="small text-muted">
+                            <strong>Frete:</strong> @Model.SelectedFreight
+                            @if (Model.ShippingEstimateDays > 0)
+                            {
+                                <span> · @Model.ShippingEstimateDays dias úteis</span>
+                            }
+                        </div>
+                    }
 
                 </div>
 
@@ -502,8 +523,6 @@
 
 @section Scripts {
 
-    <script src="https://cdn.jsdelivr.net/npm/@@microsoft/signalr@10.0.0/dist/browser/signalr.min.js"></script>
-
     <script>
 
         const orderId = @Model.Id;
@@ -543,6 +562,9 @@
                 case 6:
                     return "bi-house-check";
 
+                case 7:
+                    return "bi-x-circle";
+
                 default:
                     return "bi-box-seam";
 
@@ -575,6 +597,9 @@
 
                 case 6:
                     return "Entregue";
+
+                case 7:
+                    return "Cancelado";
 
                 default:
                     return "Desconhecido";
@@ -686,62 +711,25 @@
             async () => {
 
                 /*
-                 * SignalR
+                 * O SignalR é iniciado globalmente pelo layout.
+                 * Esta página apenas reage ao evento já recebido.
                  */
+                window.addEventListener(
+                    "order-status-updated",
+                    event => {
+                        const data = event.detail;
+                        if (!data || Number(data.orderId) !== orderId) return;
 
-                if (
-                    typeof signalR !== "undefined"
-                ) {
+                        applyStatus(
+                            data.status,
+                            data.statusName,
+                            getStatusIcon(data.status));
 
-                    try {
-
-                        const connection =
-                            new signalR
-                                .HubConnectionBuilder()
-                                .withUrl("/hubs/orders")
-                                .withAutomaticReconnect()
-                                .build();
-
-                        connection.on(
-                            "OrderStatusUpdated",
-                            function(
-                                updatedOrderId,
-                                status,
-                                label,
-                                icon
-                            ) {
-
-                                if (
-                                    Number(updatedOrderId) !==
-                                    orderId
-                                ) {
-
-                                    return;
-
-                                }
-
-                                applyStatus(
-                                    status,
-                                    label,
-                                    icon
-                                );
-
-                            }
-                        );
-
-                        await connection.start();
-
-                    }
-                    catch (error) {
-
-                        console.error(
-                            "SignalR:",
-                            error
-                        );
-
-                    }
-
-                }
+                        // Ao ser entregue, recarrega a página para que a seção
+                        // de avaliação fique disponível imediatamente.
+                        if (Number(data.status) === 6)
+                            window.setTimeout(() => window.location.reload(), 350);
+                    });
 
                 /*
                  * Fallback:

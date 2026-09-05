@@ -84,6 +84,8 @@ public sealed class AdminOrdersController : Controller
         static string Csv(string? value)
         {
             var text = value ?? string.Empty;
+            if (text.Length > 0 && "=+-@".Contains(text[0]))
+                text = "'" + text;
             return $"\"{text.Replace("\"", "\"\"")}\"";
         }
 
@@ -156,12 +158,16 @@ public sealed class AdminOrdersController : Controller
                 nameof(Index));
         }
 
+        if (!Enum.IsDefined(status))
+        {
+            TempData["ErrorMessage"] = "Status inválido.";
+            return RedirectToAction(nameof(Details), new { id });
+        }
+
+        var statusChanged = order.Status != status;
         var changed = status == OrderStatus.Cancelado
             ? await _repository.CancelAsync(id)
-            : await _repository.UpdateStatusAsync(
-                id,
-                status,
-                autoAdvance);
+            : await _repository.UpdateStatusAsync(id, status, autoAdvance);
 
         if (!changed)
         {
@@ -172,9 +178,8 @@ public sealed class AdminOrdersController : Controller
                 nameof(Index));
         }
 
-        await NotifyStatusAsync(
-            id,
-            order.UserId);
+        if (statusChanged)
+            await NotifyStatusAsync(id, order.UserId);
 
         TempData["SuccessMessage"] =
             $"Pedido {order.OrderNumber} atualizado para {status.ToDisplayName()}.";
@@ -233,10 +238,6 @@ public sealed class AdminOrdersController : Controller
 
         if (changed)
         {
-            await NotifyStatusAsync(
-                id,
-                order.UserId);
-
             TempData["SuccessMessage"] =
                 enabled
                     ? $"Automação ativada para {order.OrderNumber}."
@@ -277,8 +278,12 @@ public sealed class AdminOrdersController : Controller
 
         if (!next.HasValue)
         {
-            TempData["ErrorMessage"] =
-                "O pedido já está entregue.";
+            TempData["ErrorMessage"] = order.Status switch
+            {
+                OrderStatus.Entregue => "O pedido já foi entregue.",
+                OrderStatus.Cancelado => "O pedido está cancelado e não pode avançar.",
+                _ => "O pedido não possui uma próxima etapa válida."
+            };
 
             return RedirectToAction(
                 nameof(Details),
@@ -306,9 +311,7 @@ public sealed class AdminOrdersController : Controller
                 });
         }
 
-        await NotifyStatusAsync(
-            id,
-            order.UserId);
+        await NotifyStatusAsync(id, order.UserId);
 
         TempData["SuccessMessage"] =
             $"Pedido {order.OrderNumber} avançou para {next.Value.ToDisplayName()}.";
@@ -357,9 +360,7 @@ public sealed class AdminOrdersController : Controller
                 });
         }
 
-        await NotifyStatusAsync(
-            id,
-            order.UserId);
+        await NotifyStatusAsync(id, order.UserId);
 
         TempData["SuccessMessage"] =
             $"Pedido {order.OrderNumber} foi cancelado com sucesso.";
@@ -376,65 +377,73 @@ public sealed class AdminOrdersController : Controller
     // SIGNALR
     // =========================================================
 
-    private async Task NotifyStatusAsync(
-        int orderId,
-        string userId)
+    private async Task NotifyStatusAsync(int orderId, string userId)
     {
-        var order =
-            await _orderService.GetByIdAsync(
-                orderId);
-
-        if (order == null)
+        var order = await _repository.GetByIdAsync(orderId);
+        if (order is null)
             return;
 
-        await _hub
-            .Clients
-            .Group(
-                OrderStatusHub.GroupName(userId))
-            .SendAsync(
-                "StatusUpdated",
-                new
-                {
-                    orderId = order.Id,
-                    orderNumber = order.OrderNumber,
-                    status = (int)order.Status,
-                    statusName = order.StatusName,
-                    autoAdvance = order.AutoAdvance,
-                    updatedAt = order.UpdatedAt.ToString("O")
-                });
+        var now = order.UpdatedAt.ToString("O");
 
         try
         {
-            // GetByIdAsync do OrderService retorna OrderDetailsDto.
-            // O serviço de e-mail trabalha com a entidade Order.
-            // Buscamos a entidade diretamente pelo repositório para manter
-            // a separação entre DTOs da aplicação e entidades do domínio.
-            var orderEntity = await _repository.GetByIdAsync(orderId);
-
-            if (orderEntity != null)
-                await _emailService.SendOrderStatusAsync(orderEntity);
+            await _emailService.SendOrderStatusAsync(order);
         }
         catch (Exception ex)
         {
-            // Falha no e-mail não impede a atualização do pedido.
-            _logger.LogWarning(ex, "Não foi possível enviar a atualização por e-mail do pedido {OrderNumber}.", order.OrderNumber);
+            _logger.LogWarning(
+                ex,
+                "Não foi possível enviar a atualização por e-mail do pedido {OrderNumber}.",
+                order.OrderNumber);
         }
 
-        await _hub.Clients
-            .Group(OrderStatusHub.AdminGroupName)
-            .SendAsync(
-                "AdminOrderStatusUpdated",
-                new
-                {
-                    orderId = order.Id,
-                    orderNumber = order.OrderNumber,
-                    status = (int)order.Status,
-                    statusName = order.StatusName,
-                    isHistory = order.Status is OrderStatus.Enviado
-                        or OrderStatus.Entregue
-                        or OrderStatus.Cancelado,
-                    updatedAt = order.UpdatedAt.ToString("O")
-                });
+        try
+        {
+            await _hub.Clients
+                .Group(OrderStatusHub.GroupName(userId))
+                .SendAsync(
+                    "StatusUpdated",
+                    new
+                    {
+                        orderId = order.Id,
+                        orderNumber = order.OrderNumber,
+                        status = (int)order.Status,
+                        statusName = order.Status.ToDisplayName(),
+                        message = order.Status switch
+                        {
+                            OrderStatus.Entregue => $"O pedido {order.OrderNumber} foi entregue. Você já pode avaliar o produto.",
+                            OrderStatus.Cancelado => $"O pedido {order.OrderNumber} foi cancelado.",
+                            _ => $"O pedido {order.OrderNumber} foi atualizado para {order.Status.ToDisplayName()}."
+                        },
+                        autoAdvance = order.AutoAdvance,
+                        updatedAt = now
+                    });
+
+            await _hub.Clients
+                .Group(OrderStatusHub.AdminGroupName)
+                .SendAsync(
+                    "AdminOrderStatusUpdated",
+                    new
+                    {
+                        orderId = order.Id,
+                        orderNumber = order.OrderNumber,
+                        status = (int)order.Status,
+                        statusName = order.Status.ToDisplayName(),
+                        isHistory = order.Status is OrderStatus.Enviado
+                            or OrderStatus.Entregue
+                            or OrderStatus.Cancelado,
+                        updatedAt = now
+                    });
+        }
+        catch (Exception ex)
+        {
+            // O status do pedido já foi persistido; uma falha de tempo real
+            // nunca deve transformar uma operação concluída em erro 500.
+            _logger.LogWarning(
+                ex,
+                "Não foi possível enviar a notificação em tempo real do pedido {OrderNumber}.",
+                order.OrderNumber);
+        }
     }
 
     // =========================================================

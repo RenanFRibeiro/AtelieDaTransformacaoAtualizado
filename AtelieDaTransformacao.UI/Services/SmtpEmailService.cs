@@ -20,35 +20,51 @@ public sealed class SmtpEmailService : IEmailService
 
     public async Task SendAsync(string to, string subject, string htmlBody, CancellationToken cancellationToken = default)
     {
+        if (string.IsNullOrWhiteSpace(to))
+            return;
+
         if (string.IsNullOrWhiteSpace(_options.Host) || string.IsNullOrWhiteSpace(_options.From))
         {
-            _logger.LogWarning("E-mail não enviado: SMTP não configurado. Destinatário: {Email}", to);
+            _logger.LogWarning("E-mail não enviado: SMTP não configurado.");
+            return;
+        }
+
+        if (!MailAddress.TryCreate(to.Trim(), out var recipient))
+        {
+            _logger.LogWarning("E-mail não enviado: destinatário inválido.");
+            return;
+        }
+
+        if (!MailAddress.TryCreate(_options.From.Trim(), out var sender))
+        {
+            _logger.LogError("E-mail não enviado: remetente SMTP inválido.");
             return;
         }
 
         using var message = new MailMessage
         {
-            From = new MailAddress(_options.From, _options.FromName, Encoding.UTF8),
+            From = new MailAddress(sender.Address, _options.FromName, Encoding.UTF8),
             Subject = subject,
             Body = htmlBody,
             IsBodyHtml = true,
             BodyEncoding = Encoding.UTF8,
             SubjectEncoding = Encoding.UTF8
         };
-        message.To.Add(new MailAddress(to));
+        message.To.Add(recipient);
 
         using var client = new SmtpClient(_options.Host, _options.Port)
         {
             EnableSsl = _options.EnableSsl,
             DeliveryMethod = SmtpDeliveryMethod.Network,
-            UseDefaultCredentials = false
+            UseDefaultCredentials = false,
+            Timeout = Math.Clamp(_options.TimeoutSeconds, 3, 60) * 1000
         };
 
         if (!string.IsNullOrWhiteSpace(_options.UserName))
             client.Credentials = new NetworkCredential(_options.UserName, _options.Password);
 
         cancellationToken.ThrowIfCancellationRequested();
-        await client.SendMailAsync(message);
+        await client.SendMailAsync(message, cancellationToken);
     }
 
     public Task SendPasswordResetAsync(string to, string resetUrl, CancellationToken cancellationToken = default) =>
@@ -68,7 +84,9 @@ public sealed class SmtpEmailService : IEmailService
         if (string.IsNullOrWhiteSpace(email))
             return Task.CompletedTask;
 
-        var detailsUrl = $"{_options.BaseUrl.TrimEnd('/')}/Order/Details/{order.Id}";
+        var detailsUrl = string.IsNullOrWhiteSpace(_options.BaseUrl)
+            ? $"/Order/Details/{order.Id}"
+            : $"{_options.BaseUrl.TrimEnd('/')}/Order/Details/{order.Id}";
         return SendAsync(email, $"Atualização do pedido {order.OrderNumber}",
             $"""
             <div style="font-family:Arial,sans-serif;line-height:1.6">

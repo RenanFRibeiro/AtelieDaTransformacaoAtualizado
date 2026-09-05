@@ -43,6 +43,11 @@ public interface IOrderRepository
         OrderStatus status,
         bool? autoAdvance = null);
 
+    Task<bool> TryAdvanceAutomaticAsync(
+        int id,
+        OrderStatus expectedStatus,
+        OrderStatus nextStatus);
+
     Task<bool> SetAutoAdvanceAsync(
         int id,
         bool enabled);
