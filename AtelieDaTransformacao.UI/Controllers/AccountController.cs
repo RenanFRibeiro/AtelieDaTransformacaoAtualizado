@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using AtelieDaTransformacao.Application.DTOs;
 using AtelieDaTransformacao.UI.Models;
+using AtelieDaTransformacao.UI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,13 +13,16 @@ public class AccountController : Controller
 
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly UserManager<IdentityUser> _userManager;
+    private readonly IEmailService _emailService;
 
     public AccountController(
         SignInManager<IdentityUser> signInManager,
-        UserManager<IdentityUser> userManager)
+        UserManager<IdentityUser> userManager,
+        IEmailService emailService)
     {
         _signInManager = signInManager;
         _userManager = userManager;
+        _emailService = emailService;
     }
 
     [HttpGet]
@@ -64,6 +68,75 @@ public class AccountController : Controller
         }
 
         return View(model);
+    }
+
+    [HttpGet]
+    public IActionResult ForgotPassword() => View(new ForgotPasswordDto());
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ForgotPassword(ForgotPasswordDto model)
+    {
+        if (!ModelState.IsValid)
+            return View(model);
+
+        var email = model.Email.Trim().ToLowerInvariant();
+        var user = await _userManager.FindByEmailAsync(email);
+
+        // Resposta genérica evita revelar se um e-mail está cadastrado.
+        if (user != null)
+        {
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var resetUrl = Url.Action(nameof(ResetPassword), "Account",
+                new { userId = user.Id, token, email }, Request.Scheme);
+
+            if (!string.IsNullOrWhiteSpace(resetUrl))
+                await _emailService.SendPasswordResetAsync(email, resetUrl);
+        }
+
+        TempData["PasswordResetMessage"] =
+            "Se o e-mail estiver cadastrado, enviaremos as instruções para redefinir sua senha.";
+        return RedirectToAction(nameof(ForgotPassword));
+    }
+
+    [HttpGet]
+    public IActionResult ResetPassword(string? userId, string? token, string? email)
+    {
+        if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(token))
+            return RedirectToAction(nameof(ForgotPassword));
+
+        return View(new ResetPasswordDto
+        {
+            UserId = userId,
+            Token = token,
+            Email = email ?? string.Empty
+        });
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ResetPassword(ResetPasswordDto model)
+    {
+        if (!ModelState.IsValid)
+            return View(model);
+
+        var user = await _userManager.FindByIdAsync(model.UserId);
+        if (user == null || !string.Equals(user.Email, model.Email, StringComparison.OrdinalIgnoreCase))
+        {
+            ModelState.AddModelError(string.Empty, "Não foi possível validar a solicitação de redefinição.");
+            return View(model);
+        }
+
+        var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
+        if (!result.Succeeded)
+        {
+            foreach (var error in result.Errors)
+                ModelState.AddModelError(string.Empty, FriendlyIdentityError(error));
+            return View(model);
+        }
+
+        TempData["SuccessMessage"] = "Sua senha foi redefinida. Agora você já pode entrar.";
+        return RedirectToAction(nameof(Login));
     }
 
     [HttpGet]

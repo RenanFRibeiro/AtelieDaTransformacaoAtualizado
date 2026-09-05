@@ -122,6 +122,11 @@ public static class Program
                     true;
             });
 
+        builder.Services.Configure<EmailOptions>(
+            builder.Configuration.GetSection("Email"));
+
+        builder.Services.AddSingleton<IEmailService, SmtpEmailService>();
+
         builder.Services.AddControllersWithViews();
 
         builder.Services.AddSignalR();

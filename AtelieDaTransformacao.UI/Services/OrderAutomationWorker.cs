@@ -9,15 +9,18 @@ namespace AtelieDaTransformacao.UI.Services;
 public sealed class OrderAutomationWorker
     : BackgroundService
 {
+    private readonly IEmailService _emailService;
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<OrderAutomationWorker> _logger;
 
     public OrderAutomationWorker(
         IServiceProvider serviceProvider,
-        ILogger<OrderAutomationWorker> logger)
+        ILogger<OrderAutomationWorker> logger,
+        IEmailService emailService)
     {
         _serviceProvider = serviceProvider;
         _logger = logger;
+        _emailService = emailService;
     }
 
     protected override async Task ExecuteAsync(
@@ -73,6 +76,16 @@ public sealed class OrderAutomationWorker
 
                     if (!changed)
                         continue;
+
+                    order.Status = next.Value;
+                    try
+                    {
+                        await _emailService.SendOrderStatusAsync(order, stoppingToken);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning(ex, "Não foi possível enviar a atualização por e-mail do pedido {OrderNumber}.", order.OrderNumber);
+                    }
 
                     await hub.Clients
                         .Group(

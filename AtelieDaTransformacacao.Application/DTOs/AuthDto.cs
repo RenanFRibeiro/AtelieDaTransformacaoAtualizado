@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace AtelieDaTransformacao.Application.DTOs;
 
@@ -94,6 +94,44 @@ public sealed class RegisterDto
 
     [Display(Name = "Eu li e aceito os termos de uso")]
     public bool AcceptTerms { get; set; }
+}
+
+
+
+public sealed class ForgotPasswordDto
+{
+    [Required(ErrorMessage = "Informe seu e-mail.")]
+    [EmailAddress(ErrorMessage = "Informe um e-mail válido.")]
+    [StringLength(180)]
+    [Display(Name = "E-mail")]
+    public string Email { get; set; } = string.Empty;
+}
+
+public sealed class ResetPasswordDto
+{
+    [Required]
+    public string UserId { get; set; } = string.Empty;
+
+    [Required]
+    public string Token { get; set; } = string.Empty;
+
+    [Required(ErrorMessage = "Informe seu e-mail.")]
+    [EmailAddress(ErrorMessage = "Informe um e-mail válido.")]
+    public string Email { get; set; } = string.Empty;
+
+    [Required(ErrorMessage = "Crie uma nova senha.")]
+    [StringLength(100, MinimumLength = 8, ErrorMessage = "A senha deve ter pelo menos 8 caracteres.")]
+    [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).+$",
+        ErrorMessage = "A senha deve conter letra maiúscula, minúscula, número e caractere especial.")]
+    [DataType(DataType.Password)]
+    [Display(Name = "Nova senha")]
+    public string Password { get; set; } = string.Empty;
+
+    [Required(ErrorMessage = "Confirme sua senha.")]
+    [Compare(nameof(Password), ErrorMessage = "As senhas não coincidem.")]
+    [DataType(DataType.Password)]
+    [Display(Name = "Confirmar nova senha")]
+    public string ConfirmPassword { get; set; } = string.Empty;
 }
 
 public sealed class UserDto

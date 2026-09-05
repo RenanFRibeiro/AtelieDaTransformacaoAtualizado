@@ -3,6 +3,7 @@ using AtelieDaTransformacao.Domain.Enums;
 using AtelieDaTransformacao.Domain.Interfaces;
 using AtelieDaTransformacao.UI.Hubs;
 
+using AtelieDaTransformacao.UI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -13,6 +14,8 @@ namespace AtelieDaTransformacao.UI.Controllers;
 [Authorize(Roles = "Admin")]
 public sealed class AdminOrdersController : Controller
 {
+    private readonly IEmailService _emailService;
+    private readonly ILogger<AdminOrdersController> _logger;
     private readonly IOrderService _orderService;
     private readonly IOrderRepository _repository;
     private readonly IHubContext<OrderStatusHub> _hub;
@@ -20,11 +23,15 @@ public sealed class AdminOrdersController : Controller
     public AdminOrdersController(
         IOrderService orderService,
         IOrderRepository repository,
-        IHubContext<OrderStatusHub> hub)
+        IHubContext<OrderStatusHub> hub,
+        IEmailService emailService,
+        ILogger<AdminOrdersController> logger)
     {
         _orderService = orderService;
         _repository = repository;
         _hub = hub;
+        _emailService = emailService;
+        _logger = logger;
     }
 
     // =========================================================
@@ -395,6 +402,23 @@ public sealed class AdminOrdersController : Controller
                     autoAdvance = order.AutoAdvance,
                     updatedAt = order.UpdatedAt.ToString("O")
                 });
+
+        try
+        {
+            // GetByIdAsync do OrderService retorna OrderDetailsDto.
+            // O serviço de e-mail trabalha com a entidade Order.
+            // Buscamos a entidade diretamente pelo repositório para manter
+            // a separação entre DTOs da aplicação e entidades do domínio.
+            var orderEntity = await _repository.GetByIdAsync(orderId);
+
+            if (orderEntity != null)
+                await _emailService.SendOrderStatusAsync(orderEntity);
+        }
+        catch (Exception ex)
+        {
+            // Falha no e-mail não impede a atualização do pedido.
+            _logger.LogWarning(ex, "Não foi possível enviar a atualização por e-mail do pedido {OrderNumber}.", order.OrderNumber);
+        }
 
         await _hub.Clients
             .Group(OrderStatusHub.AdminGroupName)

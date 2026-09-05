@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="light">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -56,6 +56,27 @@
                                     <span>@currentUserEmail</span>
                                 </div>
                             }
+
+                            <div class="header-notification-wrap position-relative">
+                                <button type="button" class="header-icon-button notification-button" id="notificationButton"
+                                        aria-label="Notificações" aria-expanded="false" title="Notificações">
+                                    <i class="bi bi-bell" aria-hidden="true"></i>
+                                    <span class="notification-badge" id="notificationBadge" hidden>0</span>
+                                </button>
+                                <div class="notification-panel" id="notificationPanel" hidden>
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <strong>Notificações</strong>
+                                        <button type="button" class="btn btn-sm btn-link p-0" id="clearNotifications">Limpar</button>
+                                    </div>
+                                    <div id="notificationList" class="notification-list">
+                                        <p class="small text-muted mb-0">Nenhuma notificação nova.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="header-icon-button theme-toggle" id="themeToggle"
+                                    aria-label="Alternar tema" title="Alternar tema">
+                                <i class="bi bi-moon-stars" aria-hidden="true"></i>
+                            </button>
 
                             if (!User.IsInRole("Admin"))
                             {
@@ -114,6 +135,15 @@
     }
 
     <main role="main" class="flex-grow-1 site-main">
+        @if (!(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" &&
+               ViewContext.RouteData.Values["action"]?.ToString() == "Index"))
+        {
+            <div class="site-backbar container-fluid">
+                <button type="button" class="btn btn-outline-artisan rounded-pill site-back-button" id="globalBackButton">
+                    <i class="bi bi-arrow-left me-2"></i>Voltar
+                </button>
+            </div>
+        }
         @RenderBody()
     </main>
 
@@ -171,6 +201,7 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@@microsoft/signalr@8.0.7/dist/browser/signalr.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     <script>

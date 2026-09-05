@@ -9,6 +9,7 @@ using AtelieDaTransformacao.Domain.Enums;
 using AtelieDaTransformacao.Domain.Interfaces;
 using AtelieDaTransformacao.Infrastructure.Context;
 
+using AtelieDaTransformacao.UI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -33,17 +34,23 @@ public sealed class OrderController : Controller
     private readonly IOrderRepository _orderRepository;
     private readonly IOrderService _orderService;
     private readonly IHubContext<OrderStatusHub> _hub;
+    private readonly IEmailService _emailService;
+    private readonly ILogger<OrderController> _logger;
 
     public OrderController(
     AtelieDaTransformacaoDbContext context,
     IOrderService orderService,
     IOrderRepository orderRepository,
-    IHubContext<OrderStatusHub> hub)
+    IHubContext<OrderStatusHub> hub,
+    IEmailService emailService,
+    ILogger<OrderController> logger)
     {
         _context = context;
         _orderService = orderService;
         _orderRepository = orderRepository;
         _hub = hub;
+        _emailService = emailService;
+        _logger = logger;
     }
 
     // =========================================================
@@ -189,6 +196,15 @@ public sealed class OrderController : Controller
         if (order is null)
             return View(model);
 
+        try
+        {
+            await _emailService.SendOrderStatusAsync(order);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Não foi possível enviar a confirmação por e-mail do pedido {OrderNumber}.", order.OrderNumber);
+        }
+
         if (!model.DirectProductId.HasValue)
             ClearCart();
 
@@ -282,6 +298,20 @@ public sealed class OrderController : Controller
         var cancelledOrder = await _orderService.GetByIdAsync(id);
         if (cancelledOrder != null)
         {
+            try
+            {
+                // O OrderService retorna OrderDetailsDto; o serviço de e-mail
+                // recebe a entidade Order. Buscamos a entidade pelo repositório.
+                var cancelledOrderEntity = await _orderRepository.GetByIdAsync(id);
+
+                if (cancelledOrderEntity != null)
+                    await _emailService.SendOrderStatusAsync(cancelledOrderEntity);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Não foi possível enviar a atualização por e-mail do pedido {OrderNumber}.", cancelledOrder.OrderNumber);
+            }
+
             await _hub.Clients
                 .Group(OrderStatusHub.AdminGroupName)
                 .SendAsync(
