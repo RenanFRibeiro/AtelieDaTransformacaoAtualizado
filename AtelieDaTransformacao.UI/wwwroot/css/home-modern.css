@@ -1669,3 +1669,211 @@ h1, h2, h3, h4, h5, h6,
         max-width: calc(100vw - 90px);
     }
 }
+
+
+/* ============================================================================
+   TEMA CLARO — PALETA ORIGINAL DO ATELIÊ
+   Importante: estas regras existem SOMENTE no tema claro.
+   O tema escuro não é alterado por este bloco.
+   ============================================================================ */
+html[data-theme="light"] {
+    --modern-brown-950: #21150f;
+    --modern-brown-900: #2b1b14;
+    --modern-brown-800: #3a241a;
+    --modern-brown-700: #543426;
+    --modern-terracotta: #a85c3d;
+    --modern-terracotta-dark: #8f4b31;
+    --modern-caramel: #c58a58;
+    --modern-gold: #d0a15c;
+    --modern-cream: #f6f0e8;
+    --modern-beige: #e9ded0;
+    --modern-sand: #ded0bf;
+    --modern-white: #fffdf9;
+    --modern-text: #2b211c;
+    --modern-muted: #76685d;
+    --modern-line: rgba(58,36,26,.12);
+    --modern-shadow: 0 18px 50px rgba(54,35,24,.08);
+}
+
+/* Fundo geral: creme original, não branco puro */
+html[data-theme="light"] body {
+    background: var(--modern-cream) !important;
+    color: var(--modern-text) !important;
+}
+
+/* HEADER — acabamento claro original */
+html[data-theme="light"] .navbar-artisan {
+    background: rgba(246,240,232,.98) !important;
+    border-bottom: 1px solid rgba(58,36,26,.10) !important;
+    box-shadow: 0 8px 28px rgba(54,35,24,.08) !important;
+}
+
+html[data-theme="light"] .artisan-brand,
+html[data-theme="light"] .artisan-brand:hover,
+html[data-theme="light"] .artisan-brand:focus {
+    color: var(--modern-brown-800) !important;
+}
+
+html[data-theme="light"] .brand-mark {
+    color: var(--modern-terracotta) !important;
+    background: rgba(168,92,61,.06) !important;
+    border-color: rgba(168,92,61,.20) !important;
+}
+
+html[data-theme="light"] .brand-name {
+    color: var(--modern-brown-800) !important;
+}
+
+html[data-theme="light"] .brand-name strong {
+    color: var(--modern-terracotta) !important;
+}
+
+html[data-theme="light"] .nav-link-artisan,
+html[data-theme="light"] .nav-link-artisan:visited {
+    color: var(--modern-brown-700) !important;
+}
+
+html[data-theme="light"] .nav-link-artisan:hover,
+html[data-theme="light"] .nav-link-artisan:focus-visible {
+    color: var(--modern-brown-950) !important;
+}
+
+html[data-theme="light"] .nav-link-artisan::after {
+    background: var(--modern-terracotta) !important;
+}
+
+/* Ações do header sem blocos bege indesejados */
+html[data-theme="light"] .header-user-email-v3,
+html[data-theme="light"] .header-user-email-v3 span {
+    color: var(--modern-brown-700) !important;
+}
+
+html[data-theme="light"] .header-user-email-v3 i {
+    color: var(--modern-terracotta) !important;
+}
+
+html[data-theme="light"] .header-icon-button {
+    color: var(--modern-brown-800) !important;
+    background: transparent !important;
+    border-color: rgba(58,36,26,.16) !important;
+}
+
+html[data-theme="light"] .header-icon-button:hover,
+html[data-theme="light"] .header-icon-button:focus-visible {
+    color: var(--modern-brown-950) !important;
+    background: rgba(168,92,61,.07) !important;
+    border-color: rgba(168,92,61,.24) !important;
+}
+
+/* Botão de tema: apenas círculo, sem quadrado bege */
+html[data-theme="light"] .theme-toggle {
+    background: var(--modern-white) !important;
+    color: var(--modern-brown-800) !important;
+    border-color: rgba(58,36,26,.16) !important;
+}
+
+/* Orçamento: terracota limpo, sem fundo bege */
+html[data-theme="light"] .header-quote-link,
+html[data-theme="light"] .header-quote-link:visited {
+    color: var(--modern-terracotta) !important;
+    background: transparent !important;
+    border-color: transparent !important;
+}
+
+html[data-theme="light"] .header-quote-link:hover,
+html[data-theme="light"] .header-quote-link:focus-visible {
+    color: var(--modern-terracotta-dark) !important;
+    background: rgba(168,92,61,.07) !important;
+    border-color: rgba(168,92,61,.14) !important;
+}
+
+/* Links/ações restantes do header */
+html[data-theme="light"] .header-menu-link-v3,
+html[data-theme="light"] .header-menu-link-v3:visited {
+    color: var(--modern-brown-700) !important;
+}
+
+html[data-theme="light"] .header-menu-link-v3:hover,
+html[data-theme="light"] .header-menu-link-v3:focus-visible {
+    color: var(--modern-brown-950) !important;
+    background: rgba(168,92,61,.06) !important;
+    border-color: rgba(58,36,26,.10) !important;
+}
+
+html[data-theme="light"] .header-register-link {
+    color: #fffdf9 !important;
+    background: var(--modern-terracotta) !important;
+}
+
+html[data-theme="light"] .header-register-link:hover,
+html[data-theme="light"] .header-register-link:focus-visible {
+    color: #fffdf9 !important;
+    background: var(--modern-terracotta-dark) !important;
+}
+
+/* Áreas claras seguem a hierarquia cromática original */
+html[data-theme="light"] .artisan-hero {
+    background: var(--modern-brown-950) !important;
+}
+
+html[data-theme="light"] section:not(.benefits-section) {
+    background-color: var(--modern-cream);
+}
+
+html[data-theme="light"] .benefits-section {
+    background: var(--modern-white);
+    color: var(--modern-text);
+}
+
+html[data-theme="light"] .collection-title,
+html[data-theme="light"] .projects-title,
+html[data-theme="light"] .projects-heading h2,
+html[data-theme="light"] .projects-cta h2,
+html[data-theme="light"] .benefit-item h2 {
+    color: var(--modern-brown-950) !important;
+}
+
+html[data-theme="light"] .collection-subtitle,
+html[data-theme="light"] .projects-subtitle,
+html[data-theme="light"] .projects-heading p,
+html[data-theme="light"] .projects-cta p,
+html[data-theme="light"] .benefit-item p {
+    color: var(--modern-muted) !important;
+}
+
+html[data-theme="light"] .search-box,
+html[data-theme="light"] .project-card {
+    background: var(--modern-white) !important;
+    color: var(--modern-text);
+}
+
+html[data-theme="light"] .projects-hero {
+    background: linear-gradient(180deg, var(--modern-beige) 0%, var(--modern-cream) 100%) !important;
+}
+
+html[data-theme="light"] .projects-cta {
+    background: var(--modern-beige) !important;
+}
+
+html[data-theme="light"] .category-pills .active,
+html[data-theme="light"] .btn-artisan {
+    background: var(--modern-terracotta) !important;
+    border-color: var(--modern-terracotta) !important;
+    color: #fffdf9 !important;
+}
+
+html[data-theme="light"] .category-pills button:not(.active) {
+    background: var(--modern-white);
+    color: var(--modern-brown-700);
+    border-color: var(--modern-line);
+}
+
+html[data-theme="light"] .category-pills button:not(.active):hover {
+    background: var(--modern-beige);
+    color: var(--modern-brown-950);
+}
+
+/* Rodapé continua sendo a âncora escura da paleta original */
+html[data-theme="light"] .artisan-footer {
+    background: var(--modern-brown-950) !important;
+}

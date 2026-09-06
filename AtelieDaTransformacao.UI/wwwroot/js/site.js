@@ -31,14 +31,33 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const savedTheme = safeStorageGet("atelie-theme");
+    // O site inicia em Light Mode para manter a experiência visual consistente.
+    // O modo escuro só é ativado quando o usuário o escolhe e essa escolha fica salva.
     if (savedTheme === "dark" || savedTheme === "light") root.dataset.theme = savedTheme;
-    else if (window.matchMedia?.("(prefers-color-scheme: dark)").matches) root.dataset.theme = "dark";
+    else root.dataset.theme = "light";
     syncThemeIcon();
 
-    themeToggle?.addEventListener("click", () => {
-        root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
-        safeStorageSet("atelie-theme", root.dataset.theme);
+    const applyThemeInstantly = theme => {
+        // Bloqueia as transições apenas durante a troca. Assim o header,
+        // ícones, textos e fundos mudam de uma vez, sem "deslizarem" ou
+        // fazerem uma animação intermediária entre os dois temas.
+        root.classList.add("theme-switching");
+        root.dataset.theme = theme;
+        root.dataset.bsTheme = theme;
+        root.style.colorScheme = theme;
         syncThemeIcon();
+
+        // Mantém as animações/efeitos normais do site depois que a troca
+        // já foi pintada na tela.
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => root.classList.remove("theme-switching"));
+        });
+    };
+
+    themeToggle?.addEventListener("click", () => {
+        const nextTheme = root.dataset.theme === "dark" ? "light" : "dark";
+        safeStorageSet("atelie-theme", nextTheme);
+        applyThemeInstantly(nextTheme);
     });
 
     // ---------------------------------------------------------------------
