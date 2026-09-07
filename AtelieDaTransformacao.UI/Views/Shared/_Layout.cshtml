@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="light" data-bs-theme="light">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,7 +16,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/home-modern.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/theme.css" asp-append-version="true" />
 </head>
 <body class="d-flex flex-column min-vh-100" data-authenticated="@(User.Identity?.IsAuthenticated == true ? "true" : "false")" data-is-admin="@(User.IsInRole("Admin") ? "true" : "false")" data-user-key="@(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "anonymous")" style="--artisan-gold: #c58a58; --artisan-clay: #a85c3d; --artisan-wood: #241812;">
     <header>
@@ -46,11 +45,6 @@
                     </ul>
 
                     <div class="d-flex align-items-center header-actions-v3">
-                        <button type="button" class="header-icon-button theme-toggle" id="themeToggle"
-                                aria-label="Ativar modo escuro" title="Modo escuro">
-                            <i class="bi bi-moon-stars" aria-hidden="true"></i>
-                        </button>
-
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
                             var currentUserEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value
@@ -84,6 +78,11 @@
                                     </div>
                                 </div>
                             </div>
+                            <button type="button" class="header-icon-button theme-toggle" id="themeToggle"
+                                    aria-label="Ativar modo escuro" title="Modo escuro">
+                                <i class="bi bi-moon-stars" aria-hidden="true"></i>
+                            </button>
+
                             if (!User.IsInRole("Admin"))
                             {
                                 <a class="header-menu-link-v3 header-quote-link" aria-label="Solicitar orçamento" asp-controller="Quote" asp-action="Index" title="Solicitar orçamento">
