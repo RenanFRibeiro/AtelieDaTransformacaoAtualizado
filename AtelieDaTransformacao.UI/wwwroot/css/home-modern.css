@@ -1825,3 +1825,516 @@ html[data-theme="dark"] .featured-product-info > div + div {
 html[data-theme="dark"] .process-steps::before {
     background: rgba(255,255,255,.18) !important;
 }
+
+
+/* ============================================================================
+   HEADER V4 — ORGANIZAÇÃO HORIZONTAL + MICROINTERAÇÕES
+   Apenas apresentação/responsividade do cabeçalho e uniformidade dos preços.
+   ============================================================================ */
+@media (min-width: 992px) {
+    .navbar-artisan {
+        height: 72px;
+        min-height: 72px;
+    }
+
+    .navbar-inner {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+    }
+
+    .artisan-brand {
+        flex: 0 0 auto;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    .header-navigation-group {
+        flex: 1 1 auto;
+        min-width: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .artisan-main-nav {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        padding: 4px;
+        margin: 0 !important;
+        border: 1px solid rgba(208,161,92,.12);
+        border-radius: 14px;
+        background: rgba(255,255,255,.025);
+    }
+
+    .artisan-main-nav .nav-item {
+        display: flex;
+    }
+
+    .nav-link-artisan {
+        min-width: 92px;
+        min-height: 38px;
+        padding: .45rem .78rem !important;
+        border-radius: 10px;
+        gap: .42rem;
+        transition: color .28s ease, background .28s ease, transform .28s ease;
+    }
+
+    .nav-link-artisan:hover,
+    .nav-link-artisan:focus-visible {
+        transform: translateY(-1px);
+        background: rgba(255,255,255,.065);
+    }
+
+    .header-actions-v3 {
+        flex: 0 0 auto;
+        display: flex !important;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 4px;
+        padding-left: 14px;
+        border-left: 1px solid rgba(255,255,255,.09);
+    }
+
+    .header-user-email-v3 {
+        max-width: 190px;
+        padding: .45rem .55rem;
+    }
+
+    .header-icon-button,
+    .header-menu-link-v3,
+    .header-register-link {
+        flex: 0 0 auto;
+    }
+
+    .header-menu-link-v3 {
+        min-width: 38px;
+        min-height: 38px;
+        border-radius: 11px;
+        transition: max-width .42s cubic-bezier(.22,1,.36,1),
+                    padding .42s cubic-bezier(.22,1,.36,1),
+                    background .28s ease,
+                    border-color .28s ease,
+                    color .28s ease,
+                    transform .28s ease;
+    }
+
+    .header-menu-link-v3 span {
+        transition: max-width .42s cubic-bezier(.22,1,.36,1),
+                    opacity .24s ease,
+                    transform .42s cubic-bezier(.22,1,.36,1);
+    }
+
+    .header-menu-link-v3:hover,
+    .header-menu-link-v3:focus-visible {
+        transform: translateY(-1px);
+    }
+
+    .header-register-link {
+        min-height: 38px;
+        border-radius: 11px;
+        padding-inline: .9rem;
+        box-shadow: 0 8px 20px rgba(197,138,88,.14);
+        transition: transform .28s ease, background .28s ease, box-shadow .28s ease;
+    }
+
+    .header-register-link:hover,
+    .header-register-link:focus-visible {
+        transform: translateY(-1px);
+        box-shadow: 0 11px 25px rgba(197,138,88,.20);
+    }
+}
+
+@media (max-width: 991.98px) {
+    .navbar-inner {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .header-navigation-group {
+        width: 100%;
+    }
+
+    .artisan-main-nav {
+        width: 100%;
+        padding: 4px;
+        border: 1px solid rgba(208,161,92,.12);
+        border-radius: 13px;
+        background: rgba(255,255,255,.025);
+    }
+
+    .header-actions-v3 {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px;
+        width: 100%;
+        padding-top: 8px;
+    }
+
+    .header-actions-v3 .header-user-email-v3,
+    .header-actions-v3 .header-icon-button,
+    .header-actions-v3 .notification-button {
+        min-height: 42px;
+    }
+
+    .header-actions-v3 .header-user-email-v3 {
+        grid-column: 1 / -1;
+        width: 100%;
+        max-width: none;
+        justify-content: center;
+    }
+
+    .header-actions-v3 .header-menu-link-v3,
+    .header-actions-v3 .header-register-link,
+    .header-actions-v3 form {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .header-actions-v3 .header-menu-link-v3 {
+        justify-content: flex-start;
+        padding-inline: .75rem;
+    }
+
+    .header-actions-v3 .header-menu-link-v3 span {
+        max-width: 100%;
+        opacity: 1;
+        transform: none;
+    }
+
+    .header-actions-v3 form {
+        display: contents;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .navbar-inner {
+        width: calc(100% - 16px);
+    }
+
+    .brand-name {
+        font-size: .91rem;
+    }
+
+    .header-navigation-group .artisan-main-nav {
+        gap: 2px;
+    }
+
+    .header-navigation-group .nav-link-artisan {
+        min-height: 42px;
+        min-width: 0;
+        font-size: .76rem;
+        padding-inline: .55rem !important;
+    }
+
+    .header-navigation-group .nav-link-artisan i {
+        font-size: .86rem;
+    }
+}
+
+/* Preços sempre em uma única linha, inclusive para valores com milhares. */
+.product-footer-modern > div:first-child {
+    flex: 0 0 auto;
+    min-width: max-content;
+}
+
+.product-price {
+    display: inline-block;
+    white-space: nowrap;
+    word-break: keep-all;
+    overflow-wrap: normal;
+    line-height: 1.15;
+    letter-spacing: -.015em;
+}
+
+@media (max-width: 575.98px) {
+    .product-footer-modern {
+        align-items: center;
+        gap: 8px;
+    }
+
+    .product-price {
+        font-size: 1.05rem;
+    }
+}
+
+
+/* ==========================================================
+   HEADER V4 — organização responsiva + microinterações
+   Mantém a estrutura e funcionalidades existentes.
+   ========================================================== */
+
+.navbar-artisan {
+    --header-gap: clamp(0.35rem, 1vw, 1rem);
+}
+
+.navbar-inner {
+    min-height: 74px;
+    display: flex;
+    align-items: center;
+    gap: clamp(1rem, 2.5vw, 2.5rem);
+    padding-inline: clamp(1rem, 3vw, 2.75rem);
+}
+
+.artisan-brand {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: .7rem;
+    white-space: nowrap;
+}
+
+#mainNavbar {
+    flex: 1 1 auto;
+    min-width: 0;
+    align-items: center;
+}
+
+.header-navigation-group {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+    min-width: 0;
+}
+
+.artisan-main-nav {
+    align-items: center;
+    justify-content: center;
+    gap: clamp(.15rem, .8vw, .75rem);
+    margin: 0;
+}
+
+.artisan-main-nav .nav-item {
+    display: flex;
+}
+
+.nav-link-artisan,
+.header-menu-link-v3 {
+    position: relative;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: .48rem;
+    min-height: 42px;
+    padding: .55rem .8rem !important;
+    border-radius: 12px;
+    white-space: nowrap;
+    transition: transform .25s ease, background-color .25s ease, color .25s ease, box-shadow .25s ease;
+}
+
+.nav-link-artisan::after,
+.header-menu-link-v3::after {
+    content: "";
+    position: absolute;
+    left: 18%;
+    right: 18%;
+    bottom: 5px;
+    height: 2px;
+    border-radius: 999px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform .28s ease;
+    opacity: .7;
+}
+
+.nav-link-artisan:hover,
+.nav-link-artisan:focus-visible,
+.header-menu-link-v3:hover,
+.header-menu-link-v3:focus-visible {
+    transform: translateY(-2px);
+}
+
+.nav-link-artisan:hover::after,
+.nav-link-artisan:focus-visible::after,
+.header-menu-link-v3:hover::after,
+.header-menu-link-v3:focus-visible::after {
+    transform: scaleX(1);
+}
+
+.header-actions-v3 {
+    flex: 0 1 auto;
+    justify-content: flex-end;
+    gap: .35rem;
+    min-width: 0;
+}
+
+.header-user-email-v3 {
+    max-width: min(220px, 18vw);
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    padding: .45rem .7rem;
+    border-radius: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.header-user-email-v3 span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.header-icon-button {
+    flex: 0 0 auto;
+    width: 42px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    transition: transform .25s ease, background-color .25s ease, box-shadow .25s ease;
+}
+
+.header-icon-button:hover,
+.header-icon-button:focus-visible {
+    transform: translateY(-2px);
+}
+
+.artisan-toggler {
+    flex: 0 0 auto;
+    margin-left: auto;
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: .55rem !important;
+}
+
+@media (max-width: 1199.98px) {
+    .navbar-inner {
+        gap: 1rem;
+    }
+
+    .brand-name {
+        font-size: 1rem;
+    }
+
+    .artisan-main-nav {
+        gap: .1rem;
+    }
+
+    .nav-link-artisan,
+    .header-menu-link-v3 {
+        padding-inline: .6rem !important;
+    }
+
+    .header-user-email-v3 {
+        max-width: 160px;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .navbar-inner {
+        min-height: 68px;
+        padding-block: .55rem;
+        flex-wrap: wrap;
+    }
+
+    #mainNavbar {
+        flex-basis: 100%;
+        width: 100%;
+        padding: .8rem 0 .35rem;
+    }
+
+    .header-navigation-group {
+        justify-content: stretch;
+        width: 100%;
+        padding-bottom: .55rem;
+        border-bottom: 1px solid rgba(197, 138, 88, .2);
+    }
+
+    .artisan-main-nav {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: .25rem;
+    }
+
+    .artisan-main-nav .nav-item,
+    .nav-link-artisan {
+        width: 100%;
+    }
+
+    .nav-link-artisan {
+        justify-content: flex-start;
+        padding: .75rem .9rem !important;
+    }
+
+    .header-actions-v3 {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: .35rem;
+        padding-top: .65rem;
+    }
+
+    .header-user-email-v3 {
+        order: -1;
+        flex: 1 1 100%;
+        max-width: none;
+    }
+
+    .header-menu-link-v3 {
+        justify-content: flex-start;
+    }
+
+    .header-register-link {
+        flex: 1 1 auto;
+        text-align: center;
+    }
+
+    .notification-panel {
+        right: 0;
+        left: auto;
+        max-width: calc(100vw - 2rem);
+    }
+}
+
+@media (max-width: 575.98px) {
+    .navbar-inner {
+        padding-inline: .85rem;
+    }
+
+    .brand-name {
+        font-size: .92rem;
+    }
+
+    .brand-mark {
+        width: 34px;
+        height: 34px;
+    }
+
+    .header-actions-v3 > * {
+        min-width: 0;
+    }
+
+    .header-menu-link-v3 {
+        flex: 1 1 calc(50% - .35rem);
+    }
+
+    .header-icon-button {
+        width: 40px;
+        height: 40px;
+    }
+
+    .notification-panel {
+        position: fixed;
+        top: 72px;
+        left: .75rem;
+        right: .75rem;
+        width: auto;
+        max-width: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .nav-link-artisan,
+    .nav-link-artisan::after,
+    .header-menu-link-v3,
+    .header-menu-link-v3::after,
+    .header-icon-button {
+        transition: none !important;
+    }
+}
