@@ -45,6 +45,11 @@
                     </ul>
 
                     <div class="d-flex align-items-center header-actions-v3">
+                        <button type="button" class="header-icon-button theme-toggle" id="themeToggle"
+                                aria-label="Ativar modo escuro" aria-pressed="false" title="Modo escuro">
+                            <i class="bi bi-moon-stars" aria-hidden="true"></i>
+                        </button>
+
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
                             var currentUserEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value
@@ -78,11 +83,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="button" class="header-icon-button theme-toggle" id="themeToggle"
-                                    aria-label="Ativar modo escuro" title="Modo escuro">
-                                <i class="bi bi-moon-stars" aria-hidden="true"></i>
-                            </button>
-
                             if (!User.IsInRole("Admin"))
                             {
                                 <a class="header-menu-link-v3 header-quote-link" aria-label="Solicitar orçamento" asp-controller="Quote" asp-action="Index" title="Solicitar orçamento">

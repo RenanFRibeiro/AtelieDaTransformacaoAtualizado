@@ -211,6 +211,21 @@
             .feedback-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
             .feedback-carousel { padding-left:3.25rem; padding-right:3.25rem; --feedback-visible:2; }
         }
+        /* Dark mode: mantém a seção de avaliações integrada à paleta escura. */
+        html[data-theme="dark"] .feedback-section { background: #171311 !important; }
+        html[data-theme="dark"] .feedback-heading p { color: #c9bdb3 !important; }
+        html[data-theme="dark"] .feedback-card { background: #211b18 !important; border-color: rgba(255,255,255,.12) !important; box-shadow: 0 12px 35px rgba(0,0,0,.22); }
+        html[data-theme="dark"] .feedback-card blockquote { color: #f5eee8 !important; }
+        html[data-theme="dark"] .feedback-card-footer { border-top-color: rgba(255,255,255,.12) !important; }
+        html[data-theme="dark"] .feedback-card-footer strong { color: #f5eee8 !important; }
+        html[data-theme="dark"] .feedback-card-footer span,
+        html[data-theme="dark"] .feedback-card-footer time { color: #b8aaa0 !important; }
+        html[data-theme="dark"] .feedback-card-image { background: #2a211d !important; }
+        html[data-theme="dark"] .feedback-carousel-indicators button { background: #81766e; }
+        html[data-theme="dark"] .feedback-carousel-indicators button.active { background: #d08a61; }
+        html[data-theme="dark"] .feedback-carousel-control { background: rgba(57,45,39,.96); color: #fff8ef; border: 1px solid rgba(255,255,255,.12); }
+        html[data-theme="dark"] .feedback-carousel-control:hover { background: rgba(74,56,47,.98); }
+
         @@media (max-width:575.98px) {
             .feedback-section { padding:3.5rem 0; }
             .feedback-grid { grid-template-columns:1fr; }
@@ -219,6 +234,83 @@
             .feedback-carousel-prev { left:.15rem; }
             .feedback-carousel-next { right:.15rem; }
             .feedback-card-body { padding:1.25rem; }
+        }
+    </style>
+
+    <!-- Correção exclusiva do tema escuro da seção de avaliações.
+         Usa os dois atributos de tema para permanecer compatível com o mecanismo atual. -->
+    <style>
+        html[data-theme="dark"] .feedback-section,
+        html[data-bs-theme="dark"] .feedback-section {
+            background: #120e0c !important;
+            color: #f5eee8 !important;
+        }
+
+        html[data-theme="dark"] .feedback-section .feedback-heading h2,
+        html[data-bs-theme="dark"] .feedback-section .feedback-heading h2 {
+            color: #f5eee8 !important;
+        }
+
+        html[data-theme="dark"] .feedback-section .feedback-heading p,
+        html[data-bs-theme="dark"] .feedback-section .feedback-heading p {
+            color: #cfc2b8 !important;
+        }
+
+        html[data-theme="dark"] .feedback-section .feedback-card,
+        html[data-bs-theme="dark"] .feedback-section .feedback-card {
+            background: #211a17 !important;
+            color: #f5eee8 !important;
+            border-color: rgba(255,255,255,.13) !important;
+            box-shadow: 0 14px 36px rgba(0,0,0,.28) !important;
+        }
+
+        html[data-theme="dark"] .feedback-section .feedback-card blockquote,
+        html[data-bs-theme="dark"] .feedback-section .feedback-card blockquote {
+            color: #f5eee8 !important;
+        }
+
+        html[data-theme="dark"] .feedback-section .feedback-card-footer,
+        html[data-bs-theme="dark"] .feedback-section .feedback-card-footer {
+            border-top-color: rgba(255,255,255,.12) !important;
+        }
+
+        html[data-theme="dark"] .feedback-section .feedback-card-footer strong,
+        html[data-bs-theme="dark"] .feedback-section .feedback-card-footer strong {
+            color: #f5eee8 !important;
+        }
+
+        html[data-theme="dark"] .feedback-section .feedback-card-footer span,
+        html[data-theme="dark"] .feedback-section .feedback-card-footer time,
+        html[data-bs-theme="dark"] .feedback-section .feedback-card-footer span,
+        html[data-bs-theme="dark"] .feedback-section .feedback-card-footer time {
+            color: #bdb0a6 !important;
+        }
+
+        html[data-theme="dark"] .feedback-section .feedback-card-image,
+        html[data-bs-theme="dark"] .feedback-section .feedback-card-image {
+            background: #2b211d !important;
+        }
+
+        html[data-theme="dark"] .feedback-section .feedback-carousel-indicators button,
+        html[data-bs-theme="dark"] .feedback-section .feedback-carousel-indicators button {
+            background: #81766e !important;
+        }
+
+        html[data-theme="dark"] .feedback-section .feedback-carousel-indicators button.active,
+        html[data-bs-theme="dark"] .feedback-section .feedback-carousel-indicators button.active {
+            background: #d08a61 !important;
+        }
+
+        html[data-theme="dark"] .feedback-section .feedback-carousel-control,
+        html[data-bs-theme="dark"] .feedback-section .feedback-carousel-control {
+            background: #392d27 !important;
+            color: #fff8ef !important;
+            border: 1px solid rgba(255,255,255,.14) !important;
+        }
+
+        html[data-theme="dark"] .feedback-section .feedback-carousel-control:hover,
+        html[data-bs-theme="dark"] .feedback-section .feedback-carousel-control:hover {
+            background: #4a382f !important;
         }
     </style>
 

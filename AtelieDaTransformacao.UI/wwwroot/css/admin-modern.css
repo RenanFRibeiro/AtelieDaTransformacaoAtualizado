@@ -605,3 +605,68 @@ body.admin-collapsed .admin-logout i { margin: 0 !important; }
         width: min(88vw, 340px) !important;
     }
 }
+
+/* ============================================================================
+   TEMA ESCURO — painel administrativo
+   Apenas tokens e superfícies visuais são alterados.
+   ============================================================================ */
+html[data-theme="dark"] {
+    --admin-brown-950: #100c0a;
+    --admin-brown-900: #18110e;
+    --admin-brown-800: #241914;
+    --admin-brown-700: #3a2921;
+    --admin-terracotta: #d08a61;
+    --admin-terracotta-dark: #b96f4b;
+    --admin-caramel: #d5a06d;
+    --admin-gold: #d8ad78;
+    --admin-cream: #15110f;
+    --admin-beige: #2a211d;
+    --admin-sand: #332821;
+    --admin-white: #211b18;
+    --admin-text: #f5eee8;
+    --admin-muted: #c1b4a8;
+    --admin-line: rgba(255,255,255,.12);
+    --admin-shadow: 0 18px 50px rgba(0,0,0,.28);
+}
+html[data-theme="dark"] .admin-body .card,
+html[data-theme="dark"] .admin-body .table,
+html[data-theme="dark"] .admin-body .modal-content,
+html[data-theme="dark"] .admin-body .offcanvas { background: var(--admin-white) !important; color: var(--admin-text) !important; border-color: var(--admin-line) !important; }
+html[data-theme="dark"] .admin-body .card-header,
+html[data-theme="dark"] .admin-body .card-footer { color: var(--admin-text); border-color: var(--admin-line) !important; }
+html[data-theme="dark"] .admin-body .form-control,
+html[data-theme="dark"] .admin-body .form-select,
+html[data-theme="dark"] .admin-body textarea { background: #171311 !important; color: var(--admin-text) !important; border-color: var(--admin-line) !important; }
+html[data-theme="dark"] .admin-body .form-control::placeholder,
+html[data-theme="dark"] .admin-body .form-select::placeholder { color: #a99a8f !important; }
+html[data-theme="dark"] .admin-body .input-group-text { background: #2a211d !important; color: var(--admin-text) !important; border-color: var(--admin-line) !important; }
+html[data-theme="dark"] .admin-body .text-dark { color: var(--admin-text) !important; }
+html[data-theme="dark"] .admin-body .text-muted,
+html[data-theme="dark"] .admin-body .small.text-muted { color: var(--admin-muted) !important; }
+html[data-theme="dark"] .admin-body .bg-white,
+html[data-theme="dark"] .admin-body .bg-light,
+html[data-theme="dark"] .admin-body .table-light { background: var(--admin-white) !important; color: var(--admin-text) !important; }
+html[data-theme="dark"] .admin-body .table > :not(caption) > * > * { color: var(--admin-text) !important; background: transparent !important; border-color: var(--admin-line) !important; }
+html[data-theme="dark"] .admin-body .border,
+html[data-theme="dark"] .admin-body .border-top,
+html[data-theme="dark"] .admin-body .border-end,
+html[data-theme="dark"] .admin-body .border-bottom,
+html[data-theme="dark"] .admin-body .border-start { border-color: var(--admin-line) !important; }
+html[data-theme="dark"] .admin-body .btn-outline-dark { color: var(--admin-text) !important; border-color: rgba(255,255,255,.22) !important; }
+html[data-theme="dark"] .admin-body .btn-outline-dark:hover { background: var(--admin-text) !important; color: var(--admin-brown-950) !important; }
+html[data-theme="dark"] .admin-body .alert-light { background: #2a211d !important; color: var(--admin-text) !important; border-color: var(--admin-line) !important; }
+html[data-theme="dark"] .admin-body .dropdown-menu,
+html[data-theme="dark"] .admin-body .list-group-item,
+html[data-theme="dark"] .admin-body .accordion-item { background: var(--admin-white) !important; color: var(--admin-text) !important; border-color: var(--admin-line) !important; }
+html[data-theme="dark"] .admin-body .form-check-input { background-color: #171311; border-color: var(--admin-line); }
+html[data-theme="dark"] .admin-body .form-check-input:checked { background-color: var(--admin-terracotta); border-color: var(--admin-terracotta); }
+html[data-theme="dark"] .admin-body .btn-close { filter: invert(1) grayscale(1) brightness(1.8); }
+html[data-theme="dark"] .admin-body .admin-page-head h2,
+html[data-theme="dark"] .admin-body .admin-product-name,
+html[data-theme="dark"] .admin-body .admin-page-head strong { color: var(--admin-text) !important; }
+html[data-theme="dark"] .admin-body .admin-page-head p,
+html[data-theme="dark"] .admin-body .admin-muted { color: var(--admin-muted) !important; }
+
+@media (max-width: 767.98px) {
+    html[data-theme="dark"] .admin-body .admin-content { color: var(--admin-text); }
+}

@@ -1117,3 +1117,61 @@ html[data-theme="light"] .feedback-order-card {
     border-color: var(--ui-border) !important;
     color: var(--ui-text);
 }
+
+/* ============================================================================
+   TEMA ESCURO — camada de compatibilidade para telas legadas
+   Mantém a estrutura e a funcionalidade existentes; altera apenas a aparência.
+   ============================================================================ */
+html[data-theme="dark"] .order-card,
+html[data-theme="dark"] .order-empty-card,
+html[data-theme="dark"] .order-history-filter-card,
+html[data-theme="dark"] .order-history-card,
+html[data-theme="dark"] .feedback-order-card {
+    background: var(--ui-surface) !important;
+    color: var(--ui-text) !important;
+    border-color: var(--ui-border) !important;
+}
+html[data-theme="dark"] .order-label,
+html[data-theme="dark"] .order-date,
+html[data-theme="dark"] .order-note,
+html[data-theme="dark"] .order-history-grid .order-label,
+html[data-theme="dark"] .order-history-grid .order-date {
+    color: var(--ui-muted) !important;
+}
+html[data-theme="dark"] .order-number,
+html[data-theme="dark"] .order-total,
+html[data-theme="dark"] .order-history-grid strong,
+html[data-theme="dark"] .order-page-title {
+    color: var(--ui-text) !important;
+}
+html[data-theme="dark"] .order-note,
+html[data-theme="dark"] .order-history-grid > div:first-child {
+    border-color: var(--ui-border) !important;
+}
+html[data-theme="dark"] .terms-check-box {
+    background: var(--ui-surface-2) !important;
+    border-color: #a99a8f !important;
+}
+html[data-theme="dark"] .order-history-status.success { background: rgba(54,118,90,.22) !important; color: #9bd0b1 !important; }
+html[data-theme="dark"] .order-history-status.danger { background: rgba(180,76,69,.22) !important; color: #f0aaa5 !important; }
+html[data-theme="dark"] .order-history-status.neutral { background: rgba(255,255,255,.08) !important; color: var(--ui-text) !important; }
+html[data-theme="dark"] .text-dark,
+html[data-theme="dark"] .text-body { color: var(--ui-text) !important; }
+html[data-theme="dark"] .border,
+html[data-theme="dark"] .border-top,
+html[data-theme="dark"] .border-end,
+html[data-theme="dark"] .border-bottom,
+html[data-theme="dark"] .border-start { border-color: var(--ui-border) !important; }
+html[data-theme="dark"] .bg-body,
+html[data-theme="dark"] .bg-body-tertiary,
+html[data-theme="dark"] .bg-body-secondary { background-color: var(--ui-surface-2) !important; color: var(--ui-text) !important; }
+html[data-theme="dark"] .shadow-sm,
+html[data-theme="dark"] .shadow { box-shadow: var(--ui-shadow) !important; }
+
+/* Componentes com estilos inline nas views: somente a paleta muda no dark mode. */
+html[data-theme="dark"] .admin-body .card .p-3.rounded-4.mb-5 { background-color: var(--admin-beige, #2a211d) !important; }
+html[data-theme="dark"] .admin-body .btn-light { background: #2a211d !important; color: var(--ui-text) !important; border-color: var(--ui-border) !important; }
+html[data-theme="dark"] .admin-body .btn-light:hover { background: #332821 !important; }
+html[data-theme="dark"] .checkout-email-display { color: var(--ui-text) !important; }
+html[data-theme="dark"] .payment-option,
+html[data-theme="dark"] .freight-option { background: var(--ui-surface) !important; color: var(--ui-text) !important; }

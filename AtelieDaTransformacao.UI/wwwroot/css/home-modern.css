@@ -1669,3 +1669,159 @@ h1, h2, h3, h4, h5, h6,
         max-width: calc(100vw - 90px);
     }
 }
+
+/* ============================================================================
+   TEMA ESCURO — Ateliê da Transformação
+   Overrides visuais somente. A estrutura, componentes e comportamentos atuais
+   permanecem intactos.
+   ============================================================================ */
+html[data-theme="dark"] {
+    --modern-brown-950: #100c0a;
+    --modern-brown-900: #18110e;
+    --modern-brown-800: #241914;
+    --modern-brown-700: #3a2921;
+    --modern-terracotta: #d08a61;
+    --modern-terracotta-dark: #b96f4b;
+    --modern-caramel: #d5a06d;
+    --modern-gold: #d8ad78;
+    --modern-cream: #15110f;
+    --modern-beige: #2a211d;
+    --modern-sand: #332821;
+    --modern-white: #211b18;
+    --modern-text: #f5eee8;
+    --modern-muted: #c1b4a8;
+    --modern-line: rgba(255,255,255,.12);
+    --modern-shadow: 0 18px 50px rgba(0,0,0,.28);
+}
+
+html[data-theme="dark"] .collection-tools { background: rgba(33,27,24,.92) !important; border-color: var(--modern-line) !important; box-shadow: var(--modern-shadow); }
+html[data-theme="dark"] .search-box { background: var(--modern-white) !important; border-color: var(--modern-line) !important; }
+html[data-theme="dark"] .search-box input { color: var(--modern-text); }
+html[data-theme="dark"] .search-box input::placeholder { color: #a99a8f; }
+html[data-theme="dark"] .about-hero { background: linear-gradient(135deg,#201713 0%,#17110f 52%,#2a211c 100%) !important; border-color: var(--modern-line) !important; }
+html[data-theme="dark"] .about-hero-copy > p { color: #c5b8ad !important; }
+html[data-theme="dark"] .about-text-link { color: var(--modern-text) !important; border-color: rgba(255,255,255,.2); }
+html[data-theme="dark"] .about-story-card { background: var(--modern-white) !important; border-color: var(--modern-line) !important; box-shadow: var(--modern-shadow); }
+html[data-theme="dark"] .about-story-card p { color: var(--modern-muted) !important; }
+html[data-theme="dark"] .about-principle { background: #2a211d !important; border-color: var(--modern-line) !important; }
+html[data-theme="dark"] .about-principle p { color: var(--modern-muted) !important; }
+html[data-theme="dark"] .about-principle i { background: #3a2921 !important; }
+html[data-theme="dark"] .about-location-section { background: #17120f !important; }
+html[data-theme="dark"] .about-map-wrap { background: #30251f !important; }
+html[data-theme="dark"] .auth-shell { background: var(--modern-white) !important; border-color: var(--modern-line) !important; box-shadow: var(--modern-shadow); }
+html[data-theme="dark"] .auth-section-title { color: var(--modern-text) !important; }
+html[data-theme="dark"] .auth-section-title small { color: var(--modern-muted) !important; }
+html[data-theme="dark"] .auth-section-title > span { background: #3a2921 !important; color: var(--modern-caramel) !important; }
+html[data-theme="dark"] .auth-shell .form-label { color: var(--modern-text) !important; }
+html[data-theme="dark"] .auth-shell .form-control,
+html[data-theme="dark"] .auth-shell .input-group-text { background: #171311 !important; color: var(--modern-text) !important; border-color: var(--modern-line) !important; }
+html[data-theme="dark"] .auth-terms,
+html[data-theme="dark"] .cep-status { background: #2a211d !important; border-color: var(--modern-line) !important; color: var(--modern-text); }
+html[data-theme="dark"] .legal-page { background: #17120f !important; }
+html[data-theme="dark"] .legal-card { background: var(--modern-white) !important; border-color: var(--modern-line) !important; box-shadow: var(--modern-shadow); }
+html[data-theme="dark"] .legal-card h2 { color: var(--modern-text) !important; }
+html[data-theme="dark"] .legal-card p { color: var(--modern-muted) !important; }
+html[data-theme="dark"] .legal-updated { color: var(--modern-muted) !important; }
+html[data-theme="dark"] .legal-note { background: #2a211d !important; color: var(--modern-text); }
+html[data-theme="dark"] .page-hero { background: linear-gradient(135deg,#2a211d,#17120f) !important; }
+html[data-theme="dark"] .card-wood { background: var(--modern-white) !important; color: var(--modern-text) !important; }
+html[data-theme="dark"] .location-section { background: var(--modern-cream) !important; }
+html[data-theme="dark"] .location-card-modern { background: var(--modern-white) !important; border-color: var(--modern-line) !important; box-shadow: var(--modern-shadow); }
+html[data-theme="dark"] .location-copy > p,
+html[data-theme="dark"] .location-address span:last-child,
+html[data-theme="dark"] .projects-cta p { color: var(--modern-muted) !important; }
+html[data-theme="dark"] .location-icon,
+html[data-theme="dark"] .benefit-icon,
+html[data-theme="dark"] .process-number { background: #332821 !important; border-color: var(--modern-line) !important; }
+html[data-theme="dark"] .benefits-section { background: var(--modern-white) !important; border-color: var(--modern-line) !important; }
+html[data-theme="dark"] .process-steps::before { background: rgba(255,255,255,.16) !important; }
+html[data-theme="dark"] .craft-image-wrap { background: var(--modern-brown-800) !important; }
+html[data-theme="dark"] .craft-image-wrap::after { background: linear-gradient(180deg, transparent 45%, rgba(0,0,0,.78)) !important; }
+html[data-theme="dark"] .artisan-footer { background: var(--modern-brown-950) !important; }
+html[data-theme="dark"] .footer-grid > div:not(.footer-brand-block) a,
+html[data-theme="dark"] .footer-bottom small,
+html[data-theme="dark"] .footer-bottom a { color: rgba(255,248,239,.58) !important; }
+html[data-theme="dark"] .footer-brand-block p { color: rgba(255,248,239,.58) !important; }
+html[data-theme="dark"] .footer-bottom { border-color: rgba(255,255,255,.12) !important; }
+html[data-theme="dark"] .filter-pill-modern { color: var(--modern-text) !important; background: #2a211d !important; border-color: var(--modern-line) !important; }
+html[data-theme="dark"] .filter-pill-modern:hover,
+html[data-theme="dark"] .filter-pill-modern.active { background: #3a2921 !important; color: #fff !important; border-color: rgba(208,138,97,.5) !important; }
+html[data-theme="dark"] .artisan-toggler { border-color: rgba(255,255,255,.22) !important; }
+html[data-theme="dark"] .header-menu-link-v3:hover,
+html[data-theme="dark"] .header-menu-link-v3:focus-visible { background: rgba(255,255,255,.08) !important; }
+html[data-theme="dark"] .site-back-button { color: var(--modern-text); border-color: rgba(255,255,255,.2); }
+html[data-theme="dark"] .site-back-button:hover { background: rgba(255,255,255,.08); color: #fff; }
+
+/* Contraste de utilitários Bootstrap usados por views existentes. */
+html[data-theme="dark"] .bg-white,
+html[data-theme="dark"] .bg-light { background-color: var(--modern-white) !important; color: var(--modern-text) !important; }
+html[data-theme="dark"] .text-dark { color: var(--modern-text) !important; }
+html[data-theme="dark"] .border-light,
+html[data-theme="dark"] .border-dark { border-color: var(--modern-line) !important; }
+
+@media (max-width: 575.98px) {
+    html[data-theme="dark"] .collection-tools { padding: .75rem; }
+}
+
+/* ============================================================================
+   DARK MODE — CONTRASTE DE TEXTO
+   Corrige somente textos que herdavam tons escuros da paleta clara.
+   ============================================================================ */
+html[data-theme="dark"] .collection-title,
+html[data-theme="dark"] .collection-meta strong,
+html[data-theme="dark"] .product-title-modern,
+html[data-theme="dark"] .product-price,
+html[data-theme="dark"] .single-product-intro h2,
+html[data-theme="dark"] .process-intro h2,
+html[data-theme="dark"] .process-step h3,
+html[data-theme="dark"] .benefit-item h2,
+html[data-theme="dark"] .featured-product-copy h2,
+html[data-theme="dark"] .featured-product-info strong,
+html[data-theme="dark"] .projects-title,
+html[data-theme="dark"] .projects-heading h2,
+html[data-theme="dark"] .projects-cta h2,
+html[data-theme="dark"] .project-card-body h3 {
+    color: #f5eee8 !important;
+}
+
+html[data-theme="dark"] .filter-pill-modern,
+html[data-theme="dark"] .product-detail-button,
+html[data-theme="dark"] .featured-text-link,
+html[data-theme="dark"] .btn-outline-artisan-dark {
+    color: #e9ddd3 !important;
+}
+
+html[data-theme="dark"] .product-badge,
+html[data-theme="dark"] .product-view-chip,
+html[data-theme="dark"] .project-view {
+    color: #2b211c !important;
+}
+
+html[data-theme="dark"] .single-product-intro p,
+html[data-theme="dark"] .process-intro p,
+html[data-theme="dark"] .process-step p,
+html[data-theme="dark"] .benefit-item p,
+html[data-theme="dark"] .featured-product-copy > p,
+html[data-theme="dark"] .projects-subtitle,
+html[data-theme="dark"] .projects-heading p,
+html[data-theme="dark"] .project-card-body p {
+    color: #c9bdb3 !important;
+}
+
+html[data-theme="dark"] .product-price-label,
+html[data-theme="dark"] .featured-product-info span,
+html[data-theme="dark"] .featured-index {
+    color: #b8a99e !important;
+}
+
+html[data-theme="dark"] .featured-product-info {
+    border-color: rgba(255,255,255,.14) !important;
+}
+
+html[data-theme="dark"] .featured-product-info > div + div {
+    border-left-color: rgba(255,255,255,.14) !important;
+}
+
+html[data-theme="dark"] .process-steps::before {
+    background: rgba(255,255,255,.18) !important;
+}

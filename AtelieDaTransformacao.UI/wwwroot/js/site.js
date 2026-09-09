@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ---------------------------------------------------------------------
     // Tema: preferência por usuário/navegador, sem piscar a página.
     // ---------------------------------------------------------------------
-    const themeToggle = document.getElementById("themeToggle");
+    const themeToggles = [...document.querySelectorAll(".theme-toggle")];
     const safeStorageGet = key => { try { return localStorage.getItem(key); } catch { return null; } };
     const safeStorageSet = (key, value) => { try { localStorage.setItem(key, value); } catch { /* storage indisponível */ } };
 
@@ -22,10 +22,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const dark = root.dataset.theme === "dark";
         root.dataset.bsTheme = dark ? "dark" : "light";
         root.style.colorScheme = dark ? "dark" : "light";
-        const icon = themeToggle.querySelector("i");
-        if (icon) icon.className = `bi ${dark ? "bi-sun" : "bi-moon-stars"}`;
-        themeToggle.setAttribute("aria-label", dark ? "Ativar modo claro" : "Ativar modo escuro");
-        themeToggle.title = dark ? "Modo claro" : "Modo escuro";
+        themeToggles.forEach(toggle => {
+            const icon = toggle.querySelector("i");
+            if (icon) icon.className = `bi ${dark ? "bi-sun" : "bi-moon-stars"}`;
+            toggle.setAttribute("aria-label", dark ? "Ativar modo claro" : "Ativar modo escuro");
+            toggle.setAttribute("aria-pressed", dark ? "true" : "false");
+            toggle.title = dark ? "Modo claro" : "Modo escuro";
+        });
         const themeColor = document.querySelector('meta[name="theme-color"]');
         if (themeColor) themeColor.setAttribute("content", dark ? "#100b09" : "#2a1c16");
     };
@@ -35,10 +38,12 @@ document.addEventListener("DOMContentLoaded", () => {
     else if (window.matchMedia?.("(prefers-color-scheme: dark)").matches) root.dataset.theme = "dark";
     syncThemeIcon();
 
-    themeToggle?.addEventListener("click", () => {
-        root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
-        safeStorageSet("atelie-theme", root.dataset.theme);
-        syncThemeIcon();
+    themeToggles.forEach(toggle => {
+        toggle.addEventListener("click", () => {
+            root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
+            safeStorageSet("atelie-theme", root.dataset.theme);
+            syncThemeIcon();
+        });
     });
 
     // ---------------------------------------------------------------------
