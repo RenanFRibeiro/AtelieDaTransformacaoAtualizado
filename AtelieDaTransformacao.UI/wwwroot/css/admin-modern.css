@@ -661,11 +661,23 @@ html[data-theme="dark"] .admin-body .accordion-item { background: var(--admin-wh
 html[data-theme="dark"] .admin-body .form-check-input { background-color: #171311; border-color: var(--admin-line); }
 html[data-theme="dark"] .admin-body .form-check-input:checked { background-color: var(--admin-terracotta); border-color: var(--admin-terracotta); }
 html[data-theme="dark"] .admin-body .btn-close { filter: invert(1) grayscale(1) brightness(1.8); }
+html[data-theme="dark"] .admin-body .admin-page-head h1,
 html[data-theme="dark"] .admin-body .admin-page-head h2,
 html[data-theme="dark"] .admin-body .admin-product-name,
 html[data-theme="dark"] .admin-body .admin-page-head strong { color: var(--admin-text) !important; }
 html[data-theme="dark"] .admin-body .admin-page-head p,
 html[data-theme="dark"] .admin-body .admin-muted { color: var(--admin-muted) !important; }
+html[data-theme="dark"] .admin-body .admin-section-title,
+html[data-theme="dark"] .admin-body .admin-stat-value,
+html[data-theme="dark"] .admin-body h1,
+html[data-theme="dark"] .admin-body h2,
+html[data-theme="dark"] .admin-body h3,
+html[data-theme="dark"] .admin-body h4,
+html[data-theme="dark"] .admin-body h5,
+html[data-theme="dark"] .admin-body h6 { color: var(--admin-text) !important; }
+html[data-theme="dark"] .admin-body .admin-section-subtitle,
+html[data-theme="dark"] .admin-body .admin-product-meta,
+html[data-theme="dark"] .admin-body .admin-stat-label { color: var(--admin-muted) !important; }
 
 @media (max-width: 767.98px) {
     html[data-theme="dark"] .admin-body .admin-content { color: var(--admin-text); }
