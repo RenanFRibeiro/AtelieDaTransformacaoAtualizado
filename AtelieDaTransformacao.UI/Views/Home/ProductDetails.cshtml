@@ -18,38 +18,12 @@
 
         <div class="container">
 
-            <!-- BREADCRUMB -->
-
-            <nav aria-label="breadcrumb"
-                 class="product-breadcrumb mb-4">
-
-                <ol class="breadcrumb mb-0">
-
-                    <li class="breadcrumb-item">
-
-                        <a asp-action="Index">
-                            Coleção
-                        </a>
-
-                    </li>
-
-                    <li class="breadcrumb-item">
-
-                        <span>/</span>
-
-                    </li>
-
-                    <li class="breadcrumb-item active"
-                        aria-current="page">
-
-                        @Model.CategoryName
-
-                    </li>
-
-                </ol>
-
-            </nav>
-
+            <div class="product-details-backbar" aria-label="Navegação da página">
+                <button type="button" class="btn site-back-button product-details-back-button" id="productDetailsBackButton" aria-label="Voltar para a página anterior">
+                    <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                    <span>Voltar</span>
+                </button>
+            </div>
 
             <div class="row g-5 align-items-start">
 
@@ -1469,6 +1443,108 @@
 
         .purchase-card {
             padding: .85rem;
+        }
+    }
+
+
+
+    /* ==============================================================
+       DARK MODE — PRODUCT DETAILS / CONTRASTE FINAL
+       ==============================================================
+       Estes ajustes ficam no próprio ProductDetails para prevalecer
+       sobre as regras legadas do bloco de estilo desta página.
+    */
+    html[data-theme="dark"] .product-page .product-category { color: #cbbfb5 !important; }
+    html[data-theme="dark"] .product-page .product-category strong { color: #d39a70 !important; }
+    html[data-theme="dark"] .product-page .product-title { color: #f5eee8 !important; }
+    html[data-theme="dark"] .product-page .product-description p { color: #cbbfb5 !important; }
+    html[data-theme="dark"] .product-page .product-price-card,
+    html[data-theme="dark"] .product-page .product-info-card,
+    html[data-theme="dark"] .product-page .purchase-card { background: #211b18 !important; border-color: rgba(255,255,255,.12) !important; }
+    html[data-theme="dark"] .product-page .product-price,
+    html[data-theme="dark"] .product-page .product-price-label,
+    html[data-theme="dark"] .product-page .secure-purchase strong,
+    html[data-theme="dark"] .product-page .product-info-card strong,
+    html[data-theme="dark"] .product-page .quantity-group label { color: #f5eee8 !important; }
+    html[data-theme="dark"] .product-page .secure-purchase span,
+    html[data-theme="dark"] .product-page .product-info-card span,
+    html[data-theme="dark"] .product-page .quantity-group small,
+    html[data-theme="dark"] .product-page .purchase-note,
+    html[data-theme="dark"] .product-page .product-image-caption { color: #cbbfb5 !important; }
+    html[data-theme="dark"] .product-page .product-info-card a { color: #d39a70 !important; }
+    html[data-theme="dark"] .product-page .authenticity-card,
+    html[data-theme="dark"] .product-page .login-required,
+    html[data-theme="dark"] .product-page .unavailable-product { background: #2a211d !important; border-color: rgba(255,255,255,.12) !important; }
+    html[data-theme="dark"] .product-page .authenticity-card h3,
+    html[data-theme="dark"] .product-page .login-required strong,
+    html[data-theme="dark"] .product-page .unavailable-product strong { color: #f5eee8 !important; }
+    html[data-theme="dark"] .product-page .authenticity-card p,
+    html[data-theme="dark"] .product-page .login-required p,
+    html[data-theme="dark"] .product-page .unavailable-product span { color: #cbbfb5 !important; }
+    html[data-theme="dark"] .product-page .quantity-input { background: #171311 !important; border-color: rgba(255,255,255,.14) !important; }
+    html[data-theme="dark"] .product-page .quantity-field,
+    html[data-theme="dark"] .product-page .quantity-btn { color: #f5eee8 !important; }
+    html[data-theme="dark"] .product-page .secure-purchase { border-left-color: rgba(255,255,255,.12) !important; }
+
+
+
+    /* =============================================================
+       NAVEGAÇÃO — PRODUCT DETAILS
+       ============================================================= */
+    .product-details-backbar {
+        padding: 4px 0 18px;
+    }
+
+    .product-details-back-button {
+        min-height: 38px;
+        padding: .45rem .78rem;
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        border: 1px solid var(--ui-border, rgba(58,36,26,.13));
+        border-radius: 10px;
+        background: transparent;
+        color: var(--ui-muted, #76685d);
+        font-size: .78rem;
+        font-weight: 700;
+        line-height: 1;
+        box-shadow: none;
+        transition: background-color .18s ease, color .18s ease, border-color .18s ease, transform .18s ease;
+    }
+
+    .product-details-back-button i {
+        font-size: .9rem;
+    }
+
+    .product-details-back-button:hover,
+    .product-details-back-button:focus-visible {
+        background: color-mix(in srgb, var(--ui-accent, #b86f49) 9%, transparent);
+        color: var(--ui-text, #2d211b);
+        border-color: color-mix(in srgb, var(--ui-accent, #b86f49) 42%, var(--ui-border, rgba(58,36,26,.13)));
+        transform: translateX(-1px);
+    }
+
+    html[data-theme="dark"] .product-details-back-button {
+        color: #cbbfb5;
+        border-color: rgba(255,255,255,.14);
+    }
+
+    html[data-theme="dark"] .product-details-back-button:hover,
+    html[data-theme="dark"] .product-details-back-button:focus-visible {
+        color: #f5eee8;
+        border-color: rgba(208,138,97,.55);
+        background: rgba(208,138,97,.10);
+    }
+
+    @@media (max-width: 767.98px) {
+        .product-details-backbar {
+            padding: 2px 0 14px;
+        }
+
+        .product-details-back-button {
+            min-height: 36px;
+            padding-inline: .7rem;
+            font-size: .74rem;
         }
     }
 

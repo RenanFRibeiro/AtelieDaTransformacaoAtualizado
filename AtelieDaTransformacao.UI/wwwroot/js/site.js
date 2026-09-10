@@ -49,12 +49,20 @@ document.addEventListener("DOMContentLoaded", () => {
     // ---------------------------------------------------------------------
     // Voltar
     // ---------------------------------------------------------------------
-    document.getElementById("globalBackButton")?.addEventListener("click", () => {
-        if (document.referrer && new URL(document.referrer).origin === window.location.origin && window.history.length > 1)
-            window.history.back();
-        else
-            window.location.assign("/");
-    });
+    const goBack = () => {
+        try {
+            const referrer = document.referrer ? new URL(document.referrer) : null;
+            if (referrer && referrer.origin === window.location.origin && window.history.length > 1) {
+                window.history.back();
+                return;
+            }
+        } catch { /* fallback abaixo */ }
+
+        window.location.assign("/");
+    };
+
+    document.getElementById("globalBackButton")?.addEventListener("click", goBack);
+    document.getElementById("adminBackButton")?.addEventListener("click", goBack);
 
     // ---------------------------------------------------------------------
     // Menu mobile: Bootstrap é a única fonte de verdade.

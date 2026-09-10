@@ -169,14 +169,16 @@
                     <strong>@pageTitle</strong>
                 </div>
 
-                <div class="admin-topbar-actions">
-                    <a asp-controller="Home" asp-action="Index" class="admin-top-action" title="Abrir loja">
-                        <i class="bi bi-shop"></i><span>Ver loja</span>
-                    </a>
-                </div>
+                <div class="admin-topbar-actions" aria-hidden="true"></div>
             </header>
 
             <main class="admin-content" role="main">
+                <div class="site-backbar admin-backbar">
+                    <button type="button" class="btn site-back-button" id="adminBackButton" aria-label="Voltar para a página anterior">
+                        <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                        <span>Voltar</span>
+                    </button>
+                </div>
                 @RenderBody()
             </main>
         </div>

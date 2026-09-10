@@ -1175,3 +1175,140 @@ html[data-theme="dark"] .admin-body .btn-light:hover { background: #332821 !impo
 html[data-theme="dark"] .checkout-email-display { color: var(--ui-text) !important; }
 html[data-theme="dark"] .payment-option,
 html[data-theme="dark"] .freight-option { background: var(--ui-surface) !important; color: var(--ui-text) !important; }
+
+
+/* ============================================================================
+   NAVEGAÇÃO SIMPLIFICADA — BOTÃO VOLTAR GLOBAL
+   ============================================================================ */
+.site-backbar {
+    padding: 12px 20px 6px;
+}
+
+.site-back-button {
+    min-height: 38px;
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .45rem .78rem;
+    border: 1px solid var(--ui-border, rgba(58,36,26,.13));
+    border-radius: 10px;
+    background: transparent;
+    color: var(--ui-muted, #76685d);
+    font-size: .78rem;
+    font-weight: 700;
+    line-height: 1;
+    box-shadow: none;
+    transition: background-color .18s ease, color .18s ease, border-color .18s ease, transform .18s ease;
+}
+
+.site-back-button i {
+    font-size: .9rem;
+}
+
+.site-back-button:hover,
+.site-back-button:focus-visible {
+    background: color-mix(in srgb, var(--ui-accent, #b86f49) 9%, transparent);
+    color: var(--ui-text, #2d211b);
+    border-color: color-mix(in srgb, var(--ui-accent, #b86f49) 42%, var(--ui-border, rgba(58,36,26,.13)));
+    transform: translateX(-1px);
+}
+
+.admin-backbar {
+    padding: 0 0 14px;
+}
+
+.admin-backbar .site-back-button {
+    border-color: var(--ui-border);
+    background: transparent;
+}
+
+/* ProductDetails: no modo escuro, todos os textos principais usam contraste claro. */
+html[data-theme="dark"] .product-page,
+html[data-theme="dark"] .product-page .product-hero,
+html[data-theme="dark"] .product-page .product-content {
+    color: var(--ui-text) !important;
+}
+
+html[data-theme="dark"] .product-page .product-category,
+html[data-theme="dark"] .product-page .product-description p,
+html[data-theme="dark"] .product-page .secure-purchase span,
+html[data-theme="dark"] .product-page .product-info-card span,
+html[data-theme="dark"] .product-page .product-info-card a,
+html[data-theme="dark"] .product-page .authenticity-card p,
+html[data-theme="dark"] .product-page .quantity-group small,
+html[data-theme="dark"] .product-page .purchase-note,
+html[data-theme="dark"] .product-page .unavailable-product span,
+html[data-theme="dark"] .product-page .product-image-caption,
+html[data-theme="dark"] .product-page .product-image-caption span {
+    color: #cbbfb5 !important;
+}
+
+html[data-theme="dark"] .product-page .product-title,
+html[data-theme="dark"] .product-page .product-description,
+html[data-theme="dark"] .product-page .product-price,
+html[data-theme="dark"] .product-page .product-price-label,
+html[data-theme="dark"] .product-page .secure-purchase strong,
+html[data-theme="dark"] .product-page .product-info-card strong,
+html[data-theme="dark"] .product-page .authenticity-card h3,
+html[data-theme="dark"] .product-page .quantity-group label,
+html[data-theme="dark"] .product-page .login-required strong,
+html[data-theme="dark"] .product-page .unavailable-product strong {
+    color: #f5eee8 !important;
+}
+
+html[data-theme="dark"] .product-page .product-eyebrow,
+html[data-theme="dark"] .product-page .product-category strong,
+html[data-theme="dark"] .product-page .product-info-card a {
+    color: #d39a70 !important;
+}
+
+html[data-theme="dark"] .product-page .product-price-card,
+html[data-theme="dark"] .product-page .product-info-card,
+html[data-theme="dark"] .product-page .purchase-card {
+    background: #211b18 !important;
+    border-color: rgba(255,255,255,.12) !important;
+    color: #f5eee8 !important;
+    box-shadow: 0 16px 38px rgba(0,0,0,.18);
+}
+
+html[data-theme="dark"] .product-page .authenticity-card,
+html[data-theme="dark"] .product-page .login-required,
+html[data-theme="dark"] .product-page .unavailable-product {
+    background: #2a211d !important;
+    border-color: rgba(255,255,255,.12) !important;
+}
+
+html[data-theme="dark"] .product-page .secure-purchase {
+    border-left-color: rgba(255,255,255,.12) !important;
+}
+
+html[data-theme="dark"] .product-page .quantity-input {
+    background: #171311 !important;
+    border-color: rgba(255,255,255,.14) !important;
+}
+
+html[data-theme="dark"] .product-page .quantity-field,
+html[data-theme="dark"] .product-page .quantity-btn {
+    color: #f5eee8 !important;
+}
+
+html[data-theme="dark"] .product-page .product-benefits {
+    background: #15110f !important;
+    border-top-color: rgba(255,255,255,.08) !important;
+}
+
+@media (max-width: 767.98px) {
+    .site-backbar {
+        padding: 10px 14px 5px;
+    }
+
+    .site-back-button {
+        min-height: 36px;
+        padding-inline: .7rem;
+        font-size: .74rem;
+    }
+
+    .admin-backbar {
+        padding: 0 0 12px;
+    }
+}
