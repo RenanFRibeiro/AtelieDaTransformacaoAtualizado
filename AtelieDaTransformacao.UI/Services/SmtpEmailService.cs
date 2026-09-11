@@ -78,22 +78,6 @@ public sealed class SmtpEmailService : IEmailService
             </div>
             """, cancellationToken);
 
-    public async Task SendEmailConfirmationAsync(string to, string confirmationUrl, CancellationToken cancellationToken = default)
-    {
-        if (string.IsNullOrWhiteSpace(_options.Host) || string.IsNullOrWhiteSpace(_options.From))
-            throw new InvalidOperationException("O serviço de e-mail não está configurado.");
-
-        await SendAsync(to, "Confirme seu e-mail — Ateliê da Transformação",
-            $"""
-            <div style="font-family:Arial,sans-serif;line-height:1.6">
-              <h2>Confirme seu e-mail</h2>
-              <p>Para ativar sua conta, confirme o endereço de e-mail clicando no botão abaixo.</p>
-              <p><a href="{WebUtility.HtmlEncode(confirmationUrl)}" style="display:inline-block;padding:12px 20px;background:#a85c3d;color:#fff;text-decoration:none;border-radius:8px">Confirmar e-mail</a></p>
-              <p>Se você não criou esta conta, ignore esta mensagem.</p>
-            </div>
-            """, cancellationToken);
-    }
-
     public Task SendOrderStatusAsync(Order order, CancellationToken cancellationToken = default)
     {
         var email = order.CustomerEmail ?? order.UserEmail;

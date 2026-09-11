@@ -164,12 +164,6 @@ public sealed class AdminOrdersController : Controller
             return RedirectToAction(nameof(Details), new { id });
         }
 
-        if (!order.Status.CanTransitionTo(status))
-        {
-            TempData["ErrorMessage"] = $"Não é permitido alterar o pedido de {order.Status.ToDisplayName()} para {status.ToDisplayName()}.";
-            return RedirectToAction(nameof(Details), new { id });
-        }
-
         var statusChanged = order.Status != status;
         var changed = status == OrderStatus.Cancelado
             ? await _repository.CancelAsync(id)

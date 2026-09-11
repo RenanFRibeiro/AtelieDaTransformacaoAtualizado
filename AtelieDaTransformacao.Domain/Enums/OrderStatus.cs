@@ -14,48 +14,52 @@ public enum OrderStatus
 
 public static class OrderStatusExtensions
 {
-    public static string ToDisplayName(this OrderStatus status) => status switch
+    public static string ToDisplayName(
+        this OrderStatus status)
     {
-        OrderStatus.Criado => "Criado",
-        OrderStatus.Pendente => "Pendente",
-        OrderStatus.Aprovado => "Aprovado",
-        OrderStatus.Separacao => "Separação",
-        OrderStatus.Faturado => "Faturado",
-        OrderStatus.Enviado => "Enviado",
-        OrderStatus.Entregue => "Entregue",
-        OrderStatus.Cancelado => "Cancelado",
-        _ => status.ToString()
-    };
+        return status switch
+        {
+            OrderStatus.Criado => "Criado",
+            OrderStatus.Pendente => "Pendente",
+            OrderStatus.Aprovado => "Aprovado",
+            OrderStatus.Separacao => "Separação",
+            OrderStatus.Faturado => "Faturado",
+            OrderStatus.Enviado => "Enviado",
+            OrderStatus.Entregue => "Entregue",
+            OrderStatus.Cancelado => "Cancelado",
+            _ => status.ToString()
+        };
+    }
 
-    public static OrderStatus? GetNext(this OrderStatus status) => status switch
+    public static OrderStatus? GetNext(
+        this OrderStatus status)
     {
-        OrderStatus.Criado => OrderStatus.Pendente,
-        OrderStatus.Pendente => OrderStatus.Aprovado,
-        OrderStatus.Aprovado => OrderStatus.Separacao,
-        OrderStatus.Separacao => OrderStatus.Faturado,
-        OrderStatus.Faturado => OrderStatus.Enviado,
-        OrderStatus.Enviado => OrderStatus.Entregue,
-        _ => null
-    };
+        return status switch
+        {
+            OrderStatus.Criado => OrderStatus.Pendente,
+            OrderStatus.Pendente => OrderStatus.Aprovado,
+            OrderStatus.Aprovado => OrderStatus.Separacao,
+            OrderStatus.Separacao => OrderStatus.Faturado,
+            OrderStatus.Faturado => OrderStatus.Enviado,
+            OrderStatus.Enviado => OrderStatus.Entregue,
+            _ => null
+        };
+    }
 
-    public static bool CanCancel(this OrderStatus status) => status switch
+    public static bool CanCancel(
+        this OrderStatus status)
     {
-        OrderStatus.Criado => true,
-        OrderStatus.Pendente => true,
-        OrderStatus.Aprovado => true,
-        OrderStatus.Separacao => true,
-        OrderStatus.Faturado => true,
-        _ => false
-    };
-
-    public static bool CanTransitionTo(this OrderStatus current, OrderStatus target)
-    {
-        if (current == target)
-            return true;
-
-        if (target == OrderStatus.Cancelado)
-            return current.CanCancel();
-
-        return current.GetNext() == target;
+        return status switch
+        {
+            OrderStatus.Criado => true,
+            OrderStatus.Pendente => true,
+            OrderStatus.Aprovado => true,
+            OrderStatus.Separacao => true,
+            OrderStatus.Faturado => true,
+            OrderStatus.Enviado => false,
+            OrderStatus.Entregue => false,
+            OrderStatus.Cancelado => false,
+            _ => false
+        };
     }
 }
