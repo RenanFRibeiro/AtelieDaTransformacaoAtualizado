@@ -4,9 +4,11 @@ using AtelieDaTransformacao.UI.Models;
 using AtelieDaTransformacao.UI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace AtelieDaTransformacao.UI.Controllers;
 
+[EnableRateLimiting("auth")]
 public class AccountController : Controller
 {
     private const string RegistrationReasonKey = "RegistrationReason";
@@ -14,15 +16,18 @@ public class AccountController : Controller
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly UserManager<IdentityUser> _userManager;
     private readonly IEmailService _emailService;
+    private readonly IWebHostEnvironment _environment;
 
     public AccountController(
         SignInManager<IdentityUser> signInManager,
         UserManager<IdentityUser> userManager,
-        IEmailService emailService)
+        IEmailService emailService,
+        IWebHostEnvironment environment)
     {
         _signInManager = signInManager;
         _userManager = userManager;
         _emailService = emailService;
+        _environment = environment;
     }
 
     [HttpGet]
@@ -60,6 +65,11 @@ public class AccountController : Controller
         {
             ModelState.AddModelError(string.Empty,
                 "Esta conta está temporariamente bloqueada. Tente novamente mais tarde.");
+        }
+        else if (result.IsNotAllowed && _environment.IsProduction())
+        {
+            ModelState.AddModelError(string.Empty,
+                "Confirme seu e-mail antes de entrar. Verifique sua caixa de entrada.");
         }
         else
         {
@@ -227,6 +237,40 @@ public class AccountController : Controller
             return View(model);
         }
 
+        if (_environment.IsProduction())
+        {
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var confirmationUrl = Url.Action(
+                nameof(ConfirmEmail),
+                "Account",
+                new { userId = user.Id, token },
+                Request.Scheme);
+
+            if (string.IsNullOrWhiteSpace(confirmationUrl))
+            {
+                await _userManager.DeleteAsync(user);
+                ModelState.AddModelError(string.Empty, "Não foi possível gerar a confirmação do e-mail.");
+                return View(model);
+            }
+
+            try
+            {
+                await _emailService.SendEmailConfirmationAsync(user.Email!, confirmationUrl);
+            }
+            catch (Exception ex)
+            {
+                await _userManager.DeleteAsync(user);
+                ModelState.AddModelError(string.Empty, "Não foi possível enviar o e-mail de confirmação. Tente novamente mais tarde.");
+                HttpContext.RequestServices.GetRequiredService<ILogger<AccountController>>()
+                    .LogError(ex, "Falha ao enviar confirmação de e-mail para {Email}.", user.Email);
+                return View(model);
+            }
+
+            TempData.Remove(RegistrationReasonKey);
+            TempData["SuccessMessage"] = "Conta criada. Verifique seu e-mail para confirmar a conta antes de entrar.";
+            return RedirectToAction(nameof(Login), new { returnUrl });
+        }
+
         await _signInManager.SignInAsync(user, isPersistent: false);
         TempData.Remove(RegistrationReasonKey);
 
@@ -238,6 +282,30 @@ public class AccountController : Controller
             $"Bem-vindo(a), {model.FirstName}! Sua conta foi criada com sucesso.";
 
         return RedirectToAction("Index", "Home");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> ConfirmEmail(string? userId, string? token)
+    {
+        if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(token))
+        {
+            TempData["ErrorMessage"] = "O link de confirmação é inválido ou está incompleto.";
+            return RedirectToAction(nameof(Login));
+        }
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user is null)
+        {
+            TempData["ErrorMessage"] = "Não foi possível localizar a conta.";
+            return RedirectToAction(nameof(Login));
+        }
+
+        var result = await _userManager.ConfirmEmailAsync(user, token);
+        TempData[result.Succeeded ? "SuccessMessage" : "ErrorMessage"] = result.Succeeded
+            ? "E-mail confirmado com sucesso. Agora você já pode entrar."
+            : "O link de confirmação é inválido ou expirou. Solicite um novo cadastro ou contato com o suporte.";
+
+        return RedirectToAction(nameof(Login));
     }
 
     [HttpGet]

@@ -204,8 +204,11 @@ public sealed class OrderRepository : IOrderRepository
         if (order == null)
             return false;
 
-        if (order.Status == OrderStatus.Cancelado)
+        if (!order.Status.CanTransitionTo(status))
             return false;
+
+        if (status == OrderStatus.Cancelado)
+            return await CancelAsync(id);
 
         order.Status = status;
 

@@ -5,6 +5,7 @@ using AtelieDaTransformacao.Application.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.IdentityModel.Tokens;
 
 namespace AtelieDaTransformacao.API.Controllers;
@@ -26,8 +27,12 @@ public sealed class AuthController : ControllerBase
 
     [HttpPost("register")]
     [AllowAnonymous]
+    [EnableRateLimiting("auth")]
     public async Task<ActionResult<UserDto>> Register(RegisterDto dto)
     {
+        if (!dto.AcceptTerms)
+            return BadRequest(new { message = "Aceite os Termos de Uso e a Política de Privacidade para continuar." });
+
         if (dto.Password != dto.ConfirmPassword)
             return BadRequest(new { message = "As senhas não coincidem." });
 
@@ -49,20 +54,26 @@ public sealed class AuthController : ControllerBase
 
     [HttpPost("login")]
     [AllowAnonymous]
+    [EnableRateLimiting("auth")]
     public Task<ActionResult<LoginResponseDto>> Login(LoginDto dto) => LoginInternalAsync(dto, requireDesktopOrigin: false);
 
     // Rota exclusiva do aplicativo Desktop.
     // Somente contas marcadas como criadas pelo Desktop podem obter token por esta rota.
     [HttpPost("desktop-login")]
     [AllowAnonymous]
+    [EnableRateLimiting("auth")]
     public Task<ActionResult<LoginResponseDto>> DesktopLogin(LoginDto dto) => LoginInternalAsync(dto, requireDesktopOrigin: true);
 
     private async Task<ActionResult<LoginResponseDto>> LoginInternalAsync(LoginDto dto, bool requireDesktopOrigin)
     {
-        var user = await _users.FindByEmailAsync(dto.Email.Trim());
+        var email = dto.Email?.Trim().ToLowerInvariant() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(email) || email.Length > 180 || !System.Net.Mail.MailAddress.TryCreate(email, out _))
+            return Unauthorized(new { message = "E-mail ou senha inválidos." });
+
+        var user = await _users.FindByEmailAsync(email);
         if (user is null) return Unauthorized(new { message = "E-mail ou senha inválidos." });
 
-        var result = await _signIn.CheckPasswordSignInAsync(user, dto.Password, false);
+        var result = await _signIn.CheckPasswordSignInAsync(user, dto.Password, lockoutOnFailure: true);
         if (!result.Succeeded) return Unauthorized(new { message = "E-mail ou senha inválidos." });
 
         if (requireDesktopOrigin)
@@ -96,7 +107,7 @@ public sealed class AuthController : ControllerBase
         if (user is null)
             return Unauthorized(new { message = "Usuário não encontrado." });
 
-        var email = dto.Email.Trim();
+        var email = dto.Email?.Trim().ToLowerInvariant() ?? string.Empty;
         if (string.IsNullOrWhiteSpace(email))
             return BadRequest(new { message = "Informe o e-mail." });
 
@@ -183,7 +194,9 @@ public sealed class AuthController : ControllerBase
 
     private string CreateToken(IdentityUser user, IList<string> roles, DateTime expires)
     {
-        var key = _configuration["Jwt:Key"] ?? throw new InvalidOperationException("Jwt:Key não configurada.");
+        var key = _configuration["Jwt:Key"];
+        if (string.IsNullOrWhiteSpace(key) || Encoding.UTF8.GetByteCount(key) < 32)
+            throw new InvalidOperationException("Jwt:Key não configurada ou muito curta.");
         var issuer = _configuration["Jwt:Issuer"] ?? "AtelieDaTransformacao";
         var claims = new List<Claim>
         {

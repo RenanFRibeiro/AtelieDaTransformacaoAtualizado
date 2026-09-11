@@ -44,9 +44,9 @@ public sealed class UserManagementService : IUserManagementService
         if (dto.Password != dto.ConfirmPassword)
             return null;
 
-        var email = dto.Email.Trim();
-        if (string.IsNullOrWhiteSpace(email))
-            return null;
+        var email = dto.Email?.Trim().ToLowerInvariant() ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(email) || email.Length > 180 || !System.Net.Mail.MailAddress.TryCreate(email, out _))
+            throw new InvalidOperationException("Informe um e-mail válido.");
 
         var existing = await _users.FindByEmailAsync(email);
         if (existing is not null)

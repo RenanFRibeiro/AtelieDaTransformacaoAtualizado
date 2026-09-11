@@ -2,6 +2,7 @@ using System.Security.Claims;
 using AtelieDaTransformacao.Domain.Entities;
 using AtelieDaTransformacao.Domain.Enums;
 using AtelieDaTransformacao.Infrastructure.Context;
+using AtelieDaTransformacao.Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,11 +15,14 @@ namespace AtelieDaTransformacao.API.Controllers;
 public sealed class OrdersController : ControllerBase
 {
     private readonly AtelieDaTransformacaoDbContext _db;
+    private readonly IOrderRepository _orders;
 
     public OrdersController(
-        AtelieDaTransformacaoDbContext db)
+        AtelieDaTransformacaoDbContext db,
+        IOrderRepository orders)
     {
         _db = db;
+        _orders = orders;
     }
 
     [HttpGet]
@@ -51,8 +55,7 @@ public sealed class OrdersController : ControllerBase
 
                 Date = x.CreatedAt,
 
-                // A entidade Order atual não possui CustomerName.
-                Customer = x.UserEmail,
+                Customer = string.IsNullOrWhiteSpace(x.CustomerName) ? x.UserEmail ?? string.Empty : x.CustomerName,
 
                 Total = x.Total,
 
@@ -94,16 +97,31 @@ public sealed class OrdersController : ControllerBase
             });
         }
 
-        order.Status =
-            request.Status;
+        if (!order.Status.CanTransitionTo(request.Status))
+        {
+            return Conflict(new
+            {
+                message = $"Não é permitido alterar o pedido de {order.Status.ToDisplayName()} para {request.Status.ToDisplayName()}."
+            });
+        }
 
-        order.UpdatedAt =
-            DateTime.UtcNow;
+        bool changed;
+        if (request.Status == OrderStatus.Cancelado)
+        {
+            changed = await _orders.CancelAsync(id);
+        }
+        else
+        {
+            order.Status = request.Status;
+            order.UpdatedAt = DateTime.UtcNow;
+            order.StatusChangedAt = DateTime.UtcNow;
+            changed = await _db.SaveChangesAsync(ct) > 0;
+        }
 
-        order.StatusChangedAt =
-            DateTime.UtcNow;
+        if (!changed)
+            return Conflict(new { message = "Não foi possível atualizar o pedido." });
 
-        await _db.SaveChangesAsync(ct);
+        order = await _db.Orders.FirstAsync(x => x.Id == id, ct);
 
         return Ok(
             new OrderListItemResponse
@@ -119,7 +137,7 @@ public sealed class OrdersController : ControllerBase
                     order.CreatedAt,
 
                 Customer =
-                    order.UserEmail,
+                    string.IsNullOrWhiteSpace(order.CustomerName) ? order.UserEmail ?? string.Empty : order.CustomerName,
 
                 Total =
                     order.Total,
