@@ -6,7 +6,7 @@ namespace AtelieDaTransformacao.UI.Controllers;
 
 public class QuoteController : Controller
 {
-    private const string WhatsAppNumber = "5511999999999"; // TROQUE pelo número real da empresa.
+    private const string WhatsAppNumber = "5511972160760"; // TROQUE pelo número real da empresa.
 
     [HttpGet]
     public IActionResult Index() => View(new QuoteRequestViewModel());
