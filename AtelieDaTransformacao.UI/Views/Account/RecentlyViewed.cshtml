@@ -1,0 +1,86 @@
+@{ ViewData["Title"] = "Vistos recentemente"; }
+
+<section class="ux-account-hero page-hero text-center py-5 mb-4">
+    <div class="container">
+        <span class="eyebrow ux-reveal">MINHA CONTA</span>
+        <h1 class="display-5 serif-title fw-bold mt-2 ux-reveal">Vistos recentemente</h1>
+        <p class="lead text-muted ux-reveal">Retome a descoberta das peças que você consultou.</p>
+        <div class="ux-hero-orbit" aria-hidden="true"><span></span><span></span><span></span></div>
+    </div>
+</section>
+
+<div class="container pb-5 ux-account-page">
+    <div class="ux-section-heading ux-reveal">
+        <div><span class="eyebrow">CONTINUE DE ONDE PAROU</span><h2 class="serif-title h3 mb-1">Últimas peças vistas</h2></div>
+        <button type="button" class="btn btn-outline-artisan-dark rounded-pill" data-clear-history><i class="bi bi-trash3 me-1"></i> Limpar histórico</button>
+    </div>
+    <div id="recentGrid" class="row g-4 ux-card-grid"></div>
+    <div id="recentEmpty" class="ux-empty ux-empty-premium ux-reveal">
+        <div class="ux-empty-icon"><i class="bi bi-clock-history" aria-hidden="true"></i></div>
+        <span class="eyebrow">SUA JORNADA</span>
+        <h2 class="h4 serif-title mt-2">Seu histórico está vazio</h2>
+        <p class="text-muted mx-auto">Quando você visitar uma peça, ela aparecerá aqui para você continuar a descoberta.</p>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-artisan rounded-pill px-4">Explorar coleção <i class="bi bi-arrow-up-right ms-1"></i></a>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+(function () {
+    document.addEventListener('DOMContentLoaded', function () {
+        const grid = document.getElementById('recentGrid');
+        const empty = document.getElementById('recentEmpty');
+        const items = window.AtelieUX?.history?.() || [];
+        empty.hidden = items.length > 0;
+
+        items.forEach((x, index) => {
+            const col = document.createElement('div');
+            col.className = 'col-12 col-md-6 col-lg-4 ux-reveal';
+            col.style.setProperty('--reveal-delay', `${Math.min(index * 70, 420)}ms`);
+
+            const article = document.createElement('article');
+            article.className = 'ux-product-card h-100';
+
+            const media = document.createElement('a');
+            media.href = safeUrl(x.url);
+            media.className = 'ux-product-card-media';
+            const img = document.createElement('img');
+            img.src = safeImage(x.image);
+            img.alt = x.title ? `Imagem de ${x.title}` : 'Peça vista recentemente';
+            img.loading = 'lazy';
+            img.onerror = () => { img.src = '/images/placeholder.jpg'; };
+            media.appendChild(img);
+
+            const badge = document.createElement('span');
+            badge.className = 'ux-product-card-badge muted';
+            badge.innerHTML = '<i class="bi bi-clock-history me-1"></i>Visto recentemente';
+            media.appendChild(badge);
+
+            const body = document.createElement('div');
+            body.className = 'ux-product-card-body';
+            const title = document.createElement('h2');
+            title.className = 'h5 serif-title mb-3';
+            title.textContent = x.title || 'Peça artesanal';
+            const view = document.createElement('a');
+            view.href = safeUrl(x.url);
+            view.className = 'btn btn-artisan rounded-pill';
+            view.innerHTML = 'Ver peça <i class="bi bi-arrow-right ms-1"></i>';
+            body.append(title, view);
+            article.append(media, body);
+            col.appendChild(article);
+            grid.appendChild(col);
+        });
+
+        requestAnimationFrame(() => document.querySelectorAll('.ux-reveal').forEach(el => el.classList.add('is-visible')));
+    });
+
+    function safeUrl(value) {
+        try { const u = new URL(value || '/', window.location.origin); return u.origin === window.location.origin ? u.href : '/'; } catch { return '/'; }
+    }
+    function safeImage(value) {
+        if (!value) return '/images/placeholder.jpg';
+        try { const u = new URL(value, window.location.origin); return ['http:', 'https:'].includes(u.protocol) || u.origin === window.location.origin ? u.href : '/images/placeholder.jpg'; } catch { return '/images/placeholder.jpg'; }
+    }
+})();
+</script>
+}

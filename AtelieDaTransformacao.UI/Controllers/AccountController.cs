@@ -4,25 +4,30 @@ using AtelieDaTransformacao.UI.Models;
 using AtelieDaTransformacao.UI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace AtelieDaTransformacao.UI.Controllers;
 
-public class AccountController : Controller
+[EnableRateLimiting("auth")]
+public sealed class AccountController : Controller
 {
     private const string RegistrationReasonKey = "RegistrationReason";
 
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly UserManager<IdentityUser> _userManager;
     private readonly IEmailService _emailService;
+    private readonly IEmailAddressVerifier _emailAddressVerifier;
 
     public AccountController(
         SignInManager<IdentityUser> signInManager,
         UserManager<IdentityUser> userManager,
-        IEmailService emailService)
+        IEmailService emailService,
+        IEmailAddressVerifier emailAddressVerifier)
     {
         _signInManager = signInManager;
         _userManager = userManager;
         _emailService = emailService;
+        _emailAddressVerifier = emailAddressVerifier;
     }
 
     [HttpGet]
@@ -60,6 +65,11 @@ public class AccountController : Controller
         {
             ModelState.AddModelError(string.Empty,
                 "Esta conta está temporariamente bloqueada. Tente novamente mais tarde.");
+        }
+        else if (result.IsNotAllowed)
+        {
+            ModelState.AddModelError(string.Empty,
+                "Confirme seu e-mail antes de entrar. Verifique sua caixa de entrada ou solicite um novo link de confirmação.");
         }
         else
         {
@@ -170,12 +180,40 @@ public class AccountController : Controller
         model.PostalCode = model.PostalCode.Trim();
         model.Email = model.Email.Trim().ToLowerInvariant();
 
+        var emailVerification = await _emailAddressVerifier.VerifyAsync(model.Email, HttpContext.RequestAborted);
+        if (!emailVerification.IsValid)
+        {
+            ModelState.AddModelError(nameof(model.Email), emailVerification.Message);
+            return View(model);
+        }
+
         var existing = await _userManager.FindByEmailAsync(model.Email);
         if (existing != null)
         {
-            ModelState.AddModelError(nameof(model.Email),
-                "Já existe uma conta com este e-mail. Faça login para continuar.");
-            return View(model);
+            if (await _userManager.IsEmailConfirmedAsync(existing))
+            {
+                ModelState.AddModelError(nameof(model.Email),
+                    "Já existe uma conta com este e-mail. Faça login para continuar.");
+                return View(model);
+            }
+
+            // Se o cliente iniciou um cadastro anteriormente, não o obrigamos
+            // a preencher tudo novamente. Reenviamos a confirmação para a
+            // conta pendente e preservamos a experiência de cadastro.
+            var pendingConfirmationSent = await TrySendConfirmationEmailAsync(existing);
+            TempData["ConfirmationEmail"] = existing.Email;
+            if (pendingConfirmationSent)
+            {
+                TempData["ConfirmationResendMessage"] =
+                    "Já existe um cadastro pendente para este e-mail. Enviamos um novo link de confirmação.";
+            }
+            else
+            {
+                TempData["ConfirmationResendError"] =
+                    "Sua conta já foi criada, mas não conseguimos enviar o e-mail de confirmação. Verifique a configuração SMTP do site e tente reenviar.";
+            }
+
+            return RedirectToAction(nameof(EmailConfirmationSent), new { returnUrl = SafeReturnUrl(returnUrl) });
         }
 
         if (!model.AcceptTerms)
@@ -227,18 +265,173 @@ public class AccountController : Controller
             return View(model);
         }
 
-        await _signInManager.SignInAsync(user, isPersistent: false);
+        // A criação da conta só termina com sucesso depois que o sistema
+        // consegue enviar o link para o endereço informado. A confirmação
+        // do link é a prova de posse da caixa postal (Gmail, Outlook, Yahoo
+        // ou outro provedor), e não apenas uma validação de formato/domínio.
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        var confirmationUrl = Url.Action(
+            nameof(ConfirmEmail),
+            "Account",
+            new { userId = user.Id, token },
+            Request.Scheme);
+
+        if (string.IsNullOrWhiteSpace(confirmationUrl))
+        {
+            await _userManager.DeleteAsync(user);
+            ModelState.AddModelError(string.Empty, "Não foi possível gerar a confirmação do e-mail.");
+            return View(model);
+        }
+
+        try
+        {
+            await _emailService.SendEmailConfirmationAsync(user.Email!, confirmationUrl);
+        }
+        catch (Exception ex)
+        {
+            // Não apagamos a conta quando o SMTP está indisponível.
+            // O cadastro fica pendente de confirmação e o cliente pode
+            // corrigir a configuração/repetir o envio sem perder os dados.
+            TempData["ConfirmationEmail"] = user.Email;
+            TempData["ConfirmationResendError"] =
+                "Sua conta foi criada, mas o e-mail de confirmação não pôde ser enviado agora. Verifique a caixa de configuração de e-mail e tente reenviar.";
+            HttpContext.RequestServices.GetRequiredService<ILogger<AccountController>>()
+                .LogError(ex, "Falha ao enviar confirmação de e-mail para {Email}.", user.Email);
+            return RedirectToAction(nameof(EmailConfirmationSent), new { returnUrl = SafeReturnUrl(returnUrl) });
+        }
+
         TempData.Remove(RegistrationReasonKey);
-
-        var safeUrl = SafeReturnUrl(returnUrl);
-        if (!string.IsNullOrWhiteSpace(safeUrl))
-            return Redirect(safeUrl);
-
-        TempData["SuccessMessage"] =
-            $"Bem-vindo(a), {model.FirstName}! Sua conta foi criada com sucesso.";
-
-        return RedirectToAction("Index", "Home");
+        TempData["ConfirmationEmail"] = user.Email;
+        return RedirectToAction(nameof(EmailConfirmationSent), new { returnUrl = SafeReturnUrl(returnUrl) });
     }
+
+    [HttpGet]
+    public IActionResult EmailConfirmationSent(string? returnUrl = null)
+    {
+        ViewBag.ReturnUrl = SafeReturnUrl(returnUrl);
+        ViewBag.ConfirmationEmail = TempData.Peek("ConfirmationEmail") as string ?? string.Empty;
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ResendConfirmationEmail(string? email, string? returnUrl = null)
+    {
+        var normalizedEmail = email?.Trim().ToLowerInvariant();
+        var safeReturnUrl = SafeReturnUrl(returnUrl);
+
+        // Resposta genérica: não revela se o endereço existe ou se a conta já foi confirmada.
+        TempData["ConfirmationResendMessage"] =
+            "Se houver uma conta pendente para esse e-mail, enviaremos um novo link de confirmação.";
+
+        if (string.IsNullOrWhiteSpace(normalizedEmail) ||
+            !System.Net.Mail.MailAddress.TryCreate(normalizedEmail, out var parsedEmail) ||
+            !parsedEmail.Address.Equals(normalizedEmail, StringComparison.OrdinalIgnoreCase))
+            return RedirectToAction(nameof(EmailConfirmationSent), new { returnUrl = safeReturnUrl });
+
+        var user = await _userManager.FindByEmailAsync(normalizedEmail);
+        if (user is null || await _userManager.IsEmailConfirmedAsync(user))
+            return RedirectToAction(nameof(EmailConfirmationSent), new { returnUrl = safeReturnUrl });
+
+        try
+        {
+            var sent = await TrySendConfirmationEmailAsync(user);
+            if (!sent)
+            {
+                TempData["ConfirmationResendError"] =
+                    "Não conseguimos enviar o e-mail de confirmação agora. Verifique a configuração SMTP e tente novamente.";
+            }
+        }
+        catch (Exception ex)
+        {
+            TempData["ConfirmationResendError"] =
+                "Não conseguimos enviar o e-mail de confirmação agora. Verifique a configuração SMTP e tente novamente.";
+            HttpContext.RequestServices.GetRequiredService<ILogger<AccountController>>()
+                .LogError(ex, "Falha ao reenviar confirmação de e-mail para {Email}.", normalizedEmail);
+        }
+
+        return RedirectToAction(nameof(EmailConfirmationSent), new { returnUrl = safeReturnUrl });
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> ConfirmEmail(string? userId, string? token)
+    {
+        if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(token))
+        {
+            TempData["ErrorMessage"] = "O link de confirmação é inválido ou está incompleto.";
+            return RedirectToAction(nameof(Login));
+        }
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user is null)
+        {
+            TempData["ErrorMessage"] = "Não foi possível localizar a conta.";
+            return RedirectToAction(nameof(Login));
+        }
+
+        if (await _userManager.IsEmailConfirmedAsync(user))
+        {
+            TempData["SuccessMessage"] = "Este e-mail já foi confirmado. Agora você já pode entrar.";
+            return RedirectToAction(nameof(Login));
+        }
+
+        return View(new ConfirmEmailViewModel
+        {
+            UserId = userId,
+            Token = token,
+            Email = user.Email ?? string.Empty
+        });
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ConfirmEmailPost(ConfirmEmailViewModel model)
+    {
+        if (!ModelState.IsValid)
+            return View(nameof(ConfirmEmail), model);
+
+        var user = await _userManager.FindByIdAsync(model.UserId);
+        if (user is null)
+        {
+            TempData["ErrorMessage"] = "Não foi possível localizar a conta.";
+            return RedirectToAction(nameof(Login));
+        }
+
+        var result = await _userManager.ConfirmEmailAsync(user, model.Token);
+        TempData[result.Succeeded ? "SuccessMessage" : "ErrorMessage"] = result.Succeeded
+            ? "E-mail confirmado com sucesso. Agora você já pode entrar."
+            : "O link de confirmação é inválido ou expirou. Solicite um novo link de confirmação.";
+
+        return RedirectToAction(nameof(Login));
+    }
+
+    private async Task<bool> TrySendConfirmationEmailAsync(IdentityUser user)
+    {
+        if (string.IsNullOrWhiteSpace(user.Email))
+            return false;
+
+        await _userManager.UpdateSecurityStampAsync(user);
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        var confirmationUrl = Url.Action(
+            nameof(ConfirmEmail),
+            "Account",
+            new { userId = user.Id, token },
+            Request.Scheme);
+
+        if (string.IsNullOrWhiteSpace(confirmationUrl))
+            return false;
+
+        await _emailService.SendEmailConfirmationAsync(user.Email, confirmationUrl);
+        return true;
+    }
+
+    // Favoritos e vistos recentemente usam armazenamento local do navegador,
+    // portanto ficam disponíveis mesmo para visitantes não autenticados.
+    [HttpGet]
+    public IActionResult Favorites() => View();
+
+    [HttpGet]
+    public IActionResult RecentlyViewed() => View();
 
     [HttpGet]
     public async Task<IActionResult> Profile()

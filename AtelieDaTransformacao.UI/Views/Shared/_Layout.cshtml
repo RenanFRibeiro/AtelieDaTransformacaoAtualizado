@@ -104,6 +104,12 @@
                                 <a class="header-menu-link-v3" asp-controller="Account" asp-action="Profile" title="Meu perfil" aria-label="Meu perfil">
                                     <i class="bi bi-person-circle" aria-hidden="true"></i><span>Meu perfil</span>
                                 </a>
+                                <a class="header-menu-link-v3" asp-controller="Account" asp-action="Favorites" title="Favoritos" aria-label="Favoritos">
+                                    <i class="bi bi-heart" aria-hidden="true"></i><span>Favoritos</span>
+                                </a>
+                                <a class="header-menu-link-v3" asp-controller="Account" asp-action="RecentlyViewed" title="Vistos recentemente" aria-label="Vistos recentemente">
+                                    <i class="bi bi-clock-history" aria-hidden="true"></i><span>Vistos</span>
+                                </a>
                                 <a class="header-menu-link-v3" asp-controller="Order" asp-action="Index" title="Meus pedidos" aria-label="Meus pedidos">
                                     <i class="bi bi-box-seam" aria-hidden="true"></i><span>Meus pedidos</span>
                                 </a>
@@ -192,7 +198,7 @@
                     <span class="footer-heading">Atendimento</span>
                     <a asp-controller="Quote" asp-action="Index">Solicitar orçamento</a>
                     <a href="https://www.google.com/maps/search/?api=1&query=R.+Camomila%2C+99+-+Antigo+375+-+Jardim+Helena%2C+S%C3%A3o+Paulo+-+SP%2C+08090-530" target="_blank" rel="noopener noreferrer">Localização</a>
-                    <a href="https://wa.me/5511972160760" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+                    <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">WhatsApp</a>
                 </div>
             </div>
 
@@ -202,6 +208,13 @@
             </div>
         </div>
     </footer>
+
+    <nav class="mobile-bottom-nav" aria-label="Navegação rápida">
+        <a asp-controller="Home" asp-action="Index"><i class="bi bi-house" aria-hidden="true"></i>Início</a>
+        <a href="@Url.Action("Index", "Home")#homeProductSearch"><i class="bi bi-search" aria-hidden="true"></i>Buscar</a>
+        <a asp-controller="Account" asp-action="Favorites"><i class="bi bi-heart" aria-hidden="true"></i>Favoritos</a>
+        <a asp-controller="Cart" asp-action="Index"><i class="bi bi-bag" aria-hidden="true"></i>Carrinho</a>
+    </nav>
 
     <a href="https://wa.me/5511999999999?text=Ol%C3%A1%21%20Visitei%20o%20site%20do%20Ateli%C3%AA%20da%20Transforma%C3%A7%C3%A3o%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="Falar conosco no WhatsApp" aria-label="Falar conosco no WhatsApp">
         <span class="whatsapp-float-icon" aria-hidden="true"><i class="bi bi-whatsapp"></i></span>

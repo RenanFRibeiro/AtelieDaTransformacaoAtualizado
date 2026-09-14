@@ -21,12 +21,15 @@ public sealed class SmtpEmailService : IEmailService
     public async Task SendAsync(string to, string subject, string htmlBody, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(to))
-            return;
+            throw new ArgumentException("O destinatário do e-mail é obrigatório.", nameof(to));
 
-        if (string.IsNullOrWhiteSpace(_options.Host) || string.IsNullOrWhiteSpace(_options.From))
+        if (string.IsNullOrWhiteSpace(_options.Host) ||
+            string.IsNullOrWhiteSpace(_options.From) ||
+            string.IsNullOrWhiteSpace(_options.UserName) ||
+            string.IsNullOrWhiteSpace(_options.Password))
         {
-            _logger.LogWarning("E-mail não enviado: SMTP não configurado.");
-            return;
+            throw new InvalidOperationException(
+                "SMTP não configurado. Defina Email:Host, Email:From, Email:UserName e Email:Password usando User Secrets ou variáveis de ambiente.");
         }
 
         if (!MailAddress.TryCreate(to.Trim(), out var recipient))
@@ -60,8 +63,7 @@ public sealed class SmtpEmailService : IEmailService
             Timeout = Math.Clamp(_options.TimeoutSeconds, 3, 60) * 1000
         };
 
-        if (!string.IsNullOrWhiteSpace(_options.UserName))
-            client.Credentials = new NetworkCredential(_options.UserName, _options.Password);
+        client.Credentials = new NetworkCredential(_options.UserName, _options.Password);
 
         cancellationToken.ThrowIfCancellationRequested();
         await client.SendMailAsync(message, cancellationToken);
@@ -77,6 +79,22 @@ public sealed class SmtpEmailService : IEmailService
               <p>Se você não fez esta solicitação, ignore este e-mail.</p>
             </div>
             """, cancellationToken);
+
+    public async Task SendEmailConfirmationAsync(string to, string confirmationUrl, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(_options.Host) || string.IsNullOrWhiteSpace(_options.From))
+            throw new InvalidOperationException("O serviço de e-mail não está configurado.");
+
+        await SendAsync(to, "Confirme seu e-mail — Ateliê da Transformação",
+            $"""
+            <div style="font-family:Arial,sans-serif;line-height:1.6">
+              <h2>Confirme seu e-mail</h2>
+              <p>Para ativar sua conta, confirme o endereço de e-mail clicando no botão abaixo.</p>
+              <p><a href="{WebUtility.HtmlEncode(confirmationUrl)}" style="display:inline-block;padding:12px 20px;background:#a85c3d;color:#fff;text-decoration:none;border-radius:8px">Confirmar e-mail</a></p>
+              <p>Se você não criou esta conta, ignore esta mensagem.</p>
+            </div>
+            """, cancellationToken);
+    }
 
     public Task SendOrderStatusAsync(Order order, CancellationToken cancellationToken = default)
     {

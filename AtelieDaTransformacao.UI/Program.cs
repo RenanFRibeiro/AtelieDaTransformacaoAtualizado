@@ -8,6 +8,9 @@ using AtelieDaTransformacao.UI.Hubs;
 using AtelieDaTransformacao.UI.Services;
 
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 
 namespace AtelieDaTransformacao.UI;
@@ -45,7 +48,11 @@ public static class Program
                     options.Lockout.AllowedForNewUsers = true;
 
                     options.User.RequireUniqueEmail = true;
-                    options.SignIn.RequireConfirmedEmail = false;
+                    // A conta só pode ser usada depois que o cliente comprovar
+                    // que controla o endereço de e-mail informado no cadastro.
+                    // Isso vale também em desenvolvimento para que o fluxo testado
+                    // seja o mesmo que irá para produção.
+                    options.SignIn.RequireConfirmedEmail = true;
                     options.Password.RequiredUniqueChars = 1;
                 })
             .AddEntityFrameworkStores<
@@ -67,7 +74,7 @@ public static class Program
                 options.SlidingExpiration = true;
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SameSite = SameSiteMode.Lax;
-                options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                options.Cookie.SecurePolicy = builder.Environment.IsProduction() ? CookieSecurePolicy.Always : CookieSecurePolicy.SameAsRequest;
             });
 
         builder.Services.AddScoped<
@@ -123,15 +130,51 @@ public static class Program
 
                 options.Cookie.IsEssential = true;
                 options.Cookie.SameSite = SameSiteMode.Lax;
-                options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+                options.Cookie.SecurePolicy = builder.Environment.IsProduction() ? CookieSecurePolicy.Always : CookieSecurePolicy.SameAsRequest;
             });
+
+        builder.Services.AddHttpClient("EmailDns", client =>
+        {
+            client.BaseAddress = new Uri("https://dns.google/");
+            client.Timeout = TimeSpan.FromSeconds(8);
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("AtelieDaTransformacao/1.0");
+        });
 
         builder.Services.Configure<EmailOptions>(
             builder.Configuration.GetSection("Email"));
+        builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+        {
+            // Links de confirmação e recuperação expiram após 24 horas.
+            options.TokenLifespan = TimeSpan.FromHours(24);
+        });
         builder.Services.Configure<OrderAutomationOptions>(
             builder.Configuration.GetSection("OrderAutomation"));
 
+        builder.Services.AddSingleton<IEmailAddressVerifier, EmailAddressVerifier>();
         builder.Services.AddSingleton<IEmailService, SmtpEmailService>();
+
+        builder.Services.AddRateLimiter(options =>
+        {
+            options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+            options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+                RateLimitPartition.GetFixedWindowLimiter(
+                    httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+                    _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = 300,
+                        Window = TimeSpan.FromMinutes(1),
+                        QueueLimit = 0,
+                        AutoReplenishment = true
+                    }));
+
+            options.AddFixedWindowLimiter("auth", limiter =>
+            {
+                limiter.PermitLimit = 10;
+                limiter.Window = TimeSpan.FromMinutes(1);
+                limiter.QueueLimit = 0;
+                limiter.AutoReplenishment = true;
+            });
+        });
 
         builder.Services.AddControllersWithViews(options =>
         {
@@ -173,11 +216,22 @@ public static class Program
 
         app.UseHttpsRedirection();
 
+        app.Use(async (context, next) =>
+        {
+            context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+            context.Response.Headers["X-Frame-Options"] = "DENY";
+            context.Response.Headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
+            context.Response.Headers["Permissions-Policy"] = "camera=(self), microphone=(), geolocation=()";
+            await next();
+        });
+
         app.UseStaticFiles();
 
         app.UseRouting();
 
         app.UseSession();
+
+        app.UseRateLimiter();
 
         app.UseAuthentication();
 

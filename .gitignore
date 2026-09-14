@@ -364,3 +364,5 @@ FodyWeavers.xsd
 /AtelieDaTransformacao.Desktop/Forms/ProductDialog.resx
 /AtelieDaTransformacao.UI/Views/Shared/_Layout.cshtml.css
 /AtelieDaTransformacao.UI/wwwroot/css/home-modern.css
+/AtelieDaTransformacao.UI/Views/Shared/_Layout.cshtml
+/AtelieDaTransformacao.UI/wwwroot/css/site.css

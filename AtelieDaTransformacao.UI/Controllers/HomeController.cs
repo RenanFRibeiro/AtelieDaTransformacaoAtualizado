@@ -1,4 +1,6 @@
 ﻿using System.Threading.Tasks;
+using System.Globalization;
+using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using AtelieDaTransformacao.Application.Interfaces;
 using AtelieDaTransformacao.Application.ViewModels;
@@ -67,12 +69,26 @@ public class HomeController : Controller
         if (!string.IsNullOrWhiteSpace(search))
         {
             var term = search.Trim();
+            var normalizedTerm = NormalizeSearch(term);
             viewModel.Products = viewModel.Products.Where(p =>
-                p.Title.StartsWith(term, StringComparison.OrdinalIgnoreCase));
+                NormalizeSearch(p.Title).Contains(normalizedTerm, StringComparison.OrdinalIgnoreCase) ||
+                NormalizeSearch(p.Description).Contains(normalizedTerm, StringComparison.OrdinalIgnoreCase) ||
+                NormalizeSearch(p.CategoryName).Contains(normalizedTerm, StringComparison.OrdinalIgnoreCase));
             ViewBag.Search = term;
         }
 
         return View(viewModel);
+    }
+
+    private static string NormalizeSearch(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value)) return string.Empty;
+        var normalized = value.Normalize(NormalizationForm.FormD);
+        var builder = new StringBuilder(normalized.Length);
+        foreach (var ch in normalized)
+            if (CharUnicodeInfo.GetUnicodeCategory(ch) != UnicodeCategory.NonSpacingMark)
+                builder.Append(ch);
+        return builder.ToString().Normalize(NormalizationForm.FormC).ToLowerInvariant();
     }
 
     private static bool IsResinCategory(string? categoryName) =>

@@ -8,7 +8,7 @@
         : Model.Image;
 }
 
-<div class="product-page">
+<div class="product-page" data-product-id="@Model.Id" data-product-title="@Model.Title" data-product-url="@Url.Action("ProductDetails", "Home", new { id = Model.Id })" data-product-image="@imageUrl">
 
     <!-- =========================================================
          HERO / PRODUTO
@@ -78,6 +78,9 @@
                 <div class="col-12 col-lg-6">
 
                     <div class="product-content">
+                        <button type="button" class="favorite-toggle position-absolute end-0 top-0 m-2" data-favorite-id="@Model.Id" data-favorite-title="@Model.Title" data-favorite-url="@Url.Action("ProductDetails", "Home", new { id = Model.Id })" data-favorite-image="@imageUrl" aria-pressed="false" aria-label="Adicionar aos favoritos" title="Favoritos">
+                            <i class="bi bi-heart" aria-hidden="true"></i>
+                        </button>
 
                         <!-- CATEGORIA -->
 

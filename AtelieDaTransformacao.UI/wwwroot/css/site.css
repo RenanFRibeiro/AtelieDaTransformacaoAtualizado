@@ -1312,3 +1312,326 @@ html[data-theme="dark"] .product-page .product-benefits {
         padding: 0 0 12px;
     }
 }
+
+
+/* UX 2026 — microinterações, favoritos, histórico e mobile */
+.header-icon-button, .header-menu-link-v3, .nav-link-artisan { transition: transform .28s ease, opacity .28s ease, background-color .28s ease, color .28s ease; }
+.header-icon-button:hover, .header-menu-link-v3:hover, .nav-link-artisan:hover { transform: translateY(-1px); }
+.favorite-toggle { border:0; background:rgba(255,255,255,.9); width:42px; height:42px; border-radius:50%; display:inline-grid; place-items:center; font-size:1.15rem; transition:transform .25s ease, background-color .25s ease; z-index:3; }
+.favorite-toggle:hover { transform:scale(1.06); }
+.favorite-toggle.is-favorite i::before { content:"\\f59f"; }
+.recently-viewed-section, .personalized-section { margin-top:3rem; }
+.ux-product-tools { display:flex; justify-content:space-between; align-items:center; gap:1rem; margin:1rem 0; flex-wrap:wrap; }
+.ux-sort { min-width:210px; }
+.ux-empty { padding:3rem 1.5rem; text-align:center; border:1px solid rgba(36,24,18,.12); border-radius:1.25rem; background:rgba(255,255,255,.6); }
+.mobile-bottom-nav { display:none; }
+@media (max-width: 991.98px) {
+ .mobile-bottom-nav { position:fixed; left:0; right:0; bottom:0; z-index:1040; display:grid; grid-template-columns:repeat(4,1fr); background:rgba(36,24,18,.97); padding:.5rem .35rem calc(.5rem + env(safe-area-inset-bottom)); box-shadow:0 -8px 24px rgba(0,0,0,.18); }
+ .mobile-bottom-nav a { color:#fff; text-decoration:none; text-align:center; font-size:.72rem; opacity:.9; }
+ .mobile-bottom-nav i { display:block; font-size:1.15rem; margin-bottom:.1rem; }
+ body { padding-bottom:4.2rem; }
+}
+@media (prefers-reduced-motion: reduce) { .header-icon-button, .header-menu-link-v3, .nav-link-artisan, .favorite-toggle { transition:none !important; } }
+
+
+/* ============================================================================
+   ATELIÊ 2026 — CAMADA VISUAL PREMIUM
+   Somente conteúdo fora do header: transições, profundidade, brilho suave,
+   cards, rodapé, benefícios e páginas de conta.
+   ============================================================================ */
+:root {
+    --ux-brown: #2b1d17;
+    --ux-brown-soft: #4b3428;
+    --ux-terra: #b86f49;
+    --ux-terra-light: #d69a72;
+    --ux-cream: #f6efe8;
+    --ux-linen: #eee2d6;
+    --ux-shadow: 0 20px 55px rgba(52, 34, 24, .10);
+}
+
+.site-main {
+    position: relative;
+    isolation: isolate;
+}
+
+.site-main::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 8% 18%, rgba(184,111,73,.055), transparent 27%),
+        radial-gradient(circle at 92% 62%, rgba(111,75,53,.045), transparent 25%);
+}
+
+.site-main > *:not(.site-backbar) {
+    animation: ux-page-in .65s cubic-bezier(.2,.75,.2,1) both;
+}
+
+@keyframes ux-page-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Hero interno */
+.page-hero,
+.ux-account-hero {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background:
+        linear-gradient(135deg, rgba(255,255,255,.78), rgba(246,239,232,.92)),
+        radial-gradient(circle at 50% 0%, rgba(184,111,73,.12), transparent 42%);
+    border-bottom: 1px solid rgba(67,43,31,.08);
+}
+
+.page-hero::before,
+.ux-account-hero::before {
+    content: "";
+    position: absolute;
+    width: 360px;
+    height: 360px;
+    right: -150px;
+    top: -220px;
+    border: 1px solid rgba(184,111,73,.18);
+    border-radius: 50%;
+    box-shadow: 0 0 0 30px rgba(184,111,73,.035), 0 0 0 60px rgba(184,111,73,.025);
+    animation: ux-orbit 12s linear infinite;
+    z-index: -1;
+}
+
+.page-hero::after,
+.ux-account-hero::after {
+    content: "";
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    left: -110px;
+    bottom: -160px;
+    border-radius: 50%;
+    background: rgba(184,111,73,.055);
+    filter: blur(2px);
+    animation: ux-float 8s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes ux-orbit { to { transform: rotate(360deg); } }
+@keyframes ux-float { 50% { transform: translate(18px,-12px) scale(1.05); } }
+
+.ux-hero-orbit { position:absolute; inset:0; pointer-events:none; z-index:-1; }
+.ux-hero-orbit span { position:absolute; border-radius:50%; border:1px solid rgba(184,111,73,.16); }
+.ux-hero-orbit span:nth-child(1) { width:9px; height:9px; left:18%; top:31%; animation:ux-particle 5s ease-in-out infinite; }
+.ux-hero-orbit span:nth-child(2) { width:6px; height:6px; right:22%; top:36%; animation:ux-particle 6.5s ease-in-out infinite reverse; }
+.ux-hero-orbit span:nth-child(3) { width:11px; height:11px; right:13%; bottom:22%; animation:ux-particle 7s ease-in-out infinite; }
+@keyframes ux-particle { 50% { transform: translateY(-14px) scale(1.3); opacity:.45; } }
+
+/* Reveal reutilizável */
+.ux-reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.75,.2,1); transition-delay: var(--reveal-delay, 0ms); }
+.ux-reveal.is-visible { opacity:1; transform:none; }
+
+/* Cabeçalhos de seção */
+.ux-section-heading {
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+    gap:1rem;
+    margin: 2.5rem 0 1.35rem;
+}
+.ux-count-pill {
+    display:inline-flex;
+    align-items:center;
+    min-height:34px;
+    padding:.45rem .85rem;
+    border-radius:999px;
+    background:rgba(184,111,73,.08);
+    color:var(--ux-brown-soft);
+    font-size:.76rem;
+    font-weight:800;
+    letter-spacing:.04em;
+}
+
+/* Cards de favoritos / histórico */
+.ux-card-grid > [class*="col-"] { perspective:1000px; }
+.ux-product-card {
+    position:relative;
+    overflow:hidden;
+    border:1px solid rgba(61,43,31,.09);
+    border-radius:22px;
+    background:rgba(255,255,255,.86);
+    box-shadow:0 8px 28px rgba(52,34,24,.055);
+    transition:transform .42s cubic-bezier(.2,.75,.2,1), box-shadow .42s ease, border-color .42s ease;
+}
+.ux-product-card:hover {
+    transform:translateY(-8px) rotateX(.35deg);
+    box-shadow:var(--ux-shadow);
+    border-color:rgba(184,111,73,.22);
+}
+.ux-product-card-media {
+    position:relative;
+    display:block;
+    overflow:hidden;
+    aspect-ratio: 4 / 3;
+    background:var(--ux-linen);
+}
+.ux-product-card-media::after {
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(120deg, transparent 35%, rgba(255,255,255,.28) 50%, transparent 65%);
+    transform:translateX(-120%);
+    transition:transform .8s ease;
+}
+.ux-product-card:hover .ux-product-card-media::after { transform:translateX(120%); }
+.ux-product-card-media img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+    transition:transform .75s cubic-bezier(.2,.75,.2,1), filter .45s ease;
+}
+.ux-product-card:hover .ux-product-card-media img { transform:scale(1.055); filter:saturate(1.04) contrast(1.02); }
+.ux-product-card-badge {
+    position:absolute;
+    left:14px;
+    top:14px;
+    z-index:2;
+    padding:.42rem .7rem;
+    border-radius:999px;
+    background:rgba(43,29,23,.84);
+    color:#fff;
+    font-size:.69rem;
+    font-weight:700;
+    backdrop-filter:blur(8px);
+}
+.ux-product-card-badge.muted { background:rgba(255,255,255,.88); color:var(--ux-brown); }
+.ux-product-card-body { padding:1.2rem 1.2rem 1.25rem; }
+.ux-product-card-body .btn { transition:transform .28s ease, box-shadow .28s ease, background-color .28s ease; }
+.ux-product-card-body .btn:hover { transform:translateY(-2px); box-shadow:0 9px 22px rgba(43,29,23,.11); }
+
+/* Empty state premium */
+.ux-empty-premium {
+    position:relative;
+    overflow:hidden;
+    padding:4.2rem 1.5rem;
+    border:1px solid rgba(61,43,31,.10);
+    border-radius:26px;
+    background:linear-gradient(145deg, rgba(255,255,255,.88), rgba(246,239,232,.82));
+    box-shadow:var(--ux-shadow);
+}
+.ux-empty-premium::before {
+    content:"";
+    position:absolute;
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    border:1px solid rgba(184,111,73,.14);
+    left:-85px;
+    top:-85px;
+    animation:ux-orbit 14s linear infinite;
+}
+.ux-empty-icon {
+    width:78px;
+    height:78px;
+    margin:0 auto 1.1rem;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    color:var(--ux-terra);
+    background:rgba(184,111,73,.09);
+    font-size:2rem;
+    box-shadow:0 0 0 10px rgba(184,111,73,.025);
+    animation:ux-soft-pulse 3s ease-in-out infinite;
+}
+@keyframes ux-soft-pulse { 50% { transform:scale(1.045); box-shadow:0 0 0 16px rgba(184,111,73,.015); } }
+
+/* Benefícios e rodapé */
+.benefits-section {
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(135deg, #f2e6da, #f8f2ed);
+}
+.benefits-section::before {
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    opacity:.45;
+    background-image:radial-gradient(rgba(80,55,42,.10) .7px, transparent .7px);
+    background-size:14px 14px;
+    mask-image:linear-gradient(to bottom, transparent, #000 25%, #000 75%, transparent);
+}
+.benefit-item { position:relative; transition:transform .35s ease; }
+.benefit-item:hover { transform:translateY(-4px); }
+.benefit-icon {
+    transition:transform .4s cubic-bezier(.2,.75,.2,1), box-shadow .4s ease;
+}
+.benefit-item:hover .benefit-icon { transform:translateY(-3px) rotate(-3deg) scale(1.06); box-shadow:0 12px 28px rgba(43,29,23,.12); }
+.artisan-footer { position:relative; overflow:hidden; }
+.artisan-footer::before {
+    content:"";
+    position:absolute;
+    width:500px;
+    height:500px;
+    right:-260px;
+    top:-300px;
+    border:1px solid rgba(214,154,114,.16);
+    border-radius:50%;
+    box-shadow:0 0 0 40px rgba(214,154,114,.025), 0 0 0 80px rgba(214,154,114,.018);
+    animation:ux-orbit 20s linear infinite;
+    pointer-events:none;
+}
+.artisan-footer a { transition:transform .28s ease, opacity .28s ease; }
+.artisan-footer a:hover { transform:translateX(3px); }
+
+/* WhatsApp flutuante — sem alterar header */
+.whatsapp-float { animation:ux-whatsapp-in .8s .35s both, ux-whatsapp-pulse 3.2s 1.2s ease-in-out infinite; }
+@keyframes ux-whatsapp-in { from { opacity:0; transform:translateY(18px) scale(.92); } to { opacity:1; transform:none; } }
+@keyframes ux-whatsapp-pulse { 0%,100% { box-shadow:0 10px 28px rgba(35,25,18,.16); } 50% { box-shadow:0 14px 34px rgba(35,25,18,.25); } }
+
+/* Botões de conteúdo */
+.site-main .btn-artisan,
+.site-main .btn-outline-artisan-dark,
+.site-main .btn-outline-artisan {
+    position:relative;
+    overflow:hidden;
+    transition:transform .28s ease, box-shadow .28s ease, background-color .28s ease, color .28s ease, border-color .28s ease;
+}
+.site-main .btn-artisan::after,
+.site-main .btn-outline-artisan-dark::after,
+.site-main .btn-outline-artisan::after {
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(100deg, transparent 25%, rgba(255,255,255,.24) 50%, transparent 75%);
+    transform:translateX(-120%);
+    transition:transform .65s ease;
+    pointer-events:none;
+}
+.site-main .btn-artisan:hover::after,
+.site-main .btn-outline-artisan-dark:hover::after,
+.site-main .btn-outline-artisan:hover::after { transform:translateX(120%); }
+.site-main .btn-artisan:hover,
+.site-main .btn-outline-artisan-dark:hover,
+.site-main .btn-outline-artisan:hover { transform:translateY(-2px); }
+
+@media (max-width: 767.98px) {
+    .ux-section-heading { align-items:flex-start; flex-direction:column; }
+    .ux-section-heading .btn { width:100%; }
+    .ux-product-card-body { padding:1rem; }
+    .ux-empty-premium { padding:3rem 1.1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .site-main > *:not(.site-backbar),
+    .page-hero::before,
+    .page-hero::after,
+    .ux-account-hero::before,
+    .ux-account-hero::after,
+    .ux-hero-orbit span,
+    .ux-empty-icon,
+    .ux-empty-premium::before,
+    .artisan-footer::before,
+    .whatsapp-float { animation:none !important; }
+    .ux-reveal { opacity:1 !important; transform:none !important; transition:none !important; }
+}

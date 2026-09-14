@@ -1,0 +1,74 @@
+@{
+    ViewData["Title"] = "Confirme seu e-mail";
+    var returnUrl = ViewBag.ReturnUrl as string;
+    var email = ViewBag.ConfirmationEmail as string ?? string.Empty;
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="auth-card bg-white p-4 p-md-5 text-center">
+                <div class="auth-logo mb-3"><i class="bi bi-envelope-check"></i></div>
+                <span class="eyebrow">SEGURANÇA DA SUA CONTA</span>
+                <h1 class="serif-title fw-bold mt-2">Confirme seu e-mail</h1>
+                <p class="text-muted">Enviamos um link de confirmação para:</p>
+
+                @if (!string.IsNullOrWhiteSpace(email))
+                {
+                    <div class="alert alert-light border rounded-3 fw-semibold" role="status">
+                        <i class="bi bi-envelope me-2"></i>@email
+                    </div>
+                }
+
+                <div class="text-start bg-light rounded-3 p-3 mt-3">
+                    <div class="d-flex gap-3 align-items-start mb-3">
+                        <i class="bi bi-1-circle fs-4"></i>
+                        <div><strong>Abra sua caixa de entrada</strong><div class="small text-muted">Procure por uma mensagem do Ateliê da Transformação. Confira também Spam, Lixo eletrônico e Promoções.</div></div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-start mb-3">
+                        <i class="bi bi-2-circle fs-4"></i>
+                        <div><strong>Clique em “Confirmar e-mail”</strong><div class="small text-muted">Esse passo comprova que você realmente controla esse endereço.</div></div>
+                    </div>
+                    <div class="d-flex gap-3 align-items-start">
+                        <i class="bi bi-3-circle fs-4"></i>
+                        <div><strong>Entre normalmente</strong><div class="small text-muted">A conta permanecerá bloqueada para login até a confirmação.</div></div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info text-start rounded-3 mt-4" role="note">
+                    <i class="bi bi-shield-check me-2"></i>
+                    A confirmação funciona com Gmail, Outlook, Yahoo e outros provedores de e-mail. Não precisamos da sua senha do provedor.
+                </div>
+
+                @if (TempData["ConfirmationResendError"] is string errorMessage)
+                {
+                    <div class="alert alert-warning text-start rounded-3" role="alert">
+                        <i class="bi bi-exclamation-triangle me-2"></i>@errorMessage
+                    </div>
+                }
+                else if (TempData["ConfirmationResendMessage"] is string message)
+                {
+                    <div class="alert alert-success rounded-3" role="status">@message</div>
+                }
+
+                <form asp-action="ResendConfirmationEmail" method="post" class="mt-4 text-start">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="returnUrl" value="@returnUrl" />
+                    <label for="confirmationEmail" class="form-label fw-semibold">Não recebeu o e-mail?</label>
+                    <input id="confirmationEmail" name="email" type="email" class="form-control form-control-lg" autocomplete="email" value="@email" placeholder="voce@email.com" required maxlength="180" />
+                    <button class="btn btn-artisan btn-lg w-100 rounded-3 py-3 mt-2" type="submit">
+                        <i class="bi bi-arrow-repeat me-2"></i>Reenviar confirmação
+                    </button>
+                </form>
+
+                <div class="d-grid gap-2 mt-3">
+                    <a asp-action="Login" asp-route-returnUrl="@returnUrl" class="btn btn-outline-dark rounded-3">Voltar para entrar</a>
+                </div>
+
+                <p class="small text-muted mt-4 mb-0">
+                    Por segurança, nunca informe sua senha do Gmail, Outlook, Yahoo ou de qualquer outro provedor ao Ateliê da Transformação.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

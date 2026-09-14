@@ -6,12 +6,17 @@ namespace AtelieDaTransformacao.Application.Services;
 
 public sealed class WhatsAppService : IWhatsAppService
 {
-    // Substitua pelo número real do vendedor: 55 + DDD + número, somente dígitos.
+    // 55 + DDD + número, somente dígitos.
+    // Substitua pelo número real do vendedor.
     private const string MerchantPhoneNumber = "5511999999999";
 
     public string GenerateProductInquiryLink(string productName, decimal price)
     {
-        var message = $"Olá! Fiquei interessado no produto *{productName}* no valor de R$ {price:N2}. Gostaria de combinar o pagamento e a entrega!";
+        var message =
+            $"Olá! Fiquei interessado no produto *{productName}* " +
+            $"no valor de R$ {price:N2}. " +
+            "Gostaria de combinar o pagamento e a entrega!";
+
         return BuildLink(message);
     }
 
@@ -21,8 +26,11 @@ public sealed class WhatsAppService : IWhatsAppService
             return string.Empty;
 
         var message = new StringBuilder();
-        message.AppendLine("Olá! Gostaria de realizar uma compra pelo Ateliê da Transformação.");
+
+        message.AppendLine(
+            "Olá! Gostaria de realizar uma compra pelo Ateliê da Transformação.");
         message.AppendLine();
+
         message.AppendLine("*Produtos selecionados:*");
         message.AppendLine();
 
@@ -37,14 +45,58 @@ public sealed class WhatsAppService : IWhatsAppService
 
         message.AppendLine($"*Total estimado: R$ {cart.Total:N2}*");
         message.AppendLine();
-        message.AppendLine("Gostaria de continuar a compra e combinar pagamento e entrega.");
+
+        message.AppendLine(
+            "Gostaria de continuar a compra e combinar pagamento e entrega.");
+
+        return BuildLink(message.ToString());
+    }
+
+    public string GenerateQuoteLink(
+        string name,
+        string phone,
+        string productType,
+        string? measurements,
+        string? material,
+        string description)
+    {
+        var message = new StringBuilder();
+
+        message.AppendLine(
+            "Olá! Gostaria de solicitar um orçamento ao Ateliê da Transformação.");
+        message.AppendLine();
+
+        message.AppendLine("*Dados do cliente:*");
+        message.AppendLine($"Nome: {name}");
+        message.AppendLine($"WhatsApp: {phone}");
+        message.AppendLine();
+
+        message.AppendLine("*Detalhes do orçamento:*");
+        message.AppendLine($"Tipo de produto: {productType}");
+
+        if (!string.IsNullOrWhiteSpace(measurements))
+            message.AppendLine($"Medidas: {measurements}");
+
+        if (!string.IsNullOrWhiteSpace(material))
+            message.AppendLine($"Material: {material}");
+
+        if (!string.IsNullOrWhiteSpace(description))
+            message.AppendLine($"Descrição: {description}");
+
+        message.AppendLine();
+        message.AppendLine(
+            "Aguardo o retorno para conversarmos sobre o projeto e o orçamento.");
 
         return BuildLink(message.ToString());
     }
 
     private static string BuildLink(string message)
     {
+        if (string.IsNullOrWhiteSpace(message))
+            return string.Empty;
+
         var encoded = Uri.EscapeDataString(message);
+
         return $"https://wa.me/{MerchantPhoneNumber}?text={encoded}";
     }
 }

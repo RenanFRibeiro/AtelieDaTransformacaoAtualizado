@@ -1,5 +1,5 @@
-using System.Text;
 using AtelieDaTransformacao.UI.Models;
+using AtelieDaTransformacao.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
@@ -8,13 +8,13 @@ namespace AtelieDaTransformacao.UI.Controllers;
 
 public class QuoteController : Controller
 {
-    private const string WhatsAppNumber = "5511999999999"; // TROQUE pelo número real da empresa.
-
     private readonly UserManager<IdentityUser> _userManager;
+    private readonly IWhatsAppService _whatsAppService;
 
-    public QuoteController(UserManager<IdentityUser> userManager)
+    public QuoteController(UserManager<IdentityUser> userManager, IWhatsAppService whatsAppService)
     {
         _userManager = userManager;
+        _whatsAppService = whatsAppService;
     }
 
     [HttpGet]
@@ -22,30 +22,14 @@ public class QuoteController : Controller
     {
         var model = new QuoteRequestViewModel();
 
-        // Quando o cliente está autenticado, aproveitamos os dados já
-        // cadastrados no perfil para evitar que ele precise digitá-los novamente.
         if (User.Identity?.IsAuthenticated == true)
         {
             var user = await _userManager.GetUserAsync(User);
-            if (user != null)
-            {
-                var claims = await _userManager.GetClaimsAsync(user);
-
-                var firstName = claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
-                var lastName = claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value;
-                var name = string.Join(" ", new[] { firstName, lastName }
-                    .Where(value => !string.IsNullOrWhiteSpace(value)))
-                    .Trim();
-
-                model.Name = !string.IsNullOrWhiteSpace(name)
-                    ? name
-                    : (user.UserName ?? string.Empty);
-
-                var phone = claims.FirstOrDefault(c => c.Type == ClaimTypes.MobilePhone)?.Value;
-                model.Phone = !string.IsNullOrWhiteSpace(phone)
-                    ? phone
-                    : (user.PhoneNumber ?? string.Empty);
-            }
+            var claims = user == null ? new List<Claim>() : await _userManager.GetClaimsAsync(user);
+            model.Name = BuildFullName(claims);
+            model.Phone = user?.PhoneNumber
+                ?? User.FindFirstValue(ClaimTypes.MobilePhone)
+                ?? string.Empty;
         }
 
         return View(model);
@@ -57,17 +41,15 @@ public class QuoteController : Controller
     {
         if (!ModelState.IsValid) return View(model);
 
-        var message = new StringBuilder();
-        message.AppendLine("Olá! Gostaria de solicitar um orçamento personalizado.");
-        message.AppendLine();
-        message.AppendLine($"*Nome:* {model.Name}");
-        message.AppendLine($"*WhatsApp:* {model.Phone}");
-        message.AppendLine($"*Peça desejada:* {model.ProductType}");
-        if (!string.IsNullOrWhiteSpace(model.Measurements)) message.AppendLine($"*Medidas:* {model.Measurements}");
-        if (!string.IsNullOrWhiteSpace(model.Material)) message.AppendLine($"*Material/estilo:* {model.Material}");
-        message.AppendLine($"*Descrição:* {model.Description}");
-
-        var url = $"https://wa.me/{WhatsAppNumber}?text={Uri.EscapeDataString(message.ToString())}";
+        var url = _whatsAppService.GenerateQuoteLink(
+            model.Name, model.Phone, model.ProductType, model.Measurements, model.Material, model.Description);
         return Redirect(url);
+    }
+
+    private static string BuildFullName(IList<Claim> claims)
+    {
+        var first = claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value?.Trim();
+        var last = claims.FirstOrDefault(c => c.Type == ClaimTypes.Surname)?.Value?.Trim();
+        return string.Join(" ", new[] { first, last }.Where(x => !string.IsNullOrWhiteSpace(x)));
     }
 }
