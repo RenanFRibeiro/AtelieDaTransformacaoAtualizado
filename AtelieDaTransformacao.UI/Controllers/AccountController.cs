@@ -200,17 +200,27 @@ public sealed class AccountController : Controller
             // Se o cliente iniciou um cadastro anteriormente, não o obrigamos
             // a preencher tudo novamente. Reenviamos a confirmação para a
             // conta pendente e preservamos a experiência de cadastro.
-            var pendingConfirmationSent = await TrySendConfirmationEmailAsync(existing);
             TempData["ConfirmationEmail"] = existing.Email;
-            if (pendingConfirmationSent)
+            try
             {
-                TempData["ConfirmationResendMessage"] =
-                    "Já existe um cadastro pendente para este e-mail. Enviamos um novo link de confirmação.";
+                var pendingConfirmationSent = await TrySendConfirmationEmailAsync(existing);
+                if (pendingConfirmationSent)
+                {
+                    TempData["ConfirmationResendMessage"] =
+                        "Já existe um cadastro pendente para este e-mail. Enviamos um novo link de confirmação.";
+                }
+                else
+                {
+                    TempData["ConfirmationResendError"] =
+                        "Sua conta já foi criada, mas não conseguimos enviar o e-mail de confirmação. Verifique a configuração SMTP do site e tente reenviar.";
+                }
             }
-            else
+            catch (Exception ex)
             {
                 TempData["ConfirmationResendError"] =
-                    "Sua conta já foi criada, mas não conseguimos enviar o e-mail de confirmação. Verifique a configuração SMTP do site e tente reenviar.";
+                    "Sua conta já foi criada, mas o e-mail de confirmação não pôde ser enviado. Verifique a configuração SMTP e tente reenviar.";
+                HttpContext.RequestServices.GetRequiredService<ILogger<AccountController>>()
+                    .LogError(ex, "Falha ao reenviar confirmação de e-mail para {Email}.", existing.Email);
             }
 
             return RedirectToAction(nameof(EmailConfirmationSent), new { returnUrl = SafeReturnUrl(returnUrl) });

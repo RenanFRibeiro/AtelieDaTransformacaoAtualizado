@@ -24,13 +24,19 @@ public sealed class SmtpEmailService : IEmailService
             throw new ArgumentException("O destinatário do e-mail é obrigatório.", nameof(to));
 
         if (string.IsNullOrWhiteSpace(_options.Host) ||
-            string.IsNullOrWhiteSpace(_options.From) ||
             string.IsNullOrWhiteSpace(_options.UserName) ||
             string.IsNullOrWhiteSpace(_options.Password))
         {
             throw new InvalidOperationException(
-                "SMTP não configurado. Defina Email:Host, Email:From, Email:UserName e Email:Password usando User Secrets ou variáveis de ambiente.");
+                "SMTP não configurado. Defina Email:Host, Email:UserName e Email:Password usando User Secrets ou variáveis de ambiente.");
         }
+
+        // Para Gmail, o remetente deve ser uma caixa de e-mail válida e,
+        // normalmente, a mesma conta usada para autenticar no SMTP.
+        // Se Email:From estiver vazio, usamos automaticamente Email:UserName.
+        var configuredFrom = string.IsNullOrWhiteSpace(_options.From)
+            ? _options.UserName.Trim()
+            : _options.From.Trim();
 
         if (!MailAddress.TryCreate(to.Trim(), out var recipient))
         {
@@ -38,10 +44,11 @@ public sealed class SmtpEmailService : IEmailService
             return;
         }
 
-        if (!MailAddress.TryCreate(_options.From.Trim(), out var sender))
+        if (!MailAddress.TryCreate(configuredFrom, out var sender) ||
+            !sender.Address.Equals(configuredFrom, StringComparison.OrdinalIgnoreCase))
         {
-            _logger.LogError("E-mail não enviado: remetente SMTP inválido.");
-            return;
+            throw new InvalidOperationException(
+                $"Remetente SMTP inválido. Use um endereço de e-mail válido em Email:From ou deixe Email:From vazio para usar Email:UserName. Valor recebido: '{configuredFrom}'.");
         }
 
         using var message = new MailMessage
@@ -82,8 +89,16 @@ public sealed class SmtpEmailService : IEmailService
 
     public async Task SendEmailConfirmationAsync(string to, string confirmationUrl, CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(_options.Host) || string.IsNullOrWhiteSpace(_options.From))
-            throw new InvalidOperationException("O serviço de e-mail não está configurado.");
+        // Email:From é opcional: SendAsync usa Email:UserName como remetente
+        // quando From não foi informado. Isso evita bloquear o envio apenas
+        // porque o campo From ficou vazio nos User Secrets.
+        if (string.IsNullOrWhiteSpace(_options.Host) ||
+            string.IsNullOrWhiteSpace(_options.UserName) ||
+            string.IsNullOrWhiteSpace(_options.Password))
+        {
+            throw new InvalidOperationException(
+                "O serviço de e-mail não está configurado. Defina Email:Host, Email:UserName e Email:Password nos User Secrets.");
+        }
 
         await SendAsync(to, "Confirme seu e-mail — Ateliê da Transformação",
             $"""
