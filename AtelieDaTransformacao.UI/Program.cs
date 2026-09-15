@@ -10,6 +10,8 @@ using AtelieDaTransformacao.UI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Extensions.FileProviders;
 using System.Threading.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 
@@ -233,7 +235,22 @@ public static class Program
             await next();
         });
 
-        app.UseStaticFiles();
+        var staticFileContentTypeProvider = new FileExtensionContentTypeProvider();
+        staticFileContentTypeProvider.Mappings[".webmanifest"] = "application/manifest+json";
+
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            ContentTypeProvider = staticFileContentTypeProvider,
+            OnPrepareResponse = context =>
+            {
+                // O service worker precisa ser sempre revalidado pelo navegador,
+                // senão atualizações do app shell podem demorar a chegar aos usuários.
+                if (context.File.Name.Equals("sw.js", StringComparison.OrdinalIgnoreCase))
+                {
+                    context.Context.Response.Headers["Cache-Control"] = "no-cache";
+                }
+            }
+        });
 
         app.UseRouting();
 

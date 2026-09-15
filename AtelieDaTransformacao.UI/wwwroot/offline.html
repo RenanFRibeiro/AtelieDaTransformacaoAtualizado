@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Você está offline - Ateliê da Transformação</title>
+  <meta name="theme-color" content="#241812" />
+  <link rel="icon" href="/favicon.ico" />
+  <style>
+    :root {
+      --artisan-gold: #c58a58;
+      --artisan-clay: #a85c3d;
+      --artisan-wood: #241812;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 1.5rem;
+      background: radial-gradient(circle at top, #2f2019 0%, var(--artisan-wood) 65%);
+      color: #fff8ef;
+      font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      text-align: center;
+    }
+    .offline-card {
+      max-width: 420px;
+    }
+    .offline-icon {
+      width: 84px;
+      height: 84px;
+      margin: 0 auto 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 24px;
+      background: rgba(197, 138, 88, 0.15);
+      border: 1px solid rgba(197, 138, 88, 0.35);
+    }
+    .offline-icon svg {
+      width: 42px;
+      height: 42px;
+      fill: var(--artisan-gold);
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin: 0 0 .75rem;
+      color: #fff8ef;
+    }
+    p {
+      margin: 0 0 1.75rem;
+      color: rgba(255, 248, 239, 0.75);
+      line-height: 1.6;
+    }
+    .retry-button {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      padding: .75rem 1.75rem;
+      border-radius: 999px;
+      border: none;
+      background: linear-gradient(135deg, var(--artisan-gold), var(--artisan-clay));
+      color: #241812;
+      font-weight: 600;
+      font-size: .95rem;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+    .retry-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(197, 138, 88, 0.3);
+    }
+    .offline-note {
+      margin-top: 2rem;
+      font-size: .8rem;
+      color: rgba(255, 248, 239, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="offline-card">
+    <div class="offline-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M12 3C7 3 2.7 4.9 0 8l2 2c2.2-2.6 5.9-4 10-4s7.8 1.4 10 4l2-2C21.3 4.9 17 3 12 3zm0 6c-2.9 0-5.5 1.2-7.4 3.1l2 2C8 12.7 9.9 12 12 12s4 .7 5.4 2.1l2-2C17.5 10.2 14.9 9 12 9zm0 6c-1.4 0-2.7.6-3.6 1.5L12 20l3.6-3.5C14.7 15.6 13.4 15 12 15z" opacity=".35"/><path d="M11 18.5 12 21l1-2.5-1-1z"/></svg>
+    </div>
+    <h1>Você está sem conexão</h1>
+    <p>
+      Não foi possível carregar esta página do Ateliê da Transformação porque você está offline.
+      Verifique sua internet e tente novamente — assim que a conexão voltar, tudo funciona normalmente.
+    </p>
+    <button class="retry-button" onclick="window.location.reload()">
+      Tentar novamente
+    </button>
+    <p class="offline-note">Algumas páginas visitadas recentemente podem continuar disponíveis mesmo sem internet.</p>
+  </div>
+</body>
+</html>
