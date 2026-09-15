@@ -135,8 +135,16 @@ public static class Program
 
         builder.Services.AddHttpClient("EmailDns", client =>
         {
-            client.BaseAddress = new Uri("https://dns.google/");
+            client.BaseAddress = new Uri("https://cloudflare-dns.com/");
             client.Timeout = TimeSpan.FromSeconds(8);
+            client.DefaultRequestHeaders.Accept.ParseAdd("application/dns-json");
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("AtelieDaTransformacao/1.0");
+        });
+
+        builder.Services.AddHttpClient("BrevoEmail", client =>
+        {
+            client.BaseAddress = new Uri("https://api.brevo.com/");
+            client.Timeout = TimeSpan.FromSeconds(30);
             client.DefaultRequestHeaders.UserAgent.ParseAdd("AtelieDaTransformacao/1.0");
         });
 
@@ -151,7 +159,7 @@ public static class Program
             builder.Configuration.GetSection("OrderAutomation"));
 
         builder.Services.AddSingleton<IEmailAddressVerifier, EmailAddressVerifier>();
-        builder.Services.AddSingleton<IEmailService, SmtpEmailService>();
+        builder.Services.AddSingleton<IEmailService, BrevoEmailService>();
 
         builder.Services.AddRateLimiter(options =>
         {

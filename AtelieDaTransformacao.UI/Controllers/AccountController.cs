@@ -632,6 +632,7 @@ public sealed class AccountController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [DisableRateLimiting]
     public async Task<IActionResult> Logout()
     {
         await _signInManager.SignOutAsync();

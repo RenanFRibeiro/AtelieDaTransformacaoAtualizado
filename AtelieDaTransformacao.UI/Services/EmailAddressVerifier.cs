@@ -7,8 +7,8 @@ namespace AtelieDaTransformacao.UI.Services;
 
 /// <summary>
 /// Performs pre-registration checks. DNS/MX can confirm that the domain is configured
-/// to receive mail, but only the confirmation link sent to the mailbox can prove
-/// ownership of a specific address.
+/// to receive mail, but only the confirmation link sent to the mailbox can prove ownership.
+/// Uses Cloudflare DNS-over-HTTPS instead of any Google service.
 /// </summary>
 public sealed class EmailAddressVerifier : IEmailAddressVerifier
 {
@@ -46,15 +46,20 @@ public sealed class EmailAddressVerifier : IEmailAddressVerifier
 
         try
         {
-            // DNS-over-HTTPS avoids depending on a platform-specific MX API.
-            // Google DNS returns authoritative DNS data for the domain.
             var client = _httpClientFactory.CreateClient("EmailDns");
-            var url = $"resolve?name={Uri.EscapeDataString(domain)}&type=MX";
+            var url = $"dns-query?name={Uri.EscapeDataString(domain)}&type=MX";
             using var response = await client.GetAsync(url, cancellationToken);
+
             if (!response.IsSuccessStatusCode)
             {
-                _logger.LogWarning("Falha ao consultar MX para {Domain}: HTTP {StatusCode}.", domain, response.StatusCode);
-                return new(false, "Não foi possível verificar o domínio do e-mail agora.");
+                _logger.LogWarning(
+                    "Falha ao consultar MX para {Domain}: HTTP {StatusCode}.",
+                    domain,
+                    response.StatusCode);
+
+                // DNS is a pre-check, not proof of mailbox ownership. Do not block a
+                // legitimate registration solely because the DNS resolver is unavailable.
+                return new(true, "Endereço válido. Enviaremos um link para confirmar a caixa postal.");
             }
 
             await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
@@ -65,17 +70,21 @@ public sealed class EmailAddressVerifier : IEmailAddressVerifier
                 : -1;
 
             if (status != 0)
-                return new(false, "O domínio informado não está disponível para receber e-mails.");
+                return new(true, "Endereço válido. Enviaremos um link para confirmar a caixa postal.");
 
-            if (!document.RootElement.TryGetProperty("Answer", out var answers) ||
-                answers.ValueKind != JsonValueKind.Array ||
-                !answers.EnumerateArray().Any(x =>
-                    x.TryGetProperty("type", out var type) && type.GetInt32() == 15))
+            var hasMx = document.RootElement.TryGetProperty("Answer", out var answers) &&
+                        answers.ValueKind == JsonValueKind.Array &&
+                        answers.EnumerateArray().Any(x =>
+                            x.TryGetProperty("type", out var type) && type.GetInt32() == 15);
+
+            if (!hasMx)
             {
-                return new(false, "O domínio informado não possui um servidor de e-mail configurado.");
+                // RFC-compliant domains may accept mail through their A/AAAA record when
+                // no MX exists. The final confirmation email remains the ownership proof.
+                _logger.LogWarning("Domínio {Domain} não apresentou registro MX.", domain);
             }
 
-            return new(true, "Domínio de e-mail verificado. Enviaremos um link para confirmar que a caixa postal pertence a você.");
+            return new(true, "Domínio analisado. Enviaremos um link para confirmar a caixa postal.");
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
@@ -84,7 +93,7 @@ public sealed class EmailAddressVerifier : IEmailAddressVerifier
         catch (Exception ex)
         {
             _logger.LogWarning(ex, "Não foi possível verificar o MX do e-mail {Email}.", email);
-            return new(false, "Não foi possível verificar este e-mail agora. Tente novamente.");
+            return new(true, "Endereço válido. Enviaremos um link para confirmar a caixa postal.");
         }
     }
 }
