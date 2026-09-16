@@ -1,0 +1,115 @@
+@{ ViewData["Title"] = "Meus favoritos"; }
+
+<section class="ux-account-hero page-hero text-center py-5 mb-4">
+    <div class="container">
+        <span class="eyebrow ux-reveal">MINHA CONTA</span>
+        <h1 class="display-5 serif-title fw-bold mt-2 ux-reveal">Meus favoritos</h1>
+        <p class="lead text-muted ux-reveal">Guarde as peças que você quer revisitar depois.</p>
+        <div class="ux-hero-orbit" aria-hidden="true"><span></span><span></span><span></span></div>
+    </div>
+</section>
+
+<div class="container pb-5 ux-account-page">
+    <div class="ux-section-heading ux-reveal">
+        <div><span class="eyebrow">SUA SELEÇÃO</span><h2 class="serif-title h3 mb-1">Peças que você salvou</h2></div>
+        <span id="favoritesCount" class="ux-count-pill">0 peças</span>
+    </div>
+    <div id="favoritesGrid" class="row g-4 ux-card-grid"></div>
+    <div id="favoritesEmpty" class="ux-empty ux-empty-premium ux-reveal">
+        <div class="ux-empty-icon"><i class="bi bi-heart" aria-hidden="true"></i></div>
+        <span class="eyebrow">COMECE SUA COLEÇÃO</span>
+        <h2 class="h4 serif-title mt-2">Você ainda não salvou peças</h2>
+        <p class="text-muted mx-auto">Explore a coleção e toque no coração para guardar seus favoritos neste navegador.</p>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-artisan rounded-pill px-4">Explorar coleção <i class="bi bi-arrow-up-right ms-1"></i></a>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+(function () {
+    document.addEventListener('DOMContentLoaded', function () {
+        const grid = document.getElementById('favoritesGrid');
+        const empty = document.getElementById('favoritesEmpty');
+        const count = document.getElementById('favoritesCount');
+        const items = window.AtelieUX?.favorites?.() || [];
+
+        count.textContent = `${items.length} ${items.length === 1 ? 'peça' : 'peças'}`;
+        empty.hidden = items.length > 0;
+
+        items.forEach((x, index) => {
+            const col = document.createElement('div');
+            col.className = 'col-12 col-md-6 col-lg-4 ux-reveal';
+            col.style.setProperty('--reveal-delay', `${Math.min(index * 70, 420)}ms`);
+
+            const article = document.createElement('article');
+            article.className = 'ux-product-card h-100';
+
+            const mediaLink = document.createElement('a');
+            mediaLink.href = safeUrl(x.url);
+            mediaLink.className = 'ux-product-card-media';
+
+            const img = document.createElement('img');
+            img.src = safeImage(x.image);
+            img.alt = x.title ? `Imagem de ${x.title}` : 'Peça favorita';
+            img.loading = 'lazy';
+            img.onerror = () => { img.src = '/images/placeholder.jpg'; };
+            mediaLink.appendChild(img);
+
+            const badge = document.createElement('span');
+            badge.className = 'ux-product-card-badge';
+            badge.innerHTML = '<i class="bi bi-heart-fill me-1"></i>Salvo';
+            mediaLink.appendChild(badge);
+
+            const body = document.createElement('div');
+            body.className = 'ux-product-card-body';
+
+            const title = document.createElement('h2');
+            title.className = 'h5 serif-title mb-3';
+            title.textContent = x.title || 'Peça artesanal';
+
+            const actions = document.createElement('div');
+            actions.className = 'd-flex gap-2 flex-wrap';
+
+            const view = document.createElement('a');
+            view.href = safeUrl(x.url);
+            view.className = 'btn btn-artisan rounded-pill';
+            view.innerHTML = 'Ver peça <i class="bi bi-arrow-right ms-1"></i>';
+
+            const remove = document.createElement('button');
+            remove.type = 'button';
+            remove.className = 'btn btn-outline-artisan-dark rounded-pill';
+            remove.dataset.favoriteId = x.id ?? '';
+            remove.dataset.favoriteTitle = x.title ?? '';
+            remove.dataset.favoriteUrl = x.url ?? '';
+            remove.dataset.favoriteImage = x.image ?? '';
+            remove.innerHTML = '<i class="bi bi-heartbreak me-1"></i> Remover';
+
+            actions.append(view, remove);
+            body.append(title, actions);
+            article.append(mediaLink, body);
+            col.appendChild(article);
+            grid.appendChild(col);
+        });
+
+        if (items.length) {
+            requestAnimationFrame(() => document.querySelectorAll('.ux-reveal').forEach(el => el.classList.add('is-visible')));
+        }
+    });
+
+    function safeUrl(value) {
+        try {
+            const u = new URL(value || '/', window.location.origin);
+            return u.origin === window.location.origin ? u.href : '/';
+        } catch { return '/'; }
+    }
+
+    function safeImage(value) {
+        if (!value) return '/images/placeholder.jpg';
+        try {
+            const u = new URL(value, window.location.origin);
+            return ['http:', 'https:'].includes(u.protocol) || u.origin === window.location.origin ? u.href : '/images/placeholder.jpg';
+        } catch { return '/images/placeholder.jpg'; }
+    }
+})();
+</script>
+}

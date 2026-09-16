@@ -2338,3 +2338,286 @@ html[data-theme="dark"] .process-steps::before {
         transition: none !important;
     }
 }
+
+
+/* ============================================================================
+   HEADER LIMPO — organização visual e redução de ruído
+   Mantém as funções existentes, apenas agrupa ações secundárias em "Conta".
+   ============================================================================ */
+
+@media (min-width: 992px) {
+    .navbar-artisan {
+        height: 72px;
+        min-height: 72px;
+    }
+
+    .navbar-inner {
+        min-height: 72px;
+    }
+
+    .artisan-main-nav {
+        gap: .05rem;
+        margin-left: 1.8rem;
+    }
+
+    .nav-link-artisan {
+        padding: .5rem .72rem !important;
+        font-size: .82rem;
+    }
+
+    .nav-link-artisan i {
+        display: none;
+    }
+
+    .header-actions-v3 {
+        gap: .28rem;
+        padding-left: 1rem;
+        border-left: 1px solid rgba(255,255,255,.10);
+    }
+
+    .header-actions-v3 .header-icon-button,
+    .header-actions-v3 .header-menu-link-v3,
+    .header-account-button,
+    .header-register-link {
+        height: 38px;
+        min-height: 38px;
+    }
+
+    .header-actions-v3 .header-menu-link-v3 {
+        max-width: 38px;
+        min-width: 38px;
+        padding: .45rem !important;
+        border-radius: 10px;
+    }
+
+    .header-actions-v3 .header-menu-link-v3 span {
+        display: none;
+    }
+
+    .header-actions-v3 .header-compact-link:hover,
+    .header-actions-v3 .header-compact-link:focus-visible {
+        max-width: 38px;
+        padding-inline: .45rem !important;
+    }
+
+    .header-actions-v3 .header-quote-link {
+        color: var(--modern-caramel) !important;
+    }
+
+    .header-actions-v3 .header-icon-button {
+        width: 38px;
+        border-radius: 10px;
+    }
+
+    .header-account-dropdown {
+        margin-left: .12rem;
+    }
+
+    .header-account-button {
+        display: inline-flex;
+        align-items: center;
+        gap: .4rem;
+        border: 1px solid rgba(255,255,255,.11);
+        background: rgba(255,255,255,.035);
+        color: rgba(255,248,239,.86);
+        border-radius: 10px;
+        padding: .45rem .68rem;
+        font: inherit;
+        font-size: .78rem;
+        font-weight: 600;
+        transition: background .2s ease, border-color .2s ease, transform .2s ease;
+    }
+
+    .header-account-button::after {
+        margin-left: .12rem;
+        opacity: .6;
+    }
+
+    .header-account-button i {
+        color: var(--modern-caramel);
+        font-size: .92rem;
+    }
+
+    .header-account-button:hover,
+    .header-account-button:focus-visible,
+    .header-account-button.show {
+        color: #fff;
+        background: rgba(255,255,255,.075);
+        border-color: rgba(197,138,88,.28);
+        transform: translateY(-1px);
+    }
+
+    .header-account-menu {
+        min-width: 235px;
+        margin-top: .55rem !important;
+        padding: .45rem;
+        border: 1px solid rgba(58,36,26,.10);
+        border-radius: 14px;
+        box-shadow: 0 18px 45px rgba(30,20,13,.16);
+    }
+
+    .header-account-menu .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: .65rem;
+        min-height: 38px;
+        border-radius: 9px;
+        padding: .52rem .62rem;
+        font-size: .78rem;
+        font-weight: 600;
+    }
+
+    .header-account-menu .dropdown-item i {
+        width: 18px;
+        color: var(--modern-terracotta);
+        text-align: center;
+    }
+
+    .header-account-email {
+        padding: .45rem .6rem .35rem;
+        min-width: 0;
+    }
+
+    .header-account-email span {
+        display: block;
+        color: var(--modern-muted);
+        font-size: .62rem;
+        margin-bottom: .18rem;
+    }
+
+    .header-account-email strong {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: var(--modern-brown-950);
+        font-size: .72rem;
+    }
+
+    .header-account-logout {
+        width: 100%;
+        border: 0;
+        background: transparent;
+        text-align: left;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .header-actions-v3 {
+        display: flex !important;
+        align-items: center;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        gap: .45rem;
+        width: 100%;
+        padding: .65rem 0 .35rem;
+        border-top: 1px solid rgba(255,255,255,.07);
+    }
+
+    .header-account-dropdown {
+        flex: 0 0 auto;
+    }
+
+    .header-account-button {
+        display: inline-flex;
+        align-items: center;
+        gap: .4rem;
+        min-height: 42px;
+        border: 1px solid rgba(255,255,255,.11);
+        background: rgba(255,255,255,.035);
+        color: rgba(255,248,239,.86);
+        border-radius: 10px;
+        padding: .55rem .75rem;
+        font: inherit;
+        font-size: .8rem;
+        font-weight: 600;
+    }
+
+    .header-account-button i {
+        color: var(--modern-caramel);
+    }
+
+    .header-actions-v3 .header-compact-link {
+        max-width: none !important;
+        min-width: 42px;
+        width: auto;
+        min-height: 42px;
+        justify-content: center;
+        padding: .55rem .72rem !important;
+    }
+
+    .header-actions-v3 .header-compact-link span {
+        max-width: 120px;
+        opacity: 1;
+        transform: none;
+        display: inline-block;
+    }
+
+    .header-actions-v3 .header-icon-button {
+        width: 42px;
+        min-width: 42px;
+        height: 42px;
+    }
+
+    .header-account-menu {
+        min-width: 235px;
+        margin-top: .4rem !important;
+        border-radius: 13px;
+    }
+
+    .header-account-email strong {
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .header-actions-v3 {
+        gap: .35rem;
+    }
+
+    .header-account-label {
+        display: inline;
+    }
+
+    .header-actions-v3 .header-compact-link span {
+        max-width: 90px;
+    }
+
+    .header-account-menu {
+        position: absolute;
+        right: 0;
+        left: auto;
+    }
+}
+
+html[data-theme="dark"] .header-account-button {
+    color: rgba(255,248,239,.9);
+    border-color: rgba(255,255,255,.12);
+    background: rgba(255,255,255,.045);
+}
+
+html[data-theme="dark"] .header-account-menu {
+    background: #211814;
+    border-color: rgba(255,255,255,.10);
+}
+
+html[data-theme="dark"] .header-account-menu .dropdown-item {
+    color: #f3e9df;
+}
+
+html[data-theme="dark"] .header-account-menu .dropdown-item:hover,
+html[data-theme="dark"] .header-account-menu .dropdown-item:focus {
+    background: rgba(255,255,255,.07);
+    color: #fff;
+}
+
+html[data-theme="dark"] .header-account-email strong {
+    color: #f3e9df;
+}
+
+html[data-theme="dark"] .header-account-email span {
+    color: #b9a99d;
+}

@@ -7,6 +7,7 @@
 
     <NuGetAudit>false</NuGetAudit>
     <NoWarn>$(NoWarn);NU1900</NoWarn>
+    <UserSecretsId>eb479f0c-16cf-49aa-900f-075c159f096f</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

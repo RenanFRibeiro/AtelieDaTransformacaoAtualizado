@@ -515,7 +515,7 @@ public sealed class OrderController : Controller
                             PostalCode = checkout.PostalCode,
                             ShippingAddress = checkout.ShippingAddress,
                             AddressNumber = checkout.AddressNumber,
-                            Complement = string.Empty,
+                            Complement = checkout.Complement,
                             District = checkout.District,
                             City = checkout.City,
                             State = checkout.State,

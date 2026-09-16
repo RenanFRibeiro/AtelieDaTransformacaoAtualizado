@@ -471,3 +471,100 @@ document.addEventListener("DOMContentLoaded", () => {
         link.setAttribute("rel", [...rel].join(" "));
     });
 });
+
+
+/* UX 2026: favoritos, histórico, filtros, feedback e pré-preenchimento */
+(function () {
+    'use strict';
+    const FAV_KEY = 'atelie-favorites-v1';
+    const HISTORY_KEY = 'atelie-recent-products-v1';
+    const MAX_HISTORY = 12;
+
+    const read = (key) => { try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch { return []; } };
+    const write = (key, value) => { try { localStorage.setItem(key, JSON.stringify(value)); } catch {} };
+
+    function favorites() { return read(FAV_KEY); }
+    function isFav(id) { return favorites().some(x => String(x.id) === String(id)); }
+    function toggleFavorite(id, title, url, image) {
+        let items = favorites();
+        const exists = items.some(x => String(x.id) === String(id));
+        items = exists ? items.filter(x => String(x.id) !== String(id)) : [{ id, title, url, image, savedAt: Date.now() }, ...items];
+        write(FAV_KEY, items);
+        document.querySelectorAll('[data-favorite-id="' + CSS.escape(String(id)) + '"]').forEach(b => {
+            b.classList.toggle('is-favorite', !exists);
+            b.setAttribute('aria-pressed', String(!exists));
+            b.setAttribute('aria-label', !exists ? 'Remover dos favoritos' : 'Adicionar aos favoritos');
+        });
+        window.dispatchEvent(new CustomEvent('atelie:favorites-changed'));
+        showToast(!exists ? 'Produto salvo nos favoritos.' : 'Produto removido dos favoritos.');
+    }
+
+    function addHistory() {
+        const el = document.querySelector('[data-product-id]');
+        if (!el) return;
+        const item = { id: el.dataset.productId, title: el.dataset.productTitle || document.title, url: el.dataset.productUrl || location.href, image: el.dataset.productImage || '' };
+        let items = read(HISTORY_KEY).filter(x => String(x.id) !== String(item.id));
+        write(HISTORY_KEY, [item, ...items].slice(0, MAX_HISTORY));
+    }
+
+    function showToast(message) {
+        const region = document.getElementById('notificationToastRegion');
+        if (!region) return;
+        const toast = document.createElement('div');
+        toast.className = 'alert alert-dark shadow-sm rounded-pill px-4 py-2 mb-2';
+        toast.textContent = message;
+        region.appendChild(toast);
+        setTimeout(() => toast.remove(), 2800);
+    }
+
+    document.addEventListener('click', function (event) {
+        const fav = event.target.closest('[data-favorite-id]');
+        if (fav) {
+            event.preventDefault();
+            toggleFavorite(fav.dataset.favoriteId, fav.dataset.favoriteTitle, fav.dataset.favoriteUrl, fav.dataset.favoriteImage);
+            return;
+        }
+        const clear = event.target.closest('[data-clear-history]');
+        if (clear) { write(HISTORY_KEY, []); location.reload(); }
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.documentElement.classList.add('ux-ready');
+        addHistory();
+
+        const revealItems = document.querySelectorAll('.ux-reveal');
+        if ('IntersectionObserver' in window) {
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.12, rootMargin: '0px 0px -30px' });
+            revealItems.forEach(item => observer.observe(item));
+        } else {
+            revealItems.forEach(item => item.classList.add('is-visible'));
+        }
+        document.querySelectorAll('[data-favorite-id]').forEach(b => {
+            const active = isFav(b.dataset.favoriteId);
+            b.classList.toggle('is-favorite', active);
+            b.setAttribute('aria-pressed', String(active));
+        });
+
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', function () {
+                const submit = form.querySelector('button[type="submit"], input[type="submit"]');
+                if (!submit || submit.dataset.noLock === 'true' || form.dataset.noLock === 'true') return;
+                if (form.checkValidity && !form.checkValidity()) return;
+                if (submit.dataset.locked === 'true') return;
+                submit.dataset.locked = 'true';
+                submit.dataset.originalText = submit.innerHTML;
+                submit.innerHTML = '<span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Processando...';
+                submit.setAttribute('aria-busy', 'true');
+            });
+        });
+    });
+
+    window.AtelieUX = { favorites, history: () => read(HISTORY_KEY), toggleFavorite, showToast };
+})();

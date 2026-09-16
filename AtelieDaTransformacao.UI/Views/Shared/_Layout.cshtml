@@ -8,6 +8,15 @@
     <meta name="theme-color" content="#241812" />
     <script>try{const r=document.documentElement,t=localStorage.getItem('atelie-theme');const theme=(t==='dark'||t==='light')?t:(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');r.dataset.theme=theme;r.dataset.bsTheme=theme;r.style.colorScheme=theme;}catch(e){}</script>
 
+    <!-- PWA: manifest, ícones e metatags de instalação -->
+    <link rel="manifest" href="~/manifest.webmanifest" />
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
+    <link rel="apple-touch-icon" href="~/images/icons/apple-touch-icon.png" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Ateliê" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -58,14 +67,6 @@
                                 ?? User.Identity.Name
                                 ?? string.Empty;
 
-                            if (!string.IsNullOrWhiteSpace(currentUserEmail))
-                            {
-                                <div class="header-user-email-v3" title="E-mail de login">
-                                    <i class="bi bi-person-check" aria-hidden="true"></i>
-                                    <span>@currentUserEmail</span>
-                                </div>
-                            }
-
                             <div class="header-notification-wrap position-relative">
                                 <button type="button" class="header-icon-button notification-button" id="notificationButton"
                                         aria-label="Abrir notificações" aria-expanded="false" aria-controls="notificationPanel" title="Notificações">
@@ -85,43 +86,85 @@
                                     </div>
                                 </div>
                             </div>
+
                             if (!User.IsInRole("Admin"))
                             {
-                                <a class="header-menu-link-v3 header-quote-link" aria-label="Solicitar orçamento" asp-controller="Quote" asp-action="Index" title="Solicitar orçamento">
+                                <a class="header-menu-link-v3 header-quote-link header-compact-link"
+                                   aria-label="Solicitar orçamento" asp-controller="Quote" asp-action="Index" title="Solicitar orçamento">
                                     <i class="bi bi-pencil-square" aria-hidden="true"></i><span>Orçamento</span>
                                 </a>
-                            }
 
-                            if (User.IsInRole("Admin") || User.IsInRole("Funcionario") || User.IsInRole("Employee"))
-                            {
-                                <a class="header-menu-link-v3" asp-controller="Admin" asp-action="Index" title="Painel do Artesão" aria-label="Painel do Artesão">
-                                    <i class="bi bi-sliders" aria-hidden="true"></i><span>Painel</span>
-                                </a>
-                            }
-
-                            if (!User.IsInRole("Admin"))
-                            {
-                                <a class="header-menu-link-v3" asp-controller="Account" asp-action="Profile" title="Meu perfil" aria-label="Meu perfil">
-                                    <i class="bi bi-person-circle" aria-hidden="true"></i><span>Meu perfil</span>
-                                </a>
-                                <a class="header-menu-link-v3" asp-controller="Order" asp-action="Index" title="Meus pedidos" aria-label="Meus pedidos">
-                                    <i class="bi bi-box-seam" aria-hidden="true"></i><span>Meus pedidos</span>
-                                </a>
-                                <a class="header-menu-link-v3 position-relative" asp-controller="Cart" asp-action="Index" title="Ver carrinho" aria-label="Carrinho">
+                                <a class="header-menu-link-v3 header-cart-link position-relative"
+                                   asp-controller="Cart" asp-action="Index" title="Ver carrinho" aria-label="Carrinho">
                                     <i class="bi bi-bag" aria-hidden="true"></i><span>Carrinho</span>
                                     <span class="badge cart-badge" id="cartCountBadge" style="display:none;">0</span>
                                 </a>
                             }
 
-                            <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
-                                <button type="submit" class="header-menu-link-v3 header-logout-v3" title="  " aria-label="Sair">
-                                    <i class="bi bi-box-arrow-right" aria-hidden="true"></i><span>Sair</span>
+                            if (User.IsInRole("Admin") || User.IsInRole("Funcionario") || User.IsInRole("Employee"))
+                            {
+                                <a class="header-menu-link-v3 header-compact-link header-panel-link"
+                                   asp-controller="Admin" asp-action="Index" title="Painel do Artesão" aria-label="Painel do Artesão">
+                                    <i class="bi bi-sliders" aria-hidden="true"></i><span>Painel</span>
+                                </a>
+                            }
+
+                            <div class="dropdown header-account-dropdown">
+                                <button class="header-account-button dropdown-toggle" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false" aria-label="Abrir minha conta">
+                                    <i class="bi bi-person-circle" aria-hidden="true"></i>
+                                    <span class="header-account-label">Conta</span>
                                 </button>
-                            </form>
+                                <ul class="dropdown-menu dropdown-menu-end header-account-menu">
+                                    @if (!string.IsNullOrWhiteSpace(currentUserEmail))
+                                    {
+                                        <li>
+                                            <div class="header-account-email">
+                                                <span>Conectado como</span>
+                                                <strong title="@currentUserEmail">@currentUserEmail</strong>
+                                            </div>
+                                        </li>
+                                        <li><hr class="dropdown-divider" /></li>
+                                    }
+
+                                    @if (!User.IsInRole("Admin"))
+                                    {
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Account" asp-action="Profile">
+                                                <i class="bi bi-person-circle" aria-hidden="true"></i>Meu perfil
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Account" asp-action="Favorites">
+                                                <i class="bi bi-heart" aria-hidden="true"></i>Favoritos
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Account" asp-action="RecentlyViewed">
+                                                <i class="bi bi-clock-history" aria-hidden="true"></i>Vistos recentemente
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Order" asp-action="Index">
+                                                <i class="bi bi-box-seam" aria-hidden="true"></i>Meus pedidos
+                                            </a>
+                                        </li>
+                                        <li><hr class="dropdown-divider" /></li>
+                                    }
+
+                                    <li>
+                                        <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
+                                            <button type="submit" class="dropdown-item header-account-logout">
+                                                <i class="bi bi-box-arrow-right" aria-hidden="true"></i>Sair
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
                         }
                         else
                         {
-                            <a class="header-menu-link-v3" asp-controller="Account" asp-action="Login">
+                            <a class="header-menu-link-v3 header-login-link" asp-controller="Account" asp-action="Login">
                                 <i class="bi bi-box-arrow-in-right" aria-hidden="true"></i><span>Entrar</span>
                             </a>
                             <a class="header-register-link" asp-controller="Account" asp-action="Register">
@@ -192,7 +235,7 @@
                     <span class="footer-heading">Atendimento</span>
                     <a asp-controller="Quote" asp-action="Index">Solicitar orçamento</a>
                     <a href="https://www.google.com/maps/search/?api=1&query=R.+Camomila%2C+99+-+Antigo+375+-+Jardim+Helena%2C+S%C3%A3o+Paulo+-+SP%2C+08090-530" target="_blank" rel="noopener noreferrer">Localização</a>
-                    <a href="https://wa.me/5511972160760" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+                    <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">WhatsApp</a>
                 </div>
             </div>
 
@@ -203,6 +246,13 @@
         </div>
     </footer>
 
+    <nav class="mobile-bottom-nav" aria-label="Navegação rápida">
+        <a asp-controller="Home" asp-action="Index"><i class="bi bi-house" aria-hidden="true"></i>Início</a>
+        <a href="@Url.Action("Index", "Home")#homeProductSearch"><i class="bi bi-search" aria-hidden="true"></i>Buscar</a>
+        <a asp-controller="Account" asp-action="Favorites"><i class="bi bi-heart" aria-hidden="true"></i>Favoritos</a>
+        <a asp-controller="Cart" asp-action="Index"><i class="bi bi-bag" aria-hidden="true"></i>Carrinho</a>
+    </nav>
+
     <a href="https://wa.me/5511999999999?text=Ol%C3%A1%21%20Visitei%20o%20site%20do%20Ateli%C3%AA%20da%20Transforma%C3%A7%C3%A3o%20e%20gostaria%20de%20mais%20informa%C3%A7%C3%B5es." class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="Falar conosco no WhatsApp" aria-label="Falar conosco no WhatsApp">
         <span class="whatsapp-float-icon" aria-hidden="true"><i class="bi bi-whatsapp"></i></span>
         <span class="whatsapp-float-label">WhatsApp</span>
@@ -212,6 +262,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@@microsoft/signalr@8.0.29/dist/browser/signalr.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/pwa.js" asp-append-version="true"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
