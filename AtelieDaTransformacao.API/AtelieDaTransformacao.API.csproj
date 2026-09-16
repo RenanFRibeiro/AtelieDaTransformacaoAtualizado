@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <NuGetAudit>false</NuGetAudit>
     <NoWarn>$(NoWarn);NU1900</NoWarn>
+    <UserSecretsId>f654c58c-7d2c-44df-8716-72f70eb78e19</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.9" />
@@ -13,7 +14,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\AtelieDaTransformacacao.Application\AtelieDaTransformacao.Application.csproj" />

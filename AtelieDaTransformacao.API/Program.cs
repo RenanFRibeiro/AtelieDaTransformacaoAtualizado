@@ -1,4 +1,3 @@
-using System.Text;
 using AtelieDaTransformacao.Application.Interfaces;
 using AtelieDaTransformacao.Application.Services;
 using AtelieDaTransformacao.Domain.Interfaces;
@@ -9,6 +8,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,7 +61,15 @@ builder.Services.AddScoped<IUserManagementService, UserManagementService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "AtelieTransformacao API",
+        Version = "v1",
+        Description = "API REST do sistema AtelieTransformacao — Sistema de Gestão de Produtos em ASP.NET Core"
+    });
+});
 builder.Services.AddCors(o => o.AddPolicy("Desktop", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
 var app = builder.Build();
@@ -84,11 +93,13 @@ app.UseExceptionHandler(errorApp =>
     });
 });
 
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "AtelieTransformacao API v1");
+    options.RoutePrefix = string.Empty; // Swagger na raiz da aplicação
+});
+
 
 if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
