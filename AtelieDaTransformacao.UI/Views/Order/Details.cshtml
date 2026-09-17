@@ -16,7 +16,7 @@
     };
 }
 
-<div class="container py-5">
+<div class="container py-5 order-details-page">
 
     <!-- CABEÇALHO -->
 
@@ -389,7 +389,7 @@
 
 @if (Model.Status == OrderStatus.Entregue)
 {
-    <div class="mt-4">
+    <div class="container order-feedback-shell">
         @await Component.InvokeAsync(
             "Feedbacks",
             new
@@ -406,7 +406,7 @@
 
     .order-timeline {
         display: grid;
-        grid-template-columns: repeat(8, 1fr);
+        grid-template-columns: repeat(7, minmax(0, 1fr));
         gap: 4px;
         position: relative;
     }

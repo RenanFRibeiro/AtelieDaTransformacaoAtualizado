@@ -1,4 +1,4 @@
-// PWA: registro do Service Worker e instalação segura, acessível e responsiva.
+// PWA — instalação somente após ação explícita do usuário.
 (function () {
   "use strict";
 
@@ -16,62 +16,73 @@
     });
   }
 
-  function createInstallButton() {
-    const btn = document.createElement("button");
-    btn.id = "pwaInstallButton";
-    btn.type = "button";
-    btn.className = "pwa-install-button";
-    btn.setAttribute("aria-label", "Instalar aplicativo do Ateliê da Transformação");
-    btn.title = "Instalar o Ateliê no celular";
-    btn.innerHTML = '<i class="bi bi-phone" aria-hidden="true"></i><span class="pwa-install-label">Instalar app</span>';
-
-    btn.addEventListener("click", async () => {
-      if (!deferredPrompt) return;
-      btn.disabled = true;
-      deferredPrompt.prompt();
-      try {
-        await deferredPrompt.userChoice;
-      } finally {
-        deferredPrompt = null;
-        btn.remove();
-      }
-    });
-
-    document.body.appendChild(btn);
-    return btn;
-  }
-
-  function showAndroidInstallPrompt(event) {
+  // Captura o evento do navegador, mas NÃO abre nada automaticamente.
+  window.addEventListener("beforeinstallprompt", (event) => {
     event.preventDefault();
     deferredPrompt = event;
-    if (isStandalone()) return;
+    document.documentElement.classList.add("pwa-install-available");
+  });
 
-    const btn = document.getElementById("pwaInstallButton") || createInstallButton();
-    btn.hidden = false;
+  function showIOSInstructions() {
+    window.alert(
+      "Para instalar o Ateliê da Transformação no iPhone ou iPad:\n\n" +
+      "1. Toque em Compartilhar no Safari.\n" +
+      "2. Escolha “Adicionar à Tela de Início”.\n" +
+      "3. Confirme em “Adicionar”."
+    );
   }
 
-  // Chrome/Edge/Android: o navegador fornece o prompt nativo.
-  window.addEventListener("beforeinstallprompt", showAndroidInstallPrompt);
+  async function install() {
+    if (isStandalone()) return { outcome: "already-installed" };
 
-  // iOS não expõe beforeinstallprompt. Mostramos uma orientação sem pedir
-  // credenciais, sem armazenar dados e sem tentar simular uma instalação.
-  window.addEventListener("load", () => {
-    if (!isIOS || isStandalone()) return;
+    if (deferredPrompt) {
+      const promptEvent = deferredPrompt;
+      deferredPrompt = null;
+      document.documentElement.classList.remove("pwa-install-available");
 
-    const btn = createInstallButton();
-    btn.classList.add("pwa-install-button-ios");
-    btn.querySelector("i").className = "bi bi-phone";
-    btn.querySelector(".pwa-install-label").textContent = "Adicionar à tela inicial";
-    btn.setAttribute("aria-label", "Saiba como adicionar o Ateliê à tela inicial");
-    btn.title = "Adicionar à tela inicial";
+      try {
+        promptEvent.prompt();
+        const result = await promptEvent.userChoice;
+        return result || { outcome: "unknown" };
+      } catch (error) {
+        console.warn("Não foi possível abrir a instalação do PWA:", error);
+        return { outcome: "error" };
+      }
+    }
 
-    btn.addEventListener("click", () => {
-      window.alert("No iPhone ou iPad: toque em Compartilhar e depois em “Adicionar à Tela de Início”.");
-    }, { once: true });
+    if (isIOS) {
+      showIOSInstructions();
+      return { outcome: "ios-instructions" };
+    }
+
+    window.alert(
+      "A instalação ainda não está disponível neste navegador. " +
+      "Se aparecer o ícone de instalação na barra do navegador, você também pode usá-lo."
+    );
+    return { outcome: "unavailable" };
+  }
+
+  // A instalação só acontece quando alguma ação explícita chama esta função.
+  window.AteliePWA = Object.freeze({
+    install,
+    isStandalone: () => isStandalone()
+  });
+
+  document.addEventListener("click", (event) => {
+    const trigger = event.target.closest("[data-pwa-install]");
+    if (!trigger) return;
+
+    event.preventDefault();
+    if (trigger.dataset.pwaBusy === "true") return;
+
+    trigger.dataset.pwaBusy = "true";
+    Promise.resolve(install()).finally(() => {
+      trigger.dataset.pwaBusy = "false";
+    });
   });
 
   window.addEventListener("appinstalled", () => {
     deferredPrompt = null;
-    document.getElementById("pwaInstallButton")?.remove();
+    document.documentElement.classList.remove("pwa-install-available");
   });
 })();

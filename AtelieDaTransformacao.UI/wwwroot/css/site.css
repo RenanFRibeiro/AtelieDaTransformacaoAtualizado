@@ -1738,204 +1738,123 @@ pre, code { max-width: 100%; overflow-x: auto; }
     .pwa-install-button { transition: none !important; }
 }
 
-/* ===== REFINO VISUAL — PWA + MENU MOBILE PREMIUM ===== */
+/* ===== FINAL ORDER DETAILS + EXPLICIT PWA INSTALL ===== */
 
-/* PWA: compacto, elegante e integrado à identidade do Ateliê. */
-.pwa-install-button {
-    right: 18px;
-    bottom: calc(82px + env(safe-area-inset-bottom));
-    min-height: 44px;
-    padding: .52rem .78rem .52rem .62rem;
-    gap: .48rem;
-    border: 1px solid rgba(255,255,255,.18);
-    border-radius: 14px;
-    background: rgba(43,29,23,.94);
-    color: #f7eee5;
-    box-shadow: 0 12px 30px rgba(36,24,18,.26), 0 2px 8px rgba(0,0,0,.12);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    font-size: .76rem;
-    font-weight: 700;
-    letter-spacing: .01em;
+/* ===== FINAL ORDER DETAILS + EXPLICIT PWA INSTALL ===== */
+.order-details-page {
+    max-width: 1180px;
+    margin-inline: auto;
+    padding-top: 2.2rem !important;
+    padding-bottom: 3rem !important;
 }
-.pwa-install-button i {
-    width: 30px;
-    height: 30px;
-    display: grid;
-    place-items: center;
-    border-radius: 9px;
-    background: linear-gradient(135deg, #c58a58, #a85c3d);
-    color: #241812;
-    font-size: .9rem;
+.order-details-page > .d-flex:first-child {
+    padding: .25rem 0 1.25rem;
+    border-bottom: 1px solid var(--ui-border, rgba(255,255,255,.08));
 }
-.pwa-install-button:hover,
-.pwa-install-button:focus-visible {
+.order-details-page .serif-title { letter-spacing: -.02em; }
+.order-details-page .card {
+    border: 1px solid var(--ui-border, rgba(255,255,255,.08)) !important;
+    box-shadow: 0 18px 50px rgba(0,0,0,.12) !important;
+    transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+.order-details-page .card:hover {
     transform: translateY(-2px);
-    background: rgba(43,29,23,.98);
-    box-shadow: 0 16px 34px rgba(36,24,18,.32);
+    box-shadow: 0 24px 60px rgba(0,0,0,.16) !important;
 }
-.pwa-install-button-ios .pwa-install-label::after {
-    content: '';
+.order-details-page .card-body { min-width: 0; }
+.order-details-page .order-timeline { margin-top: .75rem; }
+.order-details-page .timeline-label { overflow-wrap: anywhere; }
+.order-details-page .timeline-dot { transition: transform .22s ease, box-shadow .22s ease; }
+.order-details-page .timeline-step.current .timeline-dot { transform: scale(1.08); }
+.order-details-page .timeline-step.completed.current .timeline-dot {
+    box-shadow: 0 0 0 6px rgba(197,138,88,.16), 0 8px 24px rgba(197,138,88,.16);
 }
+.order-details-page .row.g-4 { align-items: stretch; }
+.order-details-page .border-bottom {
+    border-color: var(--ui-border, rgba(255,255,255,.08)) !important;
+}
+.order-details-page .alert {
+    border: 1px solid rgba(197,138,88,.22);
+}
+.order-feedback-shell {
+    max-width: 1180px;
+    padding: 0 12px 2.5rem;
+}
+.order-feedback-shell .order-feedback-area {
+    margin-top: 1.25rem;
+    border-top: 1px solid var(--ui-border, rgba(255,255,255,.08));
+}
+.order-feedback-shell .order-feedback-area > .d-flex {
+    padding-top: .25rem;
+}
+.order-feedback-shell .feedback-order-card {
+    height: 100%;
+    padding: 1.35rem;
+    border: 1px solid var(--ui-border) !important;
+    border-radius: 20px;
+    background: var(--ui-surface) !important;
+    color: var(--ui-text);
+    box-shadow: 0 14px 36px rgba(0,0,0,.08) !important;
+    transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+.order-feedback-shell .feedback-order-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 44px rgba(0,0,0,.13) !important;
+}
+.order-feedback-shell .feedback-order-card h3 { overflow-wrap: anywhere; }
+.order-feedback-shell .feedback-inline-stars { font-size: 1rem; }
+.order-feedback-shell .feedback-inline-image { max-width: 100%; }
+.footer-install-link {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    margin-top: .2rem;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: .9rem;
+    text-align: left;
+    cursor: pointer;
+    opacity: .88;
+    transition: opacity .2s ease, transform .2s ease;
+}
+.footer-install-link:hover,
+.footer-install-link:focus-visible {
+    opacity: 1;
+    transform: translateX(2px);
+    outline: none;
+}
+/* Nunca renderizar um botão PWA flutuante. A instalação é sempre iniciada por ação explícita. */
+.pwa-install-button { display: none !important; }
 
-/* Menu mobile: painel limpo, espaçado e fácil de tocar. */
-@media (max-width: 991.98px) {
-    .navbar-artisan {
-        min-height: 68px;
+@media (max-width: 767.98px) {
+    .order-details-page {
+        padding: 1.25rem .85rem 2.25rem !important;
     }
-    .navbar-artisan .navbar-inner {
-        padding: .58rem .75rem;
-    }
-    .artisan-brand {
-        min-width: 0;
-        max-width: calc(100% - 64px);
-    }
-    .artisan-brand .brand-name {
-        font-size: clamp(.9rem, 3.7vw, 1.05rem);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    .brand-mark {
-        flex: 0 0 36px;
-        width: 36px;
-        height: 36px;
-    }
-    .artisan-toggler {
-        width: 46px;
-        height: 46px;
-        margin-left: auto;
-        border: 1px solid rgba(197,138,88,.32) !important;
-        border-radius: 13px !important;
-        background: rgba(255,255,255,.055);
-        display: grid !important;
-        place-items: center;
-        padding: 0 !important;
-    }
-    .artisan-toggler:focus {
-        box-shadow: 0 0 0 3px rgba(197,138,88,.16) !important;
-    }
-    .navbar-artisan .navbar-collapse {
-        margin: .35rem .1rem 0;
-        padding: .65rem;
-        border: 1px solid rgba(197,138,88,.16);
-        border-radius: 18px;
-        background: rgba(36,24,18,.985);
-        box-shadow: 0 18px 42px rgba(0,0,0,.28);
-        max-height: calc(100dvh - 84px);
-        overflow-y: auto;
-        overscroll-behavior: contain;
-    }
-    .header-navigation-group {
-        width: 100%;
-    }
-    .artisan-main-nav {
-        gap: .35rem;
-        width: 100%;
-    }
-    .artisan-main-nav .nav-item {
-        width: 100%;
-    }
-    .nav-link-artisan {
-        min-height: 50px !important;
-        width: 100%;
-        display: flex !important;
-        align-items: center;
-        gap: .85rem;
-        padding: .72rem .9rem !important;
-        border-radius: 12px;
-        font-size: .92rem;
-        background: rgba(255,255,255,.035);
-    }
-    .nav-link-artisan i {
-        width: 25px;
-        text-align: center;
-        font-size: 1.05rem;
-        color: #c58a58;
-    }
-    .nav-link-artisan:hover,
-    .nav-link-artisan:focus-visible,
-    .nav-link-artisan.active {
-        background: rgba(197,138,88,.11);
-        transform: none;
-    }
-    .header-actions-v3 {
-        width: 100%;
-        display: grid !important;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+    .order-details-page > .d-flex:first-child {
         align-items: stretch !important;
-        gap: .45rem;
-        padding: .75rem .1rem .15rem !important;
-        margin-top: .45rem;
-        border-top: 1px solid rgba(255,255,255,.08);
+        gap: .9rem !important;
     }
-    .header-actions-v3 > * {
-        min-width: 0;
-    }
-    .header-actions-v3 .header-icon-button,
-    .header-actions-v3 .header-menu-link-v3,
-    .header-actions-v3 .header-account-button,
-    .header-actions-v3 .header-login-link,
-    .header-actions-v3 .header-register-link {
+    .order-details-page > .d-flex:first-child > a {
         width: 100%;
-        min-height: 46px;
         justify-content: center;
-        border-radius: 11px;
     }
-    .header-account-dropdown {
-        width: 100%;
-    }
-    .header-account-dropdown .header-account-button {
-        display: flex;
-        align-items: center;
-        gap: .45rem;
-    }
-    .header-account-menu {
-        width: min(92vw, 360px);
-        max-height: 58vh;
-        overflow-y: auto;
-    }
-    .header-notification-wrap {
-        width: 100%;
-    }
-    .header-notification-wrap .header-icon-button {
-        width: 100%;
-    }
+    .order-details-page .card-body { padding: 1.15rem !important; }
+    .order-details-page .order-timeline { gap: 10px; }
+    .order-details-page .timeline-step { min-height: 48px; }
+    .order-details-page .timeline-label { font-size: .82rem; line-height: 1.25; }
+    .order-details-page .d-flex.justify-content-between { gap: .75rem; }
+    .order-details-page .d-flex.justify-content-between > strong:last-child { white-space: nowrap; }
+    .order-feedback-shell { padding-inline: .85rem; }
+    .order-feedback-shell .feedback-order-card { padding: 1.05rem; }
+    .footer-install-link { min-height: 44px; }
 }
 
-@media (max-width: 575.98px) {
-    .navbar-artisan .navbar-inner {
-        padding-inline: .65rem;
-    }
-    .navbar-artisan .navbar-collapse {
-        margin-inline: 0;
-        border-radius: 16px;
-        padding: .55rem;
-    }
-    .header-actions-v3 {
-        grid-template-columns: 1fr 1fr;
-    }
-    .pwa-install-button {
-        right: 12px;
-        bottom: calc(78px + env(safe-area-inset-bottom));
-        min-height: 42px;
-        padding: .48rem .68rem .48rem .55rem;
-        border-radius: 13px;
-    }
-    .pwa-install-button i {
-        width: 28px;
-        height: 28px;
-    }
-}
-
-@media (max-width: 380px) {
-    .pwa-install-button .pwa-install-label {
-        max-width: 118px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-    .artisan-brand .brand-name {
-        font-size: .86rem;
-    }
+@media (prefers-reduced-motion: reduce) {
+    .order-details-page .card,
+    .order-details-page .timeline-dot,
+    .order-feedback-shell .feedback-order-card,
+    .footer-install-link { transition: none !important; }
 }
