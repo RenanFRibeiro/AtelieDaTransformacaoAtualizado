@@ -212,13 +212,13 @@ public sealed class AccountController : Controller
                 else
                 {
                     TempData["ConfirmationResendError"] =
-                        "Sua conta já foi criada, mas não conseguimos enviar o e-mail de confirmação. Verifique a configuração de e-mail transacional (Brevo) e tente reenviar.";
+                        "Sua conta já foi criada, mas não conseguimos enviar o e-mail de confirmação. Verifique a configuração de e-mail transacional da Brevo e tente reenviar.";
                 }
             }
             catch (Exception ex)
             {
                 TempData["ConfirmationResendError"] =
-                    "Sua conta já foi criada, mas o e-mail de confirmação não pôde ser enviado. Verifique a configuração de e-mail transacional (Brevo) e tente reenviar.";
+                    "Sua conta já foi criada, mas o e-mail de confirmação não pôde ser enviado. Verifique a configuração de e-mail transacional da Brevo e tente reenviar.";
                 HttpContext.RequestServices.GetRequiredService<ILogger<AccountController>>()
                     .LogError(ex, "Falha ao reenviar confirmação de e-mail para {Email}.", existing.Email);
             }
@@ -299,9 +299,9 @@ public sealed class AccountController : Controller
         }
         catch (Exception ex)
         {
-            // Não apagamos a conta quando o serviço de e-mail transacional está indisponível.
+            // Não apagamos a conta quando a Brevo está indisponível.
             // O cadastro fica pendente de confirmação e o cliente pode
-            // repetir o envio sem perder os dados.
+            // corrigir a configuração/repetir o envio sem perder os dados.
             TempData["ConfirmationEmail"] = user.Email;
             TempData["ConfirmationResendError"] =
                 "Sua conta foi criada, mas o e-mail de confirmação não pôde ser enviado agora. Verifique a caixa de configuração de e-mail e tente reenviar.";
@@ -349,13 +349,13 @@ public sealed class AccountController : Controller
             if (!sent)
             {
                 TempData["ConfirmationResendError"] =
-                    "Não conseguimos enviar o e-mail de confirmação agora. Verifique a configuração SMTP e tente novamente.";
+                    "Não conseguimos enviar o e-mail de confirmação agora. Verifique a configuração de e-mail transacional da Brevo e tente novamente.";
             }
         }
         catch (Exception ex)
         {
             TempData["ConfirmationResendError"] =
-                "Não conseguimos enviar o e-mail de confirmação agora. Verifique a configuração SMTP e tente novamente.";
+                "Não conseguimos enviar o e-mail de confirmação agora. Verifique a configuração de e-mail transacional da Brevo e tente novamente.";
             HttpContext.RequestServices.GetRequiredService<ILogger<AccountController>>()
                 .LogError(ex, "Falha ao reenviar confirmação de e-mail para {Email}.", normalizedEmail);
         }

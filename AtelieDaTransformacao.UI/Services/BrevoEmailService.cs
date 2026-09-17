@@ -110,13 +110,13 @@ public sealed class BrevoEmailService : IEmailService
 
         if (string.IsNullOrWhiteSpace(apiKey))
             throw new InvalidOperationException(
-                "Brevo não está configurado. Defina Email:ApiKey (variável de ambiente: Email__ApiKey) com uma chave de API válida da Brevo.");
+                "Brevo não está configurado. No Azure, defina Email__ApiKey em Application settings. Localmente, use Email:ApiKey em User Secrets ou appsettings.Development.json.");
 
         if (!MailAddress.TryCreate(from, out var sender) ||
             !sender.Address.Equals(from, StringComparison.OrdinalIgnoreCase))
         {
             throw new InvalidOperationException(
-                "Remetente Brevo inválido. Verifique o remetente na Brevo e configure exatamente o mesmo endereço em Email:From (variável: Email__From).");
+                "Remetente Brevo inválido. Verifique o sender na Brevo e use exatamente o mesmo endereço em Email__From.");
         }
 
         var payload = new
@@ -158,10 +158,12 @@ public sealed class BrevoEmailService : IEmailService
 
         if (response.IsSuccessStatusCode)
         {
+            var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
             _logger.LogInformation(
-                "E-mail transacional enviado pela Brevo para {Recipient}. Assunto: {Subject}.",
+                "Brevo aceitou o e-mail para {Recipient}. HTTP {StatusCode}. Resposta: {Response}",
                 recipient.Address,
-                subject);
+                (int)response.StatusCode,
+                responseBody.Length > 500 ? responseBody[..500] : responseBody);
             return;
         }
 
