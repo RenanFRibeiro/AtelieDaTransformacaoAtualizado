@@ -4,14 +4,13 @@
 // agressivamente: sempre tentamos a rede primeiro para não mostrar
 // dados desatualizados (estoque, status de pedido, sessão etc.).
 
-const CACHE_VERSION = "v1";
+const CACHE_VERSION = "v2";
 const CACHE_NAME = `atelie-shell-${CACHE_VERSION}`;
 const OFFLINE_URL = "/offline.html";
 
 // Recursos essenciais para o app funcionar minimamente offline
 // (layout básico, ícones, css/js locais e a página de fallback).
 const PRECACHE_URLS = [
-  "/",
   OFFLINE_URL,
   "/css/site.css",
   "/css/home-modern.css",
@@ -91,22 +90,13 @@ self.addEventListener("fetch", (event) => {
   // deixa o navegador cuidar normalmente, sem interceptar.
   if (url.origin !== self.location.origin) return;
 
-  // Navegação (troca de página): network-first, com fallback para
-  // cache e, em último caso, para a página offline.
+  // Navegação: sempre vai para a rede. Não armazenamos HTML de páginas,
+  // porque uma resposta pode conter nome, e-mail, carrinho, sessão ou outros
+  // dados específicos do usuário. Em caso de perda de conexão, mostramos
+  // apenas a página offline genérica.
   if (request.mode === "navigate") {
     event.respondWith(
-      fetch(request)
-        .then((response) => {
-          const copy = response.clone();
-          if (response.ok && !isNeverCache(url.pathname)) {
-            caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
-          }
-          return response;
-        })
-        .catch(async () => {
-          const cached = await caches.match(request);
-          return cached || caches.match(OFFLINE_URL);
-        })
+      fetch(request).catch(() => caches.match(OFFLINE_URL))
     );
     return;
   }

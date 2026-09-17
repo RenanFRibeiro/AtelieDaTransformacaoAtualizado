@@ -682,3 +682,23 @@ html[data-theme="dark"] .admin-body .admin-stat-label { color: var(--admin-muted
 @media (max-width: 767.98px) {
     html[data-theme="dark"] .admin-body .admin-content { color: var(--admin-text); }
 }
+
+
+/* Refinamento final mobile do painel: conteúdo nunca força a viewport. */
+@media (max-width: 991.98px) {
+    .admin-body .table-responsive { width: 100%; max-width: 100%; overflow-x: auto; }
+    .admin-body .table { margin-bottom: 0; }
+    .admin-page-head, .admin-section-head, .admin-page-actions { min-width: 0; }
+    .admin-page-head h1, .admin-page-head h2, .admin-section-title { overflow-wrap: anywhere; }
+    .admin-content .row > *, .admin-content [class*="col-"] { min-width: 0; }
+    .admin-content .card { max-width: 100%; }
+}
+@media (max-width: 575.98px) {
+    .admin-content { width: calc(100% - 16px); padding-inline: 0; }
+    .admin-page-actions { width: 100%; flex-direction: column; align-items: stretch; }
+    .admin-page-actions .btn { width: 100%; }
+    .admin-section-head { gap: 12px; }
+    .admin-stat-grid { grid-template-columns: 1fr; }
+    .admin-body .table { min-width: 680px; }
+    .admin-modal, .admin-body .modal-dialog { max-width: calc(100vw - 20px); margin: .5rem auto; }
+}

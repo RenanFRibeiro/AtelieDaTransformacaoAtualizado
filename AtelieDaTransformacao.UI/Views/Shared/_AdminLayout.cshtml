@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="~/css/home-modern.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/admin-modern.css" asp-append-version="true" />
 </head>
-<body class="admin-body" data-authenticated="@(User.Identity?.IsAuthenticated == true ? "true" : "false")" data-is-admin="@(User.IsInRole("Admin") ? "true" : "false")" data-user-key="@(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "anonymous")">
+<body class="admin-body" data-authenticated="@(User.Identity?.IsAuthenticated == true ? "true" : "false")" data-is-admin="@(User.IsInRole("Admin") ? "true" : "false")">
     <div class="admin-shell">
         <!-- Header mobile -->
         <header class="admin-mobile-header">

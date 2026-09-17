@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/home-modern.css" asp-append-version="true" />
 </head>
-<body class="d-flex flex-column min-vh-100" data-authenticated="@(User.Identity?.IsAuthenticated == true ? "true" : "false")" data-is-admin="@(User.IsInRole("Admin") ? "true" : "false")" data-user-key="@(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "anonymous")" style="--artisan-gold: #c58a58; --artisan-clay: #a85c3d; --artisan-wood: #241812;">
+<body class="d-flex flex-column min-vh-100" data-authenticated="@(User.Identity?.IsAuthenticated == true ? "true" : "false")" data-is-admin="@(User.IsInRole("Admin") ? "true" : "false")" style="--artisan-gold: #c58a58; --artisan-clay: #a85c3d; --artisan-wood: #241812;">
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark navbar-artisan fixed-top">
             <div class="container-fluid navbar-inner">

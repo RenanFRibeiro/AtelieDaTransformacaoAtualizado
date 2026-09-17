@@ -105,18 +105,18 @@ public sealed class BrevoEmailService : IEmailService
             throw new ArgumentException("O destinatário do e-mail é inválido.", nameof(to));
         }
 
-        var apiKey = _options.ApiKey.Trim();
-        var from = _options.From.Trim();
+        var apiKey = (_options.ApiKey ?? string.Empty).Trim();
+        var from = (_options.From ?? string.Empty).Trim();
 
         if (string.IsNullOrWhiteSpace(apiKey))
             throw new InvalidOperationException(
-                "Brevo não está configurado. Defina Email:ApiKey nos User Secrets ou em uma variável de ambiente.");
+                "Brevo não está configurado. Defina Email:ApiKey (variável de ambiente: Email__ApiKey) com uma chave de API válida da Brevo.");
 
         if (!MailAddress.TryCreate(from, out var sender) ||
             !sender.Address.Equals(from, StringComparison.OrdinalIgnoreCase))
         {
             throw new InvalidOperationException(
-                "Remetente Brevo inválido. Cadastre e verifique esse endereço em Brevo e use o mesmo valor em Email:From.");
+                "Remetente Brevo inválido. Verifique o remetente na Brevo e configure exatamente o mesmo endereço em Email:From (variável: Email__From).");
         }
 
         var payload = new

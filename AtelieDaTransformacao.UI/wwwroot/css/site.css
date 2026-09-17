@@ -1635,3 +1635,307 @@ html[data-theme="dark"] .product-page .product-benefits {
     .whatsapp-float { animation:none !important; }
     .ux-reveal { opacity:1 !important; transform:none !important; transition:none !important; }
 }
+
+
+/* ============================================================================
+   MOBILE / RESPONSIVIDADE FINAL + PWA
+   Camada global para manter as páginas Razor consistentes em celulares,
+   tablets e telas pequenas, sem alterar a identidade visual do header.
+   ============================================================================ */
+html { overflow-x: hidden; }
+body { overflow-x: hidden; min-width: 0; }
+img, svg, video, canvas { max-width: 100%; }
+iframe { max-width: 100%; }
+pre, code { max-width: 100%; overflow-x: auto; }
+.table-responsive { -webkit-overflow-scrolling: touch; }
+.btn, .form-control, .form-select { max-width: 100%; }
+
+/* Evita que grades Bootstrap ou conteúdo flex provoquem overflow acidental. */
+.row > *, [class*="col-"] { min-width: 0; }
+.d-flex, .input-group, .card-body, .card-header, .modal-body { min-width: 0; }
+.text-break, .text-truncate { min-width: 0; }
+
+/* Alvos de toque confortáveis, sem aumentar controles compactos de ícone. */
+@media (pointer: coarse) {
+    .nav-link-artisan,
+    .header-menu-link-v3,
+    .header-account-button,
+    .header-icon-button,
+    .mobile-bottom-nav a,
+    .dropdown-item { min-height: 44px; }
+}
+
+/* Botão PWA: fica acima da navegação inferior e do WhatsApp, respeitando
+   notch/safe-area. O prompt nativo nunca recebe nem manipula credenciais. */
+.pwa-install-button {
+    position: fixed;
+    right: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom));
+    z-index: 1085;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .55rem;
+    min-height: 46px;
+    max-width: calc(100vw - 32px);
+    padding: .7rem 1rem;
+    border: 1px solid rgba(255,255,255,.28);
+    border-radius: 999px;
+    background: linear-gradient(135deg, #c58a58, #a85c3d);
+    color: #241812;
+    font-size: .82rem;
+    font-weight: 800;
+    line-height: 1.1;
+    box-shadow: 0 10px 28px rgba(36,24,18,.24);
+    cursor: pointer;
+    transition: transform .22s ease, box-shadow .22s ease, opacity .22s ease;
+}
+.pwa-install-button:hover,
+.pwa-install-button:focus-visible { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(36,24,18,.3); }
+.pwa-install-button:disabled { opacity: .65; cursor: wait; transform: none; }
+.pwa-install-button[hidden] { display: none !important; }
+.pwa-install-button i { font-size: 1rem; flex: 0 0 auto; }
+
+@media (max-width: 991.98px) {
+    body { padding-bottom: calc(4.2rem + env(safe-area-inset-bottom)); }
+    .pwa-install-button {
+        /* A barra inferior tem ~68px; o botão fica acima dela. */
+        bottom: calc(4.55rem + env(safe-area-inset-bottom));
+        right: 14px;
+    }
+    .mobile-bottom-nav {
+        padding-bottom: calc(.5rem + env(safe-area-inset-bottom));
+    }
+    .mobile-bottom-nav a { min-width: 0; overflow: hidden; }
+    .mobile-bottom-nav a { white-space: nowrap; text-overflow: ellipsis; }
+}
+
+@media (max-width: 575.98px) {
+    .container, .container-fluid { --bs-gutter-x: 1rem; }
+    .pwa-install-button {
+        right: 12px;
+        max-width: calc(100vw - 24px);
+        min-height: 48px;
+        padding-inline: .9rem;
+    }
+    .pwa-install-button .pwa-install-label { max-width: calc(100vw - 86px); overflow: hidden; text-overflow: ellipsis; }
+    .modal-dialog { margin: .75rem; }
+    .modal-content { max-height: calc(100dvh - 1.5rem); overflow: auto; }
+    .dropdown-menu { max-width: calc(100vw - 24px); }
+    .notification-panel { max-width: calc(100vw - 24px) !important; }
+    .form-control, .form-select { font-size: 16px; } /* evita zoom automático no iOS */
+    h1, .h1 { overflow-wrap: anywhere; }
+}
+
+@media (max-width: 380px) {
+    .pwa-install-button { font-size: .76rem; }
+    .mobile-bottom-nav { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .mobile-bottom-nav a { font-size: .66rem; }
+    .mobile-bottom-nav i { font-size: 1.05rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pwa-install-button { transition: none !important; }
+}
+
+/* ===== REFINO VISUAL — PWA + MENU MOBILE PREMIUM ===== */
+
+/* PWA: compacto, elegante e integrado à identidade do Ateliê. */
+.pwa-install-button {
+    right: 18px;
+    bottom: calc(82px + env(safe-area-inset-bottom));
+    min-height: 44px;
+    padding: .52rem .78rem .52rem .62rem;
+    gap: .48rem;
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 14px;
+    background: rgba(43,29,23,.94);
+    color: #f7eee5;
+    box-shadow: 0 12px 30px rgba(36,24,18,.26), 0 2px 8px rgba(0,0,0,.12);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    font-size: .76rem;
+    font-weight: 700;
+    letter-spacing: .01em;
+}
+.pwa-install-button i {
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    background: linear-gradient(135deg, #c58a58, #a85c3d);
+    color: #241812;
+    font-size: .9rem;
+}
+.pwa-install-button:hover,
+.pwa-install-button:focus-visible {
+    transform: translateY(-2px);
+    background: rgba(43,29,23,.98);
+    box-shadow: 0 16px 34px rgba(36,24,18,.32);
+}
+.pwa-install-button-ios .pwa-install-label::after {
+    content: '';
+}
+
+/* Menu mobile: painel limpo, espaçado e fácil de tocar. */
+@media (max-width: 991.98px) {
+    .navbar-artisan {
+        min-height: 68px;
+    }
+    .navbar-artisan .navbar-inner {
+        padding: .58rem .75rem;
+    }
+    .artisan-brand {
+        min-width: 0;
+        max-width: calc(100% - 64px);
+    }
+    .artisan-brand .brand-name {
+        font-size: clamp(.9rem, 3.7vw, 1.05rem);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .brand-mark {
+        flex: 0 0 36px;
+        width: 36px;
+        height: 36px;
+    }
+    .artisan-toggler {
+        width: 46px;
+        height: 46px;
+        margin-left: auto;
+        border: 1px solid rgba(197,138,88,.32) !important;
+        border-radius: 13px !important;
+        background: rgba(255,255,255,.055);
+        display: grid !important;
+        place-items: center;
+        padding: 0 !important;
+    }
+    .artisan-toggler:focus {
+        box-shadow: 0 0 0 3px rgba(197,138,88,.16) !important;
+    }
+    .navbar-artisan .navbar-collapse {
+        margin: .35rem .1rem 0;
+        padding: .65rem;
+        border: 1px solid rgba(197,138,88,.16);
+        border-radius: 18px;
+        background: rgba(36,24,18,.985);
+        box-shadow: 0 18px 42px rgba(0,0,0,.28);
+        max-height: calc(100dvh - 84px);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+    }
+    .header-navigation-group {
+        width: 100%;
+    }
+    .artisan-main-nav {
+        gap: .35rem;
+        width: 100%;
+    }
+    .artisan-main-nav .nav-item {
+        width: 100%;
+    }
+    .nav-link-artisan {
+        min-height: 50px !important;
+        width: 100%;
+        display: flex !important;
+        align-items: center;
+        gap: .85rem;
+        padding: .72rem .9rem !important;
+        border-radius: 12px;
+        font-size: .92rem;
+        background: rgba(255,255,255,.035);
+    }
+    .nav-link-artisan i {
+        width: 25px;
+        text-align: center;
+        font-size: 1.05rem;
+        color: #c58a58;
+    }
+    .nav-link-artisan:hover,
+    .nav-link-artisan:focus-visible,
+    .nav-link-artisan.active {
+        background: rgba(197,138,88,.11);
+        transform: none;
+    }
+    .header-actions-v3 {
+        width: 100%;
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: stretch !important;
+        gap: .45rem;
+        padding: .75rem .1rem .15rem !important;
+        margin-top: .45rem;
+        border-top: 1px solid rgba(255,255,255,.08);
+    }
+    .header-actions-v3 > * {
+        min-width: 0;
+    }
+    .header-actions-v3 .header-icon-button,
+    .header-actions-v3 .header-menu-link-v3,
+    .header-actions-v3 .header-account-button,
+    .header-actions-v3 .header-login-link,
+    .header-actions-v3 .header-register-link {
+        width: 100%;
+        min-height: 46px;
+        justify-content: center;
+        border-radius: 11px;
+    }
+    .header-account-dropdown {
+        width: 100%;
+    }
+    .header-account-dropdown .header-account-button {
+        display: flex;
+        align-items: center;
+        gap: .45rem;
+    }
+    .header-account-menu {
+        width: min(92vw, 360px);
+        max-height: 58vh;
+        overflow-y: auto;
+    }
+    .header-notification-wrap {
+        width: 100%;
+    }
+    .header-notification-wrap .header-icon-button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .navbar-artisan .navbar-inner {
+        padding-inline: .65rem;
+    }
+    .navbar-artisan .navbar-collapse {
+        margin-inline: 0;
+        border-radius: 16px;
+        padding: .55rem;
+    }
+    .header-actions-v3 {
+        grid-template-columns: 1fr 1fr;
+    }
+    .pwa-install-button {
+        right: 12px;
+        bottom: calc(78px + env(safe-area-inset-bottom));
+        min-height: 42px;
+        padding: .48rem .68rem .48rem .55rem;
+        border-radius: 13px;
+    }
+    .pwa-install-button i {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+@media (max-width: 380px) {
+    .pwa-install-button .pwa-install-label {
+        max-width: 118px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .artisan-brand .brand-name {
+        font-size: .86rem;
+    }
+}

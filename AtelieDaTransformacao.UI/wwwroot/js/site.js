@@ -171,9 +171,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }[Number(status)] || "neutral");
 
     if (notificationButton && notificationPanel && notificationList) {
-        const userKey = document.body.dataset.userKey || "anonymous";
-        const storageKey = `atelie-notifications:${userKey}`;
-        const syncKey = `atelie-notifications-sync:${userKey}`;
+        const getNotificationDeviceKey = () => {
+            const keyName = "atelie-notification-device-key";
+            try {
+                let key = localStorage.getItem(keyName);
+                if (!key) {
+                    key = window.crypto?.randomUUID?.() || `device-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+                    localStorage.setItem(keyName, key);
+                }
+                return key;
+            } catch {
+                return "session";
+            }
+        };
+        const deviceKey = getNotificationDeviceKey();
+        const storageKey = `atelie-notifications:${deviceKey}`;
+        const syncKey = `atelie-notifications-sync:${deviceKey}`;
 
         const loadNotifications = () => {
             try {

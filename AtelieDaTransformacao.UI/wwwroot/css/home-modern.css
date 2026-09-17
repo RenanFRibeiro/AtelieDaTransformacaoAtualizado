@@ -2621,3 +2621,26 @@ html[data-theme="dark"] .header-account-email strong {
 html[data-theme="dark"] .header-account-email span {
     color: #b9a99d;
 }
+
+
+/* Ajustes finais de composição para telas pequenas. */
+@media (max-width: 767.98px) {
+    .artisan-hero-slide { min-height: min(560px, calc(100svh - 70px)); }
+    .artisan-hero-content { padding-inline: 0; }
+    .artisan-hero-content .hero-title { overflow-wrap: anywhere; }
+    .search-box { width: 100%; min-width: 0; }
+    .search-box input { min-width: 0; width: 100%; }
+    .collection-heading, .collection-tools, .collection-meta { min-width: 0; }
+    .product-card-modern, .ux-product-card { min-width: 0; }
+    .product-title-modern, .product-description-modern { overflow-wrap: anywhere; }
+    .footer-grid > div { min-width: 0; }
+}
+
+@media (max-width: 420px) {
+    .home-container { width: min(100% - 20px, 1440px); }
+    .artisan-hero-content .hero-title { font-size: clamp(1.95rem, 10.5vw, 2.7rem); }
+    .artisan-hero-slide { min-height: 520px; }
+    .single-product-intro { padding-inline: 18px; }
+    .product-image-modern { height: 260px; }
+    .collection-title { font-size: clamp(2rem, 12vw, 2.8rem); }
+}
