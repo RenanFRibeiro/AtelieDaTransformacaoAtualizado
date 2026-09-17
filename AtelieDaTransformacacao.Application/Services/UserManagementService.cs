@@ -18,7 +18,12 @@ public sealed class UserManagementService : IUserManagementService
     {
         var result = new List<UserSummaryDto>();
 
-        foreach (var user in _users.Users.OrderBy(x => x.Email))
+        // Materializa a lista antes do loop: iterar um IQueryable com "await" dentro do foreach
+        // dispara uma segunda operação no mesmo DbContext (GetClaimsAsync/GetRolesAsync) enquanto
+        // a primeira consulta ainda está em andamento, o que o EF Core não permite.
+        var allUsers = _users.Users.OrderBy(x => x.Email).ToList();
+
+        foreach (var user in allUsers)
         {
             // O painel do Desktop deve exibir somente contas criadas pelo próprio Desktop.
             var claims = await _users.GetClaimsAsync(user);

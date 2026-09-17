@@ -1,6 +1,5 @@
 using System.Drawing;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats.Png;
+using SkiaSharp;
 
 namespace AtelieDaTransformacao.Desktop.Helpers;
 
@@ -23,6 +22,8 @@ public static class ImageLoader
                 bytes = await File.ReadAllBytesAsync(source);
             }
             if (bytes.Length == 0) return null;
+
+            // Formatos comuns (jpg/png/bmp/gif) — suportados nativamente pelo Windows, sem dependências extras.
             try
             {
                 using var stream = new MemoryStream(bytes);
@@ -30,11 +31,14 @@ public static class ImageLoader
                 return new Bitmap(image);
             }
             catch { }
-            using var sharpStream = new MemoryStream(bytes);
-            using var sharp = await SixLabors.ImageSharp.Image.LoadAsync(sharpStream);
-            using var pngStream = new MemoryStream();
-            await sharp.SaveAsync(pngStream, new PngEncoder());
-            pngStream.Position = 0;
+
+            // Fallback para formatos que o GDI+ não decodifica (ex: WebP) — SkiaSharp é gratuito (MIT), sem licença.
+            using var skBitmap = SKBitmap.Decode(bytes);
+            if (skBitmap is null) return null;
+
+            using var skImage = SKImage.FromBitmap(skBitmap);
+            using var skData = skImage.Encode(SKEncodedImageFormat.Png, 100);
+            using var pngStream = new MemoryStream(skData.ToArray());
             using var png = new Bitmap(pngStream);
             return new Bitmap(png);
         }
