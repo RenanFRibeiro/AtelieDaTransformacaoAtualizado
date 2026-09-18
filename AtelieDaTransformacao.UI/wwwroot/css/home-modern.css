@@ -2623,24 +2623,616 @@ html[data-theme="dark"] .header-account-email span {
 }
 
 
-/* Ajustes finais de composição para telas pequenas. */
-@media (max-width: 767.98px) {
-    .artisan-hero-slide { min-height: min(560px, calc(100svh - 70px)); }
-    .artisan-hero-content { padding-inline: 0; }
-    .artisan-hero-content .hero-title { overflow-wrap: anywhere; }
-    .search-box { width: 100%; min-width: 0; }
-    .search-box input { min-width: 0; width: 100%; }
-    .collection-heading, .collection-tools, .collection-meta { min-width: 0; }
-    .product-card-modern, .ux-product-card { min-width: 0; }
-    .product-title-modern, .product-description-modern { overflow-wrap: anywhere; }
-    .footer-grid > div { min-width: 0; }
+/* ============================================================================
+   MENU MOBILE — REFINAMENTO VISUAL FINAL
+   Centralização, tamanhos uniformes e instalação do aplicativo em destaque.
+   ============================================================================ */
+@media (max-width: 991.98px) {
+    .navbar-artisan .navbar-collapse {
+        width: min(100%, 420px);
+        margin: 8px auto 14px;
+        padding: 14px;
+        border: 1px solid rgba(197, 138, 88, .22);
+        border-radius: 18px;
+        background: rgba(31, 20, 15, .97);
+        box-shadow: 0 18px 45px rgba(0, 0, 0, .28);
+    }
+
+    .navbar-artisan .navbar-collapse.show,
+    .navbar-artisan .navbar-collapse.collapsing {
+        display: block;
+    }
+
+    .header-navigation-group {
+        width: 100%;
+        margin: 0 !important;
+        padding: 0;
+    }
+
+    .header-navigation-group .artisan-main-nav {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        margin: 0 !important;
+        padding: 0;
+    }
+
+    .header-navigation-group .artisan-main-nav .nav-item {
+        width: 100%;
+        margin: 0;
+    }
+
+    .header-navigation-group .nav-link-artisan {
+        width: 100%;
+        min-height: 54px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 13px;
+        padding: 0 16px !important;
+        border: 1px solid rgba(197, 138, 88, .16);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, .025);
+        box-sizing: border-box;
+    }
+
+    .header-navigation-group .nav-link-artisan i {
+        width: 22px;
+        min-width: 22px;
+        margin: 0 !important;
+        text-align: center;
+        font-size: 1rem;
+    }
+
+    .header-navigation-group .nav-link-artisan span {
+        font-size: .92rem;
+        font-weight: 600;
+        line-height: 1;
+    }
+
+    .header-actions-v3 {
+        width: 100%;
+        display: flex !important;
+        flex-wrap: wrap;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 10px !important;
+        margin-top: 14px;
+        padding: 14px 0 0 !important;
+        border-top: 1px solid rgba(197, 138, 88, .18);
+    }
+
+    .header-actions-v3 > .header-icon-button {
+        width: 48px;
+        min-width: 48px;
+        height: 48px;
+        flex: 0 0 48px;
+        border-radius: 13px;
+        border-color: rgba(255, 255, 255, .18);
+        background: rgba(255, 255, 255, .025);
+    }
+
+    .header-actions-v3 > .header-notification-wrap {
+        width: 48px;
+        height: 48px;
+        flex: 0 0 48px;
+    }
+
+    .header-actions-v3 > .header-notification-wrap > .header-icon-button {
+        width: 48px;
+        height: 48px;
+    }
+
+    .header-actions-v3 .header-menu-link-v3 {
+        width: 100%;
+        min-height: 52px;
+        flex: 0 0 100%;
+        display: flex !important;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 12px;
+        padding: 0 16px !important;
+        border: 1px solid rgba(197, 138, 88, .16);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, .025);
+        box-sizing: border-box;
+    }
+
+    .header-actions-v3 .header-menu-link-v3 i {
+        width: 22px;
+        min-width: 22px;
+        margin: 0 !important;
+        text-align: center;
+        font-size: 1rem;
+    }
+
+    .header-actions-v3 .header-menu-link-v3 span {
+        max-width: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+        font-size: .92rem;
+        font-weight: 600;
+    }
+
+    .pwa-install-menu-button {
+        width: 100%;
+        min-height: 74px;
+        flex: 0 0 100%;
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding: 10px 14px;
+        margin: 0;
+        border: 1px solid rgba(255, 180, 95, .72);
+        border-radius: 15px;
+        background: linear-gradient(135deg, #e99a4a 0%, #c86435 100%);
+        color: #fffaf4;
+        text-align: left;
+        box-shadow: 0 10px 26px rgba(200, 100, 53, .30);
+        cursor: pointer;
+        transition: transform .28s ease, box-shadow .28s ease, filter .28s ease;
+    }
+
+    .pwa-install-menu-button:hover,
+    .pwa-install-menu-button:focus-visible {
+        color: #fffaf4;
+        background: linear-gradient(135deg, #f0a65b 0%, #d16c3a 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 13px 30px rgba(200, 100, 53, .38);
+    }
+
+    .pwa-install-menu-button:active {
+        transform: translateY(0);
+    }
+
+    .pwa-install-menu-button[hidden] {
+        display: none !important;
+    }
+
+    .pwa-install-icon {
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: rgba(86, 39, 21, .34);
+        font-size: 1.25rem;
+    }
+
+    .pwa-install-content {
+        min-width: 0;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .pwa-install-content strong {
+        font-size: .96rem;
+        line-height: 1.2;
+    }
+
+    .pwa-install-content small {
+        font-size: .72rem;
+        line-height: 1.25;
+        opacity: .9;
+    }
+
+    .pwa-install-arrow {
+        flex: 0 0 auto;
+        font-size: 1.1rem;
+    }
+
+    .header-account-dropdown {
+        width: auto;
+        flex: 0 0 auto;
+        margin-top: 2px;
+    }
+
+    .header-account-button {
+        min-width: 126px;
+        min-height: 48px;
+        justify-content: center;
+        border-radius: 13px;
+    }
 }
 
-@media (max-width: 420px) {
-    .home-container { width: min(100% - 20px, 1440px); }
-    .artisan-hero-content .hero-title { font-size: clamp(1.95rem, 10.5vw, 2.7rem); }
-    .artisan-hero-slide { min-height: 520px; }
-    .single-product-intro { padding-inline: 18px; }
-    .product-image-modern { height: 260px; }
-    .collection-title { font-size: clamp(2rem, 12vw, 2.8rem); }
+@media (max-width: 575.98px) {
+    .navbar-artisan .navbar-collapse {
+        width: calc(100% - 28px);
+        padding: 12px;
+        border-radius: 16px;
+    }
+
+    .header-navigation-group .nav-link-artisan,
+    .header-actions-v3 .header-menu-link-v3 {
+        min-height: 52px;
+    }
+
+    .pwa-install-menu-button {
+        min-height: 70px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pwa-install-menu-button { transition: none !important; }
+}
+
+/* ============================================================================
+   AJUSTE FINAL — HEADER DESKTOP E MENU MOBILE
+   - Desktop: PWA compacto para não quebrar o cabeçalho.
+   - Mobile: conta abre para cima e permanece dentro do menu.
+   - As regras desktop ficam isoladas em min-width: 992px e não alteram o mobile.
+   ============================================================================ */
+@media (min-width: 992px) {
+    .header-actions-v3 .pwa-install-menu-button {
+        width: auto;
+        min-width: 176px;
+        max-width: 210px;
+        height: 38px;
+        min-height: 38px;
+        flex: 0 0 auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0;
+        padding: 4px 9px;
+        border: 1px solid rgba(255, 180, 95, .55);
+        border-radius: 10px;
+        background: linear-gradient(135deg, #c9783d 0%, #a95732 100%);
+        color: #fffaf4;
+        box-shadow: 0 5px 14px rgba(120, 58, 30, .18);
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .header-actions-v3 .pwa-install-menu-button:hover,
+    .header-actions-v3 .pwa-install-menu-button:focus-visible {
+        background: linear-gradient(135deg, #d58949 0%, #b66239 100%);
+        color: #fffaf4;
+        transform: translateY(-1px);
+        box-shadow: 0 7px 18px rgba(120, 58, 30, .25);
+    }
+
+    .header-actions-v3 .pwa-install-icon {
+        width: 28px;
+        height: 28px;
+        min-width: 28px;
+        display: grid;
+        place-items: center;
+        border-radius: 8px;
+        background: rgba(65, 30, 17, .28);
+        font-size: .85rem;
+    }
+
+    .header-actions-v3 .pwa-install-content {
+        min-width: 0;
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 0;
+        overflow: hidden;
+    }
+
+    .header-actions-v3 .pwa-install-content strong {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: .73rem;
+        line-height: 1.15;
+        font-weight: 700;
+    }
+
+    .header-actions-v3 .pwa-install-content small {
+        display: none;
+    }
+
+    .header-actions-v3 .pwa-install-arrow {
+        flex: 0 0 auto;
+        font-size: .8rem;
+        opacity: .9;
+    }
+}
+
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .header-actions-v3 .pwa-install-menu-button {
+        min-width: 148px;
+        max-width: 165px;
+    }
+
+    .header-actions-v3 .pwa-install-content strong {
+        font-size: .68rem;
+    }
+}
+
+@media (max-width: 991.98px) {
+    /* A conta continua centralizada no mobile, mas seu dropdown abre para cima.
+       Isso impede que o e-mail e os itens da conta cubram o conteúdo abaixo. */
+    .navbar-artisan .header-account-dropdown {
+        position: relative !important;
+        width: auto;
+        flex: 0 0 auto;
+        margin: 2px auto 0 !important;
+    }
+
+    .navbar-artisan .header-account-menu,
+    .navbar-artisan .header-account-dropdown .dropdown-menu {
+        position: absolute !important;
+        top: auto !important;
+        bottom: calc(100% + 10px) !important;
+        right: 0 !important;
+        left: auto !important;
+        transform: none !important;
+        width: min(320px, calc(100vw - 56px));
+        min-width: 0 !important;
+        max-width: 320px;
+        max-height: min(58vh, 430px);
+        overflow-y: auto;
+        margin: 0 !important;
+        padding: 8px;
+        border: 1px solid rgba(197, 138, 88, .28);
+        border-radius: 14px;
+        background: #211814 !important;
+        box-shadow: 0 18px 45px rgba(0, 0, 0, .38);
+        z-index: 1060;
+    }
+
+    .navbar-artisan .header-account-email {
+        min-width: 0;
+        max-width: 100%;
+        padding: 8px 10px 7px;
+    }
+
+    .navbar-artisan .header-account-email span {
+        color: #b9a99d;
+    }
+
+    .navbar-artisan .header-account-email strong {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: #f3e9df;
+        font-size: .76rem;
+    }
+
+    .navbar-artisan .header-account-menu .dropdown-item {
+        min-height: 42px;
+        color: #f3e9df;
+        border-radius: 9px;
+    }
+
+    .navbar-artisan .header-account-menu .dropdown-item:hover,
+    .navbar-artisan .header-account-menu .dropdown-item:focus {
+        background: rgba(255, 255, 255, .07);
+        color: #fff;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .navbar-artisan .header-account-menu,
+    .navbar-artisan .header-account-dropdown .dropdown-menu {
+        width: min(300px, calc(100vw - 42px));
+        max-width: calc(100vw - 42px);
+    }
+}
+
+/* ============================================================================
+   CORREÇÃO FINAL — DROPDOWN DA CONTA NO MOBILE
+   O menu deve ficar completamente visível e centralizado na tela.
+   Estas regras valem somente para telas menores que 992px.
+   ============================================================================ */
+@media (max-width: 991.98px) {
+    .navbar-artisan .header-account-dropdown {
+        position: relative !important;
+        z-index: 1070;
+    }
+
+    .navbar-artisan .header-account-dropdown > .header-account-menu,
+    .navbar-artisan .header-account-dropdown > .dropdown-menu {
+        position: absolute !important;
+        left: 50% !important;
+        right: auto !important;
+        bottom: calc(100% + 10px) !important;
+        top: auto !important;
+        transform: translateX(-50%) !important;
+        width: min(360px, calc(100vw - 32px)) !important;
+        min-width: 0 !important;
+        max-width: calc(100vw - 32px) !important;
+        max-height: min(60vh, 460px) !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
+        padding: 8px !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        z-index: 1070 !important;
+    }
+
+    .navbar-artisan .header-account-email {
+        width: 100% !important;
+        max-width: none !important;
+        box-sizing: border-box !important;
+        padding: 10px 12px 9px !important;
+        overflow: hidden !important;
+    }
+
+    .navbar-artisan .header-account-email span,
+    .navbar-artisan .header-account-email strong {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .navbar-artisan .header-account-email strong {
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+        font-size: .78rem !important;
+    }
+
+    .navbar-artisan .header-account-menu .dropdown-item {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .navbar-artisan .header-account-dropdown > .header-account-menu,
+    .navbar-artisan .header-account-dropdown > .dropdown-menu {
+        width: calc(100vw - 32px) !important;
+        max-width: calc(100vw - 32px) !important;
+    }
+}
+
+
+/* ============================================================================
+   AJUSTE MOBILE — DARK MODE E NOTIFICAÇÕES NO TOPO DO HEADER
+   Somente mobile: posiciona os dois botões na faixa superior, entre a marca
+   e o botão hambúrguer. As demais ações continuam dentro do menu.
+   ============================================================================ */
+@media (max-width: 991.98px) {
+    .navbar-artisan .navbar-inner {
+        position: relative;
+    }
+
+    /* Retira os dois botões da coluna do menu e fixa-os na faixa superior. */
+    .navbar-artisan .header-actions-v3 > .theme-toggle {
+        position: absolute !important;
+        top: 50% !important;
+        right: 116px !important;
+        transform: translateY(-50%) !important;
+        width: 42px !important;
+        min-width: 42px !important;
+        height: 42px !important;
+        min-height: 42px !important;
+        margin: 0 !important;
+        z-index: 1080;
+    }
+
+    .navbar-artisan .header-actions-v3 > .header-notification-wrap {
+        position: absolute !important;
+        top: 50% !important;
+        right: 66px !important;
+        transform: translateY(-50%) !important;
+        width: 42px !important;
+        min-width: 42px !important;
+        height: 42px !important;
+        z-index: 1080;
+    }
+
+    .navbar-artisan .header-actions-v3 > .header-notification-wrap > .notification-button {
+        width: 42px !important;
+        min-width: 42px !important;
+        height: 42px !important;
+        min-height: 42px !important;
+        margin: 0 !important;
+    }
+
+    /* Não deixa a área dos botões criar uma linha vazia dentro do menu. */
+    .navbar-artisan .header-actions-v3 {
+        position: relative;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .navbar-artisan .header-actions-v3 > .theme-toggle {
+        right: 112px !important;
+    }
+
+    .navbar-artisan .header-actions-v3 > .header-notification-wrap {
+        right: 62px !important;
+    }
+}
+
+
+/* CORREÇÃO — BOTÕES DE TEMA E NOTIFICAÇÃO REALMENTE NO TOPO MOBILE
+   O container .header-actions-v3 não pode ser o containing block dos botões;
+   eles devem usar .navbar-inner como referência para ficarem ao lado do logo. */
+@media (max-width: 991.98px) {
+    .navbar-artisan .header-actions-v3 {
+        position: static !important;
+    }
+
+    .navbar-artisan .header-actions-v3 > .theme-toggle,
+    .navbar-artisan .header-actions-v3 > .header-notification-wrap {
+        z-index: 1100 !important;
+    }
+
+    .navbar-artisan .header-actions-v3 > .theme-toggle {
+        right: 116px !important;
+    }
+
+    .navbar-artisan .header-actions-v3 > .header-notification-wrap {
+        right: 66px !important;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .navbar-artisan .header-actions-v3 > .theme-toggle {
+        right: 112px !important;
+    }
+
+    .navbar-artisan .header-actions-v3 > .header-notification-wrap {
+        right: 62px !important;
+    }
+}
+
+/* ============================================================================
+   CORREÇÃO FINAL — TEMA E NOTIFICAÇÕES NO CABEÇALHO MOBILE
+   Usa o viewport como referência para impedir que os botões acompanhem a
+   altura do menu aberto. Desktop não é afetado.
+   ============================================================================ */
+@media (max-width: 991.98px) {
+    .navbar-artisan .header-actions-v3 > .theme-toggle,
+    .navbar-artisan .header-actions-v3 > .header-notification-wrap {
+        position: fixed !important;
+        top: 10px !important;
+        transform: none !important;
+        margin: 0 !important;
+        z-index: 1200 !important;
+    }
+
+    .navbar-artisan .header-actions-v3 > .theme-toggle {
+        right: 116px !important;
+        width: 42px !important;
+        min-width: 42px !important;
+        height: 42px !important;
+        min-height: 42px !important;
+    }
+
+    .navbar-artisan .header-actions-v3 > .header-notification-wrap {
+        right: 66px !important;
+        width: 42px !important;
+        min-width: 42px !important;
+        height: 42px !important;
+    }
+
+    .navbar-artisan .header-actions-v3 > .header-notification-wrap > .notification-button {
+        width: 42px !important;
+        min-width: 42px !important;
+        height: 42px !important;
+        min-height: 42px !important;
+        margin: 0 !important;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .navbar-artisan .header-actions-v3 > .theme-toggle {
+        right: 112px !important;
+    }
+
+    .navbar-artisan .header-actions-v3 > .header-notification-wrap {
+        right: 62px !important;
+    }
 }

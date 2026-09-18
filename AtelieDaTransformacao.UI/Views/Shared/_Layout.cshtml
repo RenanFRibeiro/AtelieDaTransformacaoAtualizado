@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/home-modern.css" asp-append-version="true" />
 </head>
-<body class="d-flex flex-column min-vh-100" data-authenticated="@(User.Identity?.IsAuthenticated == true ? "true" : "false")" data-is-admin="@(User.IsInRole("Admin") ? "true" : "false")" style="--artisan-gold: #c58a58; --artisan-clay: #a85c3d; --artisan-wood: #241812;">
+<body class="d-flex flex-column min-vh-100" data-authenticated="@(User.Identity?.IsAuthenticated == true ? "true" : "false")" data-is-admin="@(User.IsInRole("Admin") ? "true" : "false")" data-user-key="@(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "anonymous")" style="--artisan-gold: #c58a58; --artisan-clay: #a85c3d; --artisan-wood: #241812;">
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark navbar-artisan fixed-top">
             <div class="container-fluid navbar-inner">
@@ -101,6 +101,16 @@
                                 </a>
                             }
 
+                            <button type="button" class="pwa-install-menu-button" id="pwaInstallButton" hidden
+                                    aria-label="Instalar aplicativo do Ateliê da Transformação" title="Instalar aplicativo">
+                                <span class="pwa-install-icon"><i class="bi bi-download" aria-hidden="true"></i></span>
+                                <span class="pwa-install-content">
+                                    <strong>Instalar aplicativo</strong>
+                                    <small>Tenha uma experiência ainda melhor</small>
+                                </span>
+                                <i class="bi bi-chevron-right pwa-install-arrow" aria-hidden="true"></i>
+                            </button>
+
                             if (User.IsInRole("Admin") || User.IsInRole("Funcionario") || User.IsInRole("Employee"))
                             {
                                 <a class="header-menu-link-v3 header-compact-link header-panel-link"
@@ -131,22 +141,22 @@
                                     {
                                         <li>
                                             <a class="dropdown-item" asp-controller="Account" asp-action="Profile">
-                                                <i class="bi bi-person-circle" aria-hidden="true"></i>Meu perfil
+                                                <i class="bi bi-person-circle" aria-hidden="true"></i>ㅤMeu perfil
                                             </a>
                                         </li>
                                         <li>
                                             <a class="dropdown-item" asp-controller="Account" asp-action="Favorites">
-                                                <i class="bi bi-heart" aria-hidden="true"></i>Favoritos
+                                                <i class="bi bi-heart" aria-hidden="true"></i>ㅤFavoritos
                                             </a>
                                         </li>
                                         <li>
                                             <a class="dropdown-item" asp-controller="Account" asp-action="RecentlyViewed">
-                                                <i class="bi bi-clock-history" aria-hidden="true"></i>Vistos recentemente
+                                                <i class="bi bi-clock-history" aria-hidden="true"></i>ㅤVistos recentemente
                                             </a>
                                         </li>
                                         <li>
                                             <a class="dropdown-item" asp-controller="Order" asp-action="Index">
-                                                <i class="bi bi-box-seam" aria-hidden="true"></i>Meus pedidos
+                                                <i class="bi bi-box-seam" aria-hidden="true"></i>ㅤMeus pedidos
                                             </a>
                                         </li>
                                         <li><hr class="dropdown-divider" /></li>
@@ -155,7 +165,7 @@
                                     <li>
                                         <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
                                             <button type="submit" class="dropdown-item header-account-logout">
-                                                <i class="bi bi-box-arrow-right" aria-hidden="true"></i>Sair
+                                                <i class="bi bi-box-arrow-right" aria-hidden="true"></i>ㅤSair
                                             </button>
                                         </form>
                                     </li>
@@ -236,9 +246,6 @@
                     <a asp-controller="Quote" asp-action="Index">Solicitar orçamento</a>
                     <a href="https://www.google.com/maps/search/?api=1&query=R.+Camomila%2C+99+-+Antigo+375+-+Jardim+Helena%2C+S%C3%A3o+Paulo+-+SP%2C+08090-530" target="_blank" rel="noopener noreferrer">Localização</a>
                     <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-                    <button type="button" class="footer-install-link" data-pwa-install aria-label="Instalar o aplicativo do Ateliê da Transformação">
-                        <i class="bi bi-phone me-1" aria-hidden="true"></i>Instalar aplicativo
-                    </button>
                 </div>
             </div>
 
