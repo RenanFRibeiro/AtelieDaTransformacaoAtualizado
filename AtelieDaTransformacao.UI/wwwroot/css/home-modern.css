@@ -426,6 +426,11 @@ h1, h2, h3, h4, h5, h6,
     .location-map-frame-modern, .location-map-frame-modern iframe { min-height: 400px; }
     .benefits-grid { grid-template-columns: 1fr; gap: 22px; }
     .footer-grid { grid-template-columns: 1.4fr 1fr 1fr; gap: 35px; }
+    /* PROBLEMA 1 - WhatsApp alinhado com navegação mobile */
+    .whatsapp-float {
+        right: 18px !important;
+        bottom: calc(4.55rem + env(safe-area-inset-bottom)) !important;
+    }
 }
 
 @media (max-width: 767.98px) {
@@ -482,8 +487,8 @@ h1, h2, h3, h4, h5, h6,
     .whatsapp-float {
         width: 50px !important;
         height: 50px !important;
-        right: 16px !important;
-        bottom: 16px !important;
+        right: 14px !important;
+        bottom: calc(4.55rem + env(safe-area-inset-bottom)) !important;
     }
     .whatsapp-float-icon {
         width: 50px;
