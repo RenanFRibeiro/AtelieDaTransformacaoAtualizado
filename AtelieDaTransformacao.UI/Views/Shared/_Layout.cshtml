@@ -35,6 +35,36 @@
                     <span class="serif-title brand-name">Ateliê da Transformação</span>
                 </a>
 
+                <div class="header-utility-actions" aria-label="Ações rápidas">
+                    <button type="button" class="header-icon-button theme-toggle" id="themeToggle"
+                            aria-label="Ativar modo escuro" aria-pressed="false" title="Modo escuro">
+                        <i class="bi bi-moon-stars" aria-hidden="true"></i>
+                    </button>
+
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        <div class="header-notification-wrap position-relative">
+                            <button type="button" class="header-icon-button notification-button" id="notificationButton"
+                                    aria-label="Abrir notificações" aria-expanded="false" aria-controls="notificationPanel" title="Notificações">
+                                <i class="bi bi-bell" aria-hidden="true"></i>
+                                <span class="notification-badge" id="notificationBadge" hidden>0</span>
+                            </button>
+                            <div class="notification-panel" id="notificationPanel" hidden role="region" aria-label="Central de notificações">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <strong>Notificações</strong>
+                                    <div class="d-flex align-items-center gap-3">
+                                        <button type="button" class="btn btn-sm btn-link p-0" id="markNotificationsRead">Marcar como lidas</button>
+                                        <button type="button" class="btn btn-sm btn-link p-0" id="clearNotifications" aria-label="Limpar notificações">Limpar</button>
+                                    </div>
+                                </div>
+                                <div id="notificationList" class="notification-list">
+                                    <p class="small text-muted mb-0">Nenhuma notificação nova.</p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
                 <button class="navbar-toggler artisan-toggler" type="button"
                         data-bs-toggle="collapse"
                         data-bs-target="#mainNavbar"
@@ -56,36 +86,11 @@
                     </div>
 
                     <div class="d-flex align-items-center header-actions-v3">
-                        <button type="button" class="header-icon-button theme-toggle" id="themeToggle"
-                                aria-label="Ativar modo escuro" aria-pressed="false" title="Modo escuro">
-                            <i class="bi bi-moon-stars" aria-hidden="true"></i>
-                        </button>
-
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
                             var currentUserEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value
                                 ?? User.Identity.Name
                                 ?? string.Empty;
-
-                            <div class="header-notification-wrap position-relative">
-                                <button type="button" class="header-icon-button notification-button" id="notificationButton"
-                                        aria-label="Abrir notificações" aria-expanded="false" aria-controls="notificationPanel" title="Notificações">
-                                    <i class="bi bi-bell" aria-hidden="true"></i>
-                                    <span class="notification-badge" id="notificationBadge" hidden>0</span>
-                                </button>
-                                <div class="notification-panel" id="notificationPanel" hidden role="region" aria-label="Central de notificações">
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <strong>Notificações</strong>
-                                        <div class="d-flex align-items-center gap-3">
-                                            <button type="button" class="btn btn-sm btn-link p-0" id="markNotificationsRead">Marcar como lidas</button>
-                                            <button type="button" class="btn btn-sm btn-link p-0" id="clearNotifications" aria-label="Limpar notificações">Limpar</button>
-                                        </div>
-                                    </div>
-                                    <div id="notificationList" class="notification-list">
-                                        <p class="small text-muted mb-0">Nenhuma notificação nova.</p>
-                                    </div>
-                                </div>
-                            </div>
 
                             if (!User.IsInRole("Admin"))
                             {

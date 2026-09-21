@@ -3241,3 +3241,120 @@ html[data-theme="dark"] .header-account-email span {
         right: 62px !important;
     }
 }
+
+/* ============================================================================
+   CORREÇÃO DEFINITIVA — CONTROLES DE TEMA E NOTIFICAÇÕES NO HEADER
+   Os controles ficam fora do collapse do menu para continuarem acessíveis
+   mesmo com o menu mobile fechado. Desktop e mobile mantêm o mesmo visual.
+   ============================================================================ */
+.header-utility-actions {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+.header-utility-actions .header-icon-button {
+    width: 42px;
+    min-width: 42px;
+    height: 42px;
+    min-height: 42px;
+    flex: 0 0 42px;
+    margin: 0;
+}
+
+.header-utility-actions .header-notification-wrap {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+}
+
+.header-utility-actions .notification-button {
+    width: 42px;
+    min-width: 42px;
+    height: 42px;
+    min-height: 42px;
+}
+
+@media (min-width: 992px) {
+    .header-utility-actions { order: 3; margin-left: 8px; }
+    .navbar-artisan .navbar-toggler { order: 4; }
+    .navbar-artisan #mainNavbar { order: 2; }
+}
+
+@media (max-width: 991.98px) {
+    .navbar-artisan .navbar-inner {
+        flex-wrap: wrap;
+        column-gap: 7px;
+        row-gap: 0;
+    }
+
+    .navbar-artisan .artisan-brand { order: 1; }
+
+    .navbar-artisan .header-utility-actions {
+        order: 2;
+        margin-left: auto;
+        gap: 6px;
+        position: relative;
+        z-index: 1201;
+    }
+
+    .navbar-artisan .artisan-toggler {
+        order: 3;
+        margin-left: 0 !important;
+        width: 42px;
+        min-width: 42px;
+        height: 42px;
+        min-height: 42px;
+        padding: .55rem !important;
+        z-index: 1201;
+    }
+
+    .navbar-artisan #mainNavbar {
+        order: 4;
+        flex-basis: 100%;
+        width: 100%;
+    }
+
+    /* O painel não fica preso ao collapse nem é cortado pela navbar. */
+    .navbar-artisan .header-utility-actions .notification-panel {
+        position: fixed !important;
+        top: 76px !important;
+        right: 12px !important;
+        left: auto !important;
+        width: min(380px, calc(100vw - 24px)) !important;
+        max-width: calc(100vw - 24px) !important;
+        max-height: min(520px, calc(100dvh - 92px)) !important;
+        overflow: hidden !important;
+        z-index: 1300 !important;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .navbar-artisan .header-utility-actions { gap: 5px; }
+    .navbar-artisan .header-utility-actions .header-icon-button,
+    .navbar-artisan .header-utility-actions .header-notification-wrap,
+    .navbar-artisan .header-utility-actions .notification-button {
+        width: 40px;
+        min-width: 40px;
+        height: 40px;
+        min-height: 40px;
+        flex-basis: 40px;
+    }
+
+    .navbar-artisan .artisan-toggler {
+        width: 40px;
+        min-width: 40px;
+        height: 40px;
+        min-height: 40px;
+    }
+
+    .navbar-artisan .header-utility-actions .notification-panel {
+        top: 72px !important;
+        right: 10px !important;
+        width: calc(100vw - 20px) !important;
+        max-width: calc(100vw - 20px) !important;
+    }
+}
