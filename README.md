@@ -145,3 +145,4 @@ Contribuindo
 2. Crie uma branch para a feature (git checkout -b feature/nova-funcionalidade).
 3. Garanta que a solução compile e que todos os testes passem.
 4. Abra um Pull Request descrevendo claramente as alterações.
+
